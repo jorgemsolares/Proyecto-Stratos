@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STRATOS - Herramienta Multifuncional</title>
+    <link rel="stylesheet" href="../Colores-y-Estetica/estilos.css">
+</head>
+<body>
+
+    <!-- BARRA DE NOTIFICACIONES SUPERIOR -->
+    <div id="barra-notificaciones" class="notificacion-superior">
+        <span id="texto-notificacion"></span>
+    </div>
+
+    <!-- CONTENEDOR PRINCIPAL DE LA APP -->
+    <div id="app-container">
+    
+    <!-- BRANDING CORPORATIVO (Aparece después de completar identidad) -->
+        <div id="branding-corporativo" class="branding-empresa" style="display:none;">
+            <img id="logo-empresa-header" src="" alt="Logo Empresa">
+            <p id="slogan-empresa-header"></p>
+        </div>
+      
+    <!-- BRANDING INICIAL DE STRATOS -->
+        <header class="branding">
+            <h1>STRATOS</h1>
+            <p>HERRAMIENTA MULTIFUNCIONAL</p>
+        </header>
+
+    <!-- MENSAJE PERSONALIZADO (Aparece cuando No.1 no completa Identidad) -->
+        <div id="mensaje-personalizado" class="mensaje-alerta" style="display:none;">
+            <span id="texto-mensaje-personalizado"></span>
+            <span id="frase-motivacional" class="frase-motivacional" style="display:none;"></span>
+        </div>
+
+
+<!-- ============================================ -->
+<!-- PANTALLA 1: REGISTRO/EDICIÓN DE PERFIL -->
+<!-- ============================================ -->
+<section id="registro-invitacion" class="pantalla pantalla-compacta">
+    <h2 id="titulo-registro">Bienvenido</h2>
+    <p class="descripcion-app">Configura tu perfil de acceso único.</p>
+    <div class="formulario">
+        <input type="text" id="reg-nombres" placeholder="Nombres *" spellcheck="true" required>
+        <input type="text" id="reg-apellidos" placeholder="Apellidos" spellcheck="true">
+        <input type="text" id="reg-id" placeholder="ID Empleado *" required>
+      
+        <div class="fila-dinamica">
+            <select id="reg-pais" class="selector-pais" style="flex: 1;">
+                <option value="+502">🇬🇹 +502</option>
+                <option value="+52">🇲🇽 +52</option>
+                <option value="+1">🇺🇸 +1</option>
+                <option value="+34">🇪🇸 +34</option>
+                <option value="+503">🇸🇻 +503</option>
+                <option value="+504">🇭🇳 +504</option>
+            </select>
+            <input type="tel" id="reg-tel" placeholder="Teléfono" oninput="validarContacto()" style="flex: 3;">
+        </div>
+
+        <input type="email" id="reg-email" placeholder="Email" oninput="validarContacto()" spellcheck="true">
+        <p id="mensaje-contacto" class="aviso-letrero"></p>
+
+        <div class="fila-dinamica">
+            <div style="flex: 3; text-align: left;">
+                <input type="text" id="reg-posicion" placeholder="Posición *" style="width: 100%;" spellcheck="true" required>
+            </div>
+            <div id="visor-acronimo" class="badge-visor">---</div>
+        </div>
+        <p class="leyenda-acronimo">El acrónimo se forma con las mayúsculas y números de tu posición</p>
+
+        <input type="password" id="reg-pass" placeholder="Contraseña *" oninput="manejarMascara(this)" autocomplete="new-password" required>
+        <input type="password" id="reg-pass-conf" placeholder="Confirmar Contraseña *" oninput="manejarMascara(this)" autocomplete="new-password" required>
+        <p id="mensaje-password" class="aviso-letrero"></p>
+      
+        <div id="campos-cambio-contrasena" style="display:none;">
+            <hr style="margin: 20px 0; border: 1px solid rgba(255,255,255,0.1);">
+            <p style="font-size: 0.9rem; color: var(--color-primario); margin-bottom: 10px; font-weight: 600;">
+                🔐 Cambiar mi contraseña (opcional)
+            </p>
+            <input type="password" id="edit-pass-actual" placeholder="Contraseña Actual" oninput="manejarMascara(this)" autocomplete="current-password">
+            <input type="password" id="edit-pass-nueva" placeholder="Nueva Contraseña" oninput="manejarMascara(this)" autocomplete="new-password">
+            <input type="password" id="edit-pass-conf" placeholder="Confirmar Nueva Contraseña" oninput="manejarMascara(this)" autocomplete="new-password">
+            <p id="mensaje-cambio-password" class="aviso-letrero"></p>
+        </div>
+     
+        <p class="campos-obligatorios">* Campos obligatorios</p>
+    </div>
+    <button class="btn-principal" onclick="procesarRegistro()" id="btn-salvar-registro">SALVAR</button>
+</section>
+
+
+        <!-- ============================================ -->
+        <!-- PANTALLA 2: LOGIN/ACCESO -->
+        <!-- ============================================ -->
+        <section id="pantalla-acceso" class="pantalla">
+    <h2 id="bienvenida-usuario">Hola <span id="nombre-usuario-login"></span></h2>
+              
+    <div class="formulario">
+        <input type="text" id="acc-nombre-completo" placeholder="Nombre Completo" list="lista-usuarios" autocomplete="off" spellcheck="true">
+        <datalist id="lista-usuarios"></datalist>
+      
+        <div class="opcion-recuerdame">
+            <input type="checkbox" id="guardar-local">
+            <label for="guardar-local">Recordar mi nombre en este dispositivo</label>
+        </div>
+       
+        <input type="text" id="acc-id" placeholder="ID Empleado" autocomplete="new-password" spellcheck="true" readonly onfocus="this.removeAttribute('readonly')">
+        
+        <input type="password" id="acc-pass" placeholder="Contraseña" oninput="manejarMascara(this)" autocomplete="current-password">
+      
+        <p id="mensaje-acceso" class="aviso-letrero"></p>
+        <p id="intentos-restantes" class="texto-advertencia" style="display:none;"></p>
+      
+        <button class="btn-principal" onclick="validarEntrada()">ENTRAR</button>
+        <button class="btn-link" id="btn-olvidaste-pass" onclick="solicitarRecuperacionContrasena()" style="display:none;">¿Olvidaste tu contraseña?</button>
+    </div>
+</section>
+
+            <!-- ============================================ -->
+            <!-- PANTALLA 3: IDENTIDAD CORPORATIVA (Solo No.1 y Primera Línea) -->
+            <!-- ============================================ -->
+            <section id="pantalla-identidad" class="pantalla">
+                <h2>Identidad Corporativa</h2>
+                <p class="descripcion-app">Define la identidad visual de tu organización</p>
+                
+                <div class="setup-identidad">
+                 <div class="formulario" style="margin-bottom: 20px;">
+                    <input type="text" id="empresa-nombre" placeholder="Nombre de la Empresa *" spellcheck="true" required>
+                    <input type="text" id="empresa-acronimo" placeholder="Acrónimo (opcional)" style="background: rgba(255,255,255,0.05);">
+                </div>   
+                    <!-- 1. LOGO -->
+                    <div id="contenedor-logo-previsualizacion" class="logo-upload-box" onclick="document.getElementById('input-logo').click()">
+                        <img id="vista-previa-logo" src="" style="display:none;" alt="Vista previa del logo">
+                        <span id="texto-placeholder-logo">📤 Cargar Logo</span>
+                        <input type="file" id="input-logo" accept="image/*" style="display:none;" onchange="procesarLogo(this)">
+                    </div>
+                    
+                    <!-- 2. PALETA DE COLORES (8 cuadros en 1 fila) -->
+                    <div id="paleta-colores-centrada" class="contenedor-paleta-ocho"></div>
+                    
+                    <!-- 3. ASIGNACIÓN DE COLORES -->
+                    <div class="controles-destino-color">
+                        <p style="margin-bottom: 10px; font-size: 0.9rem;">Asignar color seleccionado a:</p>
+                        <div style="display: flex; gap: 10px;">
+                            <button type="button" class="btn-opcion" onclick="aplicarCambioEstetico('fondo')">Fondo</button>
+                            <button type="button" class="btn-opcion" onclick="aplicarCambioEstetico('texto')">Letras</button>
+                            <button type="button" class="btn-opcion" onclick="aplicarCambioEstetico('botones')">Botones</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 4. PREVIEW DE COLORES ASIGNADOS -->
+                    <div class="preview-colores">
+                        <div class="preview-item">
+                            <span>Fondo</span>
+                            <div id="preview-fondo" class="color-box"></div>
+                        </div>
+                        <div class="preview-item">
+                            <span>Letras</span>
+                            <div id="preview-texto" class="color-box"></div>
+                        </div>
+                        <div class="preview-item">
+                            <span>Botones</span>
+                            <div id="preview-botones" class="color-box"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- 5. SLOGAN -->
+                    <div class="campo-con-preview">
+                        <input type="text" id="id-slogan" placeholder="Slogan de la Empresa *" oninput="actualizarVistaPrevia()" spellcheck="true" required>
+                        
+                        <!-- 6. SELECTORES DE TIPOGRAFÍA Y ESTILO -->
+                        <div class="selectores-esteticos-mejorados">
+                            <label>
+                                <span>Tipografía:</span>
+                                <select id="sel-tipografia" class="input-estilizado-mejorado" onchange="actualizarVistaPrevia()">
+                                    <option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Segoe UI</option>
+                                    <option value="Arial, Helvetica, sans-serif">Arial</option>
+                                    <option value="'Montserrat', sans-serif">Montserrat</option>
+                                    <option value="'Roboto', sans-serif">Roboto</option>
+                                    <option value="Georgia, serif">Georgia</option>
+                                    <option value="'Courier New', monospace">Courier New</option>
+                                </select>
+                            </label>
+                            
+                            <label>
+                                <span>Estilo:</span>
+                                <select id="sel-estilo" class="input-estilizado-mejorado" onchange="actualizarVistaPrevia()">
+                                    <option value="normal">Normal</option>
+                                    <option value="bold">Negrita</option>
+                                    <option value="italic">Cursiva</option>
+                                    <option value="bold italic">Negrita Cursiva</option>
+                                </select>
+                            </label>
+                        </div>
+                        
+                        <!-- VISTA PREVIA DEL SLOGAN -->
+                        <div id="vista-previa-slogan" class="slogan-preview">
+                            Vista previa del slogan
+                        </div>
+                    </div>
+                    
+                    <!-- 7. MISIÓN, VISIÓN, VALORES -->
+                    <div class="campos-filosofia">
+                        <textarea id="id-mision" placeholder="Misión *" rows="3" spellcheck="true" required></textarea>
+                        <textarea id="id-vision" placeholder="Visión *" rows="3" spellcheck="true" required></textarea>
+                        <textarea id="id-valores" placeholder="Valores (Separados por coma) *" rows="2" spellcheck="true" required></textarea>
+                    </div>
+                </div>
+                
+                <div class="fila-botones-final">
+                    <button class="btn-principal" onclick="salvarIdentidad()">SALVAR Y CONTINUAR</button>
+                    <button class="btn-secundario" onclick="saltarIdentidad()">CONTINUAR SIN COMPLETAR</button>
+                </div>
+            </section>
+
+        <!-- ============================================ -->
+        <!-- PANTALLA 4: ORGANIGRAMA PERSONAL -->
+        <!-- ============================================ -->
+        <section id="pantalla-organigrama" class="pantalla">
+            <div class="header-central-organigrama">
+                <h2 style="text-align: center; margin-top: 20px; letter-spacing: 3px;">TU ORGANIGRAMA</h2>
+                <p class="descripcion-app">Construye tu red de comunicación directa</p>
+                
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 20px 0;">
+                    <button class="btn-principal" onclick="mostrarFormularioContacto('directo')" style="padding: 10px 20px; width: auto;">
+                        + AÑADIR COLABORADOR
+                    </button>
+                    <button class="btn-secundario" onclick="mostrarFormularioContacto('indirecto')" style="padding: 10px 20px; width: auto;">
+                        + AÑADIR INDIRECTO
+                    </button>
+                    <button class="btn-secundario" onclick="mostrarFormularioContacto('observador')" style="padding: 10px 20px; width: auto;">
+                        + AÑADIR OBSERVADOR
+                    </button>
+                </div>
+            </div>
+            
+            <!-- CANVAS DEL ORGANIGRAMA -->
+            <div id="lienzo-organigrama"></div>
+            
+            <button id="btn-continuar-comunicacion" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')" style="margin-top: 30px;">
+                CONTINUAR A COMUNICACIÓN
+            </button>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- PANTALLA 5: COMUNICACIÓN (Próxima a desarrollar) -->
+        <!-- ============================================ -->
+        <section id="pantalla-comunicacion" class="pantalla">
+            <h2>Centro de Comunicación</h2>
+            <p class="descripcion-app">Módulo de comunicación en desarrollo</p>
+            <div style="text-align: center; padding: 60px 20px;">
+                <p style="font-size: 3rem;">💬</p>
+                <p style="font-size: 1.2rem; color: rgba(255,255,255,0.7);">
+                    Este módulo estará disponible próximamente
+                </p>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- PANTALLA 6: CONFIGURACIÓN PERSONAL -->
+        <!-- ============================================ -->
+        <section id="pantalla-configuracion" class="pantalla">
+            <h2>Mi Configuración</h2>
+            <p class="descripcion-app">Personaliza tu experiencia</p>
+            
+            <div class="configuracion-container">
+                <div class="config-section">
+                    <h3>🔔 Notificaciones</h3>
+                    <div class="config-options">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="config-sonido" checked>
+                            <span>Sonido</span>
+                        </label>
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="config-vibracion" checked>
+                            <span>Vibración</span>
+                        </label>
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="config-push" checked>
+                            <span>Notificaciones Push</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="config-section">
+                    <h3>🌐 Idioma</h3>
+                    <select id="config-idioma" class="input-estilizado">
+                        <option value="es" selected>Español</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+                
+                <div class="config-section">
+                    <h3>🔒 Seguridad</h3>
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="config-biometria">
+                        <span>Habilitar autenticación biométrica</span>
+                    </label>
+                </div>
+                
+                <div class="config-section">
+                    <h3>🔑 Recuperación de Contraseñas</h3>
+                    <p class="descripcion-app">
+                        Ayuda a cualquier usuario a recuperar su contraseña. 
+                        <span style="color: var(--color-advertencia);">La solicitud quedará registrada con fines de trazabilidad.</span>
+                    </p>
+                    
+                    <div class="formulario">
+                        <input type="text" id="recuperacion-destino" placeholder="Email o Teléfono del usuario *" spellcheck="true">
+                        <input type="password" id="recuperacion-nueva-pass" placeholder="Contraseña temporal *" oninput="manejarMascara(this)" autocomplete="new-password">
+                        <input type="password" id="recuperacion-conf-pass" placeholder="Confirmar contraseña *" oninput="manejarMascara(this)" autocomplete="new-password">
+                        <p id="mensaje-recuperacion" class="aviso-letrero"></p>
+                    </div>
+                    
+                    <button class="btn-principal" onclick="enviarContrasenaAUsuario()">
+                        📧 ENVIAR CONTRASEÑA
+                    </button>
+                </div>
+                
+                <div class="config-section">
+                    <h3>👤 Acciones Rápidas</h3>
+                    <button class="btn-principal" onclick="editarPerfil()" style="margin-bottom: 10px;">
+                        ✏️ Editar Mi Perfil
+                    </button>
+                    <button class="btn-secundario" onclick="irAPantalla('pantalla-organigrama-general')">
+                        🌐 Ver Organigrama General
+                    </button>
+                </div>
+            </div>
+            
+            <button class="btn-secundario" onclick="guardarConfiguracion()" style="margin-top: 20px;">
+                GUARDAR CAMBIOS
+            </button>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- PANTALLA 7: ORGANIGRAMA GENERAL -->
+        <!-- ============================================ -->
+        <section id="pantalla-organigrama-general" class="pantalla">
+            <h2 style="text-align: center; letter-spacing: 3px;">ORGANIGRAMA GENERAL</h2>
+            <p class="descripcion-app">Vista completa de la jerarquía organizacional</p>
+            
+            <div style="text-align: center; margin: 20px 0; padding: 15px; background: rgba(0,255,136,0.1); border-radius: 12px; border: 1px solid rgba(0,255,136,0.3);">
+                <p style="font-size: 0.9rem; color: rgba(255,255,255,0.9); margin: 0;">
+                    📋 <strong>Haz doble clic</strong> en cualquier nodo para ver los detalles completos del usuario
+                </p>
+            </div>
+            
+            <!-- CANVAS DEL ORGANIGRAMA GENERAL -->
+            <div id="lienzo-organigrama-general"></div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn-secundario" onclick="irAPantalla('pantalla-organigrama')">
+                    ← Regresar a Mi Organigrama
+                </button>
+            </div>
+        </section>
+
+        <!-- FOOTER GLOBAL (Marca de agua + Tuerca) -->
+        <div class="footer-global">
+            <div class="watermark-stratos">
+                <span>STRATOS</span>
+                <span class="watermark-slogan">HERRAMIENTA MULTIFUNCIONAL</span>
+            </div>
+        </div>
+
+        <!-- BOTÓN TUERCA (DENTRO DEL CONTENEDOR) -->
+        <div id="boton-tuerca-global" class="tuerca-navegacion" onclick="toggleMenuTuerca()" style="display:none;">
+            <span>📋</span>
+        </div>
+    </div>
+
+    <!-- MENÚ LATERAL (LA TUERCA) -->
+    <div id="menu-lateral-organico" class="sidebar-menu">
+        <div class="sidebar-header">
+            <h3>MENÚ</h3>
+            <button onclick="toggleMenuTuerca()" class="btn-cerrar">✕</button>
+        </div>
+        <nav id="lista-hojas-dinamica"></nav>
+    </div>
+
+    <!-- OVERLAY PARA CERRAR MENÚ -->
+    <div id="overlay-menu" class="menu-overlay" onclick="toggleMenuTuerca()"></div>
+
+    <!-- ============================================ -->
+    <!-- MODAL PARA AGREGAR/EDITAR CONTACTOS -->
+    <!-- ============================================ -->
+    <div id="modal-contacto" class="modal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-titulo">Agregar Contacto</h3>
+                <button onclick="cerrarModalContacto()" class="btn-cerrar">✕</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="modal-nombre" placeholder="Nombre (como tú lo conoces) *" spellcheck="true" required>
+                <input type="text" id="modal-puesto" placeholder="Puesto *" spellcheck="true" required>
+                <!-- Visor de acrónimo en tiempo real -->
+                <div class="fila-dinamica" style="margin-top: 10px; align-items: center;">
+                    <span style="flex: 1; color: rgba(255,255,255,0.7);">Acrónimo:</span>
+                    <div id="modal-acronimo-preview" class="badge-visor" style="flex: 1; text-align: center; background: var(--color-primario); color: #0b0f19; padding: 8px; border-radius: 8px;">---</div>
+                </div>
+                <div class="fila-dinamica">
+                    <select id="modal-pais" class="selector-pais" style="flex: 1;">
+                        <option value="+502">🇬🇹 +502</option>
+                        <option value="+52">🇲🇽 +52</option>
+                        <option value="+1">🇺🇸 +1</option>
+                    </select>
+                    <input type="tel" id="modal-tel" placeholder="Teléfono" style="flex: 3;">
+                </div>
+                <input type="email" id="modal-email" placeholder="Email" spellcheck="true">
+                
+                <p class="descripcion-tipo" id="descripcion-tipo-contacto"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-principal" onclick="guardarContacto()">💾 SALVAR E INVITAR</button>
+                <button class="btn-secundario" onclick="cerrarModalContacto()">CANCELAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MODAL PARA VER DETALLES DE CONTACTO -->
+    <!-- ============================================ -->
+    <div id="modal-detalle-contacto" class="modal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Detalles del Contacto</h3>
+                <button onclick="cerrarModalDetalle()" class="btn-cerrar">✕</button>
+            </div>
+            <div class="modal-body" id="contenido-detalle-contacto">
+                <!-- Se llena dinámicamente -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secundario" onclick="editarContactoDesdeDetalle()">✏️ EDITAR</button>
+                <button class="btn-peligro" onclick="eliminarContacto()">🗑️ ELIMINAR</button>
+                <button class="btn-principal" onclick="cerrarModalDetalle()">CERRAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MODAL PARA CAMBIO OBLIGATORIO DE CONTRASEÑA -->
+    <!-- ============================================ -->
+    <div id="modal-cambio-obligatorio" class="modal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header" style="border-bottom: 3px solid var(--color-advertencia);">
+                <h3>⚠️ Cambio de Contraseña Obligatorio</h3>
+            </div>
+            <div class="modal-body">
+                <p style="color: rgba(255,255,255,0.9); margin-bottom: 20px; padding: 15px; background: rgba(255,165,0,0.1); border-left: 4px solid var(--color-advertencia); border-radius: 8px;">
+                    Estás usando una <strong>contraseña temporal</strong>. Por seguridad, debes cambiarla antes de continuar.
+                </p>
+                
+                <div class="formulario">
+                    <input type="password" id="nueva-pass-obligatoria" placeholder="Nueva Contraseña *" oninput="manejarMascara(this)" autocomplete="new-password">
+                    <input type="password" id="conf-pass-obligatoria" placeholder="Confirmar Contraseña *" oninput="manejarMascara(this)" autocomplete="new-password">
+                    <p id="mensaje-cambio-obligatorio" class="aviso-letrero"></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-principal" onclick="cambiarContrasenaObligatoria()">
+                    🔒 CAMBIAR CONTRASEÑA Y CONTINUAR
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- SCRIPTS -->
+    <!-- ============================================ -->
+    <script src="../Motor-Logica-y-Acronimos/datos.js?v=3"></script>
+    <script src="../Motor-Logica-y-Acronimos/logica.js?v=3"></script>
+
+</body>
+</html>
