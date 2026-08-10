@@ -432,92 +432,226 @@ textarea {
 /* ==========================================
 14. BOTONES
 ========================================== */
-/* Estilo base para botones principales */
+
+/* ==========================================
+   ESTILOS BASE UNIFICADOS PARA TODOS LOS BOTONES
+   ========================================== */
+.btn-principal,
+.btn-secundario,
+.btn-accion,
+.btn-opcion,
+.btn-link,
+.btn-peligro,
+.btn-cerrar {
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: pointer;
+    position: relative;
+    border-radius: var(--radio-bordes);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 10px 20px;
+    border: 2px solid transparent;
+    display: inline-block;
+    font-size: 0.85rem;
+}
+
+/* ==========================================
+   EFECTO HOVER UNIFICADO (ELEVACIÓN + RESPLANDOR)
+   ========================================== */
+.btn-principal:hover,
+.btn-secundario:hover,
+.btn-accion:hover,
+.btn-opcion:hover,
+.btn-opcion.activo,
+.btn-link:hover,
+.btn-peligro:hover,
+.btn-cerrar:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 12px 28px rgba(0, 255, 136, 0.4);
+    border-color: #00ff88;
+}
+
+/* ==========================================
+   EFECTO ACTIVE UNIFICADO (CLIC)
+   ========================================== */
+.btn-principal:active,
+.btn-secundario:active,
+.btn-accion:active,
+.btn-opcion:active,
+.btn-link:active,
+.btn-peligro:active,
+.btn-cerrar:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 0 25px 8px var(--color-primario), inset 0 0 10px var(--color-primario);
+    transition: 0.05s linear;
+}
+
+/* ==========================================
+   BOTÓN PRINCIPAL (VERDE LUMINOSO)
+   ========================================== */
 .btn-principal {
     background: var(--color-primario);
-    color: var(--color-texto);
-    border: none;
-    padding: 8px 16px;
-    border-radius: var(--radio-bordes);
-    font-size: 0.9rem;
-    font-weight: bold;
-    cursor: pointer;
-    text-transform: uppercase;
-    width: auto;
-    transition: all var(--transicion-rapida);
-    letter-spacing: 1px;
+    color: #0b0f19;
+    border: 2px solid var(--color-primario);
     box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
-    display: inline-block;
 }
 
 .btn-principal:hover {
     background: #00dd77;
-    box-shadow: 0 8px 25px rgba(0, 255, 136, 0.5);
-    transform: translateY(-2px);
+    border-color: #00ff88;
+    box-shadow: 0 12px 28px rgba(0, 255, 136, 0.5);
 }
 
 .btn-principal:active {
-    transform: translateY(0);
-    box-shadow: 0 0 20px 8px var(--color-primario), inset 0 0 8px var(--color-primario);
-    transition: 0.05s linear;
+    box-shadow: 0 0 25px 8px var(--color-primario), inset 0 0 10px var(--color-primario);
 }
 
-/* Estilo base para botones secundarios */
+/* ==========================================
+   BOTÓN SECUNDARIO (NARANJA LUMINOSO - PRECAUCIÓN)
+   ========================================== */
 .btn-secundario {
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--color-texto);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 8px 16px;
-    border-radius: var(--radio-bordes);
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    text-transform: uppercase;
-    width: auto;
-    transition: all var(--transicion-rapida);
-    letter-spacing: 1px;
-    display: inline-block;
+    background: #ff8c00;
+    color: #0b0f19;
+    border: 2px solid #ff8c00;
+    box-shadow: 0 5px 15px rgba(255, 140, 0, 0.3);
 }
 
 .btn-secundario:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: var(--color-primario);
+    background: #ffa500;
+    border-color: #ffaa33;
+    box-shadow: 0 12px 28px rgba(255, 140, 0, 0.5);
+    transform: translateY(-4px) scale(1.03);
 }
 
 .btn-secundario:active {
-    transform: translateY(0);
-    box-shadow: 0 0 20px 8px var(--color-primario), inset 0 0 8px var(--color-primario);
-    transition: 0.05s linear;
+    box-shadow: 0 0 25px 8px #ff8c00, inset 0 0 10px #ff8c00;
+    transform: translateY(0) scale(0.98);
 }
 
-/* Botones de acción en línea (para organigrama y otros) */
+/* ==========================================
+   BOTÓN PELIGRO (ROJO LUMINOSO - IRREVERSIBLE)
+   ========================================== */
+.btn-peligro {
+    background: #e53935;
+    color: #ffffff;
+    border: 2px solid #e53935;
+    box-shadow: 0 5px 15px rgba(229, 57, 53, 0.3);
+}
+
+.btn-peligro:hover {
+    background: #ff1744;
+    border-color: #ff5252;
+    box-shadow: 0 12px 28px rgba(229, 57, 53, 0.5);
+    transform: translateY(-4px) scale(1.03);
+}
+
+.btn-peligro:active {
+    box-shadow: 0 0 25px 8px #e53935, inset 0 0 10px #e53935;
+    transform: translateY(0) scale(0.98);
+}
+
+/* ==========================================
+   BOTÓN DE ACCIÓN (VERDE - PARA ORGANIGRAMA)
+   ========================================== */
 .btn-accion {
     background: var(--color-primario);
-    color: var(--color-texto);
-    border: none;
+    color: #0b0f19;
+    border: 2px solid var(--color-primario);
     padding: 8px 16px;
-    border-radius: var(--radio-bordes);
     font-size: 0.8rem;
-    font-weight: bold;
-    cursor: pointer;
-    text-transform: uppercase;
-    width: auto;
-    transition: all var(--transicion-rapida);
-    display: inline-block;
 }
 
 .btn-accion:hover {
     background: #00dd77;
-    transform: translateY(-2px);
+    border-color: #00ff88;
+    box-shadow: 0 12px 28px rgba(0, 255, 136, 0.4);
 }
 
 .btn-accion:active {
-    transform: translateY(0);
-    box-shadow: 0 0 20px 8px var(--color-primario), inset 0 0 8px var(--color-primario);
-    transition: 0.05s linear;
+    box-shadow: 0 0 25px 8px var(--color-primario), inset 0 0 10px var(--color-primario);
 }
 
-/* Contenedor para botones en fila (final de formularios) */
+/* ==========================================
+   BOTÓN DE OPCIÓN (COLORES)
+   ========================================== */
+.btn-opcion {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: var(--color-texto);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    flex: 1;
+}
+
+.btn-opcion:hover,
+.btn-opcion.activo {
+    background: var(--color-primario);
+    color: #0b0f19;
+    border-color: var(--color-primario);
+}
+
+.btn-opcion:active {
+    box-shadow: 0 0 25px 8px var(--color-primario), inset 0 0 10px var(--color-primario);
+}
+
+/* ==========================================
+   BOTÓN DE ENLACE
+   ========================================== */
+.btn-link {
+    background: none;
+    border: none;
+    color: var(--color-primario);
+    font-size: 0.8rem;
+    text-decoration: underline;
+    padding: 8px 0;
+}
+
+.btn-link:hover {
+    color: #00dd77;
+    text-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
+    transform: translateY(-2px);
+}
+
+.btn-link:active {
+    color: var(--color-primario);
+    text-shadow: 0 0 12px var(--color-primario);
+}
+
+/* ==========================================
+   BOTÓN CERRAR (X)
+   ========================================== */
+.btn-cerrar {
+    background: rgba(255, 77, 77, 0.2);
+    border: none;
+    color: var(--color-error);
+    font-size: 1.2rem;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.btn-cerrar:hover {
+    background: var(--color-error);
+    color: white;
+    transform: rotate(90deg) translateY(-4px) scale(1.03);
+    box-shadow: 0 12px 28px rgba(255, 77, 77, 0.4);
+    border-color: var(--color-error);
+}
+
+.btn-cerrar:active {
+    transform: rotate(90deg) scale(0.95);
+    box-shadow: 0 0 25px 8px var(--color-error), inset 0 0 10px var(--color-error);
+}
+
+/* ==========================================
+   CONTENEDOR DE BOTONES EN FILA
+   ========================================== */
 .fila-botones-final {
     display: flex;
     flex-direction: row;
@@ -533,109 +667,50 @@ textarea {
     min-width: 150px;
 }
 
-/* Botones dentro de modales */
+/* ==========================================
+   BOTONES DENTRO DE MODALES
+   ========================================== */
 .modal-footer button {
     flex: 1;
     min-width: auto;
     padding: 8px 12px;
 }
 
-/* Botón de opción (colores) */
-.btn-opcion {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: var(--color-texto);
-    padding: 8px 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.8rem;
-    transition: all var(--transicion-rapida);
-    flex: 1;
-}
-
-.btn-opcion:hover,
-.btn-opcion.activo {
+/* ==========================================
+   TUERCA (MENÚ LATERAL) CON EFECTO VERDE
+   ========================================== */
+.tuerca-navegacion {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
     background: var(--color-primario);
-    color: #0b0f19;
-    border-color: var(--color-primario);
-}
-
-.btn-opcion:active {
-    transform: translateY(0);
-    box-shadow: 0 0 20px 8px var(--color-primario), inset 0 0 8px var(--color-primario);
-    transition: 0.05s linear;
-}
-
-/* Botón de enlace */
-.btn-link {
-    background: none;
-    border: none;
-    color: var(--color-primario);
-    font-size: 0.8rem;
-    cursor: pointer;
-    text-decoration: underline;
-    padding: 8px 0;
-    transition: all var(--transicion-rapida);
-}
-
-.btn-link:hover {
-    color: #00dd77;
-}
-
-.btn-link:active {
-    color: var(--color-primario);
-    text-shadow: 0 0 8px var(--color-primario);
-}
-
-/* Botón peligro (eliminar) */
-.btn-peligro {
-    background: rgba(255, 77, 77, 0.2);
-    color: var(--color-error);
-    border: 1px solid var(--color-error);
-    padding: 8px 12px;
-    border-radius: var(--radio-bordes);
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all var(--transicion-rapida);
-}
-
-.btn-peligro:hover {
-    background: var(--color-error);
-    color: white;
-}
-
-.btn-peligro:active {
-    transform: translateY(0);
-    box-shadow: 0 0 20px 8px var(--color-error), inset 0 0 8px var(--color-error);
-    transition: 0.05s linear;
-}
-
-/* Botón cerrar */
-.btn-cerrar {
-    background: rgba(255, 77, 77, 0.2);
-    border: none;
-    color: var(--color-error);
-    font-size: 1.2rem;
-    width: 30px;
-    height: 30px;
     border-radius: 50%;
-    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all var(--transicion-rapida);
+    cursor: pointer;
+    box-shadow: 0 5px 20px rgba(0, 255, 136, 0.4);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 1000;
+    border: 2px solid transparent;
 }
 
-.btn-cerrar:hover {
-    background: var(--color-error);
-    color: white;
-    transform: rotate(90deg);
+.tuerca-navegacion:hover {
+    transform: rotate(90deg) scale(1.1);
+    box-shadow: 0 12px 28px rgba(0, 255, 136, 0.6);
+    border-color: #00ff88;
 }
 
-.btn-cerrar:active {
+.tuerca-navegacion:active {
     transform: rotate(90deg) scale(0.95);
-    box-shadow: 0 0 20px 8px var(--color-error);
+    box-shadow: 0 0 25px 8px var(--color-primario), inset 0 0 10px var(--color-primario);
+    transition: 0.05s linear;
+}
+
+.tuerca-navegacion span {
+    font-size: 1.5rem;
 }
 
 /* ==========================================
