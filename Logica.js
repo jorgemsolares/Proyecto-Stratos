@@ -1741,4 +1741,85 @@ function cerrarSesionPorInactividad() { if (sesionActiva && usuarioActivo && usu
 function iniciarTemporizadorInactividad() { if (temporizadorInactividad) clearTimeout(temporizadorInactividad); const eventos = ['click', 'mousemove', 'keypress', 'scroll', 'touchstart']; eventos.forEach(evento => document.removeEventListener(evento, reiniciarTemporizador)); eventos.forEach(evento => document.addEventListener(evento, reiniciarTemporizador)); reiniciarTemporizador(); }
 function detenerTemporizadorInactividad() { if (temporizadorInactividad) clearTimeout(temporizadorInactividad); const eventos = ['click', 'mousemove', 'keypress', 'scroll', 'touchstart']; eventos.forEach(evento => document.removeEventListener(evento, reiniciarTemporizador)); }
 
+// ==========================================
+// FUNCIÓN PARA ABRIR EL FORMULARIO DE NUEVO CONTACTO
+// ==========================================
+function mostrarFormularioContacto(tipo) {
+    const modal = document.getElementById('modal-contacto');
+    if (!modal) {
+        mostrarAvisoInmediato("Error: Modal de contacto no encontrado", "error");
+        return;
+    }
+
+    // Limpiar el formulario
+    document.getElementById('modal-nombre').value = '';
+    document.getElementById('modal-puesto').value = '';
+    document.getElementById('modal-pais').value = '+502';
+    document.getElementById('modal-tel').value = '';
+    document.getElementById('modal-email').value = '';
+    document.getElementById('modal-acronimo-preview').textContent = '---';
+    document.getElementById('modal-contacto-id').value = '';
+    document.getElementById('modal-contacto-id').dataset.tipo = tipo;
+
+    // Cambiar el título según el tipo
+    const titulo = document.getElementById('modal-titulo');
+    if (titulo) {
+        if (tipo === 'directo') titulo.innerText = 'Nuevo Colaborador';
+        else if (tipo === 'indirecto') titulo.innerText = 'Nuevo Indirecto';
+        else if (tipo === 'observador') titulo.innerText = 'Nuevo Observador';
+    }
+
+    // Mostrar el modal
+    modal.style.display = 'flex';
+}
+
+// ==========================================
+// GUARDAR CONTACTO (NUEVO O EDITADO)
+// ==========================================
+function guardarContacto() {
+    const nombre = document.getElementById('modal-nombre').value.trim();
+    const puesto = document.getElementById('modal-puesto').value.trim();
+    const pais = document.getElementById('modal-pais').value;
+    const telefono = document.getElementById('modal-tel').value.trim();
+    const email = document.getElementById('modal-email').value.trim();
+    const acronimo = document.getElementById('modal-acronimo-preview').textContent;
+
+    if (!nombre || !puesto) {
+        mostrarAvisoInmediato("✖ Complete nombre y puesto", "error");
+        return;
+    }
+
+    const nuevoContacto = {
+        id: generarIdUnico(),
+        nombre: nombre,
+        puesto: puesto,
+        paisPrefijo: pais,
+        telefono: telefono,
+        email: email,
+        acronimo: acronimo,
+        invitacionEnviada: false,
+        invitacionAceptada: false
+    };
+
+    // Obtener el tipo del modal (directo, indirecto, observador)
+    const tipo = document.getElementById('modal-contacto-id')?.dataset?.tipo || 'directo';
+
+    if (tipo === 'directo') {
+        if (!datosOrganigrama) datosOrganigrama = { id: generarIdUnico(), nombre: "Usuario", hijos: [] };
+        if (!datosOrganigrama.hijos) datosOrganigrama.hijos = [];
+        datosOrganigrama.hijos.push(nuevoContacto);
+        guardarEnStorage(STORAGE_KEYS.ORGANIGRAMA, datosOrganigrama);
+    } else if (tipo === 'indirecto') {
+        contactosIndirectos.push(nuevoContacto);
+        guardarEnStorage(STORAGE_KEYS.INDIRECTOS, contactosIndirectos);
+    } else if (tipo === 'observador') {
+        observadores.push(nuevoContacto);
+        guardarEnStorage(STORAGE_KEYS.OBSERVADORES, observadores);
+    }
+
+    cerrarModalContacto();
+    renderizarOrganigrama();
+    mostrarAvisoInmediato("✓ Contacto guardado exitosamente", "exito");
+}
+
 // Nota: las funciones restantes (renderizarOrganigramaGeneral, construirOrganigramaGeneral, etc.) no se modifican y siguen funcionando igual.
