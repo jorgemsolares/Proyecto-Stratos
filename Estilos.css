@@ -19,6 +19,9 @@ Sistema de diseño completo
     --radio-bordes: 12px;
     --sombra-elevada: 0 15px 35px rgba(0, 0, 0, 0.7);
     --transicion-rapida: 0.3s ease;
+    
+    /* NUEVA VARIABLE PARA COLOR DE LETRAS (Agregada para heredar a inputs y nodos) */
+    --color-letras: #ffffff;
 }
 
 * {
