@@ -215,33 +215,32 @@
             </section>
 
         <!-- ============================================ -->
-        <!-- PANTALLA 4: ORGANIGRAMA PERSONAL -->
-        <!-- ============================================ -->
-        <section id="pantalla-organigrama" class="pantalla">
-            <div class="header-central-organigrama">
-                <h2 style="text-align: center; margin-top: 20px; letter-spacing: 3px;">TU ORGANIGRAMA</h2>
-                <p class="descripcion-app">Construye tu red de comunicación directa</p>
-                
-                <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 20px 0;">
-                    <button class="btn-principal" onclick="mostrarFormularioContacto('directo')" style="padding: 10px 20px; width: auto;">
-                        + AÑADIR COLABORADOR
-                    </button>
-                    <button class="btn-principal" onclick="mostrarFormularioContacto('indirecto')" style="padding: 10px 20px; width: auto;">
-                        + AÑADIR INDIRECTO
-                    </button>
-                    <button class="btn-principal" onclick="mostrarFormularioContacto('observador')" style="padding: 10px 20px; width: auto;">
-                        + AÑADIR OBSERVADOR
-                    </button>
-                </div>
-            </div>
-            
-            <!-- CANVAS DEL ORGANIGRAMA -->
-            <div id="lienzo-organigrama"></div>
-            
-            <button id="btn-continuar-comunicacion" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')" style="margin-top: 30px;">
-                CONTINUAR A COMUNICACIÓN
+<!-- PANTALLA 4: ORGANIGRAMA PERSONAL -->
+<!-- ============================================ -->
+<section id="pantalla-organigrama" class="pantalla">
+    <div class="header-central-organigrama">
+        <h2 style="text-align: center; margin-top: 20px; letter-spacing: 3px;">TU ORGANIGRAMA</h2>
+        <p class="descripcion-app">Construye tu red de comunicación directa</p>
+        
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 20px 0;">
+            <button class="btn-principal" onclick="mostrarFormularioContacto('directo')" style="padding: 10px 20px; width: auto;">
+                + AÑADIR COLABORADOR
             </button>
-        </section>
+            <button class="btn-principal" onclick="mostrarFormularioContacto('indirecto')" style="padding: 10px 20px; width: auto;">
+                + AÑADIR INDIRECTO
+            </button>
+            <button class="btn-principal" onclick="mostrarFormularioContacto('observador')" style="padding: 10px 20px; width: auto;">
+                + AÑADIR OBSERVADOR
+            </button>
+        </div>
+    </div>
+    
+    <div id="lienzo-organigrama"></div>
+    
+    <button id="btn-continuar-comunicacion" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')" style="margin-top: 30px;">
+        CONTINUAR A COMUNICACIÓN
+    </button>
+</section>
 
         <!-- ============================================ -->
         <!-- PANTALLA 5: COMUNICACIÓN (Próxima a desarrollar) -->
@@ -420,24 +419,24 @@
     </div>
 
     <!-- ============================================ -->
-    <!-- MODAL PARA VER DETALLES DE CONTACTO -->
-    <!-- ============================================ -->
-    <div id="modal-detalle-contacto" class="modal" style="display:none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Detalles del Contacto</h3>
-                <button onclick="cerrarModalDetalle()" class="btn-cerrar">✕</button>
-            </div>
-            <div class="modal-body" id="contenido-detalle-contacto">
-                <!-- Se llena dinámicamente -->
-            </div>
-            <div class="modal-footer">
-                <button class="btn-secundario" onclick="editarContactoDesdeDetalle()">✏️ EDITAR</button>
-                <button class="btn-peligro" onclick="eliminarContacto()">🗑️ ELIMINAR</button>
-                <button class="btn-principal" onclick="cerrarModalDetalle()">CERRAR</button>
-            </div>
+<!-- MODAL PARA VER DETALLES DE CONTACTO -->
+<!-- ============================================ -->
+<div id="modal-detalle-contacto" class="modal" style="display:none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Detalles del Contacto</h3>
+            <button type="button" onclick="cerrarModalDetalle()" class="btn-cerrar">✕</button>
+        </div>
+        <div class="modal-body" id="contenido-detalle-contacto">
+            <!-- Se llena dinámicamente por Logica.js -->
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn-secundario" onclick="editarContactoDesdeDetalle()">✏️ EDITAR</button>
+            <button type="button" class="btn-peligro" onclick="eliminarContacto()">🗑️ ELIMINAR</button>
+            <button type="button" class="btn-principal" onclick="cerrarModalDetalle()">CERRAR</button>
         </div>
     </div>
+</div>
 
     <!-- ============================================ -->
     <!-- MODAL PARA CAMBIO OBLIGATORIO DE CONTRASEÑA -->
