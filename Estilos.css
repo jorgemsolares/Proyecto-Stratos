@@ -4,7 +4,7 @@ Sistema de diseño completo
 ========================================== */
 
 /* ==========================================
- 1. VARIABLES CSS Y RESET
+ 1. VARIABLES CSS Y RESET (aquí se definen los colores, las letras y los valores que usará toda la app)
  ========================================== */
 :root {
     --color-fondo: #0b0f19;
@@ -31,7 +31,7 @@ Sistema de diseño completo
 }
 
 /* ==========================================
-2. ESTILOS BASE
+2. ESTILOS BASE (el estilo por defecto que se aplica a todo el cuerpo de la página)
 ========================================== */
 body {
     background-color: #0b0f19;
@@ -48,7 +48,7 @@ body {
 }
 
 /* ==========================================
-3. BARRA DE NOTIFICACIONES SUPERIOR
+3. BARRA DE NOTIFICACIONES SUPERIOR (la barra donde aparecen los mensajes de aviso tipo "toast")
 ========================================== */
 #barra-notificaciones {
     width: 100%;
@@ -94,7 +94,7 @@ body {
 }
 
 /* ==========================================
-4. BRANDING CORPORATIVO (DENTRO DEL CONTENEDOR)
+4. BRANDING CORPORATIVO (imágenes y logotipos que se muestran dentro del contenedor principal)
 ========================================== */
 .branding-empresa {
     display: flex;
@@ -134,7 +134,7 @@ body {
 }
 
 /* ==========================================
-5. CONTENEDOR PRINCIPAL ADAPTATIVO
+5. CONTENEDOR PRINCIPAL ADAPTATIVO (el contenedor grande que cambia de tamaño según la pantalla)
 ========================================== */
 #app-container {
     width: 90%;
@@ -155,7 +155,7 @@ body {
 }
 
 /* ==========================================
-6. MANEJO DE PANTALLAS (Display)
+6. MANEJO DE PANTALLAS (Display) (controla qué pantalla se muestra y cuál se oculta según la navegación)
 ========================================== */
 .pantalla {
     display: none;
@@ -184,7 +184,7 @@ body {
 }
 
 /* ==========================================
-7. BRANDING Y TÍTULOS
+7. BRANDING Y TÍTULOS (estilos del logotipo, la identidad visual y los encabezados de la app)
 ========================================== */
 .branding h1 {
     font-size: 2.2rem;
@@ -220,7 +220,7 @@ h3 {
 }
 
 /* ==========================================
-8. MENSAJE PERSONALIZADO (Área global de avisos)
+8. MENSAJE PERSONALIZADO (Área global de avisos) (zona donde aparecen los mensajes de confirmación, error o advertencia en toda la app)
 ========================================== */
 .mensaje-alerta {
     background: rgba(255, 255, 255, 0.1);
@@ -246,7 +246,7 @@ h3 {
 }
 
 /* ==========================================
-9. FORMULARIOS E INPUTS
+9. FORMULARIOS E INPUTS (diseño de los campos de texto, listas desplegables y áreas para escribir datos)
 ========================================== */
 .formulario {
     display: flex;
@@ -300,7 +300,7 @@ textarea {
 }
 
 /* ==========================================
-10. MENSAJES DE VALIDACIÓN
+10. MENSAJES DE VALIDACIÓN (avisos que aparecen al lado de los campos cuando hay errores o faltan datos)
 ========================================== */
 .aviso-letrero {
     font-size: 0.9rem;
@@ -336,7 +336,7 @@ textarea {
 }
 
 /* ==========================================
-11. VISOR DE ACRÓNIMO
+11. VISOR DE ACRÓNIMO (cuadro que muestra el acrónimo generado automáticamente mientras escribes el puesto)
 ========================================== */
 .badge-visor {
     background: var(--color-primario);
@@ -378,7 +378,7 @@ textarea {
 }
 
 /* ==========================================
-12. FILAS DINÁMICAS
+12. FILAS DINÁMICAS (contenedores flexibles que se adaptan para mostrar elementos como selectores de país o botones alineados)
 ========================================== */
 .fila-dinamica {
     display: flex;
@@ -391,7 +391,7 @@ textarea {
 }
 
 /* ==========================================
-13. CHECKBOX Y OPCIONES
+13. CHECKBOX Y OPCIONES (diseño de las casillas de verificación, interruptores y selectores de opciones en formularios)
 ========================================== */
 .opcion-recuerdame {
     display: flex;
@@ -433,7 +433,7 @@ textarea {
 }
 
 /* ==========================================
-14. BOTONES
+14. BOTONES (estilos de todos los botones de acción: primarios, secundarios, de peligro y de cierre)
 ========================================== */
 
 /* ==========================================
@@ -717,7 +717,7 @@ textarea {
 }
 
 /* ==========================================
-15. IDENTIDAD CORPORATIVA (MEJORADO)
+15. IDENTIDAD CORPORATIVA (MEJORADO) (estilos para la pantalla donde el usuario configura el logo, colores y nombre de su empresa)
 ========================================== */
 .setup-identidad {
     display: flex;
@@ -903,7 +903,7 @@ textarea {
 }
 
 /* ==========================================
-16. ORGANIGRAMA
+16. ORGANIGRAMA (estilos de las fichas de contactos, los conectores y la estructura visual del mapa de personas)
 ========================================== */
 #lienzo-organigrama {
     width: 100%;
@@ -1083,7 +1083,7 @@ textarea {
 }
 
 /* ==========================================
-17. CONFIGURACIÓN PERSONAL
+17. CONFIGURACIÓN PERSONAL (estilos para la pantalla donde el usuario ajusta su idioma, notificaciones y preferencias de cuenta)
 ========================================== */
 .configuracion-container {
     display: flex;
@@ -1130,7 +1130,7 @@ textarea {
 }
 
 /* ==========================================
-18. TUERCA (MENÚ LATERAL)
+18. TUERCA (MENÚ LATERAL) (estilos del menú deslizante que se abre desde el costado para navegar entre las opciones de la app)
 ========================================== */
 .tuerca-navegacion {
     position: absolute;
@@ -1237,7 +1237,7 @@ textarea {
 }
 
 /* ==========================================
-19. MODALES - AJUSTE DE Z-INDEX PARA NOTIFICACIONES
+19. MODALES - AJUSTE DE Z-INDEX PARA NOTIFICACIONES (control de la profundidad visual para que las ventanas emergentes y avisos se muestren siempre por encima de todo)
 ========================================== */
 .modal {
     position: fixed;
@@ -1315,7 +1315,7 @@ textarea {
 }
 
 /* ==========================================
-20. FOOTER GLOBAL (Marca de agua)
+20. FOOTER GLOBAL (Marca de agua) (estilos del pie de página que muestra el nombre de la aplicación y la versión en la parte inferior de la pantalla)
 ========================================== */
 .footer-global {
     display: flex;
@@ -1349,7 +1349,7 @@ textarea {
 }
 
 /* ==========================================
-21. MENSAJE MOTIVACIONAL (No usado actualmente)
+21. MENSAJE MOTIVACIONAL (No usado actualmente) (bloque de estilos preparado para futuras frases o citas motivacionales en la app)
 ========================================== */
 .mensaje-motivacional {
     background: rgba(0, 255, 136, 0.1);
@@ -1362,7 +1362,7 @@ textarea {
 }
 
 /* ==========================================
-22. RESPONSIVO
+22. RESPONSIVO (ajustes de diseño para que la app se adapte correctamente a celulares, tablets y pantallas pequeñas)
 ========================================== */
 @media (max-width: 768px) {
     #app-container {
@@ -1415,7 +1415,7 @@ textarea {
 }
 
 /* ==========================================
-23. SCROLLBAR PERSONALIZADA
+23. SCROLLBAR PERSONALIZADA (diseño a medida de la barra de desplazamiento lateral para que combine con los colores de la app)
 ========================================== */
 ::-webkit-scrollbar {
     width: 8px;
