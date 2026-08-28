@@ -10,8 +10,11 @@ Proyecto-Stratos/
 # Configuración de VS Code (solo local; la subida automática no depende de ella)
 .vscode/
 
-# Protocolo de desarrollo (solo local; en GitHub va SOLO la bitácora)
+# Protocolo de desarrollo (solo local; en GitHub va SOLO la bitácora y la visión)
 instrucciones-IA/instrucciones.md
 
 # Script de subida automática a GitHub (herramienta LOCAL de trabajo)
 subir_automatico.ps1
+
+# Archivo temporal de explicaciones para la IA (no se sube)
+Explicacion_IA.txt
