@@ -199,3 +199,4 @@ El Arquitecto quiere no comenzar en 0 y avanzar por prioridad (un solo cupo por 
 - [ ] Limpiar duplicado `Proyecto-Stratos`.
 - [ ] Unificar en un único repositorio en la raíz.
 - [ ] Subir respaldo a GitHub.
+<!-- PRUEBA E2E SUBIDA AUTOMATICA -->
