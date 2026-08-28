@@ -12,3 +12,6 @@ Proyecto-Stratos/
 
 # Protocolo de desarrollo (solo local; en GitHub va SOLO la bitácora)
 instrucciones-IA/instrucciones.md
+
+# Script de subida automática a GitHub (herramienta LOCAL de trabajo)
+subir_automatico.ps1
