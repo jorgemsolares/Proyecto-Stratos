@@ -18,3 +18,7 @@ subir_automatico.ps1
 
 # Archivo temporal de explicaciones para la IA (no se sube)
 Explicacion_IA.txt
+
+# Archivos extra sueltos (no se suben)
+_bit.txt
+_f.txt
