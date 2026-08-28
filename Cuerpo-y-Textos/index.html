@@ -8,27 +8,31 @@
 </head>
 <body>
 
-        <!-- BARRA DE NOTIFICACIONES SUPERIOR -->
+        <!-- ============================================ -->
+        <!-- GRUPO 1: CABECERA Y AVISOS GLOBALES -->
+        <!-- ============================================ -->
+
+        <!-- 1.1 BARRA DE NOTIFICACIONES SUPERIOR (avisos tipo "toast" que aparecen en la parte superior de la app) -->
     <div id="barra-notificaciones" class="notificacion-superior">
         <span id="texto-notificacion"></span>
     </div>
 
-    <!-- CONTENEDOR PRINCIPAL DE LA APP -->
+        <!-- 1.2 CONTENEDOR PRINCIPAL DE LA APP (el contenedor que envuelve y organiza toda la aplicación) -->
     <div id="app-container">
     
-    <!-- BRANDING CORPORATIVO (Aparece después de completar identidad) -->
+        <!-- 1.3 BRANDING CORPORATIVO (logo y slogan de la empresa; aparece al completar la identidad) -->
         <div id="branding-corporativo" class="branding-empresa" style="display:none;">
             <img id="logo-empresa-header" src="" alt="Logo Empresa">
             <p id="slogan-empresa-header"></p>
         </div>
       
-    <!-- BRANDING INICIAL DE STRATOS -->
+        <!-- 1.4 BRANDING INICIAL DE STRATOS (el logotipo principal de la aplicación) -->
         <header class="branding">
             <h1>STRATOS</h1>
-            <p>HERRAMIENTA MULTIFUNCIONAL</p>
+            <p data-i18n="branding_cabecera">HERRAMIENTA MULTIFUNCIONAL</p>
         </header>
 
-    <!-- MENSAJE PERSONALIZADO (Aparece cuando No.1 no completa Identidad) -->
+        <!-- 1.5 MENSAJE PERSONALIZADO (área global de alertas y avisos de la app) -->
         <div id="mensaje-personalizado" class="mensaje-alerta" style="display:none;">
             <span id="texto-mensaje-personalizado"></span>
             <span id="frase-motivacional" class="frase-motivacional" style="display:none;"></span>
@@ -36,15 +40,18 @@
 
 
 <!-- ============================================ -->
-<!-- PANTALLA 1: REGISTRO/EDICIÓN DE PERFIL -->
+<!-- GRUPO 2: PANTALLAS PRINCIPALES -->
+<!-- ============================================ -->
+<!-- ============================================ -->
+<!-- 2.1 PANTALLA 1 - REGISTRO/EDICIÓN DE PERFIL (datos personales, teléfono, cargo, acrónimo y contraseña) -->
 <!-- ============================================ -->
 <section id="registro-invitacion" class="pantalla pantalla-compacta">
-    <h2 id="titulo-registro">Bienvenido</h2>
-    <p class="descripcion-app">Configura tu perfil de acceso único.</p>
+    <h2 id="titulo-registro" data-i18n="reg_titulo">Bienvenido</h2>
+    <p class="descripcion-app" data-i18n="reg_desc">Configura tu perfil de acceso único.</p>
     <div class="formulario">
-        <input type="text" id="reg-nombres" placeholder="Nombres *" spellcheck="true" required>
-        <input type="text" id="reg-apellidos" placeholder="Apellidos" spellcheck="true">
-        <input type="text" id="reg-id" placeholder="ID Empleado *" required>
+        <input type="text" id="reg-nombres" placeholder="Nombres *" data-i18n="reg_nombres" spellcheck="true" required>
+        <input type="text" id="reg-apellidos" placeholder="Apellidos" data-i18n="reg_apellidos" spellcheck="true">
+        <input type="text" id="reg-id" placeholder="ID Empleado *" data-i18n="reg_id" required>
       
         <div class="fila-dinamica">
             <select id="reg-pais" class="selector-pais" style="flex: 1;">
@@ -55,124 +62,124 @@
                 <option value="+503">🇸🇻 +503</option>
                 <option value="+504">🇭🇳 +504</option>
             </select>
-            <input type="tel" id="reg-tel" placeholder="Teléfono" oninput="validarContacto()" style="flex: 3;">
+            <input type="tel" id="reg-tel" placeholder="Teléfono" data-i18n="reg_tel" oninput="validarContacto()" style="flex: 3;">
         </div>
 
-        <input type="email" id="reg-email" placeholder="Email" oninput="validarContacto()" spellcheck="true">
+        <input type="email" id="reg-email" placeholder="Email" data-i18n="reg_email" oninput="validarContacto()" spellcheck="true">
         <p id="mensaje-contacto" class="aviso-letrero"></p>
 
         <div class="fila-dinamica">
             <div style="flex: 3; text-align: left;">
-                <input type="text" id="reg-posicion" placeholder="Posición *" style="width: 100%;" spellcheck="true" required>
+                <input type="text" id="reg-posicion" placeholder="Posición *" data-i18n="reg_posicion" style="width: 100%;" spellcheck="true" required>
             </div>
             <div id="visor-acronimo" class="badge-visor">---</div>
         </div>
-        <p class="leyenda-acronimo">El acrónimo se forma con las mayúsculas y números de tu posición</p>
+        <p class="leyenda-acronimo" data-i18n="reg_leyenda_acronimo">El acrónimo se forma con las mayúsculas y números de tu posición</p>
 
-        <input type="password" id="reg-pass" placeholder="Contraseña *" oninput="manejarMascara(this)" autocomplete="new-password" required>
-        <input type="password" id="reg-pass-conf" placeholder="Confirmar Contraseña *" oninput="manejarMascara(this)" autocomplete="new-password" required>
+        <input type="password" id="reg-pass" placeholder="Contraseña *" data-i18n="reg_pass" oninput="manejarMascara(this)" autocomplete="new-password" required>
+        <input type="password" id="reg-pass-conf" placeholder="Confirmar Contraseña *" data-i18n="reg_pass_conf" oninput="manejarMascara(this)" autocomplete="new-password" required>
         <p id="mensaje-password" class="aviso-letrero"></p>
       
         <div id="campos-cambio-contrasena" style="display:none;">
             <hr style="margin: 20px 0; border: 1px solid rgba(255,255,255,0.1);">
-            <p style="font-size: 0.9rem; color: var(--color-primario); margin-bottom: 10px; font-weight: 600;">
+            <p style="font-size: 0.9rem; color: var(--color-primario); margin-bottom: 10px; font-weight: 600;" data-i18n="reg_cambiar_pass">
                 🔐 Cambiar mi contraseña (opcional)
             </p>
-            <input type="password" id="edit-pass-actual" placeholder="Contraseña Actual" oninput="manejarMascara(this)" autocomplete="current-password">
-            <input type="password" id="edit-pass-nueva" placeholder="Nueva Contraseña" oninput="manejarMascara(this)" autocomplete="new-password">
-            <input type="password" id="edit-pass-conf" placeholder="Confirmar Nueva Contraseña" oninput="manejarMascara(this)" autocomplete="new-password">
+            <input type="password" id="edit-pass-actual" placeholder="Contraseña Actual" data-i18n="reg_pass_actual" oninput="manejarMascara(this)" autocomplete="current-password">
+            <input type="password" id="edit-pass-nueva" placeholder="Nueva Contraseña" data-i18n="reg_pass_nueva" oninput="manejarMascara(this)" autocomplete="new-password">
+            <input type="password" id="edit-pass-conf" placeholder="Confirmar Nueva Contraseña" data-i18n="reg_pass_nueva_conf" oninput="manejarMascara(this)" autocomplete="new-password">
             <p id="mensaje-cambio-password" class="aviso-letrero"></p>
         </div>
      
-        <p class="campos-obligatorios">* Campos obligatorios</p>
+        <p class="campos-obligatorios" data-i18n="reg_obligatorios">* Campos obligatorios</p>
     </div>
-    <button class="btn-principal" onclick="procesarRegistro()" id="btn-salvar-registro">SALVAR</button>
+    <button class="btn-principal" onclick="procesarRegistro()" id="btn-salvar-registro" data-i18n="reg_salvar">SALVAR</button>
 </section>
 
 
         <!-- ============================================ -->
-        <!-- PANTALLA 2: LOGIN/ACCESO -->
+        <!-- 2.2 PANTALLA 2 - LOGIN/ACCESO (entrada al sistema con nombre, ID y contraseña) -->
         <!-- ============================================ -->
         <section id="pantalla-acceso" class="pantalla">
-    <h2 id="bienvenida-usuario">Hola <span id="nombre-usuario-login"></span></h2>
+    <h2 id="bienvenida-usuario"><span data-i18n="acc_hola">Hola</span> <span id="nombre-usuario-login"></span></h2>
               
     <div class="formulario">
-        <input type="text" id="acc-nombre-completo" placeholder="Nombre Completo" list="lista-usuarios" autocomplete="off" spellcheck="true">
+        <input type="text" id="acc-nombre-completo" placeholder="Nombre Completo" data-i18n="acc_nombre" list="lista-usuarios" autocomplete="off" spellcheck="true">
         <datalist id="lista-usuarios"></datalist>
       
         <div class="opcion-recuerdame">
             <input type="checkbox" id="guardar-local">
-            <label for="guardar-local">Recordar mi nombre en este dispositivo</label>
+            <label for="guardar-local" data-i18n="acc_recordar">Recordar mi nombre en este dispositivo</label>
         </div>
        
-        <input type="text" id="acc-id" placeholder="ID Empleado" autocomplete="new-password" spellcheck="true" readonly onfocus="this.removeAttribute('readonly')">
+        <input type="text" id="acc-id" placeholder="ID Empleado" data-i18n="acc_id" autocomplete="new-password" spellcheck="true" readonly onfocus="this.removeAttribute('readonly')">
         
-        <input type="password" id="acc-pass" placeholder="Contraseña" oninput="manejarMascara(this)" autocomplete="current-password">
+        <input type="password" id="acc-pass" placeholder="Contraseña" data-i18n="acc_pass" oninput="manejarMascara(this)" autocomplete="current-password">
       
         <p id="mensaje-acceso" class="aviso-letrero"></p>
         <p id="intentos-restantes" class="texto-advertencia" style="display:none;"></p>
       
-        <button class="btn-principal" onclick="validarEntrada()">ENTRAR</button>
-        <button class="btn-link" id="btn-olvidaste-pass" onclick="solicitarRecuperacionContrasena()" style="display:none;">¿Olvidaste tu contraseña?</button>
+        <button class="btn-principal" onclick="validarEntrada()" data-i18n="acc_entrar">ENTRAR</button>
+        <button class="btn-link" id="btn-olvidaste-pass" onclick="solicitarRecuperacionContrasena()" style="display:none;" data-i18n="acc_olvidaste">¿Olvidaste tu contraseña?</button>
     </div>
 </section>
 
             <!-- ============================================ -->
-            <!-- PANTALLA 3: IDENTIDAD CORPORATIVA (Solo No.1 y Primera Línea) -->
+            <!-- 2.3 PANTALLA 3 - IDENTIDAD CORPORATIVA (solo No.1 y Primera Línea; define logo, colores, tipografía y slogan) -->
             <!-- ============================================ -->
             <section id="pantalla-identidad" class="pantalla">
-                <h2>Identidad Corporativa</h2>
-                <p class="descripcion-app">Define la identidad visual de tu organización</p>
+                <h2 data-i18n="id_titulo">Identidad Corporativa</h2>
+                <p class="descripcion-app" data-i18n="id_desc">Define la identidad visual de tu organización</p>
                 
                 <div class="setup-identidad">
                  <div class="formulario" style="margin-bottom: 20px;">
-                    <input type="text" id="empresa-nombre" placeholder="Nombre de la Empresa *" spellcheck="true" required>
-                    <input type="text" id="empresa-acronimo" placeholder="Acrónimo (opcional)" style="background: rgba(255,255,255,0.05);">
+                    <input type="text" id="empresa-nombre" placeholder="Nombre de la Empresa *" data-i18n="id_empresa" spellcheck="true" required>
+                    <input type="text" id="empresa-acronimo" placeholder="Acrónimo (opcional)" data-i18n="id_acronimo" style="background: rgba(255,255,255,0.05);">
                 </div>   
-                    <!-- 1. LOGO -->
+                    <!-- 2.3.1 LOGO (cargar la imagen del logotipo de la empresa) -->
                     <div id="contenedor-logo-previsualizacion" class="logo-upload-box" onclick="document.getElementById('input-logo').click()">
-                        <img id="vista-previa-logo" src="" style="display:none;" alt="Vista previa del logo">
-                        <span id="texto-placeholder-logo">📤 Cargar Logo</span>
+                        <img id="vista-previa-logo" src="" style="display:none;" alt="Vista previa del logo" data-i18n="id_prev_logo">
+                        <span id="texto-placeholder-logo" data-i18n="id_cargar_logo">📤 Cargar Logo</span>
                         <input type="file" id="input-logo" accept="image/*" style="display:none;" onchange="procesarLogo(this)">
                     </div>
                     
-                    <!-- 2. PALETA DE COLORES (8 cuadros en 1 fila) -->
+                    <!-- 2.3.2 PALETA DE COLORES (los 8 cuadros de color en una fila) -->
                     <div id="paleta-colores-centrada" class="contenedor-paleta-ocho"></div>
                     
-                    <!-- 3. ASIGNACIÓN DE COLORES -->
+                    <!-- 2.3.3 ASIGNACIÓN DE COLORES (elegir a dónde aplicar el color: fondo, letras o botones) -->
                     <div class="controles-destino-color">
-                        <p style="margin-bottom: 10px; font-size: 0.9rem;">Asignar color seleccionado a:</p>
+                        <p style="margin-bottom: 10px; font-size: 0.9rem;" data-i18n="id_asignar">Asignar color seleccionado a:</p>
                         <div style="display: flex; gap: 10px;">
-                            <button type="button" class="btn-opcion" onclick="aplicarCambioEstetico('fondo')">Fondo</button>
-                            <button type="button" class="btn-opcion" onclick="aplicarCambioEstetico('texto')">Letras</button>
-                            <button type="button" class="btn-opcion" onclick="aplicarCambioEstetico('botones')">Botones</button>
+                            <button type="button" class="btn-opcion" onclick="aplicarCambioEstetico('fondo')" data-i18n="id_fondo">Fondo</button>
+                            <button type="button" class="btn-opcion" onclick="aplicarCambioEstetico('texto')" data-i18n="id_letras">Letras</button>
+                            <button type="button" class="btn-opcion" onclick="aplicarCambioEstetico('botones')" data-i18n="id_botones">Botones</button>
                         </div>
                     </div>
                     
-                    <!-- 4. PREVIEW DE COLORES ASIGNADOS -->
+                    <!-- 2.3.4 PREVIEW DE COLORES ASIGNADOS (mostrar cómo quedan los colores de fondo, letras y botones) -->
                     <div class="preview-colores">
                         <div class="preview-item">
-                            <span>Fondo</span>
+                            <span data-i18n="id_fondo">Fondo</span>
                             <div id="preview-fondo" class="color-box"></div>
                         </div>
                         <div class="preview-item">
-                            <span>Letras</span>
+                            <span data-i18n="id_letras">Letras</span>
                             <div id="preview-texto" class="color-box"></div>
                         </div>
                         <div class="preview-item">
-                            <span>Botones</span>
+                            <span data-i18n="id_botones">Botones</span>
                             <div id="preview-botones" class="color-box"></div>
                         </div>
                     </div>
                     
-                    <!-- 5. SLOGAN -->
+                    <!-- 2.3.5 SLOGAN (la frase corta de la empresa) -->
                     <div class="campo-con-preview">
-                        <input type="text" id="id-slogan" placeholder="Slogan de la Empresa *" oninput="actualizarVistaPrevia()" spellcheck="true" required>
+                        <input type="text" id="id-slogan" placeholder="Slogan de la Empresa *" data-i18n="id_slogan" oninput="actualizarVistaPrevia()" spellcheck="true" required>
                         
-                        <!-- 6. SELECTORES DE TIPOGRAFÍA Y ESTILO -->
+                        <!-- 2.3.6 SELECTORES DE TIPOGRAFÍA Y ESTILO (elegir la letra y el estilo del slogan) -->
                         <div class="selectores-esteticos-mejorados">
                             <label>
-                                <span>Tipografía:</span>
+                                <span data-i18n="id_tipografia">Tipografía:</span>
                                 <select id="sel-tipografia" class="input-estilizado-mejorado" onchange="actualizarVistaPrevia()">
                                     <option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Segoe UI</option>
                                     <option value="Arial, Helvetica, sans-serif">Arial</option>
@@ -184,107 +191,106 @@
                             </label>
                             
                             <label>
-                                <span>Estilo:</span>
+                                <span data-i18n="id_estilo">Estilo:</span>
                                 <select id="sel-estilo" class="input-estilizado-mejorado" onchange="actualizarVistaPrevia()">
-                                    <option value="normal">Normal</option>
-                                    <option value="bold">Negrita</option>
-                                    <option value="italic">Cursiva</option>
-                                    <option value="bold italic">Negrita Cursiva</option>
+                                    <option value="normal" data-i18n="id_estilo_normal">Normal</option>
+                                    <option value="bold" data-i18n="id_estilo_negrita">Negrita</option>
+                                    <option value="italic" data-i18n="id_estilo_cursiva">Cursiva</option>
+                                    <option value="bold italic" data-i18n="id_estilo_neg_curs">Negrita Cursiva</option>
                                 </select>
                             </label>
                         </div>
                         
-                        <!-- VISTA PREVIA DEL SLOGAN -->
-                        <div id="vista-previa-slogan" class="slogan-preview">
+                        <!-- 2.3.7 VISTA PREVIA DEL SLOGAN (cómo se ve el slogan con la tipografía y colores elegidos) -->
+                        <div id="vista-previa-slogan" class="slogan-preview" data-i18n="id_prev_slogan">
                             Vista previa del slogan
                         </div>
                     </div>
                     
-                    <!-- 7. MISIÓN, VISIÓN, VALORES -->
+                    <!-- 2.3.8 MISIÓN, VISIÓN Y VALORES (los principios y frases que definen a la empresa) -->
                     <div class="campos-filosofia">
-                        <textarea id="id-mision" placeholder="Misión *" rows="3" spellcheck="true" required></textarea>
-                        <textarea id="id-vision" placeholder="Visión *" rows="3" spellcheck="true" required></textarea>
-                        <textarea id="id-valores" placeholder="Valores (Separados por coma) *" rows="2" spellcheck="true" required></textarea>
+                        <textarea id="id-mision" placeholder="Misión *" data-i18n="id_mision" rows="3" spellcheck="true" required></textarea>
+                        <textarea id="id-vision" placeholder="Visión *" data-i18n="id_vision" rows="3" spellcheck="true" required></textarea>
+                        <textarea id="id-valores" placeholder="Valores (Separados por coma) *" data-i18n="id_valores" rows="2" spellcheck="true" required></textarea>
                     </div>
                 </div>
                 
                 <div class="fila-botones-final">
-                    <button class="btn-principal" onclick="salvarIdentidad()">SALVAR Y CONTINUAR</button>
-                    <button class="btn-secundario" onclick="saltarIdentidad()">CONTINUAR SIN COMPLETAR</button>
+                    <button class="btn-principal" onclick="salvarIdentidad()" data-i18n="id_salvar_cont">SALVAR Y CONTINUAR</button>
+                    <button class="btn-secundario" onclick="saltarIdentidad()" data-i18n="id_cont_sin">CONTINUAR SIN COMPLETAR</button>
                 </div>
             </section>
 
         <!-- ============================================ -->
-        <!-- PANTALLA 4: ORGANIGRAMA PERSONAL -->
-        <!-- ============================================ -->
-        <section id="pantalla-organigrama" class="pantalla">
-            <div class="header-central-organigrama">
-                <h2 style="text-align: center; margin-top: 20px; letter-spacing: 3px;">TU ORGANIGRAMA</h2>
-                <p class="descripcion-app">Construye tu red de comunicación directa</p>
-                
-                <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 20px 0;">
-                    <button class="btn-principal" onclick="mostrarFormularioContacto('directo')" style="padding: 10px 20px; width: auto;">
-                        + AÑADIR COLABORADOR
-                    </button>
-                    <button class="btn-principal" onclick="mostrarFormularioContacto('indirecto')" style="padding: 10px 20px; width: auto;">
-                        + AÑADIR INDIRECTO
-                    </button>
-                    <button class="btn-principal" onclick="mostrarFormularioContacto('observador')" style="padding: 10px 20px; width: auto;">
-                        + AÑADIR OBSERVADOR
-                    </button>
-                </div>
-            </div>
-            
-            <!-- CANVAS DEL ORGANIGRAMA -->
-            <div id="lienzo-organigrama"></div>
-            
-            <button id="btn-continuar-comunicacion" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')" style="margin-top: 30px;">
-                CONTINUAR A COMUNICACIÓN
+<!-- 2.4 PANTALLA 4 - ORGANIGRAMA PERSONAL (construye tu red: agrega colaboradores, indirectos y observadores) -->
+<!-- ============================================ -->
+<section id="pantalla-organigrama" class="pantalla">
+    <div class="header-central-organigrama">
+        <h2 style="text-align: center; margin-top: 20px; letter-spacing: 3px;" data-i18n="org_titulo">TU ORGANIGRAMA</h2>
+        <p class="descripcion-app" data-i18n="org_desc">Construye tu red de comunicación directa</p>
+        
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 20px 0;">
+            <button class="btn-principal" onclick="mostrarFormularioContacto('directo')" style="padding: 10px 20px; width: auto;" data-i18n="org_anadir_col">
+                + AÑADIR COLABORADOR
             </button>
-        </section>
+            <button class="btn-principal" onclick="mostrarFormularioContacto('indirecto')" style="padding: 10px 20px; width: auto;" data-i18n="org_anadir_ind">
+                + AÑADIR INDIRECTO
+            </button>
+            <button class="btn-principal" onclick="mostrarFormularioContacto('observador')" style="padding: 10px 20px; width: auto;" data-i18n="org_anadir_obs">
+                + AÑADIR OBSERVADOR
+            </button>
+        </div>
+    </div>
+    
+    <div id="lienzo-organigrama"></div>
+    
+    <button id="btn-continuar-comunicacion" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')" style="margin-top: 30px;" data-i18n="org_continuar">
+        CONTINUAR A COMUNICACIÓN
+    </button>
+</section>
 
         <!-- ============================================ -->
-        <!-- PANTALLA 5: COMUNICACIÓN (Próxima a desarrollar) -->
+        <!-- 2.5 PANTALLA 5 - COMUNICACIÓN (módulo de mensajes; próximo a desarrollar) -->
         <!-- ============================================ -->
         <section id="pantalla-comunicacion" class="pantalla">
-            <h2>Centro de Comunicación</h2>
-            <p class="descripcion-app">Módulo de comunicación en desarrollo</p>
+            <h2 data-i18n="com_titulo">Centro de Comunicación</h2>
+            <p class="descripcion-app" data-i18n="com_desc">Módulo de comunicación en desarrollo</p>
             <div style="text-align: center; padding: 60px 20px;">
                 <p style="font-size: 3rem;">💬</p>
-                <p style="font-size: 1.2rem; color: rgba(255,255,255,0.7);">
+                <p style="font-size: 1.2rem; color: rgba(255,255,255,0.7);" data-i18n="com_disponible">
                     Este módulo estará disponible próximamente
                 </p>
             </div>
         </section>
 
         <!-- ============================================ -->
-        <!-- PANTALLA 6: CONFIGURACIÓN PERSONAL -->
+        <!-- 2.6 PANTALLA 6 - CONFIGURACIÓN PERSONAL (notificaciones, idioma, seguridad, recuperación y acciones rápidas) -->
         <!-- ============================================ -->
         <section id="pantalla-configuracion" class="pantalla">
-            <h2>Mi Configuración</h2>
-            <p class="descripcion-app">Personaliza tu experiencia</p>
+            <h2 data-i18n="cfg_titulo">Mi Configuración</h2>
+            <p class="descripcion-app" data-i18n="cfg_desc">Personaliza tu experiencia</p>
             
             <div class="configuracion-container">
                 <div class="config-section">
-                    <h3>🔔 Notificaciones</h3>
+                    <h3 data-i18n="cfg_notif">🔔 Notificaciones</h3>
                     <div class="config-options">
                         <label class="checkbox-container">
                             <input type="checkbox" id="config-sonido" checked>
-                            <span>Sonido</span>
+                            <span data-i18n="cfg_sonido">Sonido</span>
                         </label>
                         <label class="checkbox-container">
                             <input type="checkbox" id="config-vibracion" checked>
-                            <span>Vibración</span>
+                            <span data-i18n="cfg_vibracion">Vibración</span>
                         </label>
                         <label class="checkbox-container">
                             <input type="checkbox" id="config-push" checked>
-                            <span>Notificaciones Push</span>
+                            <span data-i18n="cfg_push">Notificaciones Push</span>
                         </label>
                     </div>
                 </div>
                 
                 <div class="config-section">
-                    <h3>🌐 Idioma</h3>
+                    <h3 data-i18n="cfg_idioma">🌐 Idioma</h3>
                     <select id="config-idioma" class="input-estilizado">
                         <option value="es" selected>Español</option>
                         <option value="en">English</option>
@@ -292,50 +298,50 @@
                 </div>
                 
                 <div class="config-section">
-                    <h3>🔒 Seguridad</h3>
+                    <h3 data-i18n="cfg_seguridad">🔒 Seguridad</h3>
                     <label class="checkbox-container">
                         <input type="checkbox" id="config-biometria">
-                        <span>Habilitar autenticación biométrica</span>
+                        <span data-i18n="cfg_biometria">Habilitar autenticación biométrica</span>
                     </label>
                 </div>
                 
                 <div class="config-section">
-                    <h3>🔑 Recuperación de Contraseñas</h3>
+                    <h3 data-i18n="cfg_rec">🔑 Recuperación de Contraseñas</h3>
                     <p class="descripcion-app">
-                        Ayuda a cualquier usuario a recuperar su contraseña. 
-                        <span style="color: var(--color-advertencia);">La solicitud quedará registrada con fines de trazabilidad.</span>
+                        <span data-i18n="cfg_rec_desc">Ayuda a cualquier usuario a recuperar su contraseña.</span> 
+                        <span style="color: var(--color-advertencia);" data-i18n="cfg_rec_traz">La solicitud quedará registrada con fines de trazabilidad.</span>
                     </p>
                     
                     <div class="formulario">
-                        <input type="text" id="recuperacion-destino" placeholder="Email o Teléfono del usuario *" spellcheck="true">
-                        <input type="password" id="recuperacion-nueva-pass" placeholder="Contraseña temporal *" oninput="manejarMascara(this)" autocomplete="new-password">
-                        <input type="password" id="recuperacion-conf-pass" placeholder="Confirmar contraseña *" oninput="manejarMascara(this)" autocomplete="new-password">
+                        <input type="text" id="recuperacion-destino" placeholder="Email o Teléfono del usuario *" data-i18n="cfg_rec_dest" spellcheck="true">
+                        <input type="password" id="recuperacion-nueva-pass" placeholder="Contraseña temporal *" data-i18n="cfg_rec_temp" oninput="manejarMascara(this)" autocomplete="new-password">
+                        <input type="password" id="recuperacion-conf-pass" placeholder="Confirmar contraseña *" data-i18n="cfg_rec_conf" oninput="manejarMascara(this)" autocomplete="new-password">
                         <p id="mensaje-recuperacion" class="aviso-letrero"></p>
                     </div>
                     
-                    <button class="btn-principal" onclick="enviarContrasenaAUsuario()">
+                    <button class="btn-principal" onclick="enviarContrasenaAUsuario()" data-i18n="cfg_rec_enviar">
                         📧 ENVIAR CONTRASEÑA
                     </button>
                 </div>
                 
                 <div class="config-section">
-                    <h3>👤 Acciones Rápidas</h3>
-                    <button class="btn-principal" onclick="editarPerfil()" style="margin-bottom: 10px;">
+                    <h3 data-i18n="cfg_acciones">👤 Acciones Rápidas</h3>
+                    <button class="btn-principal" onclick="editarPerfil()" style="margin-bottom: 10px;" data-i18n="cfg_editar">
                         ✏️ Editar Mi Perfil
                     </button>
-                    <button class="btn-secundario" onclick="irAPantalla('pantalla-organigrama-general')">
+                    <button class="btn-secundario" onclick="irAPantalla('pantalla-organigrama-general')" data-i18n="cfg_verorg">
                         🌐 Ver Organigrama General
                     </button>
                 </div>
             </div>
             
-            <button class="btn-principal" onclick="guardarConfiguracion()" style="margin-top: 20px;">
+            <button class="btn-principal" onclick="guardarConfiguracion()" style="margin-top: 20px;" data-i18n="cfg_guardar">
                 GUARDAR CAMBIOS
             </button>
         </section>
 
         <!-- ============================================ -->
-        <!-- PANTALLA 7: ORGANIGRAMA GENERAL -->
+        <!-- 2.7 PANTALLA 7 - ORGANIGRAMA GENERAL (mapa completo de la jerarquía; doble clic para detalle) -->
         <!-- ============================================ -->
         <section id="pantalla-organigrama-general" class="pantalla">
             <h2 style="text-align: center; letter-spacing: 3px;">ORGANIGRAMA GENERAL</h2>
@@ -347,7 +353,7 @@
                 </p>
             </div>
             
-            <!-- CANVAS DEL ORGANIGRAMA GENERAL -->
+            <!-- 2.7.1 CANVAS DEL ORGANIGRAMA GENERAL (el lienzo donde se dibuja el mapa completo) -->
             <div id="lienzo-organigrama-general"></div>
             
             <div style="text-align: center; margin-top: 30px;">
@@ -357,7 +363,10 @@
             </div>
         </section>
 
-        <!-- FOOTER GLOBAL (Marca de agua + Tuerca) -->
+        <!-- ============================================ -->
+        <!-- GRUPO 3: PIE DE PÁGINA Y NAVEGACIÓN -->
+        <!-- ============================================ -->
+        <!-- 3.1 FOOTER GLOBAL (pie de página con la marca de agua de la app) -->
         <div class="footer-global">
             <div class="watermark-stratos">
                 <span>STRATOS</span>
@@ -365,13 +374,13 @@
             </div>
         </div>
 
-        <!-- BOTÓN TUERCA (DENTRO DEL CONTENEDOR) -->
+        <!-- 3.2 BOTÓN TUERCA (el botón flotante de navegación dentro del contenedor) -->
         <div id="boton-tuerca-global" class="tuerca-navegacion" onclick="toggleMenuTuerca()" style="display:none;">
             <span>📋</span>
         </div>
     </div>
 
-    <!-- MENÚ LATERAL (LA TUERCA) -->
+    <!-- 3.3 MENÚ LATERAL (el panel deslizante que se abre desde la tuerca) -->
     <div id="menu-lateral-organico" class="sidebar-menu">
         <div class="sidebar-header">
             <h3>MENÚ</h3>
@@ -380,24 +389,27 @@
         <nav id="lista-hojas-dinamica"></nav>
     </div>
 
-    <!-- OVERLAY PARA CERRAR MENÚ -->
+    <!-- 3.4 OVERLAY PARA CERRAR MENÚ (la sombra que cierra el menú al hacer clic fuera) -->
     <div id="overlay-menu" class="menu-overlay" onclick="toggleMenuTuerca()"></div>
 
     <!-- ============================================ -->
-    <!-- MODAL PARA AGREGAR/EDITAR CONTACTOS -->
+    <!-- GRUPO 4: MODALES (VENTANAS EMERGENTES) -->
+    <!-- ============================================ -->
+    <!-- ============================================ -->
+    <!-- 4.1 MODAL PARA AGREGAR/EDITAR CONTACTOS (guardar e invitar a un contacto, o editar uno existente) -->
     <!-- ============================================ -->
     <div id="modal-contacto" class="modal" style="display:none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="modal-titulo">Agregar Contacto</h3>
+                <h3 id="modal-titulo" data-i18n="mod_titulo">Agregar Contacto</h3>
                 <button onclick="cerrarModalContacto()" class="btn-cerrar">✕</button>
             </div>
             <div class="modal-body">
-                <input type="text" id="modal-nombre" placeholder="Nombre (como tú lo conoces) *" spellcheck="true" required>
-                <input type="text" id="modal-puesto" placeholder="Puesto *" spellcheck="true" required>
+                <input type="text" id="modal-nombre" placeholder="Nombre (como tú lo conoces) *" data-i18n="mod_nombre" spellcheck="true" required>
+                <input type="text" id="modal-puesto" placeholder="Puesto *" data-i18n="mod_puesto" spellcheck="true" required>
                 <!-- Visor de acrónimo en tiempo real -->
                 <div class="fila-dinamica" style="margin-top: 10px; align-items: center;">
-                    <span style="flex: 1; color: rgba(255,255,255,0.7);">Acrónimo:</span>
+                    <span style="flex: 1; color: rgba(255,255,255,0.7);" data-i18n="mod_acronimo">Acrónimo:</span>
                     <div id="modal-acronimo-preview" class="badge-visor" style="flex: 1; text-align: center; background: var(--color-primario); color: #0b0f19; padding: 8px; border-radius: 8px;">---</div>
                 </div>
                 <div class="fila-dinamica">
@@ -406,46 +418,48 @@
                         <option value="+52">🇲🇽 +52</option>
                         <option value="+1">🇺🇸 +1</option>
                     </select>
-                    <input type="tel" id="modal-tel" placeholder="Teléfono" style="flex: 3;">
+                    <input type="tel" id="modal-tel" placeholder="Teléfono" data-i18n="mod_tel" style="flex: 3;">
                 </div>
-                <input type="email" id="modal-email" placeholder="Email" spellcheck="true">
+                <input type="email" id="modal-email" placeholder="Email" data-i18n="mod_email" spellcheck="true">
+                <!-- Campo oculto para identificar el tipo de contacto (directo/indirecto/observador) y si se está editando (contiene el id) -->
+                <input type="hidden" id="modal-contacto-id">
                 
                 <p class="descripcion-tipo" id="descripcion-tipo-contacto"></p>
             </div>
             <div class="modal-footer">
-                <button class="btn-principal" onclick="guardarContacto()">💾 SALVAR E INVITAR</button>
-                <button class="btn-secundario" onclick="cerrarModalContacto()">CANCELAR</button>
+                <button class="btn-principal" onclick="guardarContacto()" data-i18n="mod_salvar_inv">💾 SALVAR E INVITAR</button>
+                <button class="btn-secundario" onclick="cerrarModalContacto()" data-i18n="mod_cancelar">CANCELAR</button>
             </div>
         </div>
     </div>
 
     <!-- ============================================ -->
-    <!-- MODAL PARA VER DETALLES DE CONTACTO -->
+    <!-- 4.2 MODAL PARA VER DETALLES DE CONTACTO (ver los datos y poder editar, eliminar o cerrar) -->
     <!-- ============================================ -->
-    <div id="modal-detalle-contacto" class="modal" style="display:none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Detalles del Contacto</h3>
-                <button onclick="cerrarModalDetalle()" class="btn-cerrar">✕</button>
-            </div>
-            <div class="modal-body" id="contenido-detalle-contacto">
-                <!-- Se llena dinámicamente -->
-            </div>
-            <div class="modal-footer">
-                <button class="btn-secundario" onclick="editarContactoDesdeDetalle()">✏️ EDITAR</button>
-                <button class="btn-peligro" onclick="eliminarContacto()">🗑️ ELIMINAR</button>
-                <button class="btn-principal" onclick="cerrarModalDetalle()">CERRAR</button>
-            </div>
+<div id="modal-detalle-contacto" class="modal" style="display:none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 data-i18n="det_titulo">Detalles del Contacto</h3>
+            <button type="button" onclick="cerrarModalDetalle()" class="btn-cerrar">✕</button>
+        </div>
+        <div class="modal-body" id="contenido-detalle-contacto">
+            <!-- Se llena dinámicamente por Logica.js -->
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn-secundario" onclick="editarContactoDesdeDetalle()" data-i18n="det_editar">✏️ EDITAR</button>
+            <button type="button" class="btn-peligro" onclick="eliminarContacto()" data-i18n="det_eliminar">🗑️ ELIMINAR</button>
+            <button type="button" class="btn-principal" onclick="cerrarModalDetalle()" data-i18n="det_cerrar">CERRAR</button>
         </div>
     </div>
+</div>
 
     <!-- ============================================ -->
-    <!-- MODAL PARA CAMBIO OBLIGATORIO DE CONTRASEÑA -->
+    <!-- 4.3 MODAL PARA CAMBIO OBLIGATORIO DE CONTRASEÑA (cambio forzado por seguridad al usar una contraseña temporal) -->
     <!-- ============================================ -->
     <div id="modal-cambio-obligatorio" class="modal" style="display:none;">
         <div class="modal-content">
             <div class="modal-header" style="border-bottom: 3px solid var(--color-advertencia);">
-                <h3>⚠️ Cambio de Contraseña Obligatorio</h3>
+                <h3 data-i18n="cambio_titulo">⚠️ Cambio de Contraseña Obligatorio</h3>
             </div>
             <div class="modal-body">
                 <p style="color: rgba(255,255,255,0.9); margin-bottom: 20px; padding: 15px; background: rgba(255,165,0,0.1); border-left: 4px solid var(--color-advertencia); border-radius: 8px;">
@@ -453,13 +467,13 @@
                 </p>
                 
                 <div class="formulario">
-                    <input type="password" id="nueva-pass-obligatoria" placeholder="Nueva Contraseña *" oninput="manejarMascara(this)" autocomplete="new-password">
-                    <input type="password" id="conf-pass-obligatoria" placeholder="Confirmar Contraseña *" oninput="manejarMascara(this)" autocomplete="new-password">
+                    <input type="password" id="nueva-pass-obligatoria" placeholder="Nueva Contraseña *" data-i18n="cambio_nueva" oninput="manejarMascara(this)" autocomplete="new-password">
+                    <input type="password" id="conf-pass-obligatoria" placeholder="Confirmar Contraseña *" data-i18n="cambio_conf" oninput="manejarMascara(this)" autocomplete="new-password">
                     <p id="mensaje-cambio-obligatorio" class="aviso-letrero"></p>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn-principal" onclick="cambiarContrasenaObligatoria()">
+                <button class="btn-principal" onclick="cambiarContrasenaObligatoria()" data-i18n="cambio_boton">
                     🔒 CAMBIAR CONTRASEÑA Y CONTINUAR
                 </button>
             </div>
@@ -467,7 +481,8 @@
     </div>
 
     <!-- ============================================ -->
-    <!-- SCRIPTS -->
+    <!-- GRUPO 5: SCRIPTS -->
+    <!-- 5.1 SCRIPTS (carga los archivos de datos y lógica de la app) -->
     <!-- ============================================ -->
     <script src="../Motor-Logica-y-Acronimos/datos.js?v=3"></script>
     <script src="../Motor-Logica-y-Acronimos/logica.js?v=3"></script>

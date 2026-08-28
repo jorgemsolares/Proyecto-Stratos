@@ -4,7 +4,7 @@
 // ==========================================
 
 // ==========================================
-// 0. VARIABLES GLOBALES Y ESTADO INICIAL
+// 1. VARIABLES GLOBALES Y ESTADO INICIAL (estado de navegación, cola de mensajes y temporizadores)
 // ==========================================
 let pantallaActual = 'registro-invitacion';
 let intervaloRotacionMensajes = null;
@@ -16,7 +16,7 @@ let temporizadorInactividad = null;
 const TIEMPO_INACTIVIDAD = 30 * 60 * 1000;
 
 // ==========================================
-// FUNCIÓN PARA MOSTRAR AVISO INMEDIATO
+// 2. FUNCIÓN PARA MOSTRAR AVISO INMEDIATO (muestra un aviso global temporal y reanuda los mensajes)
 // ==========================================
 function mostrarAvisoInmediato(texto, tipo) {
     if (intervaloRotacionMensajes) {
@@ -45,7 +45,7 @@ function mostrarAvisoInmediato(texto, tipo) {
 }
 
 // ==========================================
-// FUNCIÓN PARA FRAGMENTAR MISIÓN, VISIÓN Y VALORES
+// 3. FUNCIÓN PARA FRAGMENTAR MISIÓN, VISIÓN Y VALORES (divide los textos en fragmentos cortos para los mensajes)
 // ==========================================
 function obtenerFragmentosMisionVisionValores() {
     const fragmentos = [];
@@ -93,7 +93,7 @@ function obtenerFragmentosMisionVisionValores() {
 }
 
 // ==========================================
-// FUNCIÓN PARA CONSTRUIR LA COLA DE MENSAJES
+// 4. FUNCIÓN PARA CONSTRUIR LA COLA DE MENSAJES (arma la lista de avisos y frases motivacionales a mostrar)
 // ==========================================
 function construirColaMensajes() {
     colaMensajes = [];
@@ -136,7 +136,7 @@ function construirColaMensajes() {
 }
 
 // ==========================================
-// FUNCIÓN PARA INICIAR LA ROTACIÓN DE MENSAJES
+// 5. FUNCIÓN PARA INICIAR LA ROTACIÓN DE MENSAJES (rota automáticamente los avisos cada cierto tiempo)
 // ==========================================
 function iniciarRotacionMensajes() {
     if (intervaloRotacionMensajes) {
@@ -178,7 +178,7 @@ function mostrarSiguienteMensaje() {
 }
 
 // ==========================================
-// FUNCIÓN GLOBAL PARA CARGAR SUGERENCIAS
+// 6. FUNCIÓN GLOBAL PARA CARGAR SUGERENCIAS (carga los nombres guardados del dispositivo como autocompletado)
 // ==========================================
 function cargarSugerencias() {
     const datalist = document.getElementById('lista-usuarios');
@@ -197,7 +197,7 @@ function cargarSugerencias() {
 }
 
 // ==========================================
-// 1. NAVEGACIÓN ENTRE PANTALLAS
+// 7. NAVEGACIÓN ENTRE PANTALLAS (muestra/oculta pantallas, registra el historial y activa cada módulo)
 // ==========================================
 function irAPantalla(id) {
     const destino = document.getElementById(id);
@@ -248,7 +248,7 @@ function ajustarLayoutAdaptativo() {
 }
 
 // ==========================================
-// 2. INICIALIZACIÓN AL CARGAR
+// 8. INICIALIZACIÓN AL CARGAR (carga los datos guardados, valida invitaciones y prepara la app al abrir)
 // ==========================================
 window.onload = function() {
     const usuarioGuardado = cargarDeStorage(STORAGE_KEYS.USUARIO_ACTIVO);
@@ -341,7 +341,7 @@ function inicializarPantallaAcceso() {
 window.addEventListener('resize', ajustarLayoutAdaptativo);
 
 // ==========================================
-// 3. CARGAR DATOS PANTALLA 1 (PERFIL)
+// 9. CARGAR DATOS PANTALLA 1 (PERFIL) (rellena el formulario con los datos del usuario activo)
 // ==========================================
 function cargarDatosPantalla1() {
     if (!usuarioActivo?.id) return;
@@ -356,7 +356,7 @@ function cargarDatosPantalla1() {
 }
 
 // ==========================================
-// 4. CARGAR DATOS PANTALLA 3 (IDENTIDAD)
+// 10. CARGAR DATOS PANTALLA 3 (IDENTIDAD) (carga logo, slogan, misión, visión, valores y colores corporativos)
 // ==========================================
 function cargarDatosPantalla3() {
     const empresaNombre = document.getElementById('empresa-nombre');
@@ -400,7 +400,8 @@ function procesarLogo(input) {
         return;
     }
     const nombreArchivo = archivo.name || '';
-    const tipoValido = ['image/jpeg', 'image/jpg', 'image/png'];
+    // Datos trasladados a datos.js (TIPOS_IMAGEN_VALIDOS): formatos permitidos para el logo
+    const tipoValido = TIPOS_IMAGEN_VALIDOS;
     const extensionValida = /\.(jpe?g|png)$/i;
     if (!tipoValido.includes(archivo.type) || !extensionValida.test(nombreArchivo)) {
         mostrarAvisoInmediato('✖ El archivo debe ser JPG, JPEG o PNG', 'error');
@@ -431,7 +432,7 @@ function procesarLogo(input) {
 }
 
 // ==========================================
-// 5. SEGURIDAD: EFECTO LETRA-PUNTO
+// 11. SEGURIDAD: EFECTO LETRA-PUNTO (enmascara las contraseñas con puntos y guarda el valor real)
 // ==========================================
 let timerOcultarCaracter;
 function manejarMascara(input) {
@@ -460,7 +461,7 @@ function manejarMascara(input) {
 }
 
 // ==========================================
-// 6. GENERACIÓN DE ACRÓNIMOS
+// 12. GENERACIÓN DE ACRÓNIMOS (genera acrónimos a partir de nombres o puestos)
 // ==========================================
 function generarAcronimo(valor, esPuesto = false) {
     if (!valor || valor.trim() === "") {
@@ -485,6 +486,133 @@ function generarAcronimo(valor, esPuesto = false) {
     return resultado;
 }
 
+/* ==========================================
+   12.1 RECONSTRUIR ORGANIGRAMA (reconstruye la jerarquía desde un usuario; trasladado de datos.js a logica.js)
+   ========================================== */
+// Reconstruir organigrama desde un usuario existente
+function reconstruirOrganigramaDesdeUsuario(usuarioBase) {
+    if (!usuarioBase || !usuarioBase.id) return null;
+
+    const construirSubordinados = (padreId) => {
+        return baseDatosUsuarios
+            .filter(u => u.superiorId === padreId && u.activo)
+            .map(u => ({
+                id: u.id,
+                nombre: u.nombre || '',
+                apellidos: u.apellidos || '',
+                nombreCompleto: u.nombreCompleto || `${u.nombre || ''} ${u.apellidos || ''}`.trim(),
+                puesto: u.posicion || u.rol || '',
+                acronimo: u.acronimo || generarAcronimo(u.posicion || u.nombre || '', true),
+                telefono: u.telefono || '',
+                email: u.email || '',
+                idEmpleado: u.idEmpleado || '',
+                paisPrefijo: u.paisPrefijo || '+502',
+                invitacionEnviada: true,
+                invitacionAceptada: true,
+                esObservador: u.rol === 'Observador' || u.esObservador || false,
+                esIndirecto: u.rol === 'Indirecto' || u.esIndirecto || false,
+                activo: u.activo !== false,
+                hijos: []
+            }))
+            .map(hijo => {
+                hijo.hijos = construirSubordinados(hijo.id);
+                return hijo;
+            });
+    };
+
+    const raiz = {
+        id: usuarioBase.id,
+        nombre: usuarioBase.nombre || '',
+        apellidos: usuarioBase.apellidos || '',
+        nombreCompleto: usuarioBase.nombreCompleto || `${usuarioBase.nombre || ''} ${usuarioBase.apellidos || ''}`.trim(),
+        puesto: usuarioBase.posicion || usuarioBase.rol || 'No. 1',
+        acronimo: usuarioBase.acronimo || generarAcronimo(usuarioBase.posicion || usuarioBase.nombre || '', true),
+        telefono: usuarioBase.telefono || '',
+        email: usuarioBase.email || '',
+        idEmpleado: usuarioBase.idEmpleado || '',
+        paisPrefijo: usuarioBase.paisPrefijo || '+502',
+        invitacionEnviada: true,
+        invitacionAceptada: true,
+        esObservador: usuarioBase.rol === 'Observador' || usuarioBase.esObservador || false,
+        esIndirecto: usuarioBase.rol === 'Indirecto' || usuarioBase.esIndirecto || false,
+        activo: usuarioBase.activo !== false,
+        hijos: construirSubordinados(usuarioBase.id)
+    };
+
+    return raiz;
+}
+/* ==========================================
+   12.2 INFRAESTRUCTURA DE USUARIOS Y SESIÓN (búsqueda por contacto/ID, roles, superior y limpieza; trasladado de datos.js a logica.js)
+   ========================================== */
+
+// Buscar usuario por teléfono o email
+function buscarUsuarioPorContacto(telefono, email) {
+    return baseDatosUsuarios.find(u => 
+        (telefono && u.telefono === telefono) || 
+        (email && u.email === email)
+    );
+}
+
+// Buscar usuario por ID de empleado
+function buscarUsuarioPorIdEmpleado(idEmpleado) {
+    return baseDatosUsuarios.find(u => u.idEmpleado === idEmpleado);
+}
+
+// Verificar si usuario es No.1
+function esUsuarioNo1(usuarioId) {
+    const usuario = baseDatosUsuarios.find(u => u.id === usuarioId);
+    return usuario ? usuario.esNo1 : false;
+}
+
+// Verificar si usuario es Primera Línea
+function esUsuarioPrimeraLinea(usuarioId) {
+    const usuario = baseDatosUsuarios.find(u => u.id === usuarioId);
+    return usuario ? usuario.esPrimeraLinea : false;
+}
+
+// Obtener superior directo
+function obtenerSuperiorDirecto(usuarioId) {
+    const usuario = baseDatosUsuarios.find(u => u.id === usuarioId);
+    if (!usuario || !usuario.superiorId) return null;
+    return baseDatosUsuarios.find(u => u.id === usuario.superiorId);
+}
+
+// Obtener subordinados directos
+function obtenerSubordinados(usuarioId) {
+    return baseDatosUsuarios.filter(u => u.superiorId === usuarioId && u.activo);
+}
+
+// Limpiar sesión (corregido con los IDs correctos)
+function limpiarSesion() {
+    tokenSesion = null;
+    sesionActiva = false;
+    
+    // 1. Resetear objeto de usuario
+    usuarioActivo = {
+        nombre: "", apellidos: "", nombreCompleto: "", rol: "",
+        idEmpleado: "", paisPrefijo: "+502", telefono: "", email: "",
+        posicion: "", acronimo: "", contrasena: "", esNo1: false,
+        esPrimeraLinea: false, superiorId: null, invitadoPor: null,
+        tipoInvitacion: "", tipoActual: "",
+        fechaRegistro: null, ultimoAcceso: null, requiereCambioContrasena: false
+    };
+
+    // 2. Limpiar variables de seguridad reales
+    claveReal = "";
+    claveConfReal = "";
+    
+    // 3. Limpiar físicamente los campos de la interfaz para evitar que queden visibles
+    const campoId = document.getElementById('acc-id');
+    const campoPass = document.getElementById('acc-pass');
+    const avisoLetrero = document.getElementById('mensaje-acceso');
+
+    if (campoId) campoId.value = "";
+    if (campoPass) campoPass.value = "";
+    if (avisoLetrero) {
+        avisoLetrero.textContent = "";
+        avisoLetrero.className = "aviso-letrero";
+    }
+}
 document.addEventListener('input', (e) => {
     if (e.target.id === 'empresa-nombre') {
         const acronimoInput = document.getElementById('empresa-acronimo');
@@ -498,7 +626,7 @@ document.addEventListener('input', (e) => {
 });
 
 // ==========================================
-// 7. VALIDACIÓN DE CONTACTO
+// 13. VALIDACIÓN DE CONTACTO (valida el formato de email y teléfono del formulario de perfil)
 // ==========================================
 function validarContacto() {
     const email = document.getElementById('reg-email').value;
@@ -527,7 +655,7 @@ function validarContacto() {
 }
 
 // ==========================================
-// 8. VALIDACIÓN DE CONTRASEÑAS
+// 14. VALIDACIÓN DE CONTRASEÑAS (comprueba longitud y que las contraseñas coincidan)
 // ==========================================
 function validarPasswords() {
     const pass1 = document.getElementById('reg-pass');
@@ -569,7 +697,7 @@ function validarPasswords() {
 }
 
 // ==========================================
-// 9. PROCESAR REGISTRO O EDICIÓN (CORREGIDO)
+// 15. PROCESAR REGISTRO O EDICIÓN (da de alta a un usuario nuevo o actualiza uno existente)
 // ==========================================
 function procesarRegistro() {
     const nombres = document.getElementById('reg-nombres').value.trim();
@@ -693,7 +821,7 @@ function procesarRegistro() {
 }
 
 // ==========================================
-// 10. VALIDAR ENTRADA (LOGIN)
+// 16. VALIDAR ENTRADA (LOGIN) (verifica las credenciales y abre la sesión del usuario)
 // ==========================================
 function validarEntrada() {
     let nombreCompleto = document.getElementById('acc-nombre-completo').value.trim();
@@ -765,7 +893,7 @@ function validarEntrada() {
 }
 
 // ==========================================
-// 11. ACTUALIZAR INTENTOS RESTANTES
+// 17. ACTUALIZAR INTENTOS RESTANTES (muestra cuántos intentos de login quedan antes de bloquear)
 // ==========================================
 function actualizarIntentosRestantes() {
     const intentosRestantes = maxIntentosLogin - intentosLogin;
@@ -781,7 +909,7 @@ function actualizarIntentosRestantes() {
 }
 
 // ==========================================
-// 12. ACTUALIZAR MENÚ DE LA TUERCA
+// 18. ACTUALIZAR MENÚ DE LA TUERCA (construye las opciones del menú según el rol del usuario)
 // ==========================================
 function actualizarMenuTuerca() {
     const menuContainer = document.getElementById('lista-hojas-dinamica');
@@ -793,7 +921,8 @@ function actualizarMenuTuerca() {
             (usuarioActivo && usuarioActivo.esPrimeraLinea && info.visiblePara.includes('PrimeraLinea'))) {
             const enlace = document.createElement('a');
             enlace.href = '#';
-            enlace.innerHTML = `${info.icono} ${info.nombre}`;
+            const nombreTrad = traducirTexto('menu_' + id) || info.nombre;
+            enlace.innerHTML = `${info.icono} ${nombreTrad}`;
             enlace.onclick = (e) => { e.preventDefault(); irAPantalla(id); toggleMenuTuerca(); };
             if (pantallaActual === id) enlace.classList.add('activo');
             menuContainer.appendChild(enlace);
@@ -805,13 +934,13 @@ function actualizarMenuTuerca() {
     menuContainer.appendChild(separador);
     const cerrarSesionLink = document.createElement('a');
     cerrarSesionLink.href = '#';
-    cerrarSesionLink.innerHTML = '🚪 Cerrar Sesión';
+    cerrarSesionLink.innerHTML = `🚪 ${traducirTexto('menu_cerrar_sesion') || 'Cerrar Sesión'}`;
     cerrarSesionLink.onclick = (e) => { e.preventDefault(); cerrarSesion(); toggleMenuTuerca(); };
     menuContainer.appendChild(cerrarSesionLink);
 }
 
 // ==========================================
-// 13. TOGGLE MENÚ TUERCA
+// 19. TOGGLE MENÚ TUERCA (abre o cierra el menú lateral de la tuerca)
 // ==========================================
 function toggleMenuTuerca() {
     const menu = document.getElementById('menu-lateral-organico');
@@ -821,7 +950,7 @@ function toggleMenuTuerca() {
 }
 
 // ==========================================
-// 14. CARGAR NOMBRE RECORDADO
+// 20. CARGAR NOMBRE RECORDADO (rellena el campo de usuario con el nombre guardado en el dispositivo)
 // ==========================================
 function cargarNombreRecordado() {
     let nombreGuardado = cargarDeStorage(STORAGE_KEYS.RECORDAR_USUARIO);
@@ -844,7 +973,7 @@ function cargarNombreRecordado() {
 }
 
 // ==========================================
-// 15. SALVAR IDENTIDAD (PANTALLA 3)
+// 21. SALVAR IDENTIDAD (PANTALLA 3) (guarda la identidad corporativa definida por el No.1)
 // ==========================================
 function salvarIdentidad() {
     const empresaNombre = document.getElementById('empresa-nombre').value.trim();
@@ -876,7 +1005,7 @@ function salvarIdentidad() {
 }
 
 // ==========================================
-// 16. SALTAR IDENTIDAD
+// 22. SALTAR IDENTIDAD (omite flag y permite continuar sin completar la identidad)
 // ==========================================
 function saltarIdentidad() {
     mostrarAvisoInmediato("⚠ Accediendo con branding genérico temporal", "advertencia");
@@ -884,7 +1013,7 @@ function saltarIdentidad() {
 }
 
 // ==========================================
-// 17. APLICAR BRANDING GLOBAL (CORREGIDO - LOGO CARGA CORRECTAMENTE)
+// 23. APLICAR BRANDING GLOBAL (muestra el logo y slogan de la empresa en toda la app)
 // ==========================================
 function aplicarBrandingGlobal() {
     const brandingEmpresa = document.getElementById('branding-corporativo');
@@ -1008,7 +1137,7 @@ function cambiarContrasenaObligatoria() {
 }
 
 // ==========================================
-// 18. ANALIZAR COLORES DEL LOGO (CORREGIDO)
+// 24. ANALIZAR COLORES DEL LOGO (extrae los colores del logotipo y selecciona hasta 3 para la paleta)
 // ==========================================
 function hexToRgb(hex) {
     hex = hex.replace('#', '');
@@ -1069,7 +1198,7 @@ function analizarColoresLogoAutomatico() {
         coloresMap[hex] = (coloresMap[hex] || 0) + 1;
     }
     
-    // Helpers: luminance and contrast (WCAG)
+    // Helpers: luminancia y contraste (WCAG)
     function hexToRgb(hex) {
         const clean = hex.replace('#', '');
         const num = parseInt(clean.length === 3 ? clean.split('').map(c => c + c).join('') : clean, 16);
@@ -1091,7 +1220,7 @@ function analizarColoresLogoAutomatico() {
         return (light + 0.05) / (dark + 0.05);
     }
 
-    // Determine colors detected and select up to 3 logo colors (explicit count)
+    // Determina los colores detectados y selecciona hasta 3 colores del logo (conteo exacto)
     let coloresPrincipales = Object.keys(coloresMap)
         .map(hex => ({ hex: hex.toUpperCase(), count: coloresMap[hex] }))
         .sort((a, b) => b.count - a.count)
@@ -1101,7 +1230,7 @@ function analizarColoresLogoAutomatico() {
     const tieneBlanco = coloresPrincipales.includes('#FFFFFF');
     const tieneNegro = coloresPrincipales.includes('#000000');
 
-    // Exclude white/black for selecting logo colors and count remaining
+    // Excluye blanco/negro al elegir los colores del logo y cuenta las restantes
     const coloresFiltrados = coloresPrincipales.filter(hex => hex !== '#FFFFFF' && hex !== '#000000');
     let seleccionLogo = [];
     if (coloresFiltrados.length > 3) {
@@ -1110,19 +1239,20 @@ function analizarColoresLogoAutomatico() {
         seleccionLogo = coloresFiltrados.slice(0);
     }
 
-    // Always include white and black as separate entries
+    // Incluye siempre blanco y negro como entradas separadas
     const basePaleta = [...seleccionLogo];
 
-    // Prepare seguridad candidates and score them by contrast against seleccionLogo
-    const coloresSeguridad = ["#0f3460", "#16213e", "#00ff88", "#e94560", "#533483", "#ff6b6b", "#4ecdc4", "#ffd166", "#ffa500", "#800080", "#1a1a2e"];
+    // Prepara los candidatos de seguridad y los puntúa por contraste contra los colores del logo
+    // coloresTrasladado a datos.js -> COLORES_SEGURIDAD_ANALISIS
+    const coloresSeguridad = COLORES_SEGURIDAD_ANALISIS;
 
-    // If seleccionLogo is empty (logo is only BW or extremely simple), pick 6 seguridad
+    // Si la selección del logo está vacía (logo solo blanco/negro o muy simple), toma 6 colores de seguridad
     let paletaLogo = [];
     if (basePaleta.length === 0) {
         paletaLogo = coloresSeguridad.slice(0, 6);
     } else {
         paletaLogo = [...basePaleta];
-        // Score seguridad colors by sum of contrasts against logo colors
+        // Puntúa los colores de seguridad por la suma de contrastes contra los colores del logo
         const scored = coloresSeguridad.map(c => {
             const score = basePaleta.reduce((acc, lc) => acc + contrastRatio(c, lc), 0);
             return { color: c, score };
@@ -1134,13 +1264,13 @@ function analizarColoresLogoAutomatico() {
         }
     }
 
-    // Final palette: up to 6 logo-based/support colors, then white and black (unique)
+    // Paleta final: hasta 6 colores del logo/de apoyo, luego blanco y negro (únicos)
     const final = [];
     paletaLogo.forEach(c => { if (!final.includes(c)) final.push(c); });
     if (!final.includes('#FFFFFF')) final.push('#FFFFFF');
     if (!final.includes('#000000')) final.push('#000000');
 
-    // Ensure length 8 by adding remaining seguridad (diversity)
+    // Asegura un total de 8 agregando los colores de seguridad restantes (diversidad)
     let idx = 0;
     while (final.length < 8 && idx < coloresSeguridad.length) {
         const c = coloresSeguridad[idx];
@@ -1154,7 +1284,7 @@ function analizarColoresLogoAutomatico() {
 }
 
 // ==========================================
-// 19. GENERAR PALETA DE COLORES (CORREGIDO)
+// 25. GENERAR PALETA DE COLORES (construye y muestra la paleta final de 8 colores)
 // ==========================================
 function generarPaleta() {
     const contenedor = document.getElementById('paleta-colores-centrada');
@@ -1163,7 +1293,8 @@ function generarPaleta() {
     contenedor.innerHTML = '';
     const coloresUnicos = [...new Set(coloresExtraidos)];
     let paletaFinal = [...coloresUnicos];
-    const coloresSeguridad = ["#1a1a2e", "#16213e", "#0f3460", "#e94560", "#533483", "#00ff88", "#ff6b6b", "#4ecdc4", "#ffd166", "#ffa500", "#800080"];
+    // lista trasladada a datos.js -> COLORES_SEGURIDAD_PALETA
+    const coloresSeguridad = COLORES_SEGURIDAD_PALETA;
     
     if (!paletaFinal.includes('#FFFFFF')) paletaFinal.push('#FFFFFF');
     if (!paletaFinal.includes('#000000')) paletaFinal.push('#000000');
@@ -1194,84 +1325,9 @@ function generarPaleta() {
 }
 
 // ==========================================
-// 20. GUARDAR CONTACTO E INVITAR (CORREGIDO - EVITA DUPLICACIÓN)
-// ==========================================
-function guardarContacto() {
-    const nombre = document.getElementById('modal-nombre').value.trim();
-    const puesto = document.getElementById('modal-puesto').value.trim();
-    const paisPrefijo = document.getElementById('modal-pais').value;
-    const telefono = document.getElementById('modal-tel').value.trim();
-    const email = document.getElementById('modal-email').value.trim();
-    
-    if (!nombre || !puesto || (!telefono && !email)) {
-        mostrarAvisoInmediato("✖ Nombre, Puesto y un medio de contacto son obligatorios", "error");
-        return;
-    }
-    
-    const nuevoId = generarIdUnico();
-    const acronimoContacto = generarAcronimo(puesto, true);
-    
-    const nuevoContacto = {
-        id: nuevoId, nombre: nombre, nombreCompleto: nombre, puesto: puesto, acronimo: acronimoContacto,
-        telefono: telefono, email: email, paisPrefijo: paisPrefijo, invitacionEnviada: false, invitacionAceptada: false,
-        esObservador: tipoContactoActual === 'observador', esIndirecto: tipoContactoActual === 'indirecto',
-        activo: true, hijos: (tipoContactoActual === 'directo') ? [] : undefined
-    };
-    
-    if (tipoContactoActual === 'directo') {
-        if (!datosOrganigrama) {
-            datosOrganigrama = { id: usuarioActivo.id, nombre: usuarioActivo.nombre, apellidos: usuarioActivo.apellidos, nombreCompleto: usuarioActivo.nombreCompleto, puesto: usuarioActivo.posicion, acronimo: usuarioActivo.acronimo, telefono: usuarioActivo.telefono, email: usuarioActivo.email, idEmpleado: usuarioActivo.idEmpleado, paisPrefijo: usuarioActivo.paisPrefijo, invitacionEnviada: true, invitacionAceptada: true, esObservador: false, esIndirecto: false, activo: true, hijos: [] };
-        }
-        if (!datosOrganigrama.hijos) datosOrganigrama.hijos = [];
-        
-        // Verificar si ya existe un contacto con el mismo ID o nombre para evitar duplicados
-        const yaExiste = datosOrganigrama.hijos.some(h => h.id === nuevoId || h.nombre === nombre);
-        if (!yaExiste) {
-            datosOrganigrama.hijos.push(nuevoContacto);
-            guardarEnStorage(STORAGE_KEYS.ORGANIGRAMA, datosOrganigrama);
-        } else {
-            mostrarAvisoInmediato("✖ Este contacto ya existe en el organigrama", "error");
-            return;
-        }
-    } else if (tipoContactoActual === 'indirecto') {
-        const yaExiste = contactosIndirectos.some(c => c.id === nuevoId || c.nombre === nombre);
-        if (!yaExiste) {
-            contactosIndirectos.push(nuevoContacto);
-            guardarEnStorage(STORAGE_KEYS.INDIRECTOS, contactosIndirectos);
-        } else {
-            mostrarAvisoInmediato("✖ Este contacto indirecto ya existe", "error");
-            return;
-        }
-    } else if (tipoContactoActual === 'observador') {
-        const yaExiste = observadores.some(c => c.id === nuevoId || c.nombre === nombre);
-        if (!yaExiste) {
-            observadores.push(nuevoContacto);
-            guardarEnStorage(STORAGE_KEYS.OBSERVADORES, observadores);
-        } else {
-            mostrarAvisoInmediato("✖ Este observador ya existe", "error");
-            return;
-        }
-    }
-    
-    const codigoInv = generarCodigoInvitacion();
-    const invitacion = {
-        id: generarIdUnico(), usuarioDestinoId: nuevoId, nombreContacto: nombre, puestoContacto: puesto,
-        telefonoContacto: telefono, emailContacto: email, paisPrefijo: paisPrefijo, tipoContacto: tipoContactoActual,
-        invitadoPor: usuarioActivo.id, nombreInvitador: usuarioActivo.nombreCompleto, codigoInvitacion: codigoInv,
-        linkInvitacion: `${window.location.origin}?inv=${codigoInv}`, fechaInvitacion: new Date(),
-        fechaRespuesta: null, tiempoRespuestaMs: null,
-        estado: "pendiente", metodoEnvio: telefono ? "whatsapp" : "email"
-    };
-    invitacionesPendientes.push(invitacion);
-    guardarEnStorage(STORAGE_KEYS.INVITACIONES, invitacionesPendientes);
-    enviarInvitacion(invitacion);
-    mostrarAvisoInmediato(`✓ Invitación enviada a ${nombre}`, "exito");
-    cerrarModalContacto();
-    renderizarOrganigrama();
-}
-
-// ==========================================
-// 21. RENDERIZAR ORGANIGRAMA PERSONAL (CORREGIDO - SOLO PRIMERA LÍNEA)
+// 26. GUARDAR CONTACTO (versión unificada)
+// La lógica única de guardar/actualizar contactos vive en la sección 32.
+// Esta declaración duplicada se eliminó para evitar conflicto de definiciones.// 27. RENDERIZAR ORGANIGRAMA PERSONAL (dibuja el nodo del usuario y su primera línea de colaboradores)
 // ==========================================
 function renderizarOrganigrama() {
     const contenedor = document.getElementById('lienzo-organigrama');
@@ -1400,7 +1456,7 @@ function renderizarOrganigrama() {
 }
 
 // ==========================================
-// FUNCIONES ADICIONALES
+// 28. FUNCIONES ADICIONALES (detalles de contacto, perfil, configuración y recuperación de contraseña)
 // ==========================================
 function verDetalleContacto(id) {
     console.log("Ver detalle de contacto:", id);
@@ -1493,7 +1549,34 @@ function guardarConfiguracion() {
     };
     configuracionPersonal = config;
     guardarEnStorage(STORAGE_KEYS.CONFIG_PERSONAL, configuracionPersonal);
+    aplicarIdioma(config.idioma);
+    if (typeof actualizarMenuTuerca === 'function') actualizarMenuTuerca();
     mostrarAvisoInmediato("✓ Configuración guardada", "exito");
+}
+
+// Devuelve el texto traducido de una clave según el idioma actual.
+function traducirTexto(clave) {
+    const codigo = (configuracionPersonal && configuracionPersonal.idioma === 'en') ? 'en' : 'es';
+    const trad = TRADUCCIONES && TRADUCCIONES[clave];
+    return trad ? trad[codigo] : '';
+}
+
+// Aplica el idioma elegido a los textos fijos de la interfaz (los que el usuario lee, no los que escribe).
+function aplicarIdioma(idioma) {
+    const codigo = (idioma === 'en') ? 'en' : 'es';
+    document.querySelectorAll('[data-i18n]').forEach(function(el) {
+        const clave = el.getAttribute('data-i18n');
+        const trad = TRADUCCIONES && TRADUCCIONES[clave];
+        if (!trad) return;
+        const texto = trad[codigo];
+        // Si tiene hijos con estructura (spans, strong, etc.) se omite para no romper el layout.
+        const tieneHijosElemento = Array.from(el.children).some(c => c.nodeType === 1);
+        if (el.hasAttribute('placeholder')) {
+            el.setAttribute('placeholder', texto);
+        } else if (el.tagName !== 'INPUT' && el.tagName !== 'TEXTAREA' && el.tagName !== 'SELECT' && !tieneHijosElemento) {
+            el.textContent = texto;
+        }
+    });
 }
 
 function solicitarRecuperacionContrasena() { mostrarAvisoInmediato("Función de recuperación en desarrollo", "advertencia"); }
@@ -1510,7 +1593,13 @@ function editarContactoDesdeDetalle() {
     const modal = document.getElementById('modal-contacto');
     const titulo = document.getElementById('modal-titulo');
     if (modal && titulo) {
-        titulo.innerText = 'Editar Contacto';
+        titulo.innerText = traducirTexto('mod_editar') || 'Editar Contacto';
+        // Marcar el contacto en modo edición: guardamos su id y su tipo en el campo oculto
+        const campoId = document.getElementById('modal-contacto-id');
+        if (campoId) {
+            campoId.value = contactoEnEdicion.id || '';
+            campoId.dataset.tipo = tipoContactoActual || 'directo';
+        }
         document.getElementById('modal-nombre').value = contactoEnEdicion.nombre || '';
         document.getElementById('modal-puesto').value = contactoEnEdicion.puesto || '';
         document.getElementById('modal-pais').value = contactoEnEdicion.paisPrefijo || '+502';
@@ -1594,7 +1683,7 @@ function cerrarSesion() {
 }
 
 // ==========================================
-// FUNCIONES DE PERSISTENCIA Y UTILERÍAS
+// 29. FUNCIONES DE PERSISTENCIA Y UTILERÍAS (IDs, storage, invitaciones y gestión visual de colores)
 // ==========================================
 function generarIdUnico() { return 'id_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9); }
 function generarCodigoInvitacion() { return 'INV_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6).toUpperCase(); }
@@ -1734,11 +1823,148 @@ function renderizarOrganigramaGeneral() {
 }
 
 // ==========================================
-// TEMPORIZADOR DE INACTIVIDAD
+// 30. TEMPORIZADOR DE INACTIVIDAD (cierra la sesión automáticamente tras 30 minutos sin actividad)
 // ==========================================
 function reiniciarTemporizador() { if (temporizadorInactividad) clearTimeout(temporizadorInactividad); temporizadorInactividad = setTimeout(() => cerrarSesionPorInactividad(), TIEMPO_INACTIVIDAD); }
 function cerrarSesionPorInactividad() { if (sesionActiva && usuarioActivo && usuarioActivo.id) { mostrarAvisoInmediato("⏰ Sesión cerrada por inactividad de 30 minutos", "advertencia"); cerrarSesion(); } }
 function iniciarTemporizadorInactividad() { if (temporizadorInactividad) clearTimeout(temporizadorInactividad); const eventos = ['click', 'mousemove', 'keypress', 'scroll', 'touchstart']; eventos.forEach(evento => document.removeEventListener(evento, reiniciarTemporizador)); eventos.forEach(evento => document.addEventListener(evento, reiniciarTemporizador)); reiniciarTemporizador(); }
 function detenerTemporizadorInactividad() { if (temporizadorInactividad) clearTimeout(temporizadorInactividad); const eventos = ['click', 'mousemove', 'keypress', 'scroll', 'touchstart']; eventos.forEach(evento => document.removeEventListener(evento, reiniciarTemporizador)); }
+
+// ==========================================
+// 31. FUNCIÓN PARA ABRIR EL FORMULARIO DE NUEVO CONTACTO (limpia y muestra el modal según el tipo)
+// ==========================================
+function mostrarFormularioContacto(tipo) {
+    const modal = document.getElementById('modal-contacto');
+    if (!modal) {
+        mostrarAvisoInmediato("Error: Modal de contacto no encontrado", "error");
+        return;
+    }
+
+    // Limpiar el formulario
+    document.getElementById('modal-nombre').value = '';
+    document.getElementById('modal-puesto').value = '';
+    document.getElementById('modal-pais').value = '+502';
+    document.getElementById('modal-tel').value = '';
+    document.getElementById('modal-email').value = '';
+    document.getElementById('modal-acronimo-preview').textContent = '---';
+    document.getElementById('modal-contacto-id').value = '';
+    document.getElementById('modal-contacto-id').dataset.tipo = tipo;
+
+    // Cambiar el título según el tipo
+    const titulo = document.getElementById('modal-titulo');
+    if (titulo) {
+        if (tipo === 'directo') titulo.innerText = traducirTexto('mod_nuevo_col') || 'Nuevo Colaborador';
+        else if (tipo === 'indirecto') titulo.innerText = traducirTexto('mod_nuevo_ind') || 'Nuevo Indirecto';
+        else if (tipo === 'observador') titulo.innerText = traducirTexto('mod_nuevo_obs') || 'Nuevo Observador';
+    }
+
+    // Mostrar el modal
+    modal.style.display = 'flex';
+}
+
+// ==========================================
+// 32. GUARDAR CONTACTO (NUEVO O EDITADO) (persiste el contacto en organigrama o listas según su tipo)
+// ==========================================
+function guardarContacto() {
+    const nombre = document.getElementById('modal-nombre').value.trim();
+    const puesto = document.getElementById('modal-puesto').value.trim();
+    const pais = document.getElementById('modal-pais').value;
+    const telefono = document.getElementById('modal-tel').value.trim();
+    const email = document.getElementById('modal-email').value.trim();
+    const acronimo = document.getElementById('modal-acronimo-preview').textContent;
+    const campoId = document.getElementById('modal-contacto-id');
+
+    // Requisito: nombre, puesto y al menos un medio de contacto
+    if (!nombre || !puesto || (!telefono && !email)) {
+        mostrarAvisoInmediato("✖ Complete nombre, puesto y un medio de contacto", "error");
+        return;
+    }
+
+    // Tipo escogido (directo / indirecto / observador) y, si se está editando, el id del contacto
+    const tipo = (campoId && campoId.dataset && campoId.dataset.tipo) || 'directo';
+    const idEnEdicion = campoId ? campoId.value : '';
+
+    const acronimoContacto = (acronimo && acronimo !== '---') ? acronimo : generarAcronimo(puesto, true);
+
+    // ---------- MODO EDICIÓN: actualiza el contacto tal cual ----------
+    if (idEnEdicion) {
+        const datosActualizados = {
+            nombre: nombre, nombreCompleto: nombre, puesto: puesto,
+            acronimo: acronimoContacto, telefono: telefono, email: email, paisPrefijo: pais
+        };
+        let lista = null;
+        if (tipo === 'directo') lista = (datosOrganigrama && datosOrganigrama.hijos) || [];
+        else if (tipo === 'indirecto') lista = contactosIndirectos;
+        else if (tipo === 'observador') lista = observadores;
+
+        const indice = (lista || []).findIndex(c => c.id === idEnEdicion);
+        if (indice !== -1) {
+            lista[indice] = Object.assign({}, lista[indice], datosActualizados);
+            if (tipo === 'directo') guardarEnStorage(STORAGE_KEYS.ORGANIGRAMA, datosOrganigrama);
+            else if (tipo === 'indirecto') guardarEnStorage(STORAGE_KEYS.INDIRECTOS, contactosIndirectos);
+            else if (tipo === 'observador') guardarEnStorage(STORAGE_KEYS.OBSERVADORES, observadores);
+            cerrarModalContacto();
+            renderizarOrganigrama();
+            mostrarAvisoInmediato("✓ Contacto actualizado correctamente", "exito");
+            return;
+        }
+    }
+
+    // ---------- MODO NUEVO: crea el contacto y lo agrega a su lista ----------
+    const nuevoContacto = {
+        id: generarIdUnico(),
+        nombre: nombre, nombreCompleto: nombre, puesto: puesto,
+        paisPrefijo: pais, telefono: telefono, email: email,
+        acronimo: acronimoContacto,
+        invitacionEnviada: false, invitacionAceptada: false,
+        esObservador: tipo === 'observador', esIndirecto: tipo === 'indirecto',
+        activo: true, hijos: tipo === 'directo' ? [] : undefined
+    };
+
+    if (tipo === 'directo') {
+        if (!datosOrganigrama) {
+            datosOrganigrama = {
+                id: usuarioActivo.id, nombre: usuarioActivo.nombre, apellidos: usuarioActivo.apellidos,
+                nombreCompleto: usuarioActivo.nombreCompleto, puesto: usuarioActivo.posicion, acronimo: usuarioActivo.acronimo,
+                telefono: usuarioActivo.telefono, email: usuarioActivo.email, idEmpleado: usuarioActivo.idEmpleado,
+                paisPrefijo: usuarioActivo.paisPrefijo, invitacionEnviada: true, invitacionAceptada: true,
+                esObservador: false, esIndirecto: false, activo: true, hijos: []
+            };
+        }
+        if (!datosOrganigrama.hijos) datosOrganigrama.hijos = [];
+        const yaExisteDir = datosOrganigrama.hijos.some(h => h.nombre === nombre);
+        if (yaExisteDir) { mostrarAvisoInmediato("✖ Este contacto ya existe en el organigrama", "error"); return; }
+        datosOrganigrama.hijos.push(nuevoContacto);
+        guardarEnStorage(STORAGE_KEYS.ORGANIGRAMA, datosOrganigrama);
+    } else if (tipo === 'indirecto') {
+        const yaExisteInd = contactosIndirectos.some(c => c.nombre === nombre);
+        if (yaExisteInd) { mostrarAvisoInmediato("✖ Este contacto indirecto ya existe", "error"); return; }
+        contactosIndirectos.push(nuevoContacto);
+        guardarEnStorage(STORAGE_KEYS.INDIRECTOS, contactosIndirectos);
+    } else if (tipo === 'observador') {
+        const yaExisteObs = observadores.some(c => c.nombre === nombre);
+        if (yaExisteObs) { mostrarAvisoInmediato("✖ Este observador ya existe", "error"); return; }
+        observadores.push(nuevoContacto);
+        guardarEnStorage(STORAGE_KEYS.OBSERVADORES, observadores);
+    }
+
+    // Invitación del contacto recién creado
+    const codigoInv = generarCodigoInvitacion();
+    const invitacion = {
+        id: generarIdUnico(), destinoUsuarioId: nuevoContacto.id, nombreContacto: nombre, puestoContacto: puesto,
+        telefonoContacto: telefono, emailContacto: email, paisPrefijo: pais, tipoContacto: tipo,
+        invitadoPor: (usuarioActivo && usuarioActivo.id) || null, nombreInvitador: (usuarioActivo && usuarioActivo.nombreCompleto) || '',
+        codigoInvitacion: codigoInv, linkInvitacion: `${window.location.origin}?inv=${codigoInv}`,
+        fechaInvitacion: new Date(), fechaRespuesta: null, tiempoRespuestaMs: null,
+        estado: 'pendiente', metodoEnvio: telefono ? 'whatsapp' : 'email'
+    };
+    invitacionesPendientes.push(invitacion);
+    guardarEnStorage(STORAGE_KEYS.INVITACIONES, invitacionesPendientes);
+    enviarInvitacion(invitacion);
+
+    cerrarModalContacto();
+    renderizarOrganigrama();
+    mostrarAvisoInmediato(`✓ Contacto ${nombre} guardado`, "exito");
+}
 
 // Nota: las funciones restantes (renderizarOrganigramaGeneral, construirOrganigramaGeneral, etc.) no se modifican y siguen funcionando igual.

@@ -1,0 +1,8 @@
+# Entorno virtual Python
+.venv/
+
+# Respaldos locales (no deben ir a GitHub)
+Motor-Logica-y-Acronimos/_respaldo_*/
+
+# Carpeta duplicada antigua (tiene su propio .git; se mantiene local)
+Proyecto-Stratos/

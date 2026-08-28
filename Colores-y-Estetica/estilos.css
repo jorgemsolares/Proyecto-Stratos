@@ -1,10 +1,9 @@
 /* ==========================================
-ADN VISUAL STRATOS - ARCHIVO: estilos.css
-Sistema de diseño completo
-========================================== */
+   GRUPO 1: FUNDACIÓN Y BASE
+   ========================================== */
 
 /* ==========================================
- 1. VARIABLES CSS Y RESET
+ 1.1 VARIABLES CSS Y RESET (aquí se definen los colores, las letras y los valores que usará toda la app)
  ========================================== */
 :root {
     --color-fondo: #0b0f19;
@@ -19,6 +18,9 @@ Sistema de diseño completo
     --radio-bordes: 12px;
     --sombra-elevada: 0 15px 35px rgba(0, 0, 0, 0.7);
     --transicion-rapida: 0.3s ease;
+    
+    /* NUEVA VARIABLE PARA COLOR DE LETRAS (Agregada para heredar a inputs y nodos) */
+    --color-letras: #ffffff;
 }
 
 * {
@@ -28,7 +30,7 @@ Sistema de diseño completo
 }
 
 /* ==========================================
-2. ESTILOS BASE
+1.2 ESTILOS BASE (el estilo por defecto que se aplica a todo el cuerpo de la página)
 ========================================== */
 body {
     background-color: #0b0f19;
@@ -45,7 +47,11 @@ body {
 }
 
 /* ==========================================
-3. BARRA DE NOTIFICACIONES SUPERIOR
+   GRUPO 2: ESTRUCTURA Y CONTENEDORES
+   ========================================== */
+
+/* ==========================================
+2.1 BARRA DE NOTIFICACIONES SUPERIOR (la barra donde aparecen los mensajes de aviso tipo "toast")
 ========================================== */
 #barra-notificaciones {
     width: 100%;
@@ -91,7 +97,7 @@ body {
 }
 
 /* ==========================================
-4. BRANDING CORPORATIVO (DENTRO DEL CONTENEDOR)
+2.2 BRANDING CORPORATIVO (imágenes y logotipos que se muestran dentro del contenedor principal)
 ========================================== */
 .branding-empresa {
     display: flex;
@@ -131,7 +137,7 @@ body {
 }
 
 /* ==========================================
-5. CONTENEDOR PRINCIPAL ADAPTATIVO
+2.3 CONTENEDOR PRINCIPAL ADAPTATIVO (el contenedor grande que cambia de tamaño según la pantalla)
 ========================================== */
 #app-container {
     width: 90%;
@@ -152,7 +158,7 @@ body {
 }
 
 /* ==========================================
-6. MANEJO DE PANTALLAS (Display)
+2.4 MANEJO DE PANTALLAS (Display) (controla qué pantalla se muestra y cuál se oculta según la navegación)
 ========================================== */
 .pantalla {
     display: none;
@@ -181,7 +187,7 @@ body {
 }
 
 /* ==========================================
-7. BRANDING Y TÍTULOS
+2.5 BRANDING Y TÍTULOS (estilos del logotipo, la identidad visual y los encabezados de la app)
 ========================================== */
 .branding h1 {
     font-size: 2.2rem;
@@ -217,7 +223,11 @@ h3 {
 }
 
 /* ==========================================
-8. MENSAJE PERSONALIZADO (Área global de avisos)
+   GRUPO 3: COMPONENTES DE INTERFAZ
+   ========================================== */
+
+/* ==========================================
+3.1 MENSAJE PERSONALIZADO (Área global de avisos) (zona donde aparecen los mensajes de confirmación, error o advertencia en toda la app)
 ========================================== */
 .mensaje-alerta {
     background: rgba(255, 255, 255, 0.1);
@@ -243,7 +253,7 @@ h3 {
 }
 
 /* ==========================================
-9. FORMULARIOS E INPUTS
+3.2 FORMULARIOS E INPUTS (diseño de los campos de texto, listas desplegables y áreas para escribir datos)
 ========================================== */
 .formulario {
     display: flex;
@@ -297,7 +307,7 @@ textarea {
 }
 
 /* ==========================================
-10. MENSAJES DE VALIDACIÓN
+3.3 MENSAJES DE VALIDACIÓN (avisos que aparecen al lado de los campos cuando hay errores o faltan datos)
 ========================================== */
 .aviso-letrero {
     font-size: 0.9rem;
@@ -333,7 +343,7 @@ textarea {
 }
 
 /* ==========================================
-11. VISOR DE ACRÓNIMO
+3.4 VISOR DE ACRÓNIMO (cuadro que muestra el acrónimo generado automáticamente mientras escribes el puesto)
 ========================================== */
 .badge-visor {
     background: var(--color-primario);
@@ -375,7 +385,7 @@ textarea {
 }
 
 /* ==========================================
-12. FILAS DINÁMICAS
+3.5 FILAS DINÁMICAS (contenedores flexibles que se adaptan para mostrar elementos como selectores de país o botones alineados)
 ========================================== */
 .fila-dinamica {
     display: flex;
@@ -388,7 +398,7 @@ textarea {
 }
 
 /* ==========================================
-13. CHECKBOX Y OPCIONES
+3.6 CHECKBOX Y OPCIONES (diseño de las casillas de verificación, interruptores y selectores de opciones en formularios)
 ========================================== */
 .opcion-recuerdame {
     display: flex;
@@ -430,11 +440,11 @@ textarea {
 }
 
 /* ==========================================
-14. BOTONES
+3.7 BOTONES (estilos de todos los botones de acción: primarios, secundarios, de peligro y de cierre)
 ========================================== */
 
 /* ==========================================
-   ESTILOS BASE UNIFICADOS PARA TODOS LOS BOTONES
+   3.7.1 ESTILOS BASE UNIFICADOS PARA TODOS LOS BOTONES (los valores que comparten todos los botones: tamaño, redondeo, tipografía mayúscula y la transición al moverse)
    ========================================== */
 .btn-principal,
 .btn-secundario,
@@ -457,7 +467,7 @@ textarea {
 }
 
 /* ==========================================
-   EFECTO HOVER UNIFICADO (ELEVACIÓN + RESPLANDOR)
+   3.7.2 EFECTO HOVER UNIFICADO (ELEVACIÓN + RESPLANDOR) (el efecto al pasar el mouse: el botón se eleva y brilla en verde)
    ========================================== */
 .btn-principal:hover,
 .btn-secundario:hover,
@@ -473,7 +483,7 @@ textarea {
 }
 
 /* ==========================================
-   EFECTO ACTIVE UNIFICADO (CLIC)
+   3.7.3 EFECTO ACTIVE UNIFICADO (CLIC) (la respuesta visual al hacer clic: el botón se presiona y emite un resplandor intenso)
    ========================================== */
 .btn-principal:active,
 .btn-secundario:active,
@@ -488,7 +498,7 @@ textarea {
 }
 
 /* ==========================================
-   BOTÓN PRINCIPAL (VERDE LUMINOSO)
+   3.7.4 BOTÓN PRINCIPAL (VERDE LUMINOSO) (el botón de las acciones principales de la app: continuar, guardar o confirmar)
    ========================================== */
 .btn-principal {
     background: var(--color-primario);
@@ -508,7 +518,7 @@ textarea {
 }
 
 /* ==========================================
-   BOTÓN SECUNDARIO (NARANJA LUMINOSO - PRECAUCIÓN)
+   3.7.5 BOTÓN SECUNDARIO (NARANJA LUMINOSO - PRECAUCIÓN) (el botón de acciones de precaución o secundarias, en color naranja)
    ========================================== */
 .btn-secundario {
     background: #ff8c00;
@@ -530,7 +540,7 @@ textarea {
 }
 
 /* ==========================================
-   BOTÓN PELIGRO (ROJO LUMINOSO - IRREVERSIBLE)
+   3.7.6 BOTÓN PELIGRO (ROJO LUMINOSO - IRREVERSIBLE) (el botón de acciones irreversibles o de riesgo, como borrar o eliminar un dato)
    ========================================== */
 .btn-peligro {
     background: #e53935;
@@ -552,7 +562,7 @@ textarea {
 }
 
 /* ==========================================
-   BOTÓN DE ACCIÓN (VERDE - PARA ORGANIGRAMA)
+   3.7.7 BOTÓN DE ACCIÓN (VERDE - PARA ORGANIGRAMA) (el botón verde compacto que se usa dentro de las fichas del organigrama)
    ========================================== */
 .btn-accion {
     background: var(--color-primario);
@@ -573,7 +583,7 @@ textarea {
 }
 
 /* ==========================================
-   BOTÓN DE OPCIÓN (COLORES)
+   3.7.8 BOTÓN DE OPCIÓN (COLORES) (el botón seleccionable de la paleta de colores que marca cuál opción está activa)
    ========================================== */
 .btn-opcion {
     background: rgba(255, 255, 255, 0.05);
@@ -597,7 +607,7 @@ textarea {
 }
 
 /* ==========================================
-   BOTÓN DE ENLACE
+   3.7.9 BOTÓN DE ENLACE (texto que funciona como botón, se usa para acciones como "olvidé mi contraseña")
    ========================================== */
 .btn-link {
     background: none;
@@ -620,7 +630,7 @@ textarea {
 }
 
 /* ==========================================
-   BOTÓN CERRAR (X)
+   3.7.10 BOTÓN CERRAR (X) (la "X" que cierra las ventanas emergentes o modales)
    ========================================== */
 .btn-cerrar {
     background: rgba(255, 77, 77, 0.2);
@@ -650,7 +660,7 @@ textarea {
 }
 
 /* ==========================================
-   CONTENEDOR DE BOTONES EN FILA
+   3.7.11 CONTENEDOR DE BOTONES EN FILA (el espacio que ordena varios botones uno al lado del otro, como Salvar y Cancelar)
    ========================================== */
 .fila-botones-final {
     display: flex;
@@ -668,7 +678,7 @@ textarea {
 }
 
 /* ==========================================
-   BOTONES DENTRO DE MODALES
+   3.7.12 BOTONES DENTRO DE MODALES (el ajuste que hacen los botones para repartirse el ancho dentro de las ventanas emergentes)
    ========================================== */
 .modal-footer button {
     flex: 1;
@@ -677,44 +687,7 @@ textarea {
 }
 
 /* ==========================================
-   TUERCA (MENÚ LATERAL) CON EFECTO VERDE
-   ========================================== */
-.tuerca-navegacion {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
-    background: var(--color-primario);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 5px 20px rgba(0, 255, 136, 0.4);
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    z-index: 1000;
-    border: 2px solid transparent;
-}
-
-.tuerca-navegacion:hover {
-    transform: rotate(90deg) scale(1.1);
-    box-shadow: 0 12px 28px rgba(0, 255, 136, 0.6);
-    border-color: #00ff88;
-}
-
-.tuerca-navegacion:active {
-    transform: rotate(90deg) scale(0.95);
-    box-shadow: 0 0 25px 8px var(--color-primario), inset 0 0 10px var(--color-primario);
-    transition: 0.05s linear;
-}
-
-.tuerca-navegacion span {
-    font-size: 1.5rem;
-}
-
-/* ==========================================
-15. IDENTIDAD CORPORATIVA (MEJORADO)
+3.8 IDENTIDAD CORPORATIVA (MEJORADO) (estilos para la pantalla donde el usuario configura el logo, colores y nombre de su empresa)
 ========================================== */
 .setup-identidad {
     display: flex;
@@ -900,7 +873,251 @@ textarea {
 }
 
 /* ==========================================
-16. ORGANIGRAMA
+3.9 CONFIGURACIÓN PERSONAL (estilos para la pantalla donde el usuario ajusta su idioma, notificaciones y preferencias de cuenta)
+========================================== */
+.configuracion-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    text-align: left;
+}
+
+.config-section {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 20px;
+    border-radius: var(--radio-bordes);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.config-section h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.config-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.input-estilizado {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radio-bordes);
+    padding: 10px;
+    color: white;
+    font-size: 0.9rem;
+    outline: none;
+    transition: all var(--transicion-rapida);
+    cursor: pointer;
+    width: 100%;
+}
+
+.input-estilizado:hover {
+    border-color: var(--color-primario);
+    background: rgba(255, 255, 255, 0.12);
+}
+
+/* ==========================================
+3.10 TUERCA (MENÚ LATERAL) (estilos del menú deslizante que se abre desde el costado para navegar entre las opciones de la app)
+========================================== */
+.tuerca-navegacion {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background: var(--color-primario);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 5px 20px rgba(0, 255, 136, 0.4);
+    transition: all var(--transicion-rapida);
+    z-index: 1000;
+    border: 2px solid transparent;
+}
+
+.tuerca-navegacion:hover {
+    transform: rotate(90deg) scale(1.1);
+    box-shadow: 0 8px 30px rgba(0, 255, 136, 0.6);
+    border-color: #00ff88;
+}
+
+.tuerca-navegacion:active {
+    transform: rotate(90deg) scale(0.95);
+    box-shadow: 0 0 25px 8px var(--color-primario), inset 0 0 10px var(--color-primario);
+    transition: 0.05s linear;
+}
+
+.tuerca-navegacion span {
+    font-size: 1.5rem;
+}
+
+.sidebar-menu {
+    position: fixed;
+    right: -350px;
+    top: 0;
+    width: 300px;
+    height: 100vh;
+    background: linear-gradient(180deg, #1a1a2e, #0b0f19);
+    box-shadow: -5px 0 25px rgba(0, 0, 0, 0.5);
+    transition: right 0.4s ease;
+    z-index: 1500;
+    overflow-y: auto;
+    border-left: 2px solid var(--color-primario);
+}
+
+.sidebar-menu.abierto {
+    right: 0;
+}
+
+.sidebar-header {
+    padding: 20px;
+    background: rgba(0, 255, 136, 0.1);
+    border-bottom: 2px solid var(--color-primario);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sidebar-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+}
+
+#lista-hojas-dinamica {
+    padding: 15px 0;
+}
+
+#lista-hojas-dinamica a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all var(--transicion-rapida);
+    border-left: 3px solid transparent;
+}
+
+#lista-hojas-dinamica a:hover {
+    background: rgba(0, 255, 136, 0.1);
+    border-left-color: var(--color-primario);
+    color: white;
+}
+
+#lista-hojas-dinamica a.activo {
+    background: rgba(0, 255, 136, 0.15);
+    border-left-color: var(--color-primario);
+    color: var(--color-primario);
+    font-weight: bold;
+}
+
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1400;
+    display: none;
+    backdrop-filter: blur(3px);
+}
+
+.menu-overlay.activo {
+    display: block;
+}
+
+/* ==========================================
+3.11 MODALES - AJUSTE DE Z-INDEX PARA NOTIFICACIONES (control de la profundidad visual para que las ventanas emergentes y avisos se muestren siempre por encima de todo)
+========================================== */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1500;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: linear-gradient(135deg, rgba(26, 26, 46, 0.95), rgba(11, 15, 25, 0.95));
+    border-radius: var(--radio-bordes);
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+    border: 2px solid var(--color-primario);
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from { opacity: 0; transform: translateY(-50px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-header {
+    padding: 15px 20px;
+    background: rgba(0, 255, 136, 0.1);
+    border-bottom: 2px solid var(--color-primario);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.modal-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modal-footer {
+    padding: 15px 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.modal-footer button {
+    flex: 1;
+    min-width: 100px;
+}
+
+.descripcion-tipo {
+    background: rgba(0, 255, 136, 0.1);
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.8);
+    border-left: 3px solid var(--color-primario);
+}
+
+/* ==========================================
+   GRUPO 4: VISUALIZACIÓN DE DATOS
+   ========================================== */
+
+/* ==========================================
+4.1 ORGANIGRAMA (estilos de las fichas de contactos, los conectores y la estructura visual del mapa de personas)
 ========================================== */
 #lienzo-organigrama {
     width: 100%;
@@ -1080,239 +1297,11 @@ textarea {
 }
 
 /* ==========================================
-17. CONFIGURACIÓN PERSONAL
-========================================== */
-.configuracion-container {
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-    text-align: left;
-}
-
-.config-section {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 20px;
-    border-radius: var(--radio-bordes);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.config-section h3 {
-    margin-top: 0;
-    margin-bottom: 15px;
-    font-size: 1.1rem;
-}
-
-.config-options {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.input-estilizado {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: var(--radio-bordes);
-    padding: 10px;
-    color: white;
-    font-size: 0.9rem;
-    outline: none;
-    transition: all var(--transicion-rapida);
-    cursor: pointer;
-    width: 100%;
-}
-
-.input-estilizado:hover {
-    border-color: var(--color-primario);
-    background: rgba(255, 255, 255, 0.12);
-}
+   GRUPO 5: ADAPTACIÓN Y SEGURIDAD
+   ========================================== */
 
 /* ==========================================
-18. TUERCA (MENÚ LATERAL)
-========================================== */
-.tuerca-navegacion {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
-    background: var(--color-primario);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 5px 20px rgba(0, 255, 136, 0.4);
-    transition: all var(--transicion-rapida);
-    z-index: 1000;
-}
-
-.tuerca-navegacion:hover {
-    transform: rotate(90deg) scale(1.1);
-    box-shadow: 0 8px 30px rgba(0, 255, 136, 0.6);
-}
-
-.tuerca-navegacion span {
-    font-size: 1.5rem;
-}
-
-.sidebar-menu {
-    position: fixed;
-    right: -350px;
-    top: 0;
-    width: 300px;
-    height: 100vh;
-    background: linear-gradient(180deg, #1a1a2e, #0b0f19);
-    box-shadow: -5px 0 25px rgba(0, 0, 0, 0.5);
-    transition: right 0.4s ease;
-    z-index: 1500;
-    overflow-y: auto;
-    border-left: 2px solid var(--color-primario);
-}
-
-.sidebar-menu.abierto {
-    right: 0;
-}
-
-.sidebar-header {
-    padding: 20px;
-    background: rgba(0, 255, 136, 0.1);
-    border-bottom: 2px solid var(--color-primario);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.sidebar-header h3 {
-    margin: 0;
-    font-size: 1.2rem;
-    letter-spacing: 2px;
-}
-
-#lista-hojas-dinamica {
-    padding: 15px 0;
-}
-
-#lista-hojas-dinamica a {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 20px;
-    color: rgba(255, 255, 255, 0.8);
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: all var(--transicion-rapida);
-    border-left: 3px solid transparent;
-}
-
-#lista-hojas-dinamica a:hover {
-    background: rgba(0, 255, 136, 0.1);
-    border-left-color: var(--color-primario);
-    color: white;
-}
-
-#lista-hojas-dinamica a.activo {
-    background: rgba(0, 255, 136, 0.15);
-    border-left-color: var(--color-primario);
-    color: var(--color-primario);
-    font-weight: bold;
-}
-
-.menu-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 1400;
-    display: none;
-    backdrop-filter: blur(3px);
-}
-
-.menu-overlay.activo {
-    display: block;
-}
-
-/* ==========================================
-19. MODALES - AJUSTE DE Z-INDEX PARA NOTIFICACIONES
-========================================== */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1500;
-    backdrop-filter: blur(5px);
-}
-
-.modal-content {
-    background: linear-gradient(135deg, rgba(26, 26, 46, 0.95), rgba(11, 15, 25, 0.95));
-    border-radius: var(--radio-bordes);
-    width: 90%;
-    max-width: 500px;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
-    border: 2px solid var(--color-primario);
-    animation: modalSlideIn 0.3s ease;
-}
-
-@keyframes modalSlideIn {
-    from { opacity: 0; transform: translateY(-50px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.modal-header {
-    padding: 15px 20px;
-    background: rgba(0, 255, 136, 0.1);
-    border-bottom: 2px solid var(--color-primario);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.modal-header h3 {
-    margin: 0;
-    font-size: 1.2rem;
-}
-
-.modal-body {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.modal-footer {
-    padding: 15px 20px;
-    background: rgba(0, 0, 0, 0.3);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.modal-footer button {
-    flex: 1;
-    min-width: 100px;
-}
-
-.descripcion-tipo {
-    background: rgba(0, 255, 136, 0.1);
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.8);
-    border-left: 3px solid var(--color-primario);
-}
-
-/* ==========================================
-20. FOOTER GLOBAL (Marca de agua)
+5.1 FOOTER GLOBAL (Marca de agua) (estilos del pie de página que muestra el nombre de la aplicación y la versión en la parte inferior de la pantalla)
 ========================================== */
 .footer-global {
     display: flex;
@@ -1346,7 +1335,7 @@ textarea {
 }
 
 /* ==========================================
-21. MENSAJE MOTIVACIONAL (No usado actualmente)
+5.2 MENSAJE MOTIVACIONAL (No usado actualmente) (bloque de estilos preparado para futuras frases o citas motivacionales en la app)
 ========================================== */
 .mensaje-motivacional {
     background: rgba(0, 255, 136, 0.1);
@@ -1359,7 +1348,7 @@ textarea {
 }
 
 /* ==========================================
-22. RESPONSIVO
+5.3 RESPONSIVO (ajustes de diseño para que la app se adapte correctamente a celulares, tablets y pantallas pequeñas)
 ========================================== */
 @media (max-width: 768px) {
     #app-container {
@@ -1412,7 +1401,7 @@ textarea {
 }
 
 /* ==========================================
-23. SCROLLBAR PERSONALIZADA
+5.4 SCROLLBAR PERSONALIZADA (diseño a medida de la barra de desplazamiento lateral para que combine con los colores de la app)
 ========================================== */
 ::-webkit-scrollbar {
     width: 8px;
