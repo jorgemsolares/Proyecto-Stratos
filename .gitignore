@@ -6,3 +6,9 @@ Motor-Logica-y-Acronimos/_respaldo_*/
 
 # Carpeta duplicada antigua (tiene su propio .git; se mantiene local)
 Proyecto-Stratos/
+
+# Configuración de VS Code (solo local; la subida automática no depende de ella)
+.vscode/
+
+# Protocolo de desarrollo (solo local; en GitHub va SOLO la bitácora)
+instrucciones-IA/instrucciones.md
