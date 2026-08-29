@@ -35,16 +35,16 @@ let usuarioActivo = {
     email: "",
     posicion: "",
     acronimo: "",
-    contrasena: "", // Encriptada en producciÃ³n
+    contrasena: "", // Encriptada en producción
     esNo1: false,
     esPrimeraLinea: false,
     superiorId: null, // ID del jefe directo
-    invitadoPor: null, // ID de quien lo invitÃ³
-    tipoInvitacion: "", // "directo", "indirecto", "observador" (INMUTABLE - histÃ³rico)
-    tipoActual: "", // Puede cambiar si alguien mÃ¡s lo invita como colaborador
+    invitadoPor: null, // ID de quien lo invitó
+    tipoInvitacion: "", // "directo", "indirecto", "observador" (INMUTABLE - histórico)
+    tipoActual: "", // Puede cambiar si alguien más lo invita como colaborador
     fechaRegistro: null,
     ultimoAcceso: null,
-    requiereCambioContrasena: false // Flag para contraseÃ±a temporal
+    requiereCambioContrasena: false // Flag para contraseña temporal
 };
 
 // ==========================================
@@ -52,7 +52,7 @@ let usuarioActivo = {
 // ==========================================
 let identidadCorporativa = {
     completada: false,
-    completadaPor: null, // ID del No.1 que completÃ³
+    completadaPor: null, // ID del No.1 que completó
     logo: "", // Base64
     slogan: "",
     mision: "",
@@ -309,13 +309,13 @@ Estructura:
 // 5.2 MENSAJES MOTIVACIONALES — GRUPO 5
 // ==========================================
 let mensajesMotivacionales = [
-    "La comunicaciÃ³n efectiva es la base del Ã©xito.",
-    "Cada mensaje cuenta, cada acciÃ³n importa.",
-    "Tu equipo confÃ­a en ti.",
+    "La comunicación efectiva es la base del éxito.",
+    "Cada mensaje cuenta, cada acción importa.",
+    "Tu equipo confía en ti.",
     "Medir es el primer paso para mejorar.",
     "La transparencia genera confianza.",
     "El trabajo en equipo hace la diferencia.",
-    "Hoy es un buen dÃ­a para innovar.",
+    "Hoy es un buen día para innovar.",
     "Tu liderazgo inspira a otros."
 ];
 
@@ -565,7 +565,7 @@ const STORAGE_KEYS = {
     RECORDAR_USUARIO: "stratos_recordar",
     INVITACIONES: "stratos_invitaciones",
     SOLICITUDES_RECUPERACION: "stratos_solicitudes_recuperacion",
-    TOKEN_SESION: "stratos_token_sesion" // AÃ±adido para guardar el token
+    TOKEN_SESION: "stratos_token_sesion" // Añadido para guardar el token
 };
 
 // ==========================================

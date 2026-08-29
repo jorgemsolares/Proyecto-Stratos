@@ -55,10 +55,11 @@
 
 ---
 
-## ESTADO ACTUAL (actualizado el 26/08/2026)
+## ESTADO ACTUAL (actualizado el 28/08/2026)
 
 - La app que corre es la de las carpetas de la **raíz** (`Cuerpo-y-Textos`, `Colores-Estetica`, `Motor-Logica-y-Acronimos`).
 - El `index.html` referencia correctamente a `estilos.css`, `datos.js` y `logica.js`. ✅
+- **28/08/2026:** Enlace GitHub resuelto (upstream configurado), duplicado `Proyecto-Stratos` ELIMINADO (un solo repositorio) y cadenas corruptas de `datos.js` corregidas. El `DOMContentLoaded` final de `datos.js` se queda donde está (opción A).
 - **Pendiente / decidido este día:**
   1. Hacer que GitHub quede como **copia de respaldo automática** (volver a atrás si un cambio se arruina).
   2. Que todos los cambios se apliquen en `C:\Proyectos\Para Crear APP\Stratos`.
@@ -89,6 +90,14 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 ---
 
 ## BITÁCORA (historial de lo realizado)
+
+### 28/08/2026 — GitHub resuelto, duplicado eliminado y frases corruptas corregidas
+- **Enlace GitHub ↔ repositorio RESUELTO:** credenciales OK y **upstream configurado** (`git push -u origin main`). `git push`/`git pull` a secas y el botón Sync de VS Code ya funcionan. Local = `origin/main`.
+- **Duplicado `Proyecto-Stratos` ELIMINADO:** antes de borrar se verificó que sus 9 commits ya existen en el repo real (`git cat-file`). Borrado con `rmdir /s /q` (el Explorador fallaba por el `.git` interno con archivos de solo lectura). Ahora hay UN SOLO repositorio en la raíz.
+- **Cadenas corruptas de `datos.js` CORREGIDAS (11 líneas):** 4 frases motivacionales (L312/313/314/318: comunicación, éxito, acción, confía, día) + 7 comentarios (L38, 42, 43, 44, 47, 55, 568). Verificado: escaneo Python = 0 caracteres corruptos en los 4 archivos; `node --check` = sintaxis OK. Respaldo: `_respaldo_pre_reorg/datos.js.antes_fix_frases`.
+- **Decisión DOMContentLoaded (cerrada):** el bloque de arranque final de `datos.js` SE QUEDA donde está (opción A del Arquitecto): funciona perfecto y moverlo no da beneficio.
+- **Verificación del Arquitecto en navegador (28/08):** los 3 botones de añadir, la edición de contactos y el idioma ES/EN funcionan. ✅
+- **PENDIENTE restante:** el "otro tema" del Arquitecto (punto 2 de la ruta) y, opcional, traducción de textos 100% dinámicos.
 
 ### 27/08/2026 — Arreglos: display en blanco, menú con símbolos raros y contactos (añadir/editar)
 - **Display inicial en blanco** (textos crudos sin diseño): NO era error de código ni de texto. Live Server se abrió desde dentro de `Cuerpo-y-Textos`, y como el `index.html` enlaza sus hermanas con `../`, el navegador pedía rutas que no existen → 404 → rechazaba CSS/JS (MIME text/html). Solución (no código): abrir VS Code con la carpeta `C:\Proyectos\Para Crear APP\Stratos` como raíz y usar "Go Live"; la URL debe ser `http://127.0.0.1:5500/Cuerpo-y-Textos/index.html`.
@@ -204,8 +213,10 @@ El Arquitecto quiere no comenzar en 0 y avanzar por prioridad (un solo cupo por 
 ---
 
 ## PENDIENTES / SIGUIENTES PASOS
-- [ ] Arquitecto verifica la app en el navegador (¿corre la última versión?).
-- [ ] Guardar base actual de forma segura.
-- [ ] Limpiar duplicado `Proyecto-Stratos`.
-- [ ] Unificar en un único repositorio en la raíz.
-- [ ] Subir respaldo a GitHub.
+- [x] Arquitecto verifica la app en el navegador (botones, contactos e idioma — 28/08/2026).
+- [x] Guardar base actual de forma segura (respaldos locales + GitHub).
+- [x] Limpiar duplicado `Proyecto-Stratos` (28/08/2026, con verificación previa de su historial).
+- [x] Unificar en un único repositorio en la raíz + upstream configurado (28/08/2026).
+- [x] Subir respaldo a GitHub (enlace funcionando).
+- [ ] El "otro tema" que el Arquitecto quiere tratar (punto 2 de la ruta acordada).
+- [ ] Opcional: traducción 100% dinámica (avisos JS, secciones del organigrama, modal de contraseña temporal).
