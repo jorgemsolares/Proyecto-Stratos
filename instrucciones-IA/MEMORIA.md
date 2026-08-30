@@ -48,23 +48,19 @@
 6. **`instrucciones-IA/MEMORIA.md`** (este archivo)
    - Memoria de continuidad: estado actual, visión, bitácora.
 
-> **NOTA IMPORTANTE (estado de duplicación):** Pero existe una carpeta vieja
-> `Proyecto-Stratos` (del 11/08/2026) que es un duplicado SIN USO del mismo contenido.
-> La app REAL corre con los archivos de la raíz (los numerados arriba).
-> Está pendiente de limpiar/unificar (ver "ESTADO ACTUAL").
+> **NOTA (duplicación — RESUELTA 28/08/2026):** La carpeta vieja duplicada
+> `Proyecto-Stratos` fue ELIMINADA. Ahora hay UN SOLO repositorio en la raíz,
+> donde corre la app REAL (los archivos numerados arriba). ✅
 
 ---
 
-## ESTADO ACTUAL (actualizado el 28/08/2026)
+## ESTADO ACTUAL (actualizado el 29/08/2026)
 
 - La app que corre es la de las carpetas de la **raíz** (`Cuerpo-y-Textos`, `Colores-Estetica`, `Motor-Logica-y-Acronimos`).
 - El `index.html` referencia correctamente a `estilos.css`, `datos.js` y `logica.js`. ✅
 - **28/08/2026:** Enlace GitHub resuelto (upstream configurado), duplicado `Proyecto-Stratos` ELIMINADO (un solo repositorio) y cadenas corruptas de `datos.js` corregidas. El `DOMContentLoaded` final de `datos.js` se queda donde está (opción A).
-- **Pendiente / decidido este día:**
-  1. Hacer que GitHub quede como **copia de respaldo automática** (volver a atrás si un cambio se arruina).
-  2. Que todos los cambios se apliquen en `C:\Proyectos\Para Crear APP\Stratos`.
-  3. **Limpiar** la carpeta duplicada vieja `Proyecto-Stratos` y su `.git` interno, para que quede **un solo repositorio**.
-  4. Tener este `MEMORIA.md` como continuidad entre sesiones.
+- **Decisiones del 28/08 ya cumplidas:** GitHub como respaldo automático ✅ (script `subir_automatico.ps1` activo), cambios solo en la raíz `Stratos` ✅, duplicado eliminado ✅, `MEMORIA.md` de continuidad ✅.
+- **29/08/2026:** Revisadas las 3 opciones de Configuración (Sonido, Vibración, Notificaciones): guardan la preferencia pero NO ejecutan ninguna acción (no existe código de audio/vibración/notificación en el proyecto). Decisión del Arquitecto: dejar PENDIENTE su activación hasta desarrollar la **Pantalla Comunicación** (siguiente paso del proyecto).
 
 - **Reorganización de archivos (hecha hoy 26/08/2026):**
   - `estilos.css`: sección 3.7 numerada (3.7.1–3.7.12) y tuerca unificada en 3.10.
@@ -84,12 +80,24 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 - GitHub se quiere usar como **respaldo/seguridad**: si un cambio sale mal, poder **retroceder** al estado anterior.
 - La forma de trabajar del Arquitecto es por **una sola área o funcionalidad a la vez**.
 - El Arquitecto valora la **continuidad entre sesiones** y quiere que la IA "recuerde" la visión completa.
+- **Pantalla Comunicación (próximo desarrollo):** será el módulo de mensajes/notificaciones entre usuarios. Cuando exista "recibir notificaciones nuevas", las 3 opciones de Configuración se activarán así:
+  - **Sonido:** decisión On/Off; reproduce un pitido local (sin archivos de audio).
+  - **Notificaciones:** usan el sonido BASE que la máquina o el celular ya tengan designado (notificación del sistema; el navegador pide permiso una sola vez; sin tokens).
+  - **Vibración:** solo aplica a celular (On/Off; Android sí soporta, iPhone no permite vibración desde navegador — ahí simplemente no vibra).
 
 *(Se irán agregando más notas aquí conforme el Arquitecto las comparta.)*
 
 ---
 
 ## BITÁCORA (historial de lo realizado)
+
+### 29/08/2026 — Revisión de las 3 opciones de Configuración (sonido, vibración, notificaciones)
+- **Diagnóstico (SIN tocar código):** las casillas `config-sonido`, `config-vibracion` y `config-push` SÍ guardan su estado en localStorage (`guardarConfiguracion()`), pero NO ejecutan acción real: no existe en todo el proyecto código de audio, vibración ni notificaciones. Hoy son casillas decorativas.
+- **Falla adicional detectada:** al reabrir la app NO se restauran los estados guardados de esas casillas (solo se recupera el idioma); reaparecen marcadas por el defecto del HTML.
+- **"Push":** el texto viene del diccionario `TRADUCCIONES` (`cfg_push`). Las push reales (app cerrada) requieren tokens por dispositivo (Firebase/servidor). Hoy no hay nada implementado → **0 tokens en uso**.
+- **Decisión del Arquitecto:** dejar PENDIENTE hacerlas funcionales; se conectarán cuando exista "recibir notificaciones nuevas". **Siguiente paso: desarrollar la Pantalla Comunicación.** El diseño acordado quedó anotado en VISIÓN.
+- **Revisión de pendientes solicitada por el Arquitecto:** `logica.js` SÍ fue renumerado (1→32) el 26/08, pero la renumeración de TÍTULOS internos de `datos.js` NO tiene registro de haberse hecho → anotada en PENDIENTES. Conteo de corrupciones: 14 detectadas (26/08) vs 11 corregidas (28/08); el escaneo final dio 0 caracteres corruptos en los 4 archivos → cerrado con verificación. La nota "NOTA IMPORTANTE (estado de duplicación)" de este archivo quedó desactualizada (decía que el duplicado existía) → corregida.
+- La respuesta detallada de esta revisión quedó escrita en `explicacion.txt` (se limpiará al grabar bitácora, según nuevo protocolo de `instrucciones.md`).
 
 ### 28/08/2026 — GitHub resuelto, duplicado eliminado y frases corruptas corregidas
 - **Enlace GitHub ↔ repositorio RESUELTO:** credenciales OK y **upstream configurado** (`git push -u origin main`). `git push`/`git pull` a secas y el botón Sync de VS Code ya funcionan. Local = `origin/main`.
@@ -218,5 +226,8 @@ El Arquitecto quiere no comenzar en 0 y avanzar por prioridad (un solo cupo por 
 - [x] Limpiar duplicado `Proyecto-Stratos` (28/08/2026, con verificación previa de su historial).
 - [x] Unificar en un único repositorio en la raíz + upstream configurado (28/08/2026).
 - [x] Subir respaldo a GitHub (enlace funcionando).
-- [ ] El "otro tema" que el Arquitecto quiere tratar (punto 2 de la ruta acordada).
+- [x] El "otro tema" (punto 2 de la ruta): diagnosticado el 29/08/2026 → eran las 3 opciones de Configuración (ver bitácora).
+- [ ] **SIGUIENTE PASO (prioridad del Arquitecto): desarrollar la PANTALLA COMUNICACIÓN** (Pantalla 5, hoy sin funcionalidad).
+- [ ] Activar las 3 opciones de Configuración (Sonido On/Off, Notificación con sonido base del equipo, Vibración solo cel) cuando exista "recibir notificaciones nuevas" (depende del punto anterior).
+- [ ] Renumerar los TÍTULOS internos de `datos.js` (estilo logica.js 1→32) — sin registro de término; detectado en revisión 29/08.
 - [ ] Opcional: traducción 100% dinámica (avisos JS, secciones del organigrama, modal de contraseña temporal).
