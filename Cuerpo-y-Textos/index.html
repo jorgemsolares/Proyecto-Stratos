@@ -20,22 +20,31 @@
         <!-- 1.2 CONTENEDOR PRINCIPAL DE LA APP (el contenedor que envuelve y organiza toda la aplicación) -->
     <div id="app-container">
     
-        <!-- 1.3 BRANDING CORPORATIVO (logo y slogan de la empresa; aparece al completar la identidad) -->
-        <div id="branding-corporativo" class="branding-empresa" style="display:none;">
-            <img id="logo-empresa-header" src="" alt="Logo Empresa">
-            <p id="slogan-empresa-header"></p>
-        </div>
-      
-        <!-- 1.4 BRANDING INICIAL DE STRATOS (el logotipo principal de la aplicación) -->
-        <header class="branding">
-            <h1>STRATOS</h1>
-            <p data-i18n="branding_cabecera">HERRAMIENTA MULTIFUNCIONAL</p>
-        </header>
+        <!-- 1.3 ZONA SUPERIOR (fila dividida: branding a la izquierda 1/3, cartelera de mensajes a la derecha 2/3) -->
+        <div id="zona-superior">
+            <!-- 1.3.1 BRANDING (columna izquierda: identidad corporativa o branding inicial de Stratos) -->
+            <div id="zona-branding">
+                <!-- BRANDING CORPORATIVO (logo y slogan de la empresa; aparece al completar la identidad) -->
+                <div id="branding-corporativo" class="branding-empresa" style="display:none;">
+                    <img id="logo-empresa-header" src="" alt="Logo Empresa">
+                    <p id="slogan-empresa-header"></p>
+                </div>
 
-        <!-- 1.5 MENSAJE PERSONALIZADO (área global de alertas y avisos de la app) -->
-        <div id="mensaje-personalizado" class="mensaje-alerta" style="display:none;">
-            <span id="texto-mensaje-personalizado"></span>
-            <span id="frase-motivacional" class="frase-motivacional" style="display:none;"></span>
+                <!-- BRANDING INICIAL DE STRATOS (el logotipo principal de la aplicación) -->
+                <header class="branding">
+                    <h1>STRATOS</h1>
+                    <p data-i18n="branding_cabecera">HERRAMIENTA MULTIFUNCIONAL</p>
+                </header>
+            </div>
+
+            <!-- 1.3.2 CARTELERA DE MENSAJES (columna derecha: mensajes rotativos de la app) -->
+            <div id="zona-cartelera">
+                <!-- MENSAJE PERSONALIZADO (área global de alertas y avisos de la app) -->
+                <div id="mensaje-personalizado" class="mensaje-alerta" style="display:none;">
+                    <span id="texto-mensaje-personalizado"></span>
+                    <span id="frase-motivacional" class="frase-motivacional" style="display:none;"></span>
+                </div>
+            </div>
         </div>
 
 
@@ -120,6 +129,14 @@
         <p id="intentos-restantes" class="texto-advertencia" style="display:none;"></p>
       
         <button class="btn-principal" onclick="validarEntrada()" data-i18n="acc_entrar">ENTRAR</button>
+
+        <!-- OPCIONES DE AUTENTICACIÓN BIOMÉTRICA (facial/patrón/huella; se habilitan según el dispositivo — PUNTO 6) -->
+        <div id="opciones-biometria" class="opciones-biometria">
+            <button type="button" class="btn-biometria" id="bio-facial" title="Reconocimiento facial" onclick="intentarBiometria('facial')">👤</button>
+            <button type="button" class="btn-biometria" id="bio-patron" title="Patrón de desbloqueo" onclick="intentarBiometria('patron')">🔳</button>
+            <button type="button" class="btn-biometria" id="bio-huella" title="Huella digital" onclick="intentarBiometria('huella')">☝️</button>
+        </div>
+
         <button class="btn-link" id="btn-olvidaste-pass" onclick="solicitarRecuperacionContrasena()" style="display:none;" data-i18n="acc_olvidaste">¿Olvidaste tu contraseña?</button>
     </div>
 </section>
@@ -272,21 +289,17 @@
             
             <div class="configuracion-container">
                 <div class="config-section">
-                    <h3 data-i18n="cfg_notif">🔔 Notificaciones</h3>
-                    <div class="config-options">
-                        <label class="checkbox-container">
-                            <input type="checkbox" id="config-sonido" checked>
-                            <span data-i18n="cfg_sonido">Sonido</span>
-                        </label>
-                        <label class="checkbox-container">
-                            <input type="checkbox" id="config-vibracion" checked>
-                            <span data-i18n="cfg_vibracion">Vibración</span>
-                        </label>
-                        <label class="checkbox-container">
-                            <input type="checkbox" id="config-push" checked>
-                            <span data-i18n="cfg_push">Notificaciones Push</span>
-                        </label>
+                    <h3 data-i18n="cfg_ia">🤖 Configuración de IA</h3>
+                    <p class="descripcion-app" data-i18n="cfg_ia_desc">Personaliza a tu asistente de Stratos.</p>
+                    <!-- Nombre del asistente (el comando de activación es "Hola [nombre]" — PUNTO 7) -->
+                    <div class="formulario" style="margin-bottom: 10px;">
+                        <input type="text" id="config-nombre-asistente" placeholder="Nombre de tu asistente *" data-i18n="cfg_ia_nombre" maxlength="20" spellcheck="true">
                     </div>
+                    <!-- Botón de IA (diseño de esfera; la lógica de la IA se conecta en el PUNTO 7) -->
+                    <button type="button" id="boton-ia-configuracion" class="boton-ia">
+                        <span class="rotulo-ia-linea1" data-i18n="cfg_ia_boton1">Configuración</span>
+                        <span class="rotulo-ia-linea2" data-i18n="cfg_ia_boton2">IA</span>
+                    </button>
                 </div>
                 
                 <div class="config-section">
@@ -377,6 +390,26 @@
         <!-- 3.2 BOTÓN TUERCA (el botón flotante de navegación dentro del contenedor) -->
         <div id="boton-tuerca-global" class="tuerca-navegacion" onclick="toggleMenuTuerca()" style="display:none;">
             <span>📋</span>
+        </div>
+
+        <!-- 3.3 BOTÓN DE IA FLOTANTE (esfera del asistente; presente en todas las pantallas excepto Login — PUNTO 7) -->
+        <div id="boton-ia-flotante" class="boton-ia boton-ia-flotante" onclick="activarBotonIA()" style="display:none;" role="button" title="Asistente de IA">
+            <span class="rotulo-ia-flotante">Stratos</span>
+        </div>
+
+        <!-- 3.4 VENTANA EMERGENTE DE IA (muestra lo que dice el usuario y lo que responde la IA; abajo-centro, compacta — PUNTO 7) -->
+        <div id="ventana-ia" class="ventana-ia" style="display:none;">
+            <div class="ventana-ia-cabecera">
+                <span id="ventana-ia-estado" class="ventana-ia-estado">Escuchando...</span>
+                <button type="button" class="ventana-ia-btn" id="btn-ia-pausa" onclick="alternarPausaIA()" title="Pausa">⏸</button>
+                <button type="button" class="ventana-ia-btn" id="btn-ia-editar" onclick="editarTextoIA()" title="Editar">✏️</button>
+                <button type="button" class="ventana-ia-btn" onclick="cerrarVentanaIA()" title="Cerrar">✕</button>
+            </div>
+            <div class="ventana-ia-cuerpo">
+                <p id="ventana-ia-texto-usuario" class="ventana-ia-linea-usuario"></p>
+                <p id="ventana-ia-texto-respuesta" class="ventana-ia-linea-respuesta"></p>
+                <input type="text" id="ventana-ia-input" class="ventana-ia-input" style="display:none;" placeholder="Escribe tu comando..." data-i18n="ia_escribe" onkeydown="if(event.key==='Enter'){enviarTextoIA();}">
+            </div>
         </div>
     </div>
 

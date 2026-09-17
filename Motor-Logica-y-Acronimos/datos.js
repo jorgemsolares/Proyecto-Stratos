@@ -323,11 +323,7 @@ let mensajesMotivacionales = [
 // 5.3 CONFIGURACIÓN PERSONAL DEL USUARIO
 // ==========================================
 let configuracionPersonal = {
-    notificaciones: {
-        sonido: true,
-        vibracion: true,
-        push: true
-    },
+    nombreAsistente: "Vero", // Nombre de la IA; el usuario lo cambia en Configuración (PUNTO 7)
     idioma: "es", // es, en
     biometria: false,
     temaOscuro: true // Siempre true (definido por No.1)
@@ -344,10 +340,16 @@ const TRADUCCIONES = {
     // CONFIGURACIÓN
     "cfg_titulo": { es: "Mi Configuración", en: "My Settings" },
     "cfg_desc": { es: "Personaliza tu experiencia", en: "Customize your experience" },
-    "cfg_notif": { es: "Notificaciones", en: "Notifications" },
-    "cfg_sonido": { es: "Sonido", en: "Sound" },
-    "cfg_vibracion": { es: "Vibración", en: "Vibration" },
-    "cfg_push": { es: "Notificaciones Push", en: "Push Notifications" },
+    "cfg_ia": { es: "Configuración de IA", en: "AI Settings" },
+    "cfg_ia_desc": { es: "Personaliza a tu asistente de Stratos.", en: "Customize your Stratos assistant." },
+    "cfg_ia_boton1": { es: "Configuración", en: "Settings" },
+    "cfg_ia_boton2": { es: "IA", en: "AI" },
+    "cfg_ia_nombre": { es: "Nombre de tu asistente *", en: "Your assistant's name *" },
+    "ia_escuchando": { es: "Escuchando...", en: "Listening..." },
+    "ia_respondiendo": { es: "Respondiendo...", en: "Responding..." },
+    "ia_pausa": { es: "Pausa — corrige manualmente", en: "Pause — correct manually" },
+    "ia_sin_micro": { es: "Sin micrófono — usa ✏️ para escribir", en: "No mic — use ✏️ to type" },
+    "ia_escribe": { es: "Escribe tu comando...", en: "Type your command..." },
     "cfg_idioma": { es: "Idioma", en: "Language" },
     "cfg_seguridad": { es: "Seguridad", en: "Security" },
     "cfg_biometria": { es: "Habilitar autenticación biométrica", en: "Enable biometric authentication" },
@@ -565,7 +567,9 @@ const STORAGE_KEYS = {
     RECORDAR_USUARIO: "stratos_recordar",
     INVITACIONES: "stratos_invitaciones",
     SOLICITUDES_RECUPERACION: "stratos_solicitudes_recuperacion",
-    TOKEN_SESION: "stratos_token_sesion" // Añadido para guardar el token
+    TOKEN_SESION: "stratos_token_sesion", // Añadido para guardar el token
+    ULTIMO_USUARIO: "stratos_ultimo_usuario", // Último usuario que entró al sistema en este dispositivo
+    ULTIMO_SALUDO: "stratos_ultimo_saludo_fecha" // Fecha del último saludo mostrado en la cartelera
 };
 
 // ==========================================
@@ -620,6 +624,8 @@ window.addEventListener('DOMContentLoaded', function() {
         configuracionPersonal = configuracionGuardada;
         const selectorIdioma = document.getElementById('config-idioma');
         if (selectorIdioma && configuracionGuardada.idioma) selectorIdioma.value = configuracionGuardada.idioma;
+        const campoAsistente = document.getElementById('config-nombre-asistente');
+        if (campoAsistente && configuracionPersonal.nombreAsistente) campoAsistente.value = configuracionPersonal.nombreAsistente;
     }
     if (typeof aplicarIdioma === 'function') aplicarIdioma(configuracionPersonal.idioma || 'es');
 });

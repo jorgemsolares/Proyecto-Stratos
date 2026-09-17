@@ -1,62 +1,106 @@
-# PROTOCOLO OBLIGATORIO DE DESARROLLO
+# INSTRUCCIONES PARA LA IA DEL SISTEMA (VS CODE)
 
-## Mi Rol
-- Soy el Arquitecto, Diseñador y Director del proyecto.
-- No sé programación ni código, pero tengo el mapa completo de la app en mi cabeza.
-- La guía y las necesidades las planteo como dueño de la idea 
-
-## Tu Rol (IA)
-- Eres un asistente técnico y traductor de lógica a código VS Code.
-- Tienes ESTRICTAMENTE PROHIBIDO alterar la lógica, proponer cambios de diseño por tu cuenta o asumir funciones que no he solicitado.
-- No intentes "mejorar" mi idea original a menos que yo te pida opiniones de optimización.
-- No se necesita dar extensas explicaciones porque se pierde la continuidad de la idea que tiene el desarrollador, en la mayoria de los casos es tan facil como responder a los cuestionamientos con un Si o No.
-- Es imperativo seguir al creador no el proponer o dar respuestas anticipadas sin estar seguro de lo está planteando por lo que es mejor aclarar si se tiene el concepto claro antes de proponer que en estos trabajos NO ES NECESARIO si no se solicita expresamente.
-
-## PASO OBLIGATORIO AL INICIO DE CADA SESIÓN
-1. ANTES de responder o actuar, lee por completo `instrucciones-IA/MEMORIA.md` (memoria del proyecto: mapa de archivos, estado actual, visión y bitácora).
-2. Léelo porque sin él la IA "abre en blanco" y pierde continuidad. La memoria vive en el archivo, no en la conversación.
-3. Retoma desde el ESTADO ACTUAL y los PENDIENTES anotados ahí, al menos que el Arquitecto indique otra cosa.
-4. Al terminar un proceso real, pide o sugiere actualizar la BITÁCORA del `MEMORIA.md`.
-5. **Regla de archivo:** La Bitácora de `MEMORIA.md` debe mantenerse corta y actualizada. 
-   Todo lo que tenga más de 3 meses se MUEVE automáticamente al archivo `instrucciones-IA/Historial_Bitacora.md` (que no se lee en cada sesión, solo se consulta si el Arquitecto lo pide).
-   6. **Comunicación con GitHub (proceso de fondo):** La conexión con GitHub y el script `subir_automatico.ps1` son un proceso de fondo que ya está activo. 
-   La IA NO debe intentar abrir, verificar ni probar la comunicación. 
-   Solo debe ejecutar el comando **"Grabar Bitácora"** cuando el Arquitecto lo indique, para que el script suba los archivos automáticamente.
-   7. **Ejecución del script:** La IA no puede ejecutar scripts de PowerShell directamente por sí sola.
-   Cuando el Arquitecto diga "Grabar Bitácora", la IA debe confirmar que los archivos están listos y decirle al Arquitecto: "Listo, ejecuta el script `subir_automatico.ps1`".
-   (En VS Code, el Arquitecto abre la Terminal y escribe: `.\subir_automatico.ps1`).
-
-## Método de Trabajo (Paso a Paso)
-1. Yo te plantearé una sola área o funcionalidad a la vez.
-2. Tu tarea es traducir esa área a código exacto para VS Code.
-3. Si un paso requiere varias modificaciones, avísame ANTES de escribir el código.
-4. Si detectas que algo de lo que pido romperá el sistema, explícamelo de forma sencilla en español y espera mi aprobación antes de actuar.
-
-## OPERACIÓN DE SINCRONIZACIÓN CON GITHUB (IMPORTANTE)
-
-- **Activación:** Cuando el Arquitecto diga **"Grabar Bitácora"**, **"Sincronizar"**, **"Subir a GitHub"** o cualquier frase equivalente que indique que se deben subir los cambios, **la IA DEBE ejecutar inmediatamente el comando** `.\subir_automatico.ps1` en la Terminal de VS Code.
-- **Sin excusas:** La IA NO debe preguntar cómo hacerlo, ni esperar órdenes adicionales, ni explicar que no puede. Si el Arquitecto da la orden de subir, **la IA escribe el comando en la terminal**.
-- **Subida manual (Respaldo):** Si el script automático falla o se detiene, la IA debe ejecutar manualmente estos 3 pasos en la terminal (uno por uno):
-  1. `git add .`
-  2. `git commit -m "Actualización automática"`
-  3. `git push origin main`
-
-## PROTOCOLO DE LECTURA DE "explicacion.txt" (Optimización de tokens)
-
-- Cuando el Arquitecto diga **"Leer explicación"**, la IA **DEBE**:
-  1. Abrir y leer TODO el archivo `explicacion.txt` **sin preguntar nada en el chat**.
-  2. Actuar de inmediato según lo que pida el Arquitecto en ese archivo.
-  3. **NO escribir procesos largos, ni resúmenes, ni repreguntas en el chat.** 
-  4. Si el Arquitecto lo solicita explícitamente en el archivo, **solo entonces** escribirá sus respuestas en el chat.
-  5. Si necesita hacer una acción (ej: crear archivos, editarlos, subir a GitHub), **la hará directamente** y solo avisará al final con un mensaje corto: "Acción completada. Grabado en [nombre del archivo]".
-- **Regla de oro del chat:** El chat es SOLO para confirmaciones cortas ("Sí", "Listo", "Ok") y para las órdenes del Arquitecto. La IA NO debe ocupar el chat con explicaciones técnicas ni procesos internos.
+> **Propósito:** Este documento contiene los cambios concretos a implementar en el sistema Stratos.
+> Cada punto incluye: **qué cambiar**, **dónde**, **cómo debe quedar**.
 
 ---
 
-## LIMPIEZA AUTOMÁTICA DE "explicacion.txt"
+## PUNTO 1: MOVER LOGO + SLOGAN A SUPERIOR IZQUIERDA
 
-- **Cuando el Arquitecto diga "Grabar Bitácora"** (o cualquier frase equivalente que indique subir a GitHub):
-  1. La IA **DEBE** ejecutar el comando para subir los cambios.
-  2. **INMEDIATAMENTE DESPUÉS**, la IA debe abrir `explicacion.txt` y **borrar TODO su contenido** (dejarlo completamente vacío).
-  3. La IA debe guardar el archivo vacío. Así quedará **limpio y listo** para la próxima sesión.
-- **Regla de oro:** El contenido de `explicacion.txt` es temporal. Terminó su ciclo de vida cuando la IA terminó la tarea y se subió todo a GitHub. No debe quedar nada guardado ahí.
+**Qué cambiar:**
+- Mover el logo y el slogan de la compañía de la parte superior centrada a la parte superior izquierda.
+- El espacio superior restante (a la derecha del logo) debe ocuparlo el área de Cartelera de Mensajes.
+
+**Dónde:**
+- `index.html`: Estructura de la parte superior.
+- `estilos.css`: Diseño de la parte superior.
+
+**Cómo debe quedar:**
+- La parte superior se divide en tres: izquierda (logo + slogan) ocupa 1/3, derecha (cartelera) ocupa 2/3.
+- Comparten altura y ancho.
+- El cuerpo de la pantalla crece, aprovechando el espacio liberado (al correr la cartelera hacia arriba, se libera el espacio actual que ocupa en pantalla).
+- El logo/slogan dejan de ser el centro de atención y pasan a ser referencia y pertenencia (identidad).
+
+---
+
+## PUNTO 4: ELIMINAR SONIDO, VIBRACIÓN, MODO NOCTURNO DE CONFIGURACIÓN
+
+**Qué cambiar:**
+- Eliminar las tres opciones (Sonido, Vibración, Modo Nocturno) de la pantalla de Configuración.
+- El sistema debe tomar los autorizados del dispositivo (no gestionarlos desde Stratos).
+- En su lugar, implementar el botón de configuración de IA.
+
+**Dónde:**
+- `index.html`: Pantalla de Configuración.
+- `logica.js`: Lógica de la pantalla de Configuración.
+- `estilos.css`: Diseño de la pantalla de Configuración.
+
+**Cómo debe quedar:**
+- La pantalla de Configuración ya no tiene las tres opciones.
+- En la misma área, aparece el botón de **"Configuración de IA"**.
+- El sistema no gestiona sonido, vibración ni modo nocturno.
+
+---
+
+## PUNTO 6: SALUDO "HOLA [NOMBRE]" EN LOGIN
+
+**Qué cambiar:**
+- Implementar saludo personalizado en Login.
+- El saludo debe cambiar **antes** de presionar "ENTRAR".
+- Habiendo incluido el saludo personalizado, el sistema debe reconocer el nombre del último usuario del sistema para eso.
+- Si el dispositivo ya tiene guardado varios usuarios y se cambia el usuario de entrada, al presionar ENTRAR, el sistema debe cambiar el nombre en el saludo inicial y luego entrar, permitiendo ver al usuario ese cambio.
+- Al entrar, el saludo debe aparecer de nuevo en la Cartelera, **solo la primera vez del día** (para estadísticas de horario de trabajo).
+- El reconocimiento facial/patrón/huella son opciones **dentro del mismo Login**, habilitadas según el dispositivo, **en la parte inferior del botón de entrada**.
+
+**Dónde:**
+- `index.html`: Pantalla de Login.
+- `logica.js`: Lógica del saludo y del desplegable de usuarios.
+- `estilos.css`: Diseño del saludo.
+
+**Cómo debe quedar:**
+- Al seleccionar un nombre del desplegable, el saludo cambia a "Hola [Nombre]".
+- Al entrar, el saludo aparece en Cartelera (solo la primera vez del día).
+- Las opciones de autenticación (facial, patrón, huella) aparecen en la parte inferior del botón de entrada, dentro del mismo Login, según el dispositivo.
+
+---
+
+## PUNTO 7: CREAR BOTÓN DE IA (EFECTOS VISUALES + SONIDO + INDICADOR DE VOZ)
+
+**Qué cambiar:**
+- Implementar la lógica del botón de IA (actualmente es un placeholder).
+- El botón está en **todas las pantallas** (excepto Login). En la pantalla de Configuración está en otro lugar, pero su diseño es igual.
+- Al presionar:
+  - Se activa el micrófono (con sonido).
+  - Se requiere el comando **"Hola [nombre]"** para confirmar que no fue un error.
+- La ventana emergente:
+  - Aparece cuando el usuario presiona el botón.
+  - Guarda el diseño actual en cuanto a colores de las ventanas de Organigrama.
+  - Solo tiene: el texto del estado, el botón de editar y la X.
+  - Muestra en texto lo que el usuario dice (mientras Vero escucha).
+  - Muestra en texto lo que Vero responde (mientras Vero habla).
+  - Tiene un letrero **"PAUSA"** (en el área de "Escuchando") para que el usuario corrija manualmente si Vero tradujo mal.
+  - En la parte de abajo, muestra el estado actual:
+    - **"Escuchando..."** (mientras el micrófono está activo).
+    - **"Respondiendo..."** (mientras Vero habla).
+  - Se cierra sola después de un tiempo calculado: `(número de palabras / 3.5) + 0.75` segundos.
+  - Mismo tamaño y forma que las de organigramas, pero crece si la respuesta ocupa más espacio.
+  - Ubicación: parte inferior central, tamaño compacto, no se puede mover.
+- El botón:
+  - Es una **esfera con movimiento tipo humo** (el humo color verde Stratos), con la palabra "Stratos" sobre ella (excepto en la pantalla de Configuración, que tiene la oración "Configuración de IA").
+  - Tiene los colores de identidad corporativa de un botón.
+  - Al presionar, sale un **halo de luz verde Stratos**.
+- **La única pantalla sin Vero es Login.**
+
+**Dónde:**
+- `index.html`: Estructura del botón y la ventana emergente.
+- `logica.js`: Lógica de activación, micrófono, ventana emergente, estados.
+- `estilos.css`: Diseño del botón (esfera, humo, halo) y de la ventana emergente.
+
+**Cómo debe quedar:**
+- El botón de IA es una esfera con movimiento tipo humo (humo color verde Stratos), con "Stratos" sobre ella, colores de identidad, y halo verde al presionar.
+- La ventana emergente muestra texto (lo que dice el usuario y lo que responde Vero), con estado "Escuchando..." o "Respondiendo...", con opción "PAUSA", botón de editar y X.
+- Se cierra sola después del tiempo calculado.
+
+---
+
+**Fin de las instrucciones.**

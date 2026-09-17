@@ -45,7 +45,7 @@ function mostrarAvisoInmediato(texto, tipo) {
 }
 
 // ==========================================
-// 3. FUNCIÓN PARA FRAGMENTAR MISIÓN, VISIÓN Y VALORES (divide los textos en fragmentos cortos para los mensajes)
+// 3. FUNCIÓN PARA FRAGMENTAR MISIÓN, VISIÓN Y VALORES (separa los textos en frases completas usando fronteras naturales: comas, puntos y dobles espacios)
 // ==========================================
 function obtenerFragmentosMisionVisionValores() {
     const fragmentos = [];
@@ -57,36 +57,13 @@ function obtenerFragmentosMisionVisionValores() {
     const separadores = /[,;.]|\s{2,}/;
     textos.forEach(texto => {
         if (!texto) return;
-        let partes = texto.split(separadores);
-        partes.forEach(parte => {
+        texto.split(separadores).forEach(parte => {
             parte = parte.trim();
             if (parte.length === 0) return;
-            if (parte.length > 150) {
-                let corte = parte.substring(0, 150);
-                let ultimoEspacio = corte.lastIndexOf(' ');
-                if (ultimoEspacio > 0) {
-                    corte = corte.substring(0, ultimoEspacio);
-                }
-                fragmentos.push(corte + '...');
-                let resto = parte.substring(corte.length);
-                if (resto.length > 0) {
-                    resto = resto.replace(/^\s+/, '');
-                    if (resto.length > 0) {
-                        if (resto.length > 150) {
-                            let nuevoCorte = resto.substring(0, 150);
-                            let nuevoUltimoEspacio = nuevoCorte.lastIndexOf(' ');
-                            if (nuevoUltimoEspacio > 0) {
-                                nuevoCorte = nuevoCorte.substring(0, nuevoUltimoEspacio);
-                            }
-                            fragmentos.push(nuevoCorte + '...');
-                        } else {
-                            fragmentos.push(resto);
-                        }
-                    }
-                }
-            } else {
-                fragmentos.push(parte);
-            }
+            // Frase completa como fragmento (sin cortes a mitad de frase):
+            // los fragmentos se separan SOLO en fronteras naturales, de modo
+            // que nunca quedan colas sueltas de pocas palabras (p. ej. "los objetivos").
+            fragmentos.push(parte);
         });
     });
     return fragmentos;
@@ -97,6 +74,19 @@ function obtenerFragmentosMisionVisionValores() {
 // ==========================================
 function construirColaMensajes() {
     colaMensajes = [];
+    // Saludo en la cartelera: solo la PRIMERA VEZ del día (estadística de horario de trabajo — PUNTO 6)
+    if (usuarioActivo && usuarioActivo.nombreCompleto) {
+        const hoySaludo = new Date().toDateString();
+        if (localStorage.getItem(STORAGE_KEYS.ULTIMO_SALUDO) !== hoySaludo) {
+            localStorage.setItem(STORAGE_KEYS.ULTIMO_SALUDO, hoySaludo);
+            colaMensajes.push({
+                texto: `👋 Hola, ${usuarioActivo.nombre}`,
+                tipo: 'saludo',
+                fechaInicio: new Date(),
+                resuelto: false
+            });
+        }
+    }
     if (!identidadCorporativa.completada) {
         const no1 = baseDatosUsuarios.find(u => u.esNo1);
         const nombreNo1 = no1 ? no1.nombre : "El administrador";
@@ -109,10 +99,12 @@ function construirColaMensajes() {
     }
     if (identidadCorporativa.completada) {
         const hoy = new Date().toDateString();
-        const ultimoMensaje = localStorage.getItem('ultimo_mensaje_fecha');
+        const fragmentos = obtenerFragmentosMisionVisionValores();
+        const textoGuardado = localStorage.getItem('ultimo_mensaje_texto');
         let mensajeMotivacional = null;
-        if (ultimoMensaje !== hoy) {
-            const fragmentos = obtenerFragmentosMisionVisionValores();
+        // El mensaje del día se rifa una sola vez; si el texto guardado ya no existe
+        // en la identidad actual (textos editados), se rifa uno nuevo de inmediato.
+        if (localStorage.getItem('ultimo_mensaje_fecha') !== hoy || !textoGuardado || !fragmentos.includes(textoGuardado)) {
             if (fragmentos.length > 0) {
                 const nuevoIndice = Math.floor(Math.random() * fragmentos.length);
                 mensajeMotivacional = fragmentos[nuevoIndice];
@@ -121,7 +113,7 @@ function construirColaMensajes() {
                 localStorage.setItem('ultimo_mensaje_texto', mensajeMotivacional);
             }
         } else {
-            mensajeMotivacional = localStorage.getItem('ultimo_mensaje_texto');
+            mensajeMotivacional = textoGuardado;
         }
         if (mensajeMotivacional) {
             colaMensajes.push({
@@ -168,6 +160,8 @@ function mostrarSiguienteMensaje() {
     if (mensajeDiv && textoMensaje && mensaje) {
         mensajeDiv.classList.remove('exito', 'error', 'advertencia');
         if (mensaje.tipo === 'motivacional') {
+            mensajeDiv.classList.add('exito');
+        } else if (mensaje.tipo === 'saludo') {
             mensajeDiv.classList.add('exito');
         } else if (mensaje.tipo === 'aviso') {
             mensajeDiv.classList.add('advertencia');
@@ -217,6 +211,8 @@ function irAPantalla(id) {
     destino.classList.add('active');
     destino.style.display = 'flex';
     pantallaActual = id;
+    // El botón de IA aparece en todas las pantallas excepto Login (PUNTO 7)
+    mostrarBotonIA(id !== 'pantalla-acceso');
     ajustarLayoutAdaptativo();
     if (typeof estadoPantallas !== 'undefined' && estadoPantallas[id]) {
         estadoPantallas[id].visitada = true;
@@ -333,9 +329,13 @@ function inicializarPantallaAcceso() {
     cargarSugerencias();
     if (campoNombre) {
         campoNombre.addEventListener('click', () => { cargarSugerencias(); campoNombre.setAttribute('list', 'lista-usuarios'); });
-        campoNombre.addEventListener('input', () => { cargarSugerencias(); campoNombre.setAttribute('list', 'lista-usuarios'); });
+        campoNombre.addEventListener('input', () => { cargarSugerencias(); campoNombre.setAttribute('list', 'lista-usuarios'); actualizarSaludoLogin(); });
         campoNombre.addEventListener('focus', () => { cargarSugerencias(); campoNombre.setAttribute('list', 'lista-usuarios'); });
     }
+    // El saludo arranca con el último usuario del sistema (PUNTO 6)
+    actualizarSaludoLogin();
+    // Las opciones biométricas se habilitan o no según el dispositivo (PUNTO 6)
+    inicializarBiometria();
 }
 
 window.addEventListener('resize', ajustarLayoutAdaptativo);
@@ -878,6 +878,9 @@ function validarEntrada() {
     let usuariosDispositivo = localStorage.getItem('usuarios_del_dispositivo');
     usuariosDispositivo = usuariosDispositivo ? JSON.parse(usuariosDispositivo) : [];
     if (!usuariosDispositivo.includes(nombreCompleto)) { usuariosDispositivo.push(nombreCompleto); localStorage.setItem('usuarios_del_dispositivo', JSON.stringify(usuariosDispositivo)); }
+    guardarEnStorage(STORAGE_KEYS.ULTIMO_USUARIO, nombreCompleto);
+    // El saludo cambia a este usuario ANTES de entrar (PUNTO 6)
+    actualizarSaludoLogin();
     window.claveAccesoReal = "";
     if (campoPass) campoPass.value = "";
     if (usuario.requiereCambioContrasena) { mostrarModalCambioObligatorio(); return; }
@@ -962,7 +965,13 @@ function cargarNombreRecordado() {
         if (campoNombre) campoNombre.value = nombreGuardado;
         if (checkRecordar) checkRecordar.checked = true;
         if (spanNombre) spanNombre.innerText = nombreGuardado.split(' ')[0];
-    } else { if (spanNombre) spanNombre.innerText = "de nuevo"; }
+    } else {
+        // Sin "recordar": el saludo usa el último usuario del sistema, si existe (PUNTO 6)
+        const ultimoUsuario = localStorage.getItem(STORAGE_KEYS.ULTIMO_USUARIO);
+        if (spanNombre) {
+            spanNombre.innerText = ultimoUsuario ? ultimoUsuario.replace(/^"|"$/g, '').split(' ')[0] : "de nuevo";
+        }
+    }
     const datalist = document.getElementById('lista-usuarios');
     if (datalist) {
         datalist.innerHTML = '';
@@ -970,6 +979,47 @@ function cargarNombreRecordado() {
     }
     const elementoFrase = document.getElementById('frase-motivacional');
     if (elementoFrase) elementoFrase.innerText = `"${obtenerFraseMotivacional()}"`;
+}
+
+// ==========================================
+// 20.1 SALUDO DEL LOGIN (actualiza el "Hola [Nombre]" en vivo; usa el último usuario del sistema si el campo está vacío — PUNTO 6)
+// ==========================================
+function actualizarSaludoLogin() {
+    const spanNombre = document.getElementById('nombre-usuario-login');
+    if (!spanNombre) return;
+    const campoNombre = document.getElementById('acc-nombre-completo');
+    const texto = campoNombre ? campoNombre.value.trim().replace(/^"|"$/g, '') : '';
+    if (texto) {
+        spanNombre.innerText = texto.split(' ')[0];
+    } else {
+        const ultimoUsuario = localStorage.getItem(STORAGE_KEYS.ULTIMO_USUARIO);
+        spanNombre.innerText = ultimoUsuario ? ultimoUsuario.replace(/^"|"$/g, '').split(' ')[0] : "de nuevo";
+    }
+}
+
+// ==========================================
+// 20.2 AUTENTICACIÓN BIOMÉTRICA DEL LOGIN (habilita facial/patrón/huella solo si el dispositivo ofrece autenticador — PUNTO 6)
+// ==========================================
+function inicializarBiometria() {
+    const contenedor = document.getElementById('opciones-biometria');
+    if (!contenedor) return;
+    const soportado = window.PublicKeyCredential && typeof PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable === 'function';
+    if (!soportado) {
+        contenedor.classList.add('no-disponible');
+        return;
+    }
+    PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable().then(disponible => {
+        if (!disponible) contenedor.classList.add('no-disponible');
+    }).catch(() => contenedor.classList.add('no-disponible'));
+}
+
+function intentarBiometria(metodo) {
+    const contenedor = document.getElementById('opciones-biometria');
+    if (!contenedor || contenedor.classList.contains('no-disponible')) {
+        mostrarAvisoInmediato("✖ Este dispositivo no ofrece autenticación biométrica", "advertencia");
+        return;
+    }
+    mostrarAvisoInmediato("🔓 Biométrico disponible en el dispositivo. Su activación se enlaza con 'Habilitar autenticación biométrica' (Configuración).", "exito");
 }
 
 // ==========================================
@@ -1541,9 +1591,7 @@ function editarPerfil() { irAPantalla('registro-invitacion'); }
 
 function guardarConfiguracion() {
     const config = {
-        sonido: document.getElementById('config-sonido')?.checked || false,
-        vibracion: document.getElementById('config-vibracion')?.checked || false,
-        push: document.getElementById('config-push')?.checked || false,
+        nombreAsistente: (document.getElementById('config-nombre-asistente')?.value || '').trim() || 'Vero',
         idioma: document.getElementById('config-idioma')?.value || 'es',
         biometria: document.getElementById('config-biometria')?.checked || false
     };
@@ -1968,3 +2016,207 @@ function guardarContacto() {
 }
 
 // Nota: las funciones restantes (renderizarOrganigramaGeneral, construirOrganigramaGeneral, etc.) no se modifican y siguen funcionando igual.
+
+// ==========================================
+// 33. ASISTENTE DE IA (BOTÓN FLOTANTE, VOZ Y VENTANA EMERGENTE — PUNTO 7)
+// ==========================================
+
+// Estado interno del asistente
+let iaActiva = false;            // hay sesión de asistente abierta
+let iaEnPausa = false;           // el usuario puso PAUSA para corregir
+let iaReconocimiento = null;     // instancia de SpeechRecognition
+let iaPasoConfirmacion = false;  // ya se confirmó con "Hola [nombre]"
+let iaTemporizadorCierre = null; // cierre automático de la ventana
+let iaSintesis = window.speechSynthesis || null;
+
+function nombreAsistenteIA() {
+    return (configuracionPersonal && configuracionPersonal.nombreAsistente) ? configuracionPersonal.nombreAsistente : "Vero";
+}
+
+// Muestra u oculta el botón flotante (no existe en Login)
+function mostrarBotonIA(visible) {
+    const btn = document.getElementById('boton-ia-flotante');
+    if (btn) btn.style.display = visible ? 'flex' : 'none';
+    if (!visible) cerrarVentanaIA();
+}
+
+// Se activa al presionar la esfera: sonido + micrófono + ventana
+function activarBotonIA() {
+    if (iaActiva) { cerrarVentanaIA(); return; }
+    iaActiva = true;
+    iaEnPausa = false;
+    iaPasoConfirmacion = false;
+    const ventana = document.getElementById('ventana-ia');
+    const textoUsuario = document.getElementById('ventana-ia-texto-usuario');
+    const textoRespuesta = document.getElementById('ventana-ia-texto-respuesta');
+    if (textoUsuario) textoUsuario.innerText = '';
+    if (textoRespuesta) textoRespuesta.innerText = '';
+    if (ventana) ventana.style.display = 'flex';
+    const btn = document.getElementById('boton-ia-flotante');
+    if (btn) btn.classList.add('ia-presionado');
+    // Sonido de activación (pitido local, sin archivos de audio)
+    reproducirPitidoIA();
+    // La ventana se auto-cierra sola tras el tiempo calculado
+    programarCierreAutomaticoIA();
+    // Escuchar
+    iniciarEscuchaIA();
+}
+
+// Pitido con WebAudio (sin archivos de audio)
+function reproducirPitidoIA() {
+    try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const vol = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = 880;
+        vol.gain.setValueAtTime(0.08, ctx.currentTime);
+        vol.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.35);
+        osc.connect(vol); vol.connect(ctx.destination);
+        osc.start(); osc.stop(ctx.currentTime + 0.35);
+    } catch (e) { /* sin audio disponible: continuar en silencio */ }
+}
+
+// Micrófono (Web Speech API); si no existe, ofrece escritura
+function iniciarEscuchaIA() {
+    const estado = document.getElementById('ventana-ia-estado');
+    const hayMicro = Boolean(window.SpeechRecognition || window.webkitSpeechRecognition);
+    if (estado) estado.innerText = hayMicro ? traducirTexto('ia_escuchando') : traducirTexto('ia_sin_micro');
+    if (!hayMicro) { mostrarEntradaTextoIA(); return; }
+    try {
+        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+        iaReconocimiento = new SR();
+        iaReconocimiento.lang = (configuracionPersonal && configuracionPersonal.idioma === 'en') ? 'en-US' : 'es-ES';
+        iaReconocimiento.interimResults = true;
+        iaReconocimiento.continuous = false;
+        const textoUsuario = document.getElementById('ventana-ia-texto-usuario');
+        iaReconocimiento.onresult = (evento) => {
+            let parcial = '';
+            for (const res of evento.results) parcial += res[0].transcript;
+            if (textoUsuario) textoUsuario.innerText = parcial;
+            if (evento.results[evento.results.length - 1].isFinal) procesarComandoIA(parcial.trim());
+        };
+        iaReconocimiento.onerror = () => { mostrarEntradaTextoIA(); };
+        iaReconocimiento.start();
+    } catch (e) { mostrarEntradaTextoIA(); }
+}
+
+// PAUSA: el usuario corrige manualmente lo que dijo
+function alternarPausaIA() {
+    iaEnPausa = !iaEnPausa;
+    const estado = document.getElementById('ventana-ia-estado');
+    const btnPausa = document.getElementById('btn-ia-pausa');
+    if (iaEnPausa) {
+        if (iaReconocimiento) { try { iaReconocimiento.stop(); } catch (e) {} }
+        if (estado) estado.innerText = traducirTexto('ia_pausa');
+        if (btnPausa) btnPausa.innerText = '▶';
+        mostrarEntradaTextoIA();
+    } else {
+        if (btnPausa) btnPausa.innerText = '⏸';
+        iniciarEscuchaIA();
+    }
+}
+
+function mostrarEntradaTextoIA() {
+    const input = document.getElementById('ventana-ia-input');
+    if (input) { input.style.display = 'block'; input.focus(); }
+}
+
+// Editar (✏️): corrige el texto enviado manualmente
+function editarTextoIA() {
+    mostrarEntradaTextoIA();
+    const input = document.getElementById('ventana-ia-input');
+    const textoUsuario = document.getElementById('ventana-ia-texto-usuario');
+    if (input && textoUsuario) input.value = textoUsuario.innerText;
+}
+
+function enviarTextoIA() {
+    const input = document.getElementById('ventana-ia-input');
+    if (!input || !input.value.trim()) return;
+    const texto = input.value.trim();
+    input.value = '';
+    procesarComandoIA(texto);
+}
+
+// Cerrar (✕) o auto-cierre
+function cerrarVentanaIA() {
+    iaActiva = false;
+    iaEnPausa = false;
+    iaPasoConfirmacion = false;
+    if (iaTemporizadorCierre) { clearTimeout(iaTemporizadorCierre); iaTemporizadorCierre = null; }
+    if (iaReconocimiento) { try { iaReconocimiento.stop(); } catch (e) {} iaReconocimiento = null; }
+    if (iaSintesis) iaSintesis.cancel();
+    const ventana = document.getElementById('ventana-ia');
+    if (ventana) ventana.style.display = 'none';
+    const btn = document.getElementById('boton-ia-flotante');
+    if (btn) btn.classList.remove('ia-presionado');
+}
+
+// La ventana se cierra sola: (número de palabras / 3.5) + 0.75 segundos
+function programarCierreAutomaticoIA() {
+    if (iaTemporizadorCierre) clearTimeout(iaTemporizadorCierre);
+    const textoRespuesta = document.getElementById('ventana-ia-texto-respuesta');
+    const palabras = textoRespuesta ? (textoRespuesta.innerText.trim().split(/\s+/).filter(Boolean).length) : 0;
+    const segundos = (palabras / 3.5) + 0.75;
+    iaTemporizadorCierre = setTimeout(() => {
+        if (iaActiva && !iaEnPausa && textoRespuesta && textoRespuesta.innerText.trim()) cerrarVentanaIA();
+        else if (iaActiva) programarCierreAutomaticoIA();
+    }, Math.max(segundos * 1000, 1500));
+}
+
+// Procesa lo dicho por el usuario (voz o teclado)
+function procesarComandoIA(texto) {
+    const textoUsuario = document.getElementById('ventana-ia-texto-usuario');
+    if (textoUsuario) textoUsuario.innerText = texto;
+    if (!iaPasoConfirmacion) {
+        // Confirmación obligatoria: "Hola [nombre del asistente]"
+        const nombre = nombreAsistenteIA().toLowerCase();
+        if (texto.toLowerCase().includes('hola') && texto.toLowerCase().includes(nombre)) {
+            iaPasoConfirmacion = true;
+            responderIA(`¡Hola! Soy ${nombreAsistenteIA()}, tu asistente. ¿En qué te ayudo?`);
+        } else {
+            responderIA(`Di "Hola ${nombreAsistenteIA()}" para confirmar.`);
+        }
+        return;
+    }
+    // Comandos locales (sin servidor): navegación, hora y frase
+    const t = texto.toLowerCase();
+    if (t.includes('abrir') || t.includes('ir a') || t.includes('muestra')) {
+        const mapa = [
+            ['comunicacion', 'pantalla-comunicacion'], ['organigrama general', 'pantalla-organigrama-general'],
+            ['organigrama', 'pantalla-organigrama'], ['configuracion', 'pantalla-configuracion'],
+            ['identidad', 'pantalla-identidad'], ['perfil', 'registro-invitacion']
+        ];
+        for (const [clave, pantalla] of mapa) {
+            if (t.includes(clave)) { irAPantalla(pantalla); responderIA(`Abriendo ${clave}.`); return; }
+        }
+    }
+    if (t.includes('hora')) {
+        responderIA(`Son las ${new Date().toLocaleTimeString('es', { hour: 'numeric', minute: '2-digit' })}.`);
+        return;
+    }
+    if (t.includes('frase') || t.includes('motiva')) {
+        responderIA(obtenerFraseMotivacional());
+        return;
+    }
+    responderIA("Aún estoy aprendiendo ese comando. Prueba: abrir Configuración, abrir Organigrama, ¿qué hora es?, dame una frase.");
+}
+
+// Responde: texto en la ventana, voz del asistente y auto-cierre
+function responderIA(texto) {
+    const estado = document.getElementById('ventana-ia-estado');
+    const textoRespuesta = document.getElementById('ventana-ia-texto-respuesta');
+    if (textoRespuesta) textoRespuesta.innerText = texto;
+    if (estado) estado.innerText = traducirTexto('ia_respondiendo');
+    if (iaSintesis) {
+        try {
+            iaSintesis.cancel();
+            const voz = new SpeechSynthesisUtterance(texto);
+            voz.lang = (configuracionPersonal && configuracionPersonal.idioma === 'en') ? 'en-US' : 'es-ES';
+            voz.rate = 1.05;
+            voz.onend = () => { if (estado) estado.innerText = traducirTexto('ia_escuchando'); };
+            iaSintesis.speak(voz);
+        } catch (e) {}
+    }
+    programarCierreAutomaticoIA();
+}

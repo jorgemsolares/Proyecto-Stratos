@@ -5,12 +5,14 @@
 > El Arquitecto (dueño) lo mantiene actualizado en cada avance.
 
 ---
+
 ## CÓMO USAR ESTE ARCHIVO (protocolo)
 
-1. **Al abrir una sesión nueva**, la IA lee este archivo completo + `instrucciones.md` + **`A_DONDE_VA_STRATOS.md`**.
+1. **Al abrir una sesión nueva**, la IA debe leer primero `A_DONDE_VA_STRATOS.md` + `Minutas de Chats` (https://github.com/jorgemsolares/Comunicaci-n-IA-Internet/blob/main/Minutas%20de%20Chats), y luego TODOS los archivos del sistema (los que están en las carpetas `Cuerpo-y-Textos`, `Colores-y-Estetica`, `Motor-Logica-y-Acronimos`, y los de `instrucciones-IA`).
 2. **Cada avance real** se anota en la sección BITÁCORA (con fecha).
 3. **Las notas de visión** (comentarios del Arquitecto que aún no se aplican) se guardan en VISIÓN, para que la IA las tenga presentes cuando toque ese proceso.
 4. Este archivo también se respalda en GitHub junto al código.
+5. **`instrucciones.md` y `explicacion.txt` deben estar vacíos al inicio del día.** Se llenan después, cuando el Arquitecto quiere dar las órdenes del día o explicar algo (para evadir tokens).
 
 ---
 
@@ -22,7 +24,7 @@
 - La IA **nunca** debe tocar el código sin permiso explícito del Arquitecto.
 - Se trabaja **una sola área o funcionalidad a la vez**.
 - **Nada se deja a medias.** Si algo no se termina, se anota claramente en la sección PENDIENTES de esta bitácora.
-- La IA debe respetar el protocolo de lectura: primero `MEMORIA.md`, luego `instrucciones.md` y **`A_DONDE_VA_STRATOS.md`**.
+- La IA debe respetar el protocolo de lectura: primero `A_DONDE_VA_STRATOS.md` + `Minutas de Chats`, luego TODOS los archivos del sistema.
 
 ---
 
@@ -61,6 +63,7 @@
 - **28/08/2026:** Enlace GitHub resuelto (upstream configurado), duplicado `Proyecto-Stratos` ELIMINADO (un solo repositorio) y cadenas corruptas de `datos.js` corregidas. El `DOMContentLoaded` final de `datos.js` se queda donde está (opción A).
 - **Decisiones del 28/08 ya cumplidas:** GitHub como respaldo automático ✅ (script `subir_automatico.ps1` activo), cambios solo en la raíz `Stratos` ✅, duplicado eliminado ✅, `MEMORIA.md` de continuidad ✅.
 - **29/08/2026:** Revisadas las 3 opciones de Configuración (Sonido, Vibración, Notificaciones): guardan la preferencia pero NO ejecutan ninguna acción (no existe código de audio/vibración/notificación en el proyecto). Decisión del Arquitecto: dejar PENDIENTE su activación hasta desarrollar la **Pantalla Comunicación** (siguiente paso del proyecto).
+- **16/09/2026:** Aplicados los 4 PUNTOS de `instrucciones.md` (ver detalle en BITÁCORA): zona superior dividida (branding 1/3 + cartelera 2/3), Configuración limpia con botón de IA (esfera con humo), saludo "Hola [Nombre]" en Login con biometría por dispositivo, y botón flotante de IA con ventana emergente y voz. Pendiente: verificación del Arquitecto en el navegador (la hará el 17/09).
 
 - **Reorganización de archivos (hecha hoy 26/08/2026):**
   - `estilos.css`: sección 3.7 numerada (3.7.1–3.7.12) y tuerca unificada en 3.10.
@@ -90,6 +93,35 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 ---
 
 ## BITÁCORA (historial de lo realizado)
+
+### 16/09/2026 — PUNTO 1 (instrucciones.md): zona superior dividida + ajustes de la cartelera
+- **`index.html`:** nueva `#zona-superior` dividida — izquierda `#zona-branding` (1/3: branding corporativo o STRATOS) y derecha `#zona-cartelera` (2/3: el mensaje rotativo/avisos). IDs intactos; el cuerpo de pantalla crece al liberar la fila completa que ocupaba el mensaje.
+- **`estilos.css` — nueva sección 2.2.1 ZONA SUPERIOR:** fila 1/3+2/3 con altura compartida, responsive apilado en ≤768px. Branding compacto y centrado dentro de su área: logo en espacio fijo 140×40 px (120×36 móvil) con `object-fit: contain` (cualquier foto se ajusta sin deformarse) y slogan acotado al MISMO ancho, centrado (no desborda; baja en líneas). Cartelera con ancho automático (flex).
+- **`logica.js` — `obtenerFragmentosMisionVisionValores()`:** se eliminó el corte forzado a 150 caracteres que amputaba frases largas y dejaba colas huérfanas (causa del mensaje suelto "los objetivos" en la cartelera). Ahora cada fragmento es la frase completa, separada solo en fronteras naturales (comas/puntos/dobles espacios).
+- **`logica.js` — `construirColaMensajes()`:** el mensaje del día se invalida si el texto guardado ya no existe en los fragmentos actuales (al editar Misión/Visión/Valores se rifa uno nuevo de inmediato; ya no hay que esperar a mañana).
+- **PUNTO 4 (instrucciones.md) — Configuración limpia + botón de IA:**
+  - **`index.html`:** eliminada la sección completa "🔔 Notificaciones" (casillas Sonido, Vibración y Push — Push incluida porque también es gestión de notificaciones; el sistema ahora toma los permisos autorizados del dispositivo). En su lugar quedó la sección "🤖 Configuración de IA" con el botón `#boton-ia-configuracion` (clase `.boton-ia`; sin lógica todavía — Vero se conecta en el PUNTO 7). Nota: "Modo Nocturno" no existía como opción en pantalla (`temaOscuro` es fijo `true`, definido por el No.1).
+  - **`datos.js`:** claves de traducción `cfg_notif`/`cfg_sonido`/`cfg_vibracion`/`cfg_push` reemplazadas por `cfg_ia`/`cfg_ia_desc`/`cfg_ia_boton` (ES/EN).
+  - **`estilos.css`:** nueva sección 3.12 BOTÓN DE IA — rediseñada como **esfera de 110px** con el diseño del PUNTO 7 adelantado: humo verde circulando dentro (2 nubes difusas animadas), rótulo "Configuración IA" sobre la esfera y **halo verde Stratos** al posicionar el cursor o presionar. Este diseño (`.boton-ia`) es la base reutilizable del botón flotante de las demás pantallas (PUNTO 7). La clase genérica `.config-options` quedó sin uso (no se tocó).
+  - **`logica.js`:** `guardarConfiguracion()` ya no lee sonido/vibración/push — guarda solo idioma y biometría. Idioma, Seguridad, Recuperación de Contraseñas y Acciones Rápidas intactos.
+  - **Rediseño visual del botón (comentario del Arquitecto):** esfera centrada en su área con rótulo en dos líneas — "Configuración" pequeña arriba y "IA" grande abajo (traducciones `cfg_ia_boton1`/`cfg_ia_boton2`). **Decisión para el PUNTO 7:** en las demás pantallas el botón flotante tendrá el TAMAÑO del círculo del libro (tuerca) y estará centrado en su área. El texto "Vero" se retiró de la app: el usuario nombrará a su asistente en la Configuración de IA.
+- **Pendiente de verificación del Arquitecto en el navegador** (recargar con Ctrl+F5 por caché de CSS/JS).
+- **PUNTO 6 (instrucciones.md) — Saludo "Hola [Nombre]" en Login:**
+  - **HTML:** ya existía el saludo `#bienvenida-usuario` ("Hola" + `#nombre-usuario-login`); agregada la fila de biometría `#opciones-biometria` (facial 👤 / patrón 🔳 / huella ☝️) debajo del botón ENTRAR.
+  - **`logica.js` — nuevas funciones:** `actualizarSaludoLogin()` (el saludo cambia EN VIVO al escribir/elegir nombre del desplegable, ANTES de presionar ENTRAR; si el campo está vacío usa el ÚLTIMO USUARIO del sistema); `inicializarBiometria()` (detecta autenticador de plataforma del dispositivo vía WebAuthn `isUserVerifyingPlatformAuthenticatorAvailable` — si no hay, los botones quedan atenuados); `intentarBiometria()` (avisa disponibilidad; su activación real queda enlazada al checkbox "Habilitar autenticación biométrica" de Configuración).
+  - **Al ENTRAR:** `validarEntrada()` guarda `stratos_ultimo_usuario` y llama `actualizarSaludoLogin()` → el saludo cambia de nombre y luego entra (el usuario ve el cambio).
+  - **Cartelera:** en `construirColaMensajes()` se agregó el mensaje tipo 'saludo' "👋 Hola, [nombre]" que aparece SOLO la primera vez del día (clave `stratos_ultimo_saludo_fecha`; base para la estadística de horario de trabajo).
+  - **`datos.js`:** nuevas claves en `STORAGE_KEYS`: `ULTIMO_USUARIO` y `ULTIMO_SALUDO`.
+  - **`estilos.css`:** nueva sección 3.13 OPCIONES BIOMÉTRICAS — círculos de 44px con halo verde al pasar el mouse y estado atenuado cuando el dispositivo no ofrece autenticador.
+  - **Nota (limitación honesta):** el patrón visual no es autenticable vía navegador; los botones detectan el autenticador general del equipo (huella/PIN/cara según dispositivo). El registro biométrico por usuario se definirá más adelante (requiere decisión del Arquitecto).
+- **PUNTO 7 (instrucciones.md) — Botón de IA (esfera + ventana emergente + voz):**
+  - **HTML:** botón flotante `#boton-ia-flotante` (misma esfera `.boton-ia`, rótulo "Stratos", TAMAÑO del círculo del libro/tuerca — 50px desktop, 45px móvil — abajo-CENTRO, decisión del Arquitecto) + ventana emergente `#ventana-ia` (estado "Escuchando.../Respondiendo...", ⏸ PAUSA, ✏️ editar, ✕ cerrar, líneas de lo que dice el usuario y de la IA, campo de escritura si no hay micrófono). En Configuración se agregó el campo "Nombre de tu asistente" (`#config-nombre-asistente`; el comando de activación es "Hola [nombre]"; predeterminado "Vero" — el usuario lo cambia).
+  - **`logica.js` — nueva sección 33 (asistente):** `activarBotonIA()` (pitido WebAudio sin archivos, abre ventana, halo verde, auto-cierre), `iniciarEscuchaIA()` (Web Speech API; sin micrófono → entrada por teclado), `alternarPausaIA()` (PAUSA corrige manualmente), `editarTextoIA()`/`enviarTextoIA()`, `cerrarVentanaIA()`, `programarCierreAutomaticoIA()` (**(palabras/3.5)+0.75 s**, solo tras responder), `procesarComandoIA()` (confirmación "Hola [nombre]" obligatoria; comandos locales: abrir pantallas, hora, frase motivacional), `responderIA()` (texto + voz SpeechSynthesis según idioma). `mostrarBotonIA()` conectado a `irAPantalla()`: aparece en TODAS las pantallas excepto Login.
+  - **`datos.js`:** `configuracionPersonal.nombreAsistente` (reemplazó al bloque notificaciones eliminado en el Punto 4); traducciones nuevas: `cfg_ia_nombre`, `ia_escuchando`, `ia_respondiendo`, `ia_pausa`, `ia_sin_micro`, `ia_escribe`. Al cargar la app se restaura el nombre del asistente.
+  - **`estilos.css`:** secciones 3.14 (botón flotante, centrado con translateX, halo `ia-presionado`) y 3.15 (ventana abajo-centro, 70% ancho máx 420px, crece con el contenido, scroll interno).
+  - **Límites actuales:** reconocimiento/voz dependen del navegador (Chrome sí; si no hay, funciona por teclado). Los comandos son LOCALES (sin servidor); la IA completa de Vero se integrará más adelante.
+- **Pendiente de verificación del Arquitecto en el navegador** (recargar con Ctrl+F5).
+
 
 ### 29/08/2026 — Revisión de las 3 opciones de Configuración (sonido, vibración, notificaciones)
 - **Diagnóstico (SIN tocar código):** las casillas `config-sonido`, `config-vibracion` y `config-push` SÍ guardan su estado en localStorage (`guardarConfiguracion()`), pero NO ejecutan acción real: no existe en todo el proyecto código de audio, vibración ni notificaciones. Hoy son casillas decorativas.
@@ -196,7 +228,7 @@ Con el objetivo de dejar los 4 archivos con el mismo criterio (títulos numerado
 - **`datos.js` — corregida la CODIFICACIÓN de los títulos/comentarios:**
   - El archivo tenía **doble-codificación** (UTF-8 ↔ cp1252): tildes, Ñ y emojis salían corruptos (`Sesión`, `CONFIGURACIÓN`).
   - Se repararon **30 líneas de comentario/título** usando round-trip cp1252, solo en líneas de comentario.
-  - **No se tocó ninguna línea de código ni dato** (quedaron 14 corrupciones en DATOS — cadenas de la app — fuera de alcance, pendientes de decisión).
+  - **No se tocó ninguna línea de código ni dato en ese momento** (quedaron 14 corrupciones en DATOS — cadenas de la app — pendientes). **RESUELTO 28/08/2026:** las 14 cadenas corruptas de `datos.js` fueron reparadas en el commit `d1c50ff` ("Fix: cadenas corruptas en datos.js (frases motivacionales + comentarios)"). Verificado 16/09/2026 con escaneo completo del archivo: **0 corrupciones restantes**. ✅
   - `logica.js`, `estilos.css` e `index.html` ya estaban limpios (0 corrupciones).
 
 - **`logica.js` — reorganización de títulos y comentarios:**
@@ -221,13 +253,9 @@ El Arquitecto quiere no comenzar en 0 y avanzar por prioridad (un solo cupo por 
 ---
 
 ## PENDIENTES / SIGUIENTES PASOS
-- [x] Arquitecto verifica la app en el navegador (botones, contactos e idioma — 28/08/2026).
-- [x] Guardar base actual de forma segura (respaldos locales + GitHub).
-- [x] Limpiar duplicado `Proyecto-Stratos` (28/08/2026, con verificación previa de su historial).
-- [x] Unificar en un único repositorio en la raíz + upstream configurado (28/08/2026).
-- [x] Subir respaldo a GitHub (enlace funcionando).
-- [x] El "otro tema" (punto 2 de la ruta): diagnosticado el 29/08/2026 → eran las 3 opciones de Configuración (ver bitácora).
+- [ ] **VERIFICACIÓN DEL ARQUITECTO (programada para el 17/09/2026):** revisar en el navegador (Ctrl+F5) los Puntos 1, 4, 6 y 7 aplicados hoy: zona superior (logo/cartelera), Configuración (esfera de IA + nombre del asistente), Login (saludo + biometría) y botón flotante de IA con voz y ventana.
 - [ ] **SIGUIENTE PASO (prioridad del Arquitecto): desarrollar la PANTALLA COMUNICACIÓN** (Pantalla 5, hoy sin funcionalidad).
-- [ ] Activar las 3 opciones de Configuración (Sonido On/Off, Notificación con sonido base del equipo, Vibración solo cel) cuando exista "recibir notificaciones nuevas" (depende del punto anterior).
+- [ ] Registro biométrico por usuario (facial/huella reales): requiere decisión del Arquitecto sobre el flujo de inscripción; hoy solo hay detección de dispositivo en Login.
+- [ ] Activar el "cerebro" completo de Vero (IA real): hoy el asistente tiene voz + comandos LOCALES (navegación, hora, frase); los comandos solo tienen sentido con más usuarios inscritos y con Comunicación (nota del Arquitecto del 16/09).
 - [ ] Renumerar los TÍTULOS internos de `datos.js` (estilo logica.js 1→32) — sin registro de término; detectado en revisión 29/08.
 - [ ] Opcional: traducción 100% dinámica (avisos JS, secciones del organigrama, modal de contraseña temporal).
