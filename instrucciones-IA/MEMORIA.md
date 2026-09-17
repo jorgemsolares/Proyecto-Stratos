@@ -56,7 +56,7 @@
 
 ---
 
-## ESTADO ACTUAL (actualizado el 29/08/2026)
+## ESTADO ACTUAL (actualizado el 17/09/2026)
 
 - La app que corre es la de las carpetas de la **raíz** (`Cuerpo-y-Textos`, `Colores-Estetica`, `Motor-Logica-y-Acronimos`).
 - El `index.html` referencia correctamente a `estilos.css`, `datos.js` y `logica.js`. ✅
@@ -64,6 +64,7 @@
 - **Decisiones del 28/08 ya cumplidas:** GitHub como respaldo automático ✅ (script `subir_automatico.ps1` activo), cambios solo en la raíz `Stratos` ✅, duplicado eliminado ✅, `MEMORIA.md` de continuidad ✅.
 - **29/08/2026:** Revisadas las 3 opciones de Configuración (Sonido, Vibración, Notificaciones): guardan la preferencia pero NO ejecutan ninguna acción (no existe código de audio/vibración/notificación en el proyecto). Decisión del Arquitecto: dejar PENDIENTE su activación hasta desarrollar la **Pantalla Comunicación** (siguiente paso del proyecto).
 - **16/09/2026:** Aplicados los 4 PUNTOS de `instrucciones.md` (ver detalle en BITÁCORA): zona superior dividida (branding 1/3 + cartelera 2/3), Configuración limpia con botón de IA (esfera con humo), saludo "Hola [Nombre]" en Login con biometría por dispositivo, y botón flotante de IA con ventana emergente y voz. Pendiente: verificación del Arquitecto en el navegador (la hará el 17/09).
+- **17/09/2026:** Sincronización con GitHub completada (el rebase que quedó a medias el 16/09 fue resuelto). Repositorio limpio y al día: `main` = `origin/main` = `c74d162`. Se preservaron 37 líneas nuevas de `A_DONDE_VA_STRATOS.md` (contenido de Vero). Detalle en BITÁCORA.
 
 - **Reorganización de archivos (hecha hoy 26/08/2026):**
   - `estilos.css`: sección 3.7 numerada (3.7.1–3.7.12) y tuerca unificada en 3.10.
@@ -93,6 +94,14 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 ---
 
 ## BITÁCORA (historial de lo realizado)
+
+### 17/09/2026 — SINCRONIZACIÓN CON GITHUB (rebase pendiente del 16/09) — RESUELTO
+- **Problema encontrado:** el repositorio quedó ayer a mitad de un `git rebase` de `main` sobre `origin/main` (HEAD desacoplado, "no branch, rebasing main"). GitHub tenía un commit hecho aparte (`1af4d2b` "Update A_DONDE_VA_STRATOS.md") y el commit local del 16/09 (`a09bc27`: PUNTOS 1, 4, 6 y 7 + bitácora) **seguía SIN SUBIR**. Resultado: la app corría bien en disco, pero el trabajo del 16/09 no estaba respaldado en GitHub.
+- **Riesgo detectado y evitado:** `instrucciones-IA/A_DONDE_VA_STRATOS.md` tenía **37 líneas nuevas** de contenido (secciones B–H de Vero: "Principio de Vero: la ayuda es lo primero", "vendedora silenciosa", Límites de Vero, Resumen ejecutivo y aprendizaje, etc.) que existían **solo en el disco**: no estaban ni en `1af4d2b` ni en `a09bc27`. Se incorporaron al commit antes de continuar, para no perderlas.
+- **Acción:** (1) respaldo de retroceso `git branch respaldo-16-09 a09bc27`; (2) conflicto de `A_DONDE_VA_STRATOS.md` resuelto uniendo ambas partes (las dos versiones solo diferían en un salto de línea final); (3) `git rebase --continue`; (4) `git push origin main`.
+- **Resultado:** `main` = `c74d162` (8 archivos, 889 inserciones / 455 borrados) **subido a GitHub**. Verificado: `HEAD` = `origin/main` = `c74d162` y árbol de trabajo limpio. Historial lineal: `9174a98 → 1af4d2b → c74d162`.
+- **Retroceso disponible:** rama local `respaldo-16-09` (apunta al commit viejo `a09bc27`), por si se quiere volver al estado anterior al rebase.
+- **Sin cambios de código:** en esta sesión NO se tocó ninguna línea de la app; solo se completó la sincronización pendiente.
 
 ### 16/09/2026 — PUNTO 1 (instrucciones.md): zona superior dividida + ajustes de la cartelera
 - **`index.html`:** nueva `#zona-superior` dividida — izquierda `#zona-branding` (1/3: branding corporativo o STRATOS) y derecha `#zona-cartelera` (2/3: el mensaje rotativo/avisos). IDs intactos; el cuerpo de pantalla crece al liberar la fila completa que ocupaba el mensaje.
