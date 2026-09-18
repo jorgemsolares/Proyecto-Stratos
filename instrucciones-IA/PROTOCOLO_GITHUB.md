@@ -19,7 +19,7 @@ Este protocolo y las tres herramientas que lo acompañan cierran esas tres puert
 
 ---
 
-## 2. LAS TRES HERRAMIENTAS (tareas de VS Code)
+## 2. LAS TAREAS DE VS CODE (LA HERRAMIENTA)
 
 Se lanzan con **Ctrl+Shift+P → "Run Task"**:
 
