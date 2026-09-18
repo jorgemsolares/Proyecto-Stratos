@@ -50,6 +50,16 @@
 6. **`instrucciones-IA/MEMORIA.md`** (este archivo)
    - Memoria de continuidad: estado actual, visión, bitácora.
 
+7. **`instrucciones-IA/PROTOCOLO_GITHUB.md`** (creado 17/09/2026)
+   - Cómo subir a GitHub sin repetir el enredo del 16/09: las 3 tareas, rutina diaria,
+     qué hacer si hay rebase/conflicto/rechazo y el rescate manual. **Sí se sube a GitHub.**
+
+8. **Herramientas locales de sincronización** (NO se suben; viven en el PC):
+   - `estado_git.ps1` → diagnóstico en un paso (veredicto AL DÍA / CON AVISOS / REVISAR).
+   - `sincronizar_git.ps1` → subida segura (rescata rebase, integra, verifica).
+   - `subir_automatico.ps1` → vigilante: respalda y sube al guardar (endurecido 17/09).
+   - `.vscode\tasks.json` → las 4 tareas que se lanzan desde VS Code.
+
 > **NOTA (duplicación — RESUELTA 28/08/2026):** La carpeta vieja duplicada
 > `Proyecto-Stratos` fue ELIMINADA. Ahora hay UN SOLO repositorio en la raíz,
 > donde corre la app REAL (los archivos numerados arriba). ✅
@@ -65,6 +75,7 @@
 - **29/08/2026:** Revisadas las 3 opciones de Configuración (Sonido, Vibración, Notificaciones): guardan la preferencia pero NO ejecutan ninguna acción (no existe código de audio/vibración/notificación en el proyecto). Decisión del Arquitecto: dejar PENDIENTE su activación hasta desarrollar la **Pantalla Comunicación** (siguiente paso del proyecto).
 - **16/09/2026:** Aplicados los 4 PUNTOS de `instrucciones.md` (ver detalle en BITÁCORA): zona superior dividida (branding 1/3 + cartelera 2/3), Configuración limpia con botón de IA (esfera con humo), saludo "Hola [Nombre]" en Login con biometría por dispositivo, y botón flotante de IA con ventana emergente y voz. Pendiente: verificación del Arquitecto en el navegador (la hará el 17/09).
 - **17/09/2026:** Sincronización con GitHub completada (el rebase que quedó a medias el 16/09 fue resuelto). Repositorio limpio y al día: `main` = `origin/main` = `c74d162`. Se preservaron 37 líneas nuevas de `A_DONDE_VA_STRATOS.md` (contenido de Vero). Detalle en BITÁCORA.
+- **17/09/2026 (sesión 2):** Ante la preocupación del Arquitecto por el tiempo que costó la sincronización, se **blindó el proceso** para que no vuelva a pasar: diagnóstico en un paso, subida segura con rescate de rebase, vigilante endurecido y protocolo escrito (`PROTOCOLO_GITHUB.md`). **No se tocó ninguna línea de la app.** Detalle en BITÁCORA.
 
 - **Reorganización de archivos (hecha hoy 26/08/2026):**
   - `estilos.css`: sección 3.7 numerada (3.7.1–3.7.12) y tuerca unificada en 3.10.
@@ -94,6 +105,23 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 ---
 
 ## BITÁCORA (historial de lo realizado)
+
+### 17/09/2026 (sesión 2) — BLINDAJE DE LA SINCRONIZACIÓN CON GITHUB (sin tocar la app)
+- **Motivo:** el Arquitecto manifestó preocupación por el tiempo que costó la sincronización de la sesión anterior y pidió revisar si se podía mejorar ANTES de seguir con el sistema. Se hizo el diagnóstico del proceso y se corrigió la causa raíz.
+- **Causa raíz encontrada (por qué pasó lo del 16/09):**
+  1. El script `subir_automatico.ps1` hacía `git push` **sin integrar antes** lo que hubiera en GitHub → push rechazado y estado descolocado.
+  2. Un `rebase` podía quedar **a medias** sin que nada lo avisara ni lo rescatara.
+  3. Había trabajo **solo en el disco** sin commitear (37 líneas de Vero) → a un paso de perderse.
+  4. **Bug real detectado:** `subir_automatico.ps1` estaba guardado en UTF-8 **sin BOM**, y PowerShell 5.1 lo leía como ANSI → los commits automáticos quedaban con la "á" corrupta en el historial (`Auto: bit├ícora actualizada`). Corregido.
+- **Lo que se creó (herramientas LOCALES, no se suben a GitHub):**
+  - `estado_git.ps1` — diagnóstico en UN paso: rama, rebase/merge a medias, archivos sin commitear, preparados, solo-en-disco, conflictos, commits sin subir y GITHUB vs local. Da **VEREDICTO** (AL DÍA / CON AVISOS / REVISAR) y guarda el reporte en `_estado_git.txt` para pegárselo a la IA.
+  - `sincronizar_git.ps1` — subida segura en 6 pasos: (1) rescata rebase/merge a medias dejando respaldo en `respaldo-antes-de-rebase`, (2) avisa y **se detiene** si hay conflictos, (3) prepara todo, (4) commitea con el mensaje que se le dé, (5) integra lo de GitHub (rebase+autostash, sin adivinar ante conflicto) y sube con reintento, (6) **verifica contra GitHub** que el commit llegó.
+  - `subir_automatico.ps1` **endurecido**: ya no vigila solo `MEMORIA.md`, vigila **todo el proyecto**; no toca nada si hay rebase/merge a medias; integra antes de subir; aborta el rebase si no puede integrar (deja el commit a salvo); verifica después; escribe registro en `_subida_automatica.log`; y tiene tope de 1 subida por minuto (menos ruido en GitHub) + revisión de seguridad cada 30 s por si algún cambio se escapó.
+  - `.vscode\tasks.json` — 4 tareas: **0)** iniciar vigilante, **1)** Estado Git (diagnóstico), **2)** Sincronizar con GitHub (pide el mensaje), **3)** Ver registro del vigilante.
+  - `instrucciones-IA/PROTOCOLO_GITHUB.md` — el protocolo escrito (se sube a GitHub para que la IA del internet lo lea): rutina diaria, qué hacer ante rebase/conflicto/rechazo/sin internet y el rescate manual con las reglas de oro.
+- **Limpieza:** `.gitignore` ampliado (herramientas locales, `_subida_automatica.log`, `_estado_git.txt`, `_f2.txt`) para que ningún temporal ni reporte ensucie GitHub.
+- **Pruebas hechas:** los 3 scripts se validaron (0 errores de sintaxis y con BOM UTF-8), `tasks.json` es JSON válido y `estado_git.ps1` corrido en vivo → veredicto correcto.
+- **Sin cambios de código:** NO se tocó nada de la app (ni `index.html`, ni `estilos.css`, ni `datos.js`, ni `logica.js`).
 
 ### 17/09/2026 — SINCRONIZACIÓN CON GITHUB (rebase pendiente del 16/09) — RESUELTO
 - **Problema encontrado:** el repositorio quedó ayer a mitad de un `git rebase` de `main` sobre `origin/main` (HEAD desacoplado, "no branch, rebasing main"). GitHub tenía un commit hecho aparte (`1af4d2b` "Update A_DONDE_VA_STRATOS.md") y el commit local del 16/09 (`a09bc27`: PUNTOS 1, 4, 6 y 7 + bitácora) **seguía SIN SUBIR**. Resultado: la app corría bien en disco, pero el trabajo del 16/09 no estaba respaldado en GitHub.
@@ -263,6 +291,7 @@ El Arquitecto quiere no comenzar en 0 y avanzar por prioridad (un solo cupo por 
 
 ## PENDIENTES / SIGUIENTES PASOS
 - [ ] **VERIFICACIÓN DEL ARQUITECTO (programada para el 17/09/2026):** revisar en el navegador (Ctrl+F5) los Puntos 1, 4, 6 y 7 aplicados hoy: zona superior (logo/cartelera), Configuración (esfera de IA + nombre del asistente), Login (saludo + biometría) y botón flotante de IA con voz y ventana.
+- [ ] **VERIFICACIÓN DEL ARQUITECTO (nuevo 17/09, sesión 2):** abrir `Ctrl+Shift+P` → "Run Task" y comprobar que aparecen las 4 tareas nuevas (0 vigilante, 1 diagnóstico, 2 sincronizar, 3 registro). Probar la tarea 1 (debe decir AL DÍA) y lanzar la 0 al empezar a trabajar.
 - [ ] **SIGUIENTE PASO (prioridad del Arquitecto): desarrollar la PANTALLA COMUNICACIÓN** (Pantalla 5, hoy sin funcionalidad).
 - [ ] Registro biométrico por usuario (facial/huella reales): requiere decisión del Arquitecto sobre el flujo de inscripción; hoy solo hay detección de dispositivo en Login.
 - [ ] Activar el "cerebro" completo de Vero (IA real): hoy el asistente tiene voz + comandos LOCALES (navegación, hora, frase); los comandos solo tienen sentido con más usuarios inscritos y con Comunicación (nota del Arquitecto del 16/09).
