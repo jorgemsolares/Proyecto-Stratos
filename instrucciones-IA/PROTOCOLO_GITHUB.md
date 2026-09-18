@@ -28,6 +28,7 @@ Se lanzan con **Ctrl+Shift+P → "Run Task"**:
 | **0) Iniciar vigilante de respaldo (dejar abierto)** | Vigila toda la carpeta del proyecto. Cada vez que guardas algo, respalda y sube a GitHub (máx. 1 vez por minuto). | Al empezar a trabajar. Se deja corriendo. |
 | **1) Estado Git (diagnóstico)** | Te dice en 2 segundos: rama, si hay rebase a medias, qué está sin commitear, qué falta subir y el **VEREDICTO**. | Antes de empezar, antes de subir y cuando algo "huela raro". |
 | **2) Sincronizar con GitHub** | Rescata rebase/merge a medias, commitea, integra lo de GitHub y sube, con verificación final. | Para subir a mano con reporte (o cuando el vigilante avise). |
+| **3) Ver registro del vigilante** | Muestra las últimas 40 líneas de `_subida_automatica.log`. | Para saber qué hizo el vigilante mientras trabajabas. |
 
 El diagnóstico guarda además el reporte en `_estado_git.txt` (raíz del proyecto).
 **Si hay que pedir ayuda a la IA, se le pega ese archivo completo.**

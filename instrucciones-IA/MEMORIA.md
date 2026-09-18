@@ -120,7 +120,12 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
   - `.vscode\tasks.json` — 4 tareas: **0)** iniciar vigilante, **1)** Estado Git (diagnóstico), **2)** Sincronizar con GitHub (pide el mensaje), **3)** Ver registro del vigilante.
   - `instrucciones-IA/PROTOCOLO_GITHUB.md` — el protocolo escrito (se sube a GitHub para que la IA del internet lo lea): rutina diaria, qué hacer ante rebase/conflicto/rechazo/sin internet y el rescate manual con las reglas de oro.
 - **Limpieza:** `.gitignore` ampliado (herramientas locales, `_subida_automatica.log`, `_estado_git.txt`, `_f2.txt`) para que ningún temporal ni reporte ensucie GitHub.
-- **Pruebas hechas:** los 3 scripts se validaron (0 errores de sintaxis y con BOM UTF-8), `tasks.json` es JSON válido y `estado_git.ps1` corrido en vivo → veredicto correcto.
+- **Pruebas hechas (con evidencia):** los 3 scripts se validaron (0 errores de sintaxis y con BOM UTF-8), `tasks.json` es JSON válido y **se probaron en vivo**: el vigilante creó y subió solo el commit `268ece7` (19:00:38 → 19:00:51 "Subido a GitHub y VERIFICADO"), la tarea 2 creó y subió `9e280d4` con verificación contra GitHub, y el diagnóstico reportó correctamente.
+- **Tres bugs reales encontrados y corregidos en las pruebas:**
+  1. `subir_automatico.ps1` estaba en UTF-8 **sin BOM** → PowerShell 5.1 leía mal los acentos en los mensajes de commit (por eso los commits del historial dicen `bit├ícora`). Corregido a UTF-8 con BOM.
+  2. El vigilante basado en **eventos de Windows** (FileSystemWatcher) **no disparaba**: las acciones de evento corren en otro ámbito y no ven las funciones del script. Se rehízo con **sondeo** (revisa el repo cada 10 s) → probado y funcionando.
+  3. `sincronizar_git.ps1` usaba `Test-Path (...) -or Test-Path (...)`; PowerShell interpreta `-or` como parámetro de `Test-Path` y la comprobación fallaba (por eso el PASO 1 no veía el rebase). Corregido con paréntesis.
+  *(Nota de honestidad: la prueba en vivo dejó dos commits con nombre "Auto: respaldo y subida…" y uno llamado "prueba_vigia_temporal.txt" (ya borrado en el commit siguiente). Solo eran pruebas; no afectan a la app.)*
 - **Sin cambios de código:** NO se tocó nada de la app (ni `index.html`, ni `estilos.css`, ni `datos.js`, ni `logica.js`).
 
 ### 17/09/2026 — SINCRONIZACIÓN CON GITHUB (rebase pendiente del 16/09) — RESUELTO
