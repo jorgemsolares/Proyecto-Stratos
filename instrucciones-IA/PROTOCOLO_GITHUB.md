@@ -21,11 +21,17 @@ Este protocolo y las tres herramientas que lo acompañan cierran esas tres puert
 
 ## 2. LAS TAREAS DE VS CODE (LA HERRAMIENTA)
 
+> **IMPORTANTE (17/09/2026): el vigilante YA ARRANCA SOLO al encender el PC.**
+> Está en la carpeta de Inicio de Windows, **oculto y sin ventanas**: no hay que
+> acordarse de nada ni gastar tiempo en lanzarlo. Si algún día lo quieres apagar:
+> tecla Windows → escribe `shell:startup` → Enter → borra
+> `Stratos - respaldo automatico.vbs`. Si se lanza dos veces, el segundo **se cierra solo**.
+
 Se lanzan con **Ctrl+Shift+P → "Run Task"**:
 
 | Tarea | Qué hace | Cuándo usarla |
 |---|---|---|
-| **0) Iniciar vigilante de respaldo (dejar abierto)** | Vigila toda la carpeta del proyecto. Cada vez que guardas algo, respalda y sube a GitHub (máx. 1 vez por minuto). | Al empezar a trabajar. Se deja corriendo. |
+| **0) Vigía de respaldo** | Respalda y sube a GitHub solo (máx. 1 vez por minuto). **Ya arranca solo al encender el PC**; esta tarea solo sirve si lo cerraste y lo quieres de vuelta. | Casi nunca: solo si lo apagaste. |
 | **1) Estado Git (diagnóstico)** | Te dice en 2 segundos: rama, si hay rebase a medias, qué está sin commitear, qué falta subir y el **VEREDICTO**. | Antes de empezar, antes de subir y cuando algo "huela raro". |
 | **2) Sincronizar con GitHub** | Rescata rebase/merge a medias, commitea, integra lo de GitHub y sube, con verificación final. | Para subir a mano con reporte (o cuando el vigilante avise). |
 | **3) Ver registro del vigilante** | Muestra las últimas 40 líneas de `_subida_automatica.log`. | Para saber qué hizo el vigilante mientras trabajabas. |
