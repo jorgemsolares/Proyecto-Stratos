@@ -76,6 +76,7 @@
 - **16/09/2026:** Aplicados los 4 PUNTOS de `instrucciones.md` (ver detalle en BITÁCORA): zona superior dividida (branding 1/3 + cartelera 2/3), Configuración limpia con botón de IA (esfera con humo), saludo "Hola [Nombre]" en Login con biometría por dispositivo, y botón flotante de IA con ventana emergente y voz. Pendiente: verificación del Arquitecto en el navegador (la hará el 17/09).
 - **17/09/2026:** Sincronización con GitHub completada (el rebase que quedó a medias el 16/09 fue resuelto). Repositorio limpio y al día: `main` = `origin/main` = `c74d162`. Se preservaron 37 líneas nuevas de `A_DONDE_VA_STRATOS.md` (contenido de Vero). Detalle en BITÁCORA.
 - **17/09/2026 (sesión 2):** Ante la preocupación del Arquitecto por el tiempo que costó la sincronización, se **blindó el proceso** para que no vuelva a pasar: diagnóstico en un paso, subida segura con rescate de rebase, vigilante endurecido y protocolo escrito (`PROTOCOLO_GITHUB.md`). **No se tocó ninguna línea de la app.** Detalle en BITÁCORA.
+- **17/09/2026 (sesión 2, continuación):** El Arquitecto precisó que su prioridad es **"con menos hacer más"** (no gastar tokens/tiempo en tareas repetitivas). Se resolvió con **arranque automático**: el vigilante de respaldo ahora **se inicia solo al encender el PC** (carpeta de Inicio de Windows, oculto), y si se lanza dos veces el segundo se cierra solo. Ya no hay que acordarse de nada.
 
 - **Reorganización de archivos (hecha hoy 26/08/2026):**
   - `estilos.css`: sección 3.7 numerada (3.7.1–3.7.12) y tuerca unificada en 3.10.
@@ -126,6 +127,7 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
   2. El vigilante basado en **eventos de Windows** (FileSystemWatcher) **no disparaba**: las acciones de evento corren en otro ámbito y no ven las funciones del script. Se rehízo con **sondeo** (revisa el repo cada 10 s) → probado y funcionando.
   3. `sincronizar_git.ps1` usaba `Test-Path (...) -or Test-Path (...)`; PowerShell interpreta `-or` como parámetro de `Test-Path` y la comprobación fallaba (por eso el PASO 1 no veía el rebase). Corregido con paréntesis.
   *(Nota de honestidad: la prueba en vivo dejó dos commits con nombre "Auto: respaldo y subida…" y uno llamado "prueba_vigia_temporal.txt" (ya borrado en el commit siguiente). Solo eran pruebas; no afectan a la app.)*
+- **Arranque automático (prioridad "con menos hacer más"):** el vigilante **se inicia solo al encender el PC** (acceso directo `.vbs` en la carpeta de Inicio de Windows, oculto y sin ventanas) y un **candado (mutex)** impide que corran dos a la vez: si se lanza una segunda copia, se cierra sola. Ya no hay que acordarse de arrancarlo. **Costo: $0 en tokens y $0 en tiempo.**
 - **Sin cambios de código:** NO se tocó nada de la app (ni `index.html`, ni `estilos.css`, ni `datos.js`, ni `logica.js`).
 
 ### 17/09/2026 — SINCRONIZACIÓN CON GITHUB (rebase pendiente del 16/09) — RESUELTO

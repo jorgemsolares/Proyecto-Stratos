@@ -51,11 +51,12 @@ El diagnóstico guarda además el reporte en `_estado_git.txt` (raíz del proyec
 
 ## 3. RUTINA RECOMENDADA
 
-**Al empezar a trabajar**
-1. Tarea **1) Estado Git** → debe decir AL DÍA (o CON AVISOS).
-2. Tarea **0) Iniciar vigilante** → se deja corriendo en su propia terminal.
+**Al encender el PC** — **nada**: el vigilante arranca solo (oculto).
 
-**Mientras trabajas** — nada especial: el vigilante respalda y sube solo (máx. 1 vez por minuto).
+**Al empezar a trabajar (10 segundos, opcional)**
+1. Tarea **1) Estado Git** → debe decir AL DÍA (o CON AVISOS).
+
+**Mientras trabajas** — nada: el vigilante respalda y sube solo (máx. 1 vez por minuto).
 
 **Antes de cerrar el PC**
 1. Tarea **2) Sincronizar con GitHub** (deja el mensaje o presiona Enter para el automático).
