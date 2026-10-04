@@ -32,3 +32,10 @@ explicacion.txt
 _bit.txt
 _f.txt
 _f2.txt
+
+# Validadores locales creados por la IA (04/10/2026): comprueban la sintaxis de los
+# .js y la parte criptografica de la biometria. Son utiles, pero no van a GitHub.
+_validar_js.py
+_probar_biometria.py
+_validar_js.txt
+_probar_biometria.txt

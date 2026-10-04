@@ -1,0 +1,19 @@
+﻿
+============================================================
+  SINCRONIZAR CON GITHUB - STRATOS
+============================================================
+  Mensaje : Auto: sincronizacion 04/10/2026 15:33
+
+[PASO 1] Sin rebase/merge pendiente. OK
+
+[PASO 2] Revisando que hay pendiente...
+          M .gitignore
+          M Colores-y-Estetica/estilos.css
+          M Cuerpo-y-Textos/index.html
+          M Motor-Logica-y-Acronimos/datos.js
+          M Motor-Logica-y-Acronimos/logica.js
+          M instrucciones-IA/MEMORIA.md
+          M instrucciones-IA/instrucciones.md
+         ?? _subida.txt
+
+[PASO 3] Preparando cambios (git add)...

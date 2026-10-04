@@ -99,6 +99,24 @@
             <input type="password" id="edit-pass-conf" placeholder="Confirmar Nueva Contraseña" data-i18n="reg_pass_nueva_conf" oninput="manejarMascara(this)" autocomplete="new-password">
             <p id="mensaje-cambio-password" class="aviso-letrero"></p>
         </div>
+
+        <!-- ENROLAMIENTO BIOMÉTRICO (el usuario inscribe rostro/patrón/huella en ESTE dispositivo — PUNTO 9-10-11) -->
+        <div id="biometria-enrolamiento" class="biometria-enrolamiento">
+            <p class="titulo-biometria" data-i18n="bio_enrol_titulo">🔐 Autenticación biométrica (este dispositivo)</p>
+            <p class="leyenda-biometria" data-i18n="bio_enrol_leyenda">Inscribe la opción con la que quieres entrar de aquí en adelante (rostro, patrón o huella).</p>
+            <div id="opciones-biometria-perfil" class="opciones-biometria">
+                <button type="button" class="btn-biometria" id="perfil-bio-facial" title="Inscribir rostro" data-i18n-title="bio_facial" onclick="enrolarBiometria('facial')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10.5" r="0.9"/><circle cx="15" cy="10.5" r="0.9"/><path d="M8.5 15c1 1 2.2 1.5 3.5 1.5s2.5-.5 3.5-1.5"/></svg>
+                </button>
+                <button type="button" class="btn-biometria" id="perfil-bio-patron" title="Inscribir patrón" data-i18n-title="bio_patron" onclick="enrolarBiometria('patron')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="5" r="1.1"/><circle cx="12" cy="5" r="1.1"/><circle cx="19" cy="5" r="1.1"/><circle cx="5" cy="12" r="1.1"/><circle cx="12" cy="12" r="1.1"/><circle cx="19" cy="12" r="1.1"/><circle cx="5" cy="19" r="1.1"/><circle cx="12" cy="19" r="1.1"/><circle cx="19" cy="19" r="1.1"/><path d="M5 5l7 7 7 7"/></svg>
+                </button>
+                <button type="button" class="btn-biometria" id="perfil-bio-huella" title="Inscribir huella" data-i18n-title="bio_huella" onclick="enrolarBiometria('huella')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 11v3"/><path d="M8.5 8.2a5 5 0 0 1 7 0"/><path d="M6.6 10.5a8 8 0 0 1 10.8 0"/><path d="M5 13.2a11 11 0 0 1 14 0"/><path d="M7.5 15.8a8 8 0 0 1 9 0"/><path d="M10 18.4a5 5 0 0 1 4 0"/></svg>
+                </button>
+            </div>
+            <p id="mensaje-biometria-perfil" class="aviso-letrero"></p>
+        </div>
      
         <p class="campos-obligatorios" data-i18n="reg_obligatorios">* Campos obligatorios</p>
     </div>
@@ -132,9 +150,15 @@
 
         <!-- OPCIONES DE AUTENTICACIÓN BIOMÉTRICA (facial/patrón/huella; se habilitan según el dispositivo — PUNTO 6) -->
         <div id="opciones-biometria" class="opciones-biometria">
-            <button type="button" class="btn-biometria" id="bio-facial" title="Reconocimiento facial" onclick="intentarBiometria('facial')">👤</button>
-            <button type="button" class="btn-biometria" id="bio-patron" title="Patrón de desbloqueo" onclick="intentarBiometria('patron')">🔳</button>
-            <button type="button" class="btn-biometria" id="bio-huella" title="Huella digital" onclick="intentarBiometria('huella')">☝️</button>
+            <button type="button" class="btn-biometria" id="bio-facial" title="Reconocimiento facial" data-i18n-title="bio_facial" onclick="intentarBiometria('facial')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10.5" r="0.9"/><circle cx="15" cy="10.5" r="0.9"/><path d="M8.5 15c1 1 2.2 1.5 3.5 1.5s2.5-.5 3.5-1.5"/></svg>
+            </button>
+            <button type="button" class="btn-biometria" id="bio-patron" title="Patrón de desbloqueo" data-i18n-title="bio_patron" onclick="intentarBiometria('patron')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="5" r="1.1"/><circle cx="12" cy="5" r="1.1"/><circle cx="19" cy="5" r="1.1"/><circle cx="5" cy="12" r="1.1"/><circle cx="12" cy="12" r="1.1"/><circle cx="19" cy="12" r="1.1"/><circle cx="5" cy="19" r="1.1"/><circle cx="12" cy="19" r="1.1"/><circle cx="19" cy="19" r="1.1"/><path d="M5 5l7 7 7 7"/></svg>
+            </button>
+            <button type="button" class="btn-biometria" id="bio-huella" title="Huella digital" data-i18n-title="bio_huella" onclick="intentarBiometria('huella')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 11v3"/><path d="M8.5 8.2a5 5 0 0 1 7 0"/><path d="M6.6 10.5a8 8 0 0 1 10.8 0"/><path d="M5 13.2a11 11 0 0 1 14 0"/><path d="M7.5 15.8a8 8 0 0 1 9 0"/><path d="M10 18.4a5 5 0 0 1 4 0"/></svg>
+            </button>
         </div>
 
         <button class="btn-link" id="btn-olvidaste-pass" onclick="solicitarRecuperacionContrasena()" style="display:none;" data-i18n="acc_olvidaste">¿Olvidaste tu contraseña?</button>
@@ -408,7 +432,7 @@
             <div class="ventana-ia-cuerpo">
                 <p id="ventana-ia-texto-usuario" class="ventana-ia-linea-usuario"></p>
                 <p id="ventana-ia-texto-respuesta" class="ventana-ia-linea-respuesta"></p>
-                <input type="text" id="ventana-ia-input" class="ventana-ia-input" style="display:none;" placeholder="Escribe tu comando..." data-i18n="ia_escribe" onkeydown="if(event.key==='Enter'){enviarTextoIA();}">
+                <input type="text" id="ventana-ia-input" class="ventana-ia-input" style="display:none;" placeholder="Escribe aquí..." data-i18n="ia_escribe" onkeydown="if(event.key==='Enter'){enviarTextoIA();}">
             </div>
         </div>
     </div>

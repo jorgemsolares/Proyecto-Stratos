@@ -60,6 +60,12 @@
    - `subir_automatico.ps1` → vigilante: respalda y sube al guardar (endurecido 17/09).
    - `.vscode\tasks.json` → las 4 tareas que se lanzan desde VS Code.
 
+9. **Validadores locales creados por la IA el 04/10/2026** (NO se suben; viven en el PC):
+   - `_validar_js.py` → revisa que `logica.js` y `datos.js` no tengan errores de sintaxis
+     (usa un parser real de JavaScript; este equipo **no tiene Node**, por eso existe).
+   - `_probar_biometria.py` → prueba la parte criptográfica de la biometría (CBOR → SPKI y
+     verificación ECDSA). Encontró 2 bugs reales el 04/10. Se ejecuta sin instalar nada.
+
 > **NOTA (duplicación — RESUELTA 28/08/2026):** La carpeta vieja duplicada
 > `Proyecto-Stratos` fue ELIMINADA. Ahora hay UN SOLO repositorio en la raíz,
 > donde corre la app REAL (los archivos numerados arriba). ✅
@@ -77,6 +83,9 @@
 - **17/09/2026:** Sincronización con GitHub completada (el rebase que quedó a medias el 16/09 fue resuelto). Repositorio limpio y al día: `main` = `origin/main` = `c74d162`. Se preservaron 37 líneas nuevas de `A_DONDE_VA_STRATOS.md` (contenido de Vero). Detalle en BITÁCORA.
 - **17/09/2026 (sesión 2):** Ante la preocupación del Arquitecto por el tiempo que costó la sincronización, se **blindó el proceso** para que no vuelva a pasar: diagnóstico en un paso, subida segura con rescate de rebase, vigilante endurecido y protocolo escrito (`PROTOCOLO_GITHUB.md`). **No se tocó ninguna línea de la app.** Detalle en BITÁCORA.
 - **17/09/2026 (sesión 2, continuación):** El Arquitecto precisó que su prioridad es **"con menos hacer más"** (no gastar tokens/tiempo en tareas repetitivas). Se resolvió con **arranque automático**: el vigilante de respaldo ahora **se inicia solo al encender el PC** (carpeta de Inicio de Windows, oculto), y si se lanza dos veces el segundo se cierra solo. Ya no hay que acordarse de nada.
+- **03/10/2026:** Aplicado el **PUNTO 48** de `instrucciones.md` (Login: registro de hora de entrada/salida, errores de tipeo por usuario, aviso al jefe al agotar los 7 intentos, cambio obligatorio con contraseña temporal, sugerencia de la IA por reincidencia y nombre de IA configurable; sello "Escribe aquí..."). Ver detalle en BITÁCORA. Pendiente: verificación del Arquitecto en el navegador y la integración de la alerta al jefe con la **cartelera por prioridad (PUNTO 2)**.
+- **03/10/2026 (continuación):** Aplicado el **PUNTO 34** de `instrucciones.md`: ficha **`bancoDatos`** por usuario (días/sesiones, errores, permisos, invitaciones, actividad y campos libres) + **migración al cargar con respaldo previo**. Histórico de 5 años (con hora y minutos). Detalle en BITÁCORA.
+
 
 - **Reorganización de archivos (hecha hoy 26/08/2026):**
   - `estilos.css`: sección 3.7 numerada (3.7.1–3.7.12) y tuerca unificada en 3.10.
@@ -106,6 +115,53 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 ---
 
 ## BITÁCORA (historial de lo realizado)
+
+### 04/10/2026 — PUNTOS 9-10-11 + 6: BIOMETRÍA TERMINADA (estaba a medias)
+- **Contexto:** la sesión anterior había dejado la biometría a medias (HTML, CSS y parte de `logica.js` escritos, pero con dos funciones que se llamaban y **no existían**: `intentarBiometria()` y `actualizarEstadoEnrolamiento()` → `ReferenceError`; la segunda incluso rompía `irAPantalla('registro-invitacion')`, o sea entrar al Perfil). Además no había WebAuthn real: la "inscripción" solo escribía un registro en localStorage y **no había entrada con biometría**. Se terminó todo el PUNTO.
+- **Diagnóstico (sin tocar código) que guió el trabajo:** quedan `intentarBiometria()` y `actualizarEstadoEnrolamiento()` sin definir; la clase CSS `.enrolado` nunca se aplicaba; faltan las traducciones `bio_enrol_titulo`/`bio_enrol_leyenda`; el bloque de Perfil no se atenuaba; la casilla `#config-biometria` no se leía ni se restauraba.
+- **`logica.js` — sección 20.2 reescrita por completo:**
+  - **Utilidades WebAuthn:** `_bioConcatenarBytes`, `_bioBufferABase64Url`, `_bioBase64UrlABuffer`, `_bioDesafioAleatorio`, `_bioDecodificarCose` (decodificador CBOR), `_bioDer`, `_bioSecuenciaDer`, `_bioCoseASpki` (COSE → SPKI para EC2/P-256 y RSA) y `_bioVerificarAsercion`.
+  - **`enrolarBiometria(metodo)`** ahora hace **`navigator.credentials.create()`** de verdad (desafío aleatorio, RP *Stratos*, `userVerification: 'required'`, autenticador de plataforma) y guarda solo la **clave pública + id de credencial** de ESTE dispositivo. El secreto nunca sale del equipo. Al inscribir, se habilita sola la casilla de Configuración.
+  - **`actualizarEstadoEnrolamiento()`** (la que faltaba): resalta con `.enrolado` el método inscrito, atenúa `#opciones-biometria-perfil` si el dispositivo no tiene autenticador y escribe en `#mensaje-biometria-perfil` qué falta o qué hay inscrito.
+  - **`actualizarEstadoBiometriaLogin()` + `inicializarBiometria()`**: mismo estado visual en el Login (resalta el método inscrito, atenúa si no hay dispositivo o si la casilla está apagada).
+  - **`biometriaParaLogin()`**: decide con qué credencial entrar (la del nombre escrito en el campo, o la del último usuario del dispositivo).
+  - **`intentarBiometria(metodo)`** (la que faltaba): **`navigator.credentials.get()`** + verificación criptográfica real (origen, desafío, bit UP de usuario verificado y firma). Si falla, avisa el motivo en el Login y lo registra como incidente. Reemplaza por completo nombre + ID + contraseña.
+  - **`iniciarSesionBiometrica(usuario)`**: abre la sesión por el mismo camino que `validarEntrada` (registra hora de entrada, incidente `biometria`, banco de datos, menú, inactivity timer y pantalla de destino). Si el usuario tiene **contraseña temporal pendiente**, la biometría NO omite el cambio obligatorio.
+  - Se eliminó `biometriaEnroladaDispositivo()`, que quedó sin uso al aparecer `biometriaParaLogin()`.
+- **`datos.js`:** 18 claves de traducción nuevas de biometría (`bio_enrol_titulo`, `bio_enrol_leyenda`, `bio_facial/patron/huella`, avisos, etc.) con ES/EN; y en `DOMContentLoaded` se restaura el estado de la casilla `#config-biometria` (antes se perdía al reabrir la app).
+- **`index.html`:** los 6 botones biométricos (3 del Perfil + 3 del Login) llevan `data-i18n-title` para que el texto emergente también se traduzca.
+- **`logica.js` — `aplicarIdioma()`:** ahora procesa también `[data-i18n-title]`. **`guardarConfiguracion()`** refresca el estado de los botones al guardar.
+- **Limitaciones honestas (importantes):**
+  1. **WebAuthn NO permite elegir el método.** El dispositivo decide si el paso es cara, huella o PIN. Los tres botones dirigen al mismo autenticador de plataforma y el sistema **avisa** si ese método no es el que está inscrito. Para rostro/patrón/huella *reales* hay que incrustar la cámara o leer el sensor: eso requiere SDK nativo o un servicio; hoy no es posible solo con navegador.
+  2. Solo funciona en **contexto seguro**: con **Live Server (127.0.0.1)** ✅ o en **https** cuando esté en hosting. Abierto como `file://` no funciona, y el sistema lo avisa con un mensaje claro.
+  3. La credencial queda amarrada al **origen**: si la app se publica en un dominio, la inscripción hay que hacerla **en ese mismo dominio y en ese equipo**.
+- **Verificación hecha por la IA antes de entregar:** `logica.js` y `datos.js` parseados con un **parser real de JavaScript** → sintaxis correcta. Y `_probar_biometria.py` (puerto 1:1 de las funciones criptográficas, sin instalar nada) → **26/26 pruebas OK**: CBOR lee bien la clave COSE, el SPKI de P-256 es **byte a byte idéntico** a la plantilla del estándar, el SPKI de RSA tiene la estructura correcta, y la verificación ECDSA acepta la firma buena y rechaza la ajena.
+- **Esa prueba encontró 2 bugs REALES en el código nuevo (ya corregidos):** (1) al construir el INTEGER de DER del módulo RSA **faltaba la etiqueta `0x02`**; (2) **faltaba el byte `0x00` de signo** cuando el bit alto del módulo está activo (pasa siempre con claves de 2048 bits). Sin esas correcciones, una credencial RSA habría sido imposible de verificar.
+- **Pendiente:** el Arquitecto debe probarlo en el navegador (Ctrl+F5) en un equipo con Windows Hello/PIN: inscribir en Perfil → cerrar sesión → entrar con el icono. En un equipo **sin** autenticador, los 3 botones deben verse atenuados y explicar por qué.
+
+### 03/10/2026 — PUNTO 34: MEJORAR EL BANCO DE DATOS
+- **Aplicado el PUNTO 34 de `instrucciones.md`** (segundo en orden descendente: 48 → **34** → 33 → 31 → 9-10-11 → 6 → 3 → 2). Ficha **`bancoDatos`** por usuario, con migración al cargar y respaldo previo.
+- **`datos.js`:** nueva **sección 1.5** con `let bancoDatos = {}` (clave = `usuarioId`) y su estructura documentada (`diasSesiones`, `errores`, `permisos`, `invitaciones`, `actividad`, `camposLibres`). Nuevas claves `STORAGE_KEYS.BANCO_DATOS` y `STORAGE_KEYS.RESPALDO_MIGRACION`; se cargan en `DOMContentLoaded`.
+- **`logica.js`:** nueva **sección 16.2** con `fichaBancoDatosPorDefecto`, `fichaBancoDatos`, `guardarBancoDatos`, `completarFichaBancoDatos` (rellena sin borrar), `calcularMinutosTrabajados`, `registrarDiaSesionBancoDatos`, `actualizarErroresBancoDatos`, `actualizarPermisosBancoDatos`, `registrarInvitacionBancoDatos`, `registrarActividadBancoDatos`, `respaldarDatosNavegador` y `migrarBancoDatos`.
+- **Migración al cargar:** `migrarBancoDatos()` hace un **respaldo previo** de TODOS los datos del navegador (guardado en `stratos_respaldo_migracion`) y luego **rellena** cada ficha con valores por defecto **sin borrar nada**; siembra días/sesiones y errores ya existentes con criterio **idempotente** (los errores se recalculan desde `incidentesLogin`).
+- **Enganches:** entrada/salida → `diasSesiones` (con minutos trabajados); errores de login → bloque `errores`; inicio de sesión → `permisos` + `actividad`; "Salvar e Invitar" → `invitaciones.invitoA` + `actividad`.
+- **Histórico 5 años:** `depurarHistoricos()` ahora también poda `diasSesiones` y `actividad` del banco (conserva la ficha). Se guarda **hora y minutos**.
+- **Pendiente / Notas:** (1) el bloque **actividad** queda listo para el futuro módulo de Comunicación (correos/chats/tareas). (2) Falta la **verificación del Arquitecto** en el navegador (Ctrl+F5).
+
+### 03/10/2026 — PUNTO 48: LOGIN (REGISTRAR HORA, ERRORES, AVISOS AL JEFE)
+- **Aplicado el PUNTO 48 de `instrucciones.md`** (una sola área: Login). Se trabaja en **orden descendente** de los puntos pendientes; este fue el primero (48 → 34 → 33 → 31 → 9-10-11 → 6 → 3 → 2).
+- **`datos.js`:**
+  - `usuarioActivo` y la ficha de `baseDatosUsuarios` ganan `intentosLoginFallidos` (**por usuario**, no global) y `ultimaContrasenaTemporal`.
+  - Nueva **sección 1.4**: estructuras `registrosAsistencia` (entradas/salidas, con `salidaTrasMedianoche`) e `incidentesLogin` (tipo/resultado por intento).
+  - `STORAGE_KEYS` nuevas: `REGISTROS_ASISTENCIA` y `INCIDENTES_LOGIN`; se cargan en `DOMContentLoaded` y se depura el histórico.
+  - Traducción `ia_escribe` → ES "Escribe aquí..." / EN "Type here...".
+- **`logica.js`:**
+  - Nueva **sección 16.1**: `registrarHoraEntrada` (primera entrada del día), `registrarHoraSalida` (última salida; si cruza la medianoche queda en el día de la entrada abierta), `registrarIncidenteLogin`, `registrarErrorLogin` (por usuario), `notificarJefeBloqueo` (crea `solicitudesRecuperacion` con `solicitadoA = superiorId`), `erroresUltimaSemana`, `revisarSugerenciaContrasena` (>6 errores en la semana) y `mostrarSolicitudesPendientesJefe`; histórico de 5 años con `depurarHistoricos`.
+  - `validarEntrada`: registra errores (nombre/contraseña), reinicia el contador del usuario al entrar bien, graba la hora de entrada y el intento exitoso; si entra con contraseña temporal registra el incidente y muestra el cambio obligatorio; al jefe se le muestran sus solicitudes pendientes (prioridad ALTA).
+  - `cerrarSesion`: graba la hora de salida antes de limpiar la sesión.
+- **`index.html`:** campo de la IA con sello de agua "Escribe aquí...".
+- **Pendiente / Notas:** (1) la alerta al jefe se **guarda** en `solicitudesRecuperacion` y se le muestra al iniciar sesión; su integración plena en **cartelera con duración por prioridad** llegará con el **PUNTO 2**. (2) La generación/entrega de la contraseña temporal (correo + SMS) depende del flujo de recuperación (aún en desarrollo). (3) Falta la **verificación del Arquitecto** en el navegador (Ctrl+F5). (4) No hay Node en el equipo: la sintaxis se verificó manualmente (no con `node --check`).
+
 
 ### 17/09/2026 (sesión 2) — BLINDAJE DE LA SINCRONIZACIÓN CON GITHUB (sin tocar la app)
 - **Motivo:** el Arquitecto manifestó preocupación por el tiempo que costó la sincronización de la sesión anterior y pidió revisar si se podía mejorar ANTES de seguir con el sistema. Se hizo el diagnóstico del proceso y se corrigió la causa raíz.
@@ -297,6 +353,23 @@ El Arquitecto quiere no comenzar en 0 y avanzar por prioridad (un solo cupo por 
 ---
 
 ## PENDIENTES / SIGUIENTES PASOS
+
+### Estado de los PUNTOS de `instrucciones.md` (04/10/2026)
+| Punto | Estado |
+|-------|--------|
+| 2 — Duración por prioridad | ✅ Hecho |
+| 3 — Anuncio motivacional + paso a la IA | ✅ Hecho |
+| 6 — Saludo "Hola [Nombre]" + iconos biométricos | ✅ Hecho (04/10) |
+| 9-10-11 — Biometría | ✅ Hecho (04/10) |
+| 31 — Organigrama General recursivo y persistente | ❌ **Sin empezar** |
+| 33 — Cruce de datos al crear primera línea | 🟡 **A medias** |
+| 34 — Banco de datos por usuario | ✅ Hecho |
+| 48 — Login (horas, errores, aviso al jefe) | ✅ Hecho |
+
+- [ ] **PRIORIDAD 1 — PUNTO 33 (terminar):** hoy `guardarContacto()` solo compara el **nombre** dentro de su propia lista. Falta (a) revisar duplicados cruzando **nombre + puesto + teléfono + email** contra TODO el organigrama (directos, indirectos y observadores), (b) la **ventana de confirmación Sí/No** con la frase de la IA, y (c) que la IA hable el resultado.
+  - **Decisión pendiente del Arquitecto:** el PUNTO 33 pide **eliminar `#modal-contacto-id`**, pero ese campo oculto es lo que hace funcionar "Editar contacto" (se agregó el 27/08 para arreglar ese bug). **Recomendación de la IA: mantenerlo** y apartarse de esa línea del PUNTO; si se quita, se rompe la edición.
+- [ ] **PRIORIDAD 2 — PUNTO 31 (empezar):** `renderizarOrganigramaGeneral()` sigue dibujando **solo 2 niveles** (raíz + hijos directos) y **no persiste**. Falta hacerlo recursivo, que guarde los cambios, avise de doble registro y permita cambiar quién es el No.1.
+- [ ] **VERIFICACIÓN DEL ARQUITECTO de la biometría (04/10/2026):** en un equipo con Windows Hello o PIN → abrir con Live Server (Ctrl+F5), entrar a **Perfil**, inscribir un método, cerrar sesión y entrar con el icono del Login. En un equipo **sin** autenticador, los 3 botones deben verse atenuados y explicar el motivo. **Nota:** abierto como `file://` NO funciona (WebAuthn exige Live Server o https).
 - [ ] **VERIFICACIÓN DEL ARQUITECTO (programada para el 17/09/2026):** revisar en el navegador (Ctrl+F5) los Puntos 1, 4, 6 y 7 aplicados hoy: zona superior (logo/cartelera), Configuración (esfera de IA + nombre del asistente), Login (saludo + biometría) y botón flotante de IA con voz y ventana.
 - [ ] **VERIFICACIÓN DEL ARQUITECTO (nuevo 17/09, sesión 2):** abrir `Ctrl+Shift+P` → "Run Task" y comprobar que aparecen las 4 tareas nuevas (0 vigía, 1 diagnóstico, 2 sincronizar, 3 registro) y que la 1 dice **AL DÍA**. **Ya NO hay que lanzar nada al empezar: el vigía arranca solo al encender el PC.**
 - [ ] **Confirmar el arranque automático tras reiniciar:** la próxima vez que se reinicie el PC, revisar que el vigía arrancó solo (tarea 3 → "Ver registro": debe decir "Vigia iniciado" con la hora del encendido). El archivo que lo arranca vive en la carpeta de Inicio de Windows (`shell:startup\Stratos - respaldo automatico.vbs`), **fuera del repositorio**: si algún día se cambia de PC, hay que volver a crearlo (está explicado en `PROTOCOLO_GITHUB.md`).

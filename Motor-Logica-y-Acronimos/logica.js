@@ -45,28 +45,143 @@ function mostrarAvisoInmediato(texto, tipo) {
 }
 
 // ==========================================
-// 3. FUNCIÓN PARA FRAGMENTAR MISIÓN, VISIÓN Y VALORES (separa los textos en frases completas usando fronteras naturales: comas, puntos y dobles espacios)
+// 3. FUNCIÓN PARA FRAGMENTAR MISIÓN, VISIÓN Y VALORES (PUNTO 3)
+// Segmentos: ideal 51-200 caracteres, máx 250. Delimitadores: coma (,), punto (.)
+// y punto y coma (;). Un segmento corto (<51) se une al ANTERIOR si venía de coma,
+// o al SIGUIENTE si venía de punto / punto y coma. Filtro: sin guiones ni números solos.
 // ==========================================
 function obtenerFragmentosMisionVisionValores() {
-    const fragmentos = [];
+    const IDEAL_MIN = 51, IDEAL_MAX = 200, MAX = 250;
     const textos = [
         identidadCorporativa.mision,
         identidadCorporativa.vision,
         ...(identidadCorporativa.valores || [])
     ];
-    const separadores = /[,;.]|\s{2,}/;
+    let fragmentos = [];
     textos.forEach(texto => {
         if (!texto) return;
-        texto.split(separadores).forEach(parte => {
-            parte = parte.trim();
-            if (parte.length === 0) return;
-            // Frase completa como fragmento (sin cortes a mitad de frase):
-            // los fragmentos se separan SOLO en fronteras naturales, de modo
-            // que nunca quedan colas sueltas de pocas palabras (p. ej. "los objetivos").
-            fragmentos.push(parte);
-        });
+        fragmentos = fragmentos.concat(segmentarTextoEnOraciones(texto, IDEAL_MIN, IDEAL_MAX, MAX));
     });
-    return fragmentos;
+    return fragmentos.filter(esFragmentoValido);
+}
+
+// Descartar fragmentos que no sean oraciones completas (guiones, números solos, vacíos).
+function esFragmentoValido(fragmento) {
+    if (!fragmento) return false;
+    const t = fragmento.trim();
+    if (t.length === 0) return false;
+    if (!/[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]/.test(t)) return false;      // debe tener letras
+    if (/^[\s\-–—_.·•*]+$/.test(t)) return false;               // solo guiones/signos
+    if (/^[\d\s.,;:\-–—%$#°]+$/.test(t)) return false;          // solo números/símbolos
+    return true;
+}
+
+// Segmenta un texto en oraciones completas según las reglas del PUNTO 3.
+function segmentarTextoEnOraciones(texto, idealMin, idealMax, max) {
+    // 1) Tokeniza conservando el delimitador que cierra cada parte
+    const partes = [];
+    let buffer = '';
+    for (const ch of texto) {
+        if (ch === ',' || ch === '.' || ch === ';') {
+            buffer += ch;
+            partes.push({ texto: buffer.trim(), delimitador: ch });
+            buffer = '';
+        } else {
+            buffer += ch;
+        }
+    }
+    if (buffer.trim()) partes.push({ texto: buffer.trim(), delimitador: null });
+
+    // 2) Une las partes cortas (< idealMin) según su delimitador
+    const salida = [];
+    let pendiente = ''; // corto que debe unirse al SIGUIENTE (punto / punto y coma)
+    partes.forEach(parte => {
+        let t = parte.texto;
+        if (!t) return;
+        if (pendiente) { t = `${pendiente} ${t}`.trim(); pendiente = ''; }
+        if (t.length < idealMin) {
+            if ((parte.delimitador === ',' || parte.delimitador === null) && salida.length > 0) {
+                salida[salida.length - 1] = `${salida[salida.length - 1]} ${t}`.trim(); // al ANTERIOR
+            } else {
+                pendiente = t; // punto / punto y coma → al SIGUIENTE
+            }
+        } else {
+            salida.push(t);
+        }
+    });
+    if (pendiente) {
+        if (salida.length > 0) salida[salida.length - 1] = `${salida[salida.length - 1]} ${pendiente}`.trim();
+        else salida.push(pendiente);
+    }
+
+    // 3) Corta lo que exceda el máximo (respetando límites de palabra)
+    const finales = [];
+    salida.forEach(seg => {
+        let resto = (seg || '').trim();
+        while (resto.length > max) {
+            let corte = resto.lastIndexOf(' ', max);
+            if (corte < idealMin) corte = max;
+            finales.push(resto.slice(0, corte).trim());
+            resto = resto.slice(corte).trim();
+        }
+        if (resto) finales.push(resto);
+    });
+    return finales;
+}
+
+// ==========================================
+// 3.2 PREPARACIÓN PARA LA IA (PUNTO 3)
+// El sistema NO entiende el texto: hoy corta con reglas y, cuando la IA esté
+// implementada, le pasará el texto completo con sus parámetros.
+// ==========================================
+function pasarTextoALaIA(textoCompleto) {
+    const texto = textoCompleto || [
+        identidadCorporativa.mision,
+        identidadCorporativa.vision,
+        ...(identidadCorporativa.valores || [])
+    ].filter(Boolean).join('. ');
+    const paquete = {
+        texto: texto,
+        tamanoPermitido: { ideal: [51, 200], maximo: 250 },
+        nivelPrioridad: 'media',   // PUNTO 3: anuncio motivacional = Media
+        tiempoRotacion: 6000,      // PUNTO 3: 6 segundos
+        destino: 'cartelera'
+    };
+    // PENDIENTE: aquí se enviará a la IA cuando esté implementada; ella devolverá
+    // los fragmentos en oraciones completas para la cartelera.
+    console.log('pasarTextoALaIA (preparado, sin IA conectada):', paquete);
+    return paquete;
+}
+
+// ==========================================
+// 3.1 PRIORIDAD Y DURACIÓN DE LOS AVISOS (PUNTO 2)
+// La clasificación la hace el SISTEMA (no el usuario).
+// Tabla: alta = 10 s | media = 6 s | baja = 4 s.
+// ==========================================
+// Prioridad según el remitente (compara con superiorId en baseDatosUsuarios).
+function clasificarPrioridadPorRemitente(emisorId, options) {
+    options = options || {};
+    // Atención inmediata (acción en menos de 1 hora, correo prioritario) → alta
+    if (typeof options.horas === 'number' && options.horas < 1) return 'alta';
+    if (emisorId && usuarioActivo && usuarioActivo.id) {
+        const superiorId = usuarioActivo.superiorId;
+        if (superiorId && emisorId === superiorId) return 'alta'; // viene de su superior
+        const emisor = (typeof baseDatosUsuarios !== 'undefined') ? baseDatosUsuarios.find(u => u.id === emisorId) : null;
+        if (emisor && emisor.esNo1) return 'alta'; // el No.1 siempre es superior
+    }
+    if (options.deSuperior) return 'alta';
+    if (emisorId) return 'media'; // colega o subalterno
+    if (typeof options.horas === 'number' && options.horas <= 24) return 'media';
+    return 'baja'; // informativo o acción lejana
+}
+
+// Duración en milisegundos de un mensaje de cartelera según su prioridad.
+function duracionMensajeCartelera(mensaje) {
+    if (mensaje && typeof mensaje.duracion === 'number') return mensaje.duracion;
+    const prioridad = (mensaje && mensaje.prioridad) || 'media';
+    const segundos = (typeof DURACION_PRIORIDAD_CARTELERA !== 'undefined' && DURACION_PRIORIDAD_CARTELERA[prioridad])
+        ? DURACION_PRIORIDAD_CARTELERA[prioridad] : 6;
+    return segundos * 1000;
 }
 
 // ==========================================
@@ -74,6 +189,31 @@ function obtenerFragmentosMisionVisionValores() {
 // ==========================================
 function construirColaMensajes() {
     colaMensajes = [];
+    // PUNTO 2: el jefe ve en CARTELERA sus solicitudes de contraseña pendientes
+    // (prioridad ALTA) y la sugerencia de la IA por reincidencia de errores (PUNTO 48).
+    if (usuarioActivo && usuarioActivo.id) {
+        const solicitudes = (typeof solicitudesRecuperacion !== 'undefined')
+            ? solicitudesRecuperacion.filter(s => s.solicitadoA === usuarioActivo.id && s.estado === 'pendiente')
+            : [];
+        solicitudes.forEach(s => {
+            colaMensajes.push({
+                texto: `🔑 Solicitud de contraseña (prioridad ALTA): ${s.nombreUsuario}`,
+                tipo: 'mensaje',
+                prioridad: 'alta',
+                fechaInicio: new Date(),
+                resuelto: false
+            });
+        });
+        if (typeof erroresUltimaSemana === 'function' && erroresUltimaSemana(usuarioActivo) > 6) {
+            colaMensajes.push({
+                texto: `🔐 ${nombreAsistenteIA()} te sugiere cambiar tu contraseña (errores esta semana)`,
+                tipo: 'mensaje',
+                prioridad: 'media',
+                fechaInicio: new Date(),
+                resuelto: false
+            });
+        }
+    }
     // Saludo en la cartelera: solo la PRIMERA VEZ del día (estadística de horario de trabajo — PUNTO 6)
     if (usuarioActivo && usuarioActivo.nombreCompleto) {
         const hoySaludo = new Date().toDateString();
@@ -82,6 +222,7 @@ function construirColaMensajes() {
             colaMensajes.push({
                 texto: `👋 Hola, ${usuarioActivo.nombre}`,
                 tipo: 'saludo',
+                prioridad: 'baja',
                 fechaInicio: new Date(),
                 resuelto: false
             });
@@ -93,6 +234,7 @@ function construirColaMensajes() {
         colaMensajes.push({
             texto: `⚠️ Aviso: ${nombreNo1} aún no ha definido toda la Identidad Corporativa.`,
             tipo: 'aviso',
+            prioridad: 'baja',
             fechaInicio: new Date(),
             resuelto: false
         });
@@ -119,6 +261,7 @@ function construirColaMensajes() {
             colaMensajes.push({
                 texto: mensajeMotivacional,
                 tipo: 'motivacional',
+                prioridad: 'media', // PUNTO 3: anuncio motivacional diario = Media (6 s)
                 fechaInicio: new Date(),
                 resuelto: false
             });
@@ -132,7 +275,7 @@ function construirColaMensajes() {
 // ==========================================
 function iniciarRotacionMensajes() {
     if (intervaloRotacionMensajes) {
-        clearInterval(intervaloRotacionMensajes);
+        clearTimeout(intervaloRotacionMensajes);
         intervaloRotacionMensajes = null;
     }
     if (temporizadorAviso) {
@@ -146,9 +289,21 @@ function iniciarRotacionMensajes() {
         return;
     }
     mostrarSiguienteMensaje();
-    intervaloRotacionMensajes = setInterval(() => {
+    programarSiguienteMensaje(); // PUNTO 2: cada mensaje dura según su prioridad (10/6/4 s)
+}
+
+// PUNTO 2: programa el paso al siguiente mensaje usando la DURACIÓN de su prioridad.
+function programarSiguienteMensaje() {
+    if (intervaloRotacionMensajes) {
+        clearTimeout(intervaloRotacionMensajes);
+        intervaloRotacionMensajes = null;
+    }
+    if (colaMensajes.length === 0) return;
+    const actual = colaMensajes[indiceMensajeActual];
+    intervaloRotacionMensajes = setTimeout(() => {
         mostrarSiguienteMensaje();
-    }, 10000);
+        programarSiguienteMensaje();
+    }, duracionMensajeCartelera(actual));
 }
 
 function mostrarSiguienteMensaje() {
@@ -166,6 +321,7 @@ function mostrarSiguienteMensaje() {
         } else if (mensaje.tipo === 'aviso') {
             mensajeDiv.classList.add('advertencia');
         }
+        mensajeDiv.dataset.prioridad = mensaje.prioridad || 'media'; // PUNTO 2
         textoMensaje.innerText = mensaje.texto;
         mensajeDiv.style.display = 'flex';
     }
@@ -220,7 +376,7 @@ function irAPantalla(id) {
     if (typeof historialPantallas !== 'undefined') {
         historialPantallas.push(id);
     }
-    if (id === 'registro-invitacion' && usuarioActivo?.id) cargarDatosPantalla1();
+    if (id === 'registro-invitacion' && usuarioActivo?.id) { cargarDatosPantalla1(); actualizarEstadoEnrolamiento(); }
     if (id === 'pantalla-identidad') cargarDatosPantalla3();
     if (id === 'pantalla-organigrama-general') renderizarOrganigramaGeneral();
     if (id === 'pantalla-organigrama') renderizarOrganigrama();
@@ -837,6 +993,7 @@ function validarEntrada() {
     if (!usuario) {
         intentosLogin++;
         actualizarIntentosRestantes();
+        registrarErrorLogin(null, 'nombre'); // PUNTO 48: error de tipeo (usuario/ID no encontrado)
         if (aviso) { aviso.innerText = "✖ Usuario no encontrado"; aviso.className = "aviso-letrero texto-error"; aviso.style.maxHeight = "40px"; }
         window.claveAccesoReal = "";
         if (campoPass) { campoPass.value = ""; manejarMascara(campoPass); }
@@ -847,6 +1004,7 @@ function validarEntrada() {
     if (usuario.contrasena !== window.claveAccesoReal) {
         intentosLogin++;
         actualizarIntentosRestantes();
+        registrarErrorLogin(usuario, 'contrasena'); // PUNTO 48: error de contraseña de ESTE usuario
         if (aviso) { aviso.innerText = "✖ Contraseña incorrecta"; aviso.className = "aviso-letrero texto-error"; aviso.style.maxHeight = "40px"; }
         window.claveAccesoReal = "";
         if (campoPass) { campoPass.value = ""; manejarMascara(campoPass); }
@@ -855,6 +1013,11 @@ function validarEntrada() {
         return;
     }
     intentosLogin = 0;
+    // PUNTO 48: al entrar correctamente se reinicia el contador de errores de ESTE usuario
+    usuario.intentosLoginFallidos = 0;
+    const _idxReset = baseDatosUsuarios.findIndex(u => u.id === usuario.id);
+    if (_idxReset !== -1) baseDatosUsuarios[_idxReset] = { ...usuario };
+    guardarEnStorage(STORAGE_KEYS.BASE_USUARIOS, baseDatosUsuarios);
     if (aviso) aviso.style.maxHeight = "0";
     const divIntentos = document.getElementById('intentos-restantes');
     if (divIntentos) divIntentos.style.display = 'none';
@@ -883,8 +1046,22 @@ function validarEntrada() {
     actualizarSaludoLogin();
     window.claveAccesoReal = "";
     if (campoPass) campoPass.value = "";
-    if (usuario.requiereCambioContrasena) { mostrarModalCambioObligatorio(); return; }
+    // PUNTO 48: se registra la hora de entrada (primera del día) y el intento exitoso
+    registrarHoraEntrada(usuario);
+    registrarIncidenteLogin(usuario, 'login', 'exitoso');
+    // PUNTO 34: banco de datos — permisos del usuario y actividad de la sesión
+    actualizarPermisosBancoDatos(usuario);
+    registrarActividadBancoDatos(usuario.id, 'sesion', 'Inicio de sesión');
+    if (usuario.requiereCambioContrasena) {
+        // Entró con contraseña temporal: cambio obligatorio y registro del incidente
+        usuario.ultimaContrasenaTemporal = new Date();
+        registrarIncidenteLogin(usuario, 'contrasena_temporal', 'exitoso');
+        mostrarModalCambioObligatorio();
+        return;
+    }
     mostrarAvisoInmediato(`✓ Hola, ${usuario.nombre}`, "exito");
+    // PUNTO 2: las solicitudes al jefe (prioridad ALTA) y la sugerencia de la IA se
+    // muestran en la CARTELERA (se arma en construirColaMensajes al entrar a pantalla).
     if (typeof iniciarTemporizadorInactividad === 'function') iniciarTemporizadorInactividad();
     actualizarMenuTuerca();
     const botonTuerca = document.getElementById('boton-tuerca-global');
@@ -909,6 +1086,323 @@ function actualizarIntentosRestantes() {
         elemento.style.maxHeight = "0";
         setTimeout(() => elemento.style.display = 'none', 300);
     }
+}
+
+// ==========================================
+// 16.1 ASISTENCIA Y ERRORES DE LOGIN (PUNTO 48)
+// Registro de hora (primera entrada / última salida, con cruce de medianoche),
+// errores de tipeo POR USUARIO, aviso al jefe al agotar los intentos y
+// sugerencia de la IA por reincidencia de errores. Histórico: 5 años.
+// ==========================================
+const ANIOS_HISTORICO = 5; // Histórico de asistencia y errores (5 años)
+
+function _dosDigitos(n) { return String(n).padStart(2, '0'); }
+function _fechaISO(d) { return `${d.getFullYear()}-${_dosDigitos(d.getMonth() + 1)}-${_dosDigitos(d.getDate())}`; }
+function _horaHM(d) { return `${_dosDigitos(d.getHours())}:${_dosDigitos(d.getMinutes())}`; }
+
+// Elimina registros de asistencia/errores con más de 5 años de antigüedad.
+function depurarHistoricos() {
+    const limite = new Date();
+    limite.setFullYear(limite.getFullYear() - ANIOS_HISTORICO);
+    const isoLimite = _fechaISO(limite);
+    registrosAsistencia = registrosAsistencia.filter(r => (r.diaLaboral || '') >= isoLimite);
+    incidentesLogin = incidentesLogin.filter(i => (i.fecha || '') >= isoLimite);
+    // PUNTO 34: depura también el histórico del banco de datos (se conserva la ficha)
+    if (typeof bancoDatos === 'object' && bancoDatos) {
+        Object.values(bancoDatos).forEach(f => {
+            if (Array.isArray(f.diasSesiones)) f.diasSesiones = f.diasSesiones.filter(d => (d.diaLaboral || '') >= isoLimite);
+            if (Array.isArray(f.actividad)) f.actividad = f.actividad.filter(a => (a.fecha || '') >= isoLimite);
+        });
+    }
+}
+
+// Guarda la PRIMERA entrada del día (si ya existe un registro de hoy, no la cambia).
+function registrarHoraEntrada(usuario) {
+    if (!usuario || !usuario.id) return;
+    const ahora = new Date();
+    const hoy = _fechaISO(ahora);
+    let registro = registrosAsistencia.find(r => r.usuarioId === usuario.id && r.diaLaboral === hoy);
+    if (!registro) {
+        registro = {
+            id: generarIdUnico(),
+            usuarioId: usuario.id,
+            nombreUsuario: usuario.nombreCompleto || usuario.nombre || '',
+            diaLaboral: hoy,
+            horaEntrada: _horaHM(ahora),
+            fechaEntrada: ahora.toISOString(),
+            horaSalida: null,
+            fechaSalida: null,
+            salidaTrasMedianoche: false
+        };
+        registrosAsistencia.push(registro);
+    }
+    guardarEnStorage(STORAGE_KEYS.REGISTROS_ASISTENCIA, registrosAsistencia);
+    registrarDiaSesionBancoDatos(usuario.id, registro); // PUNTO 34
+}
+
+// Guarda la ÚLTIMA salida del día. Si el cierre cruza la medianoche, pertenece
+// al día de la ENTRADA abierta más reciente (regla del PUNTO 48).
+function registrarHoraSalida(usuario) {
+    if (!usuario || !usuario.id) return;
+    const ahora = new Date();
+    let registro = null;
+    for (let i = registrosAsistencia.length - 1; i >= 0; i--) {
+        const r = registrosAsistencia[i];
+        if (r.usuarioId === usuario.id && !r.horaSalida) { registro = r; break; }
+    }
+    if (!registro) {
+        const hoy = _fechaISO(ahora);
+        registro = registrosAsistencia.find(r => r.usuarioId === usuario.id && r.diaLaboral === hoy);
+    }
+    if (!registro) return;
+    registro.horaSalida = _horaHM(ahora);
+    registro.fechaSalida = ahora.toISOString();
+    registro.salidaTrasMedianoche = (_fechaISO(ahora) !== registro.diaLaboral);
+    guardarEnStorage(STORAGE_KEYS.REGISTROS_ASISTENCIA, registrosAsistencia);
+    registrarDiaSesionBancoDatos(usuario.id, registro); // PUNTO 34
+}
+
+// Registra un intento de login (fallido o exitoso) en el perfil del usuario.
+function registrarIncidenteLogin(usuario, tipo, resultado) {
+    const ahora = new Date();
+    incidentesLogin.push({
+        id: generarIdUnico(),
+        usuarioId: usuario ? usuario.id : null,
+        nombreUsuario: usuario ? (usuario.nombreCompleto || usuario.nombre || '') : '',
+        fecha: _fechaISO(ahora),
+        hora: _horaHM(ahora),
+        tipo: tipo, // "nombre" | "id" | "contrasena" | "contrasena_temporal" | "login"
+        resultado: resultado || 'fallido' // "fallido" | "exitoso"
+    });
+    depurarHistoricos();
+    guardarEnStorage(STORAGE_KEYS.INCIDENTES_LOGIN, incidentesLogin);
+    if (usuario && usuario.id) actualizarErroresBancoDatos(usuario.id); // PUNTO 34
+}
+
+// Registra un error de login (por usuario) y avisa al jefe al agotar los intentos.
+function registrarErrorLogin(usuario, tipo) {
+    registrarIncidenteLogin(usuario, tipo, 'fallido');
+    if (!usuario) return;
+    usuario.intentosLoginFallidos = (usuario.intentosLoginFallidos || 0) + 1;
+    const idx = baseDatosUsuarios.findIndex(u => u.id === usuario.id);
+    if (idx !== -1) baseDatosUsuarios[idx] = { ...usuario };
+    guardarEnStorage(STORAGE_KEYS.BASE_USUARIOS, baseDatosUsuarios);
+    if (usuario.intentosLoginFallidos >= maxIntentosLogin) notificarJefeBloqueo(usuario);
+}
+
+// Crea (si no existe) la solicitud de recuperación dirigida al jefe directo.
+function notificarJefeBloqueo(usuario) {
+    if (!usuario) return null;
+    const pendiente = solicitudesRecuperacion.find(s => s.usuarioId === usuario.id && s.estado === 'pendiente');
+    if (pendiente) return pendiente;
+    const solicitud = {
+        id: generarIdUnico(),
+        usuarioId: usuario.id,
+        nombreUsuario: usuario.nombreCompleto || usuario.nombre || '',
+        solicitadoA: usuario.superiorId || null, // jefe directo
+        nombreSuperior: '',
+        quienAyudo: '',
+        nombreQuienAyudo: '',
+        fechaSolicitud: new Date(),
+        fechaResolucion: null,
+        estado: 'pendiente',
+        contrasenaTemporalGenerada: ''
+    };
+    solicitudesRecuperacion.push(solicitud);
+    guardarEnStorage(STORAGE_KEYS.SOLICITUDES_RECUPERACION, solicitudesRecuperacion);
+    return solicitud;
+}
+
+// Cuenta los errores (fallidos) de un usuario en los últimos 7 días.
+function erroresUltimaSemana(usuario) {
+    if (!usuario || !usuario.id) return 0;
+    const limite = new Date();
+    limite.setDate(limite.getDate() - 7);
+    return incidentesLogin.filter(inc => {
+        if (inc.usuarioId !== usuario.id || inc.resultado !== 'fallido') return false;
+        return new Date(`${inc.fecha}T${inc.hora || '00:00'}:00`) >= limite;
+    }).length;
+}
+
+// La IA sugiere cambiar la contraseña si hay más de 6 errores en una semana (7 en 7 días).
+function revisarSugerenciaContrasena(usuario) {
+    if (!usuario) return;
+    const errores = erroresUltimaSemana(usuario);
+    if (errores > 6) {
+        // El aviso va a cartelera (aquí se muestra como aviso inmediato al iniciar sesión).
+        mostrarAvisoInmediato(`🔐 ${nombreAsistenteIA()} te sugiere cambiar tu contraseña (${errores} errores esta semana)`, "advertencia");
+    }
+}
+
+// El jefe ve (prioridad ALTA) las solicitudes de contraseña pendientes a su cargo.
+function mostrarSolicitudesPendientesJefe(usuario) {
+    if (!usuario || !usuario.id) return;
+    const pendientes = solicitudesRecuperacion.filter(s => s.solicitadoA === usuario.id && s.estado === 'pendiente');
+    if (pendientes.length === 0) return;
+    const nombres = pendientes.map(s => s.nombreUsuario).join(', ');
+    mostrarAvisoInmediato(`🔑 Solicitud de contraseña (prioridad ALTA): ${nombres}`, "advertencia");
+}
+
+// ==========================================
+// 16.2 BANCO DE DATOS POR USUARIO (PUNTO 34)
+// Ficha aparte por usuario con bloques: días/sesiones, errores, permisos,
+// invitaciones, actividad y campos libres. Histórico: 5 años.
+// ==========================================
+// Ficha nueva con valores por defecto.
+function fichaBancoDatosPorDefecto(usuario) {
+    return {
+        usuarioId: usuario ? usuario.id : null,
+        nombreCompleto: usuario ? (usuario.nombreCompleto || usuario.nombre || '') : '',
+        creado: new Date().toISOString(),
+        actualizado: new Date().toISOString(),
+        diasSesiones: [],
+        errores: { id: 0, contrasena: 0, nombre: 0, total: 0, ultimo: null },
+        permisos: { modulos: [] },
+        invitaciones: { invitoA: [], invitadoPor: usuario ? (usuario.invitadoPor || null) : null },
+        actividad: [],
+        camposLibres: {}
+    };
+}
+
+// Devuelve (creando si hace falta) la ficha del usuario.
+function fichaBancoDatos(usuarioId) {
+    if (!usuarioId) return null;
+    if (!bancoDatos[usuarioId]) {
+        const usuario = (typeof baseDatosUsuarios !== 'undefined') ? baseDatosUsuarios.find(u => u.id === usuarioId) : null;
+        bancoDatos[usuarioId] = fichaBancoDatosPorDefecto(usuario);
+    }
+    return bancoDatos[usuarioId];
+}
+
+function guardarBancoDatos() {
+    guardarEnStorage(STORAGE_KEYS.BANCO_DATOS, bancoDatos);
+}
+
+// Rellena los campos nuevos con valores por defecto SIN borrar lo existente.
+function completarFichaBancoDatos(ficha, usuario) {
+    const def = fichaBancoDatosPorDefecto(usuario);
+    if (!Array.isArray(ficha.diasSesiones)) ficha.diasSesiones = [];
+    if (!Array.isArray(ficha.actividad)) ficha.actividad = [];
+    if (!ficha.errores || typeof ficha.errores !== 'object') ficha.errores = def.errores;
+    else ficha.errores = { ...def.errores, ...ficha.errores };
+    if (!ficha.permisos || typeof ficha.permisos !== 'object') ficha.permisos = def.permisos;
+    else ficha.permisos = { ...def.permisos, ...ficha.permisos };
+    if (!ficha.invitaciones || typeof ficha.invitaciones !== 'object') ficha.invitaciones = def.invitaciones;
+    else ficha.invitaciones = { ...def.invitaciones, ...ficha.invitaciones };
+    if (!ficha.camposLibres || typeof ficha.camposLibres !== 'object') ficha.camposLibres = {};
+    if (!ficha.usuarioId && usuario) ficha.usuarioId = usuario.id;
+    if (!ficha.creado) ficha.creado = def.creado;
+    ficha.actualizado = new Date().toISOString();
+    return ficha;
+}
+
+// Calcula los minutos trabajados de un registro de asistencia.
+function calcularMinutosTrabajados(registro) {
+    if (!registro || !registro.fechaEntrada || !registro.fechaSalida) return 0;
+    const ms = new Date(registro.fechaSalida) - new Date(registro.fechaEntrada);
+    return ms > 0 ? Math.round(ms / 60000) : 0;
+}
+
+// Bloque "Días/Sesiones": alta/actualización de un día del usuario (sin guardar).
+function _upsertDiaSesionBancoDatos(ficha, registro) {
+    let dia = ficha.diasSesiones.find(d => d.registroId === registro.id);
+    if (!dia) {
+        dia = { registroId: registro.id, diaLaboral: registro.diaLaboral, entrada: registro.horaEntrada, salida: null, minutosTrabajados: 0 };
+        ficha.diasSesiones.push(dia);
+    }
+    if (registro.horaSalida) {
+        dia.salida = registro.horaSalida;
+        dia.minutosTrabajados = calcularMinutosTrabajados(registro);
+    }
+    return ficha;
+}
+
+function registrarDiaSesionBancoDatos(usuarioId, registro) {
+    const ficha = fichaBancoDatos(usuarioId);
+    if (!ficha || !registro) return;
+    _upsertDiaSesionBancoDatos(ficha, registro);
+    ficha.actualizado = new Date().toISOString();
+    guardarBancoDatos();
+}
+
+// Bloque "Errores": recalcula desde incidentesLogin (idempotente).
+function actualizarErroresBancoDatos(usuarioId, guardar) {
+    const ficha = fichaBancoDatos(usuarioId);
+    if (!ficha) return;
+    const fallidos = incidentesLogin.filter(i => i.usuarioId === usuarioId && i.resultado === 'fallido');
+    const errores = { id: 0, contrasena: 0, nombre: 0, total: fallidos.length, ultimo: null };
+    fallidos.forEach(i => {
+        if (errores[i.tipo] !== undefined) errores[i.tipo]++;
+        errores.ultimo = `${i.fecha} ${i.hora}`;
+    });
+    ficha.errores = errores;
+    ficha.actualizado = new Date().toISOString();
+    if (guardar !== false) guardarBancoDatos();
+}
+
+// Bloque "Permisos": qué módulos puede ver el usuario.
+function actualizarPermisosBancoDatos(usuario) {
+    if (!usuario || !usuario.id) return;
+    const ficha = fichaBancoDatos(usuario.id);
+    if (!ficha) return;
+    const modulos = [];
+    for (const [id, info] of Object.entries(estadoPantallas)) {
+        if (info.visiblePara.includes('todos') ||
+            info.visiblePara.includes(usuario.rol) ||
+            (usuario.esNo1 && info.visiblePara.includes('No.1')) ||
+            (usuario.esPrimeraLinea && info.visiblePara.includes('PrimeraLinea'))) {
+            modulos.push(id);
+        }
+    }
+    ficha.permisos = { modulos };
+    ficha.actualizado = new Date().toISOString();
+    guardarBancoDatos();
+}
+
+// Bloque "Invitaciones": a quién invitó el usuario.
+function registrarInvitacionBancoDatos(usuarioId, destinoNombre) {
+    const ficha = fichaBancoDatos(usuarioId);
+    if (!ficha) return;
+    const ahora = new Date();
+    ficha.invitaciones.invitoA.push({ nombre: destinoNombre || '', fecha: _fechaISO(ahora), hora: _horaHM(ahora) });
+    ficha.actualizado = ahora.toISOString();
+    guardarBancoDatos();
+}
+
+// Bloque "Actividad": qué hizo el usuario (correos, chats, tareas, etc.).
+function registrarActividadBancoDatos(usuarioId, tipo, detalle) {
+    const ficha = fichaBancoDatos(usuarioId);
+    if (!ficha) return;
+    const ahora = new Date();
+    ficha.actividad.push({ fecha: _fechaISO(ahora), hora: _horaHM(ahora), tipo: tipo || '', detalle: detalle || '' });
+    ficha.actualizado = ahora.toISOString();
+    guardarBancoDatos();
+}
+
+// Respaldo previo de TODOS los datos del navegador antes de migrar.
+function respaldarDatosNavegador() {
+    const copia = {};
+    Object.values(STORAGE_KEYS).forEach(k => { copia[k] = localStorage.getItem(k); });
+    guardarEnStorage(STORAGE_KEYS.RESPALDO_MIGRACION, { fecha: new Date().toISOString(), datos: copia });
+}
+
+// Migración al cargar: respaldo + relleno de fichas sin borrar nada.
+function migrarBancoDatos() {
+    try { respaldarDatosNavegador(); } catch (e) {}
+    baseDatosUsuarios.forEach(u => {
+        if (!u || !u.id) return;
+        bancoDatos[u.id] = completarFichaBancoDatos(bancoDatos[u.id] || fichaBancoDatosPorDefecto(u), u);
+    });
+    // Se conservan fichas cuyo usuario ya no exista (no se borra nada)
+    Object.values(bancoDatos).forEach(f => completarFichaBancoDatos(f, null));
+    // Sembrar días/sesiones y errores ya existentes (se guarda UNA sola vez al final)
+    registrosAsistencia.forEach(r => {
+        if (!r.usuarioId) return;
+        const ficha = fichaBancoDatos(r.usuarioId);
+        if (ficha) _upsertDiaSesionBancoDatos(ficha, r);
+    });
+    Object.keys(bancoDatos).forEach(id => actualizarErroresBancoDatos(id, false));
+    guardarBancoDatos();
 }
 
 // ==========================================
@@ -998,28 +1492,485 @@ function actualizarSaludoLogin() {
 }
 
 // ==========================================
-// 20.2 AUTENTICACIÓN BIOMÉTRICA DEL LOGIN (habilita facial/patrón/huella solo si el dispositivo ofrece autenticador — PUNTO 6)
+// 20.2 AUTENTICACIÓN BIOMÉTRICA (LOGIN Y ENROLAMIENTO — PUNTOS 6 y 9-10-11)
+// Iconos SVG de trazo fino (verde Stratos). Cada botón intenta su propio proceso
+// (facial / patrón / huella) usando WebAuthn (navigator.credentials).
+// La opción se inscribe en la pantalla de Perfil y, desde ahí en adelante,
+// sirve para entrar SOLO con la biometría (sin nombre, ID ni contraseña).
 // ==========================================
-function inicializarBiometria() {
-    const contenedor = document.getElementById('opciones-biometria');
-    if (!contenedor) return;
+const METODOS_BIOMETRICOS = ['facial', 'patron', 'huella'];
+const NOMBRE_METODO_BIOMETRICO = { facial: 'rostro', patron: 'patrón', huella: 'huella' };
+
+// Pregunta al dispositivo si ofrece autenticador de plataforma (WebAuthn).
+function verificarDispositivoBiometrico() {
     const soportado = window.PublicKeyCredential && typeof PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable === 'function';
-    if (!soportado) {
-        contenedor.classList.add('no-disponible');
-        return;
-    }
-    PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable().then(disponible => {
-        if (!disponible) contenedor.classList.add('no-disponible');
-    }).catch(() => contenedor.classList.add('no-disponible'));
+    if (!soportado) return Promise.resolve(false);
+    return PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable().catch(() => false);
 }
 
-function intentarBiometria(metodo) {
-    const contenedor = document.getElementById('opciones-biometria');
-    if (!contenedor || contenedor.classList.contains('no-disponible')) {
-        mostrarAvisoInmediato("✖ Este dispositivo no ofrece autenticación biométrica", "advertencia");
+// ¿El usuario dejó habilitada la biometría en Configuración?
+function biometriaHabilitada() { return !!(configuracionPersonal && configuracionPersonal.biometria); }
+
+// Texto de un aviso ya traducido (si la clave no existe, se usa el texto en español).
+function _bioTexto(clave, porDefecto) {
+    const t = typeof traducirTexto === 'function' ? traducirTexto(clave) : '';
+    return t || porDefecto;
+}
+
+// ---------- Utilidades de bytes para WebAuthn (base64url, CBOR/COSE y DER) ----------
+function _bioConcatenarBytes() {
+    const partes = Array.prototype.slice.call(arguments);
+    const total = partes.reduce((suma, p) => suma + p.length, 0);
+    const salida = new Uint8Array(total);
+    let posicion = 0;
+    partes.forEach(p => { salida.set(p, posicion); posicion += p.length; });
+    return salida;
+}
+
+function _bioBufferABase64Url(buffer) {
+    const bytes = new Uint8Array(buffer);
+    let binario = '';
+    for (let i = 0; i < bytes.length; i++) binario += String.fromCharCode(bytes[i]);
+    return btoa(binario).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+function _bioBase64UrlABuffer(texto) {
+    let base64 = String(texto || '').replace(/-/g, '+').replace(/_/g, '/');
+    while (base64.length % 4) base64 += '=';
+    const binario = atob(base64);
+    const bytes = new Uint8Array(binario.length);
+    for (let i = 0; i < binario.length; i++) bytes[i] = binario.charCodeAt(i);
+    return bytes;
+}
+
+// Desafío aleatorio de un solo uso (WebAuthn exige uno distinto en cada operación).
+function _bioDesafioAleatorio() { return crypto.getRandomValues(new Uint8Array(32)); }
+
+// Decodifica una clave COSE (CBOR) en un objeto plano.
+function _bioDecodificarCose(base64Url) {
+    const bytes = _bioBase64UrlABuffer(base64Url);
+    const vista = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    let posicion = 0;
+    function leerCabecera() {
+        const inicial = vista.getUint8(posicion++);
+        const tipo = inicial >> 5;
+        const info = inicial & 0x1f;
+        let longitud = info;
+        if (info === 24) longitud = vista.getUint8(posicion++);
+        else if (info === 25) { longitud = vista.getUint16(posicion); posicion += 2; }
+        else if (info === 26) { longitud = vista.getUint32(posicion); posicion += 4; }
+        return { tipo: tipo, info: info, longitud: longitud };
+    }
+    function leerValor() {
+        const cab = leerCabecera();
+        const largo = cab.longitud;
+        if (cab.tipo === 0) return largo;
+        if (cab.tipo === 1) return -1 - largo;
+        if (cab.tipo === 2) { const v = bytes.slice(posicion, posicion + largo); posicion += largo; return v; }
+        if (cab.tipo === 3) { const v = new TextDecoder().decode(bytes.slice(posicion, posicion + largo)); posicion += largo; return v; }
+        if (cab.tipo === 4) { const v = []; for (let i = 0; i < largo; i++) v.push(leerValor()); return v; }
+        if (cab.tipo === 5) { const v = {}; for (let i = 0; i < largo; i++) { const k = leerValor(); v[k] = leerValor(); } return v; }
+        if (cab.tipo === 7) return cab.info === 20 ? false : (cab.info === 21 ? true : null);
+        throw new Error('CBOR: tipo no soportado (' + cab.tipo + ')');
+    }
+    return leerValor();
+}
+
+// Longitud DER (usa bytes extra cuando el largo pasa de 127).
+function _bioDer(longitud) {
+    if (longitud < 0x80) return new Uint8Array([longitud]);
+    const bytes = [];
+    let n = longitud;
+    while (n > 0) { bytes.unshift(n & 0xff); n = Math.floor(n / 256); }
+    return new Uint8Array([0x80 | bytes.length].concat(bytes));
+}
+
+function _bioSecuenciaDer() {
+    const cuerpo = _bioConcatenarBytes.apply(null, arguments);
+    return _bioConcatenarBytes(new Uint8Array([0x30]), _bioDer(cuerpo.length), cuerpo);
+}
+
+// Convierte la clave pública COSE al formato SPKI que entiende crypto.subtle.
+// Cubre lo que usan los autenticadores de plataforma: EC2/P-256 (ES256) y RSA (RS256).
+function _bioCoseASpki(cose) {
+    if (cose.kty === 2) {
+        const algoritmo = _bioSecuenciaDer(
+            new Uint8Array([0x06, 0x07, 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x02, 0x01]),
+            new Uint8Array([0x06, 0x08, 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x03, 0x01, 0x07])
+        );
+        const punto = _bioConcatenarBytes(new Uint8Array([0x04]), cose.x, cose.y);
+        const bits = _bioConcatenarBytes(new Uint8Array([0x00]), punto);
+        return {
+            spki: _bioSecuenciaDer(algoritmo, new Uint8Array([0x03]), _bioDer(bits.length), bits),
+            importar: { name: 'ECDSA', namedCurve: 'P-256' },
+            verificar: { name: 'ECDSA', hash: 'SHA-256' }
+        };
+    }
+    if (cose.kty === 3) {
+        const algoritmo = _bioSecuenciaDer(
+            new Uint8Array([0x06, 0x09, 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x01, 0x01, 0x01]),
+            new Uint8Array([0x05, 0x00])
+        );
+        // INTEGER de DER: etiqueta 0x02 + longitud + contenido. Si el bit mas alto
+        // esta activo se antepone un 0x00, porque si no el entero se leeria como
+        // negativo (pasa siempre con modulos RSA).
+        const entero = (bytes) => {
+            const conCero = (bytes.length && (bytes[0] & 0x80))
+                ? _bioConcatenarBytes(new Uint8Array([0x00]), bytes)
+                : bytes;
+            return _bioConcatenarBytes(new Uint8Array([0x02]), _bioDer(conCero.length), conCero);
+        };
+        const bits = _bioConcatenarBytes(new Uint8Array([0x00]), _bioSecuenciaDer(entero(cose.n), entero(cose.e)));
+        return {
+            spki: _bioSecuenciaDer(algoritmo, new Uint8Array([0x03]), _bioDer(bits.length), bits),
+            importar: { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
+            verificar: { name: 'RSASSA-PKCS1-v1_5' }
+        };
+    }
+    throw new Error('Biometría: algoritmo de clave no soportado');
+}
+
+// Verifica la aserción que devuelve el dispositivo: origen, desafío, usuario
+// verificado y firma criptográfica. Si el contador no avanza, el autenticador
+// fue clonado y la aserción se rechaza.
+async function _bioVerificarAsercion(registro, asercion, desafio) {
+    const respuesta = asercion.response;
+    const datosCliente = JSON.parse(new TextDecoder().decode(respuesta.clientDataJSON));
+    if (datosCliente.type !== 'webauthn.get') return false;
+    if (datosCliente.challenge !== _bioBufferABase64Url(desafio)) return false;
+    if (datosCliente.origin !== window.location.origin) return false;
+    const datosAutenticador = new Uint8Array(respuesta.authenticatorData);
+    if (!(datosAutenticador[32] & 0x01)) return false; // bit UP: el usuario fue verificado
+    const hashCliente = new Uint8Array(await crypto.subtle.digest('SHA-256', respuesta.clientDataJSON));
+    const firmado = _bioConcatenarBytes(datosAutenticador, hashCliente);
+    const clave = _bioCoseASpki(_bioDecodificarCose(registro.publicKey));
+    const llave = await crypto.subtle.importKey('spki', clave.spki, clave.importar, false, ['verify']);
+    const esFirmaValida = await crypto.subtle.verify(clave.verificar, llave, respuesta.signature, firmado);
+    const contadorNuevo = new DataView(datosAutenticador.buffer, datosAutenticador.byteOffset + 33, 4).getUint32(0);
+    if (esFirmaValida && registro.contador && contadorNuevo <= registro.contador) return false;
+    if (esFirmaValida) {
+        registro.contador = contadorNuevo;
+        const mapa = leerMapaBiometria();
+        if (mapa[registro.usuarioId]) { mapa[registro.usuarioId].contador = contadorNuevo; guardarEnStorage(STORAGE_KEYS.BIOMETRIA, mapa); }
+    }
+    return esFirmaValida;
+}
+
+// Enrolamiento biométrico guardado en ESTE dispositivo: { [usuarioId]: {…} }.
+function leerMapaBiometria() { return cargarDeStorage(STORAGE_KEYS.BIOMETRIA) || {}; }
+
+// El usuario inscribe (enrola) su biometría desde la pantalla de Perfil (PUNTO 9-10-11).
+// El dispositivo genera la clave; aquí solo se guarda la clave PÚBLICA y el id de la
+// credencial en ESTE dispositivo (el secreto nunca sale del equipo).
+function enrolarBiometria(metodo) {
+    const mensaje = document.getElementById('mensaje-biometria-perfil');
+    const info = (texto, clase) => {
+        if (!mensaje) return;
+        mensaje.innerText = texto;
+        mensaje.className = 'aviso-letrero' + (clase ? ' ' + clase : '');
+        mensaje.style.maxHeight = '60px';
+    };
+    if (!usuarioActivo || !usuarioActivo.id) {
+        mostrarAvisoInmediato("✖ Inicia sesión para inscribir tu biometría", "advertencia");
         return;
     }
-    mostrarAvisoInmediato("🔓 Biométrico disponible en el dispositivo. Su activación se enlaza con 'Habilitar autenticación biométrica' (Configuración).", "exito");
+    if (!METODOS_BIOMETRICOS.includes(metodo)) return;
+    if (!window.PublicKeyCredential || !navigator.credentials) {
+        info(_bioTexto('bio_sin_webauthn', 'Este navegador no admite autenticación biométrica.'), 'texto-error');
+        return;
+    }
+    if (!window.crypto || !crypto.subtle) {
+        info(_bioTexto('bio_contexto_seguro', 'Abre la app con Live Server o desde una dirección https para usar la biometría.'), 'texto-error');
+        return;
+    }
+
+    verificarDispositivoBiometrico().then(async disponible => {
+        if (!disponible) {
+            const aviso = _bioTexto('bio_sin_dispositivo', 'Este dispositivo no ofrece autenticación biométrica.');
+            info(aviso, 'texto-advertencia');
+            mostrarAvisoInmediato("✖ " + aviso, "advertencia");
+            return;
+        }
+        const idUsuarioHash = new Uint8Array(await crypto.subtle.digest(
+            'SHA-256', new TextEncoder().encode(usuarioActivo.id)
+        ));
+        let credencial = null;
+        try {
+            credencial = await navigator.credentials.create({
+                publicKey: {
+                    challenge: _bioDesafioAleatorio(),
+                    rp: { name: 'Stratos' },
+                    user: {
+                        id: idUsuarioHash,
+                        name: usuarioActivo.nombreCompleto || usuarioActivo.id,
+                        displayName: usuarioActivo.nombreCompleto || usuarioActivo.id
+                    },
+                    pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }],
+                    authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'discouraged' },
+                    attestation: 'none',
+                    timeout: 60000
+                }
+            });
+        } catch (error) {
+            const aviso = (error && error.name === 'NotAllowedError')
+                ? _bioTexto('bio_cancelada', 'Inscripción cancelada.')
+                : _bioTexto('bio_error_inscribir', 'No se pudo inscribir la biometría en este dispositivo.');
+            info(aviso, 'texto-error');
+            return;
+        }
+        if (!credencial || !credencial.response || !credencial.response.publicKey) {
+            info(_bioTexto('bio_error_inscribir', 'No se pudo inscribir la biometría en este dispositivo.'), 'texto-error');
+            return;
+        }
+        const mapa = leerMapaBiometria();
+        mapa[usuarioActivo.id] = {
+            usuarioId: usuarioActivo.id,
+            nombreCompleto: usuarioActivo.nombreCompleto,
+            idEmpleado: usuarioActivo.idEmpleado,
+            metodo: metodo,
+            credencialId: _bioBufferABase64Url(credencial.rawId),
+            publicKey: _bioBufferABase64Url(credencial.response.publicKey),
+            transports: (typeof credencial.response.getTransports === 'function') ? credencial.response.getTransports() : [],
+            contador: 0,
+            fecha: new Date().toISOString()
+        };
+        guardarEnStorage(STORAGE_KEYS.BIOMETRIA, mapa);
+        // Al inscribir, la biometría queda habilitada en Configuración.
+        if (!biometriaHabilitada()) {
+            configuracionPersonal.biometria = true;
+            guardarEnStorage(STORAGE_KEYS.CONFIG_PERSONAL, configuracionPersonal);
+            const casilla = document.getElementById('config-biometria');
+            if (casilla) casilla.checked = true;
+        }
+        actualizarEstadoEnrolamiento();
+        registrarActividadBancoDatos(usuarioActivo.id, 'biometria',
+            'Inscribió biometría de ' + (NOMBRE_METODO_BIOMETRICO[metodo] || metodo));
+        mostrarAvisoInmediato(`✓ Biometría de ${NOMBRE_METODO_BIOMETRICO[metodo] || metodo} inscrita en este dispositivo`, "exito");
+    }).catch(() => {
+        info(_bioTexto('bio_error_inscribir', 'No se pudo inscribir la biometría en este dispositivo.'), 'texto-error');
+    });
+}
+
+// Pinta el estado de la inscripción: resalta el método inscrito, atenúa los
+// botones si el dispositivo no tiene autenticador y explica qué falta (PUNTO 6-B.5).
+function actualizarEstadoEnrolamiento() {
+    const usuario = (usuarioActivo && usuarioActivo.id) ? usuarioActivo : null;
+    const enrolada = usuario ? leerMapaBiometria()[usuario.id] : null;
+
+    METODOS_BIOMETRICOS.forEach(metodo => {
+        const boton = document.getElementById('perfil-bio-' + metodo);
+        if (boton) boton.classList.toggle('enrolado', !!(enrolada && enrolada.metodo === metodo));
+    });
+
+    verificarDispositivoBiometrico().then(disponible => {
+        const contenedorPerfil = document.getElementById('opciones-biometria-perfil');
+        if (contenedorPerfil) contenedorPerfil.classList.toggle('no-disponible', !disponible);
+        const mensaje = document.getElementById('mensaje-biometria-perfil');
+        if (!mensaje) return;
+        mensaje.style.maxHeight = '60px';
+        if (!disponible) {
+            mensaje.innerText = _bioTexto('bio_sin_dispositivo', 'Este dispositivo no ofrece autenticación biométrica.');
+            mensaje.className = 'aviso-letrero texto-advertencia';
+        } else if (enrolada) {
+            mensaje.innerText = _bioTexto('bio_ya_inscrita', 'Ya tienes inscrita tu biometría de')
+                + ' ' + (NOMBRE_METODO_BIOMETRICO[enrolada.metodo] || enrolada.metodo) + '.';
+            mensaje.className = 'aviso-letrero texto-exito';
+        } else {
+            mensaje.innerText = _bioTexto('bio_sin_inscribir', 'Aún no has inscrito ninguna biometría en este dispositivo.');
+            mensaje.className = 'aviso-letrero';
+        }
+    });
+
+    actualizarEstadoBiometriaLogin();
+}
+
+// Estado visual de los botones del Login (atenúa si no se puede usar y resalta
+// el método que el usuario de este dispositivo tiene inscrito).
+function actualizarEstadoBiometriaLogin() {
+    const contenedor = document.getElementById('opciones-biometria');
+    if (!contenedor) return;
+    const seleccion = biometriaParaLogin();
+    const metodoInscrito = seleccion.registro ? seleccion.registro.metodo : null;
+    METODOS_BIOMETRICOS.forEach(metodo => {
+        const boton = document.getElementById('bio-' + metodo);
+        if (boton) boton.classList.toggle('enrolado', metodo === metodoInscrito);
+    });
+    verificarDispositivoBiometrico().then(disponible => {
+        contenedor.classList.toggle('no-disponible', !(disponible && biometriaHabilitada()));
+    });
+}
+
+// Punto de entrada desde el Login (PUNTO 6): comprueba el dispositivo.
+function inicializarBiometria() { actualizarEstadoBiometriaLogin(); }
+
+// Elige con qué credencial se va a entrar: la del usuario escrito en el Login,
+// o la del último usuario de este dispositivo si el campo está vacío.
+function biometriaParaLogin() {
+    const mapa = leerMapaBiometria();
+    const registros = Object.keys(mapa)
+        .map(clave => mapa[clave])
+        .filter(registro => registro && registro.credencialId);
+    if (registros.length === 0) return { registro: null, motivo: 'nadie_inscrito' };
+    const campoNombre = document.getElementById('acc-nombre-completo');
+    const escrito = campoNombre ? campoNombre.value.trim().replace(/^"|"$/g, '') : '';
+    if (escrito) {
+        const encontrado = registros.find(r => (r.nombreCompleto || '').toLowerCase() === escrito.toLowerCase());
+        return encontrado ? { registro: encontrado, motivo: null } : { registro: null, motivo: 'usuario_no_inscrito' };
+    }
+    const ultimoNombre = localStorage.getItem(STORAGE_KEYS.ULTIMO_USUARIO);
+    if (ultimoNombre) {
+        const porUltimo = registros.find(r => r.nombreCompleto === ultimoNombre);
+        if (porUltimo) return { registro: porUltimo, motivo: null };
+    }
+    return { registro: registros[0], motivo: null };
+}
+
+// Intenta entrar SOLO con la biometría: sustituye nombre + ID + contraseña
+// (PUNTO 9-10-11, puntos 4 a 6). Cada botón va a su propio proceso.
+function intentarBiometria(metodo) {
+    if (!METODOS_BIOMETRICOS.includes(metodo)) return;
+    const mensajeLogin = document.getElementById('mensaje-acceso');
+    const avisar = (texto) => {
+        if (mensajeLogin) {
+            mensajeLogin.innerText = texto;
+            mensajeLogin.className = 'aviso-letrero texto-error';
+            mensajeLogin.style.maxHeight = '60px';
+        }
+        mostrarAvisoInmediato("✖ " + texto, "advertencia");
+    };
+
+    if (!window.PublicKeyCredential || !navigator.credentials) {
+        avisar(_bioTexto('bio_sin_webauthn', 'Este navegador no admite autenticación biométrica.'));
+        return;
+    }
+    if (!window.crypto || !crypto.subtle) {
+        avisar(_bioTexto('bio_contexto_seguro', 'Abre la app con Live Server o desde una dirección https para usar la biometría.'));
+        return;
+    }
+    if (!biometriaHabilitada()) {
+        avisar(_bioTexto('bio_desactivada', 'Activa "Habilitar autenticación biométrica" en Configuración.'));
+        return;
+    }
+
+    const seleccion = biometriaParaLogin();
+    if (!seleccion.registro) {
+        avisar(seleccion.motivo === 'usuario_no_inscrito'
+            ? _bioTexto('bio_usuario_no_inscrito', 'Ese usuario no tiene biometría inscrita en este dispositivo.')
+            : _bioTexto('bio_nadie_inscrito', 'Todavía no hay biometría inscrita. Inscríbela desde tu Perfil.'));
+        return;
+    }
+    const registro = seleccion.registro;
+    if (registro.metodo !== metodo) {
+        avisar(_bioTexto('bio_metodo_inscrito', 'La opción que tienes inscrita es:')
+            + ' ' + (NOMBRE_METODO_BIOMETRICO[registro.metodo] || registro.metodo));
+        return;
+    }
+    const usuario = baseDatosUsuarios.find(u => u.id === registro.usuarioId);
+    if (!usuario) {
+        avisar(_bioTexto('bio_usuario_no_inscrito', 'Ese usuario no tiene biometría inscrita en este dispositivo.'));
+        return;
+    }
+
+    const desafio = _bioDesafioAleatorio();
+    verificarDispositivoBiometrico().then(async disponible => {
+        if (!disponible) {
+            avisar(_bioTexto('bio_sin_dispositivo', 'Este dispositivo no ofrece autenticación biométrica.'));
+            return;
+        }
+        let asercion = null;
+        try {
+            asercion = await navigator.credentials.get({
+                publicKey: {
+                    challenge: desafio,
+                    allowCredentials: [{ type: 'public-key', id: _bioBase64UrlABuffer(registro.credencialId) }],
+                    userVerification: 'required',
+                    timeout: 60000
+                }
+            });
+        } catch (error) {
+            avisar((error && error.name === 'NotAllowedError')
+                ? _bioTexto('bio_cancelada', 'Biometría cancelada.')
+                : _bioTexto('bio_error_verificar', 'No se pudo verificar la biometría.'));
+            return;
+        }
+        let esValida = false;
+        try {
+            esValida = await _bioVerificarAsercion(registro, asercion, desafio);
+        } catch (error) {
+            esValida = false;
+            console.warn('Biometría: fallo al verificar la aserción', error);
+        }
+        if (!esValida) {
+            registrarIncidenteLogin(usuario, 'biometria', 'fallido');
+            avisar(_bioTexto('bio_error_verificar', 'No se pudo verificar la biometría.'));
+            return;
+        }
+        // Contraseña temporal pendiente: la biometría no omite el cambio obligatorio.
+        if (usuario.requiereCambioContrasena) {
+            mostrarAvisoInmediato("⚠ Debes cambiar tu contraseña temporal antes de entrar", "advertencia");
+            return;
+        }
+        iniciarSesionBiometrica(usuario);
+    }).catch(() => {
+        avisar(_bioTexto('bio_error_verificar', 'No se pudo verificar la biometría.'));
+    });
+}
+
+// Abre la sesión tras una verificación biométrica correcta. Reutiliza el mismo
+// camino que `validarEntrada` para no dejar fuera ningún registro (PUNTO 48/34).
+function iniciarSesionBiometrica(usuario) {
+    if (!usuario || !usuario.id) return;
+    usuario.intentosLoginFallidos = 0;
+    usuario.ultimoAcceso = new Date();
+    const indiceUsuario = baseDatosUsuarios.findIndex(u => u.id === usuario.id);
+    if (indiceUsuario !== -1) baseDatosUsuarios[indiceUsuario] = { ...usuario };
+    guardarEnStorage(STORAGE_KEYS.BASE_USUARIOS, baseDatosUsuarios);
+
+    usuarioActivo = usuario;
+    sesionActiva = true;
+    tokenSesion = generarIdUnico();
+    guardarEnStorage(STORAGE_KEYS.USUARIO_ACTIVO, usuarioActivo);
+    guardarEnStorage(STORAGE_KEYS.TOKEN_SESION, tokenSesion);
+
+    const organigramaGuardado = cargarDeStorage(STORAGE_KEYS.ORGANIGRAMA);
+    if (organigramaGuardado) {
+        datosOrganigrama = organigramaGuardado;
+    } else if (usuario.esNo1) {
+        datosOrganigrama = reconstruirOrganigramaDesdeUsuario(usuario);
+        if (datosOrganigrama) guardarEnStorage(STORAGE_KEYS.ORGANIGRAMA, datosOrganigrama);
+    }
+
+    guardarEnStorage(STORAGE_KEYS.ULTIMO_USUARIO, usuario.nombreCompleto);
+    guardarEnStorage(STORAGE_KEYS.RECORDAR_USUARIO, usuario.nombreCompleto);
+    let usuariosDispositivo = localStorage.getItem('usuarios_del_dispositivo');
+    usuariosDispositivo = usuariosDispositivo ? JSON.parse(usuariosDispositivo) : [];
+    if (!usuariosDispositivo.includes(usuario.nombreCompleto)) {
+        usuariosDispositivo.push(usuario.nombreCompleto);
+        localStorage.setItem('usuarios_del_dispositivo', JSON.stringify(usuariosDispositivo));
+    }
+    const casillaRecordar = document.getElementById('guardar-local');
+    if (casillaRecordar) casillaRecordar.checked = true;
+    const campoNombre = document.getElementById('acc-nombre-completo');
+    if (campoNombre) campoNombre.value = usuario.nombreCompleto;
+    const aviso = document.getElementById('mensaje-acceso');
+    if (aviso) { aviso.innerText = ''; aviso.style.maxHeight = '0'; }
+    const divIntentos = document.getElementById('intentos-restantes');
+    if (divIntentos) divIntentos.style.display = 'none';
+    actualizarSaludoLogin();
+
+    registrarHoraEntrada(usuario);
+    registrarIncidenteLogin(usuario, 'biometria', 'exitoso');
+    actualizarPermisosBancoDatos(usuario);
+    registrarActividadBancoDatos(usuario.id, 'sesion', 'Inicio de sesión con biometría');
+    mostrarAvisoInmediato(`✓ ${_bioTexto('bio_bienvenida', 'Hola')}, ${usuario.nombre}`, "exito");
+    if (typeof iniciarTemporizadorInactividad === 'function') iniciarTemporizadorInactividad();
+    actualizarMenuTuerca();
+    const botonTuerca = document.getElementById('boton-tuerca-global');
+    if (botonTuerca) botonTuerca.style.display = 'flex';
+    setTimeout(() => {
+        if (usuario.esNo1 && !identidadCorporativa.completada) irAPantalla('pantalla-identidad');
+        else irAPantalla('pantalla-comunicacion');
+    }, 1500);
 }
 
 // ==========================================
@@ -1598,6 +2549,7 @@ function guardarConfiguracion() {
     configuracionPersonal = config;
     guardarEnStorage(STORAGE_KEYS.CONFIG_PERSONAL, configuracionPersonal);
     aplicarIdioma(config.idioma);
+    actualizarEstadoBiometriaLogin(); // PUNTO 9-10-11: refleja la casilla en el Login
     if (typeof actualizarMenuTuerca === 'function') actualizarMenuTuerca();
     mostrarAvisoInmediato("✓ Configuración guardada", "exito");
 }
@@ -1612,6 +2564,12 @@ function traducirTexto(clave) {
 // Aplica el idioma elegido a los textos fijos de la interfaz (los que el usuario lee, no los que escribe).
 function aplicarIdioma(idioma) {
     const codigo = (idioma === 'en') ? 'en' : 'es';
+    // Textos alternativos (title) de los botones, p. ej. los biométricos.
+    document.querySelectorAll('[data-i18n-title]').forEach(function(el) {
+        const claveTitulo = el.getAttribute('data-i18n-title');
+        const tradTitulo = TRADUCCIONES && TRADUCCIONES[claveTitulo];
+        if (tradTitulo) el.setAttribute('title', tradTitulo[codigo]);
+    });
     document.querySelectorAll('[data-i18n]').forEach(function(el) {
         const clave = el.getAttribute('data-i18n');
         const trad = TRADUCCIONES && TRADUCCIONES[clave];
@@ -1707,6 +2665,7 @@ function eliminarContacto() {
 function cerrarSesion() {
     if (confirm("¿Está seguro que desea cerrar sesión?")) {
         if (typeof detenerTemporizadorInactividad === 'function') detenerTemporizadorInactividad();
+        if (usuarioActivo && usuarioActivo.id) registrarHoraSalida(usuarioActivo); // PUNTO 48: última salida del día
         sessionStorage.clear();
         usuarioActivo = null;
         datosOrganigrama = null;
@@ -2009,6 +2968,11 @@ function guardarContacto() {
     invitacionesPendientes.push(invitacion);
     guardarEnStorage(STORAGE_KEYS.INVITACIONES, invitacionesPendientes);
     enviarInvitacion(invitacion);
+    // PUNTO 34: banco de datos — invitación enviada y actividad
+    if (usuarioActivo && usuarioActivo.id) {
+        registrarInvitacionBancoDatos(usuarioActivo.id, nombre);
+        registrarActividadBancoDatos(usuarioActivo.id, 'invitacion', `Invitó a ${nombre} (${tipo})`);
+    }
 
     cerrarModalContacto();
     renderizarOrganigrama();

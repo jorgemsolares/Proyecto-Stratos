@@ -21,6 +21,23 @@ const COLORES_SEGURIDAD_PALETA = ["#1a1a2e", "#16213e", "#0f3460", "#e94560", "#
 // Formatos de imagen permitidos para el logo
 const TIPOS_IMAGEN_VALIDOS = ['image/jpeg', 'image/jpg', 'image/png'];
 
+// Duraciones de la CARTELERA según prioridad (segundos) — PUNTO 2
+const DURACION_PRIORIDAD_CARTELERA = { alta: 10, media: 6, baja: 4 };
+/*
+Estructura de cada mensaje de la CARTELERA (#zona-cartelera) — PUNTO 2:
+{
+    texto: "…",
+    tipo: "saludo" | "motivacional" | "aviso" | "mensaje",
+    prioridad: "alta" | "media" | "baja", // la clasifica el SISTEMA, no el usuario
+    duracion: 10000,                      // ms (opcional; si falta se usa la tabla por prioridad)
+    fechaInicio: Date,
+    resuelto: false
+}
+Tabla: alta = 10 s | media = 6 s | baja = 4 s.
+Clasificación: superior (comparar con superiorId) → alta; colega/subalterno → media;
+informativo o acción lejana → baja.
+*/
+
 // ==========================================
 // 1.1 USUARIO ACTIVO (Sesión actual)
 // ==========================================
@@ -44,7 +61,9 @@ let usuarioActivo = {
     tipoActual: "", // Puede cambiar si alguien más lo invita como colaborador
     fechaRegistro: null,
     ultimoAcceso: null,
-    requiereCambioContrasena: false // Flag para contraseña temporal
+    requiereCambioContrasena: false, // Flag para contraseña temporal
+    intentosLoginFallidos: 0, // Intentos de login fallidos de ESTE usuario (PUNTO 48 - por usuario, no global)
+    ultimaContrasenaTemporal: null // Fecha del último uso de contraseña temporal (PUNTO 48)
 };
 
 // ==========================================
@@ -207,6 +226,8 @@ Estructura:
     esPrimeraLinea: false,
     activo: true,
     requiereCambioContrasena: false,
+    intentosLoginFallidos: 0, // PUNTO 48 - por usuario, no global
+    ultimaContrasenaTemporal: null, // PUNTO 48
     fechaRegistro: Date,
     ultimoAcceso: Date
 }
@@ -306,6 +327,62 @@ Estructura:
 */
 
 // ==========================================
+// 1.4 ASISTENCIA Y ERRORES DE LOGIN (PUNTO 48)
+// ==========================================
+// Registro de hora (primera entrada y última salida del día). Histórico: 5 años.
+let registrosAsistencia = [];
+/*
+Estructura:
+{
+    id: "unico",
+    usuarioId: "",
+    nombreUsuario: "",
+    diaLaboral: "YYYY-MM-DD",   // día al que pertenece la ENTRADA
+    horaEntrada: "HH:MM",       // primera entrada del día
+    fechaEntrada: ISO,
+    horaSalida: "HH:MM" | null, // última salida del día (null si sigue abierto)
+    fechaSalida: ISO | null,
+    salidaTrasMedianoche: false // true si el cierre pertenece al día anterior
+}
+*/
+
+// Intentos de login (éxito/fallo) y errores de tipeo. Histórico: 5 años.
+let incidentesLogin = [];
+/*
+Estructura:
+{
+    id: "unico",
+    usuarioId: "" | null,
+    nombreUsuario: "",
+    fecha: "YYYY-MM-DD",
+    hora: "HH:MM",
+    tipo: "nombre" | "id" | "contrasena" | "contrasena_temporal" | "login",
+    resultado: "fallido" | "exitoso"
+}
+*/
+
+// ==========================================
+// 1.5 BANCO DE DATOS POR USUARIO (PUNTO 34)
+// ==========================================
+// Ficha aparte por usuario (clave = usuarioId). Histórico: 5 años.
+let bancoDatos = {};
+/*
+Estructura de cada ficha (bancoDatos[usuarioId]):
+{
+    usuarioId: "",
+    nombreCompleto: "",
+    creado: ISO,
+    actualizado: ISO,
+    diasSesiones: [ { registroId, diaLaboral, entrada: "HH:MM", salida: "HH:MM"|null, minutosTrabajados: 0 } ],
+    errores: { id: 0, contrasena: 0, nombre: 0, total: 0, ultimo: null },
+    permisos: { modulos: [] },
+    invitaciones: { invitoA: [ { nombre, fecha, hora } ], invitadoPor: null },
+    actividad: [ { fecha, hora, tipo, detalle } ],
+    camposLibres: {} // Para lo que se defina después
+}
+*/
+
+// ==========================================
 // 5.2 MENSAJES MOTIVACIONALES — GRUPO 5
 // ==========================================
 let mensajesMotivacionales = [
@@ -349,10 +426,29 @@ const TRADUCCIONES = {
     "ia_respondiendo": { es: "Respondiendo...", en: "Responding..." },
     "ia_pausa": { es: "Pausa — corrige manualmente", en: "Pause — correct manually" },
     "ia_sin_micro": { es: "Sin micrófono — usa ✏️ para escribir", en: "No mic — use ✏️ to type" },
-    "ia_escribe": { es: "Escribe tu comando...", en: "Type your command..." },
+    "ia_escribe": { es: "Escribe aquí...", en: "Type here..." },
     "cfg_idioma": { es: "Idioma", en: "Language" },
     "cfg_seguridad": { es: "Seguridad", en: "Security" },
     "cfg_biometria": { es: "Habilitar autenticación biométrica", en: "Enable biometric authentication" },
+    // BIOMETRÍA (PUNTOS 6 y 9-10-11) — inscripción en Perfil y entrada directa
+    "bio_enrol_titulo": { es: "🔐 Autenticación biométrica (este dispositivo)", en: "🔐 Biometric authentication (this device)" },
+    "bio_enrol_leyenda": { es: "Inscribe la opción con la que quieres entrar de aquí en adelante (rostro, patrón o huella).", en: "Enroll the option you will use from now on (face, pattern or fingerprint)." },
+    "bio_facial": { es: "Reconocimiento facial", en: "Face recognition" },
+    "bio_patron": { es: "Patrón de desbloqueo", en: "Unlock pattern" },
+    "bio_huella": { es: "Huella digital", en: "Fingerprint" },
+    "bio_sin_dispositivo": { es: "Este dispositivo no ofrece autenticación biométrica.", en: "This device does not offer biometric authentication." },
+    "bio_ya_inscrita": { es: "Ya tienes inscrita tu biometría de", en: "You already enrolled your" },
+    "bio_sin_inscribir": { es: "Aún no has inscrito ninguna biometría en este dispositivo.", en: "You have not enrolled any biometric on this device yet." },
+    "bio_sin_webauthn": { es: "Este navegador no admite autenticación biométrica.", en: "This browser does not support biometric authentication." },
+    "bio_contexto_seguro": { es: "Abre la app con Live Server o desde una dirección https para usar la biometría.", en: "Open the app with Live Server or from an https address to use biometrics." },
+    "bio_desactivada": { es: 'Activa "Habilitar autenticación biométrica" en Configuración.', en: 'Enable "biometric authentication" in Settings.' },
+    "bio_nadie_inscrito": { es: "Todavía no hay biometría inscrita. Inscríbela desde tu Perfil.", en: "No biometric enrolled yet. Enroll it from your Profile." },
+    "bio_usuario_no_inscrito": { es: "Ese usuario no tiene biometría inscrita en este dispositivo.", en: "That user has no biometric enrolled on this device." },
+    "bio_metodo_inscrito": { es: "La opción que tienes inscrita es:", en: "The option you enrolled is:" },
+    "bio_cancelada": { es: "Biometría cancelada.", en: "Biometric cancelled." },
+    "bio_error_verificar": { es: "No se pudo verificar la biometría.", en: "Could not verify the biometric." },
+    "bio_error_inscribir": { es: "No se pudo inscribir la biometría en este dispositivo.", en: "Could not enroll the biometric on this device." },
+    "bio_bienvenida": { es: "Hola", en: "Hello" },
     "cfg_rec": { es: "Recuperación de Contraseñas", en: "Password Recovery" },
     "cfg_rec_desc": { es: "Ayuda a cualquier usuario a recuperar su contraseña.", en: "Help any user recover their password." },
     "cfg_rec_traz": { es: "La solicitud quedará registrada con fines de trazabilidad.", en: "The request is recorded for traceability purposes." },
@@ -567,6 +663,11 @@ const STORAGE_KEYS = {
     RECORDAR_USUARIO: "stratos_recordar",
     INVITACIONES: "stratos_invitaciones",
     SOLICITUDES_RECUPERACION: "stratos_solicitudes_recuperacion",
+    REGISTROS_ASISTENCIA: "stratos_registros_asistencia", // PUNTO 48 - entradas/salidas
+    INCIDENTES_LOGIN: "stratos_incidentes_login", // PUNTO 48 - errores de login
+    BANCO_DATOS: "stratos_banco_datos", // PUNTO 34 - ficha por usuario
+    RESPALDO_MIGRACION: "stratos_respaldo_migracion", // PUNTO 34 - respaldo previo a migrar
+    BIOMETRIA: "stratos_biometria", // PUNTO 9-10-11 - método biométrico enrolado por usuario y dispositivo
     TOKEN_SESION: "stratos_token_sesion", // Añadido para guardar el token
     ULTIMO_USUARIO: "stratos_ultimo_usuario", // Último usuario que entró al sistema en este dispositivo
     ULTIMO_SALUDO: "stratos_ultimo_saludo_fecha" // Fecha del último saludo mostrado en la cartelera
@@ -585,6 +686,9 @@ window.addEventListener('DOMContentLoaded', function() {
     const indirectosGuardados = cargarDeStorage(STORAGE_KEYS.INDIRECTOS);
     const observadoresGuardados = cargarDeStorage(STORAGE_KEYS.OBSERVADORES);
     const invitacionesGuardadas = cargarDeStorage(STORAGE_KEYS.INVITACIONES);
+    const registrosAsistenciaGuardados = cargarDeStorage(STORAGE_KEYS.REGISTROS_ASISTENCIA);
+    const incidentesLoginGuardados = cargarDeStorage(STORAGE_KEYS.INCIDENTES_LOGIN);
+    const bancoDatosGuardado = cargarDeStorage(STORAGE_KEYS.BANCO_DATOS);
     
     if (usuarioGuardado) {
         usuarioActivo = usuarioGuardado;
@@ -617,6 +721,23 @@ window.addEventListener('DOMContentLoaded', function() {
     if (invitacionesGuardadas) {
         invitacionesPendientes = invitacionesGuardadas;
     }
+    
+    if (registrosAsistenciaGuardados) {
+        registrosAsistencia = registrosAsistenciaGuardados;
+    }
+    
+    if (incidentesLoginGuardados) {
+        incidentesLogin = incidentesLoginGuardados;
+    }
+    
+    if (bancoDatosGuardado) {
+        bancoDatos = bancoDatosGuardado;
+    }
+    
+    // PUNTO 34: migración del banco de datos (respaldo previo + relleno sin borrar nada)
+    if (typeof migrarBancoDatos === 'function') migrarBancoDatos();
+    // PUNTO 48: depura el histórico de asistencia/errores con más de 5 años
+    if (typeof depurarHistoricos === 'function') depurarHistoricos();
 
     // Cargar la configuración personal guardada (incluye el idioma) y aplicarla
     const configuracionGuardada = cargarDeStorage(STORAGE_KEYS.CONFIG_PERSONAL);
@@ -626,6 +747,9 @@ window.addEventListener('DOMContentLoaded', function() {
         if (selectorIdioma && configuracionGuardada.idioma) selectorIdioma.value = configuracionGuardada.idioma;
         const campoAsistente = document.getElementById('config-nombre-asistente');
         if (campoAsistente && configuracionPersonal.nombreAsistente) campoAsistente.value = configuracionPersonal.nombreAsistente;
+        // PUNTO 9-10-11: se restaura el estado de la casilla de biometría
+        const casillaBio = document.getElementById('config-biometria');
+        if (casillaBio) casillaBio.checked = !!configuracionPersonal.biometria;
     }
     if (typeof aplicarIdioma === 'function') aplicarIdioma(configuracionPersonal.idioma || 'es');
 });

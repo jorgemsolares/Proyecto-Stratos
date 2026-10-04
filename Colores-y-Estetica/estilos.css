@@ -1310,6 +1310,43 @@ textarea {
     transform: none;
 }
 
+/* PUNTO 6 (Parte B) / 9-10-11: iconos SVG de trazo fino en verde Stratos */
+.btn-biometria {
+    color: var(--color-primario);
+}
+.btn-biometria svg {
+    width: 26px;
+    height: 26px;
+    display: block;
+}
+
+/* Opción ya enrolada en este dispositivo (resaltada) */
+.opciones-biometria .btn-biometria.enrolado {
+    border-color: var(--color-primario);
+    background: rgba(0, 255, 136, 0.18);
+    box-shadow: 0 0 12px rgba(0, 255, 136, 0.6);
+}
+
+/* Bloque de enrolamiento biométrico en la pantalla de Perfil (PUNTO 9-10-11) */
+.biometria-enrolamiento {
+    margin: 18px 0;
+    padding: 14px;
+    border: 1px solid rgba(0, 255, 136, 0.25);
+    border-radius: var(--radio-bordes);
+    background: rgba(0, 255, 136, 0.04);
+}
+.biometria-enrolamiento .titulo-biometria {
+    color: var(--color-primario);
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+}
+.biometria-enrolamiento .leyenda-biometria {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 10px;
+}
+
 /* ==========================================
 3.14 BOTÓN DE IA FLOTANTE (esfera del asistente en todas las pantallas menos Login; tamaño del círculo del libro, abajo-centro — PUNTO 7)
 ========================================== */
