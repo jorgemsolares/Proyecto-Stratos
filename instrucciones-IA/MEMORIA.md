@@ -65,6 +65,15 @@
      (usa un parser real de JavaScript; este equipo **no tiene Node**, por eso existe).
    - `_probar_biometria.py` → prueba la parte criptográfica de la biometría (CBOR → SPKI y
      verificación ECDSA). Encontró 2 bugs reales el 04/10. Se ejecuta sin instalar nada.
+   - `_probar_organigrama.py` → prueba el árbol del Organigrama General (PUNTOS 31 y 33).
+   - `_probar_marcas.py` → prueba las marcas del día del PUNTO 6A (entrada/salida/tiempo).
+
+10. **`instrucciones-IA/instrucciones.md` y `explicacion.txt` son archivos DE ÓRDENES, no de memoria.**
+    - El Arquitecto escribe ahí lo que quiere el día y **al terminar la sesión los borra**.
+    - Por eso son VOLÁTILES: **nada importante puede quedarse solo ahí.** Todo lo que
+      sobreviva (decisiones, límites, lo aplicado, lo pendiente) va a esta `MEMORIA.md`.
+    - El 04/10/2026 el Arquitecto confirmó esta dinámica y ambos archivos quedaron
+      vacíos/borrados, con todo su contenido ya volcado en la BITÁCORA.
 
 > **NOTA (duplicación — RESUELTA 28/08/2026):** La carpeta vieja duplicada
 > `Proyecto-Stratos` fue ELIMINADA. Ahora hay UN SOLO repositorio en la raíz,
@@ -115,6 +124,17 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 ---
 
 ## BITÁCORA (historial de lo realizado)
+
+### 04/10/2026 (noche) — PUNTO 6 PARTE A: PRIMERA ENTRADA / ÚLTIMA SALIDA DEL DÍA
+El PUNTO 6 tenía dos partes (A: saludo + marcas del día; B: iconos). La B quedó hecha el 16/09, pero **la Parte A estaba incompleta**: el saludo en vivo y el saludo en cartelera existían, y el PUNTO 48 había creado el histórico de asistencia, pero **nunca se escribieron los 3 campos que pide el punto 6 sobre el usuario**. Quedó cerrado ahora.
+- **`datos.js`:** `usuarioActivo` y la estructura de `baseDatosUsuarios` ganan `primeraEntradaDelDia` ("YYYY-MM-DD HH:MM"), `ultimaSalidaDelDia` (igual, `null` si sigue abierto) y `tiempoTotalDelDia` (minutos).
+- **`logica.js` — nueva sección 16.1.1:** `minutosHastaAhora()`, `obtenerMarcasDelDia()`, `actualizarMarcasDelDia()` y `completarMarcasDelDia()`.
+- **Cómo se evita duplicar información:** `registrosAsistencia` (PUNTO 48) sigue siendo el **histórico de 5 años**; los 3 campos del punto 6 son la **foto del día de hoy** y se calculan a partir de ese histórico. No hay dos verdades ni dos juegos de reglas.
+- **Se actualizan al ENTRAR y al SALIR** (`registrarHoraEntrada` y `registrarHoraSalida` los invocan), así que también funcionan cuando la entrada es por **biometría**.
+- **Mientras el día está abierto**, `tiempoTotalDelDia` va contando los minutos desde la primera entrada (por eso se escribió `minutosHastaAhora()` en vez de reutilizar `calcularMinutosTrabajados()`, que da 0 mientras no hay salida).
+- **Cruce de medianoche respetado:** si se entra a las 11 PM y se sale a las 12:30 AM, las tres marcas pertenecen al día de la ENTRADA.
+- **Migración sin perder nada:** `completarMarcasDelDia()` se llama dentro de `migrarBancoDatos()` y rellena los 3 campos de los usuarios que ya existían, tomándolos de su registro de hoy. Los que no tengan registro de hoy quedan vacíos (no se inventa nada).
+- **Verificación:** `logica.js` y `datos.js` con parser real → 0 errores. Nueva prueba `_probar_marcas.py` → **10/10 OK**, cubriendo día abierto (el tiempo suma solo), día cerrado, cruce de medianoche, usuario sin registro y que un segundo ingreso NO pise la primera entrada. Total del día: **58 pruebas automáticas en verde** (26 biometría + 22 organigrama/duplicados + 10 marcas del día).
 
 ### 04/10/2026 (tarde) — PUNTOS 33 Y 31: TERMINADOS + RESUBIDA A GITHUB
 Orden pedido por el Arquitecto en `explicacion.txt`: subir primero, luego 33, luego 31, luego traducciones.

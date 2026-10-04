@@ -1,0 +1,32 @@
+﻿85: - **17/09/2026 (sesión 2, continuación):** El Arquitecto precisó que su prioridad es **"con menos hacer más"** (no gastar tokens/tiempo en tareas repe
+86: - **03/10/2026:** Aplicado el **PUNTO 48** de `instrucciones.md` (Login: registro de hora de entrada/salida, errores de tipeo por usuario, aviso al je
+87: - **03/10/2026 (continuación):** Aplicado el **PUNTO 34** de `instrucciones.md`: ficha **`bancoDatos`** por usuario (días/sesiones, errores, permisos,
+124: **2) PUNTO 33 — CRUCE DE INFORMACIÓN AL CREAR PRIMERA LÍNEA (terminado):**
+135: **3) PUNTO 31 — ORGANIGRAMA GENERAL (terminado):**
+138: - **3.5 Aviso de doble registro:** si el contacto ya existe **como usuario registrado y con otro jefe**, `guardarContacto()` muestra la ventana con el
+144: **4) TRADUCCIONES (punto 4 de `explicacion.txt`):** añadidas con ES/EN: los 4 textos de la ventana de aviso, **prioridades** (alta/media/baja), los 2 
+172: ### 03/10/2026 — PUNTO 34: MEJORAR EL BANCO DE DATOS
+173: - **Aplicado el PUNTO 34 de `instrucciones.md`** (segundo en orden descendente: 48 → **34** → 33 → 31 → 9-10-11 → 6 → 3 → 2). Ficha **`bancoDatos`** p
+190: - `validarEntrada`: registra errores (nombre/contraseña), reinicia el contador del usuario al entrar bien, graba la hora de entrada y el intento exito
+193: - **Pendiente / Notas:** (1) la alerta al jefe se **guarda** en `solicitudesRecuperacion` y se le muestra al iniciar sesión; su integración plena en *
+216: - **Arranque automático (prioridad "con menos hacer más"):** el vigilante **se inicia solo al encender el PC** (acceso directo `.vbs` en la carpeta de
+249: - **`logica.js` — nueva sección 33 (asistente):** `activarBotonIA()` (pitido WebAudio sin archivos, abre ventana, halo verde, auto-cierre), `iniciarEs
+267: - **Cadenas corruptas de `datos.js` CORREGIDAS (11 líneas):** 4 frases motivacionales (L312/313/314/318: comunicación, éxito, acción, confía, día) + 7
+270: - **PENDIENTE restante:** el "otro tema" del Arquitecto (punto 2 de la ruta) y, opcional, traducción de textos 100% dinámicos.
+274: - **Menú de la tuerca (abajo, derecha) con símbolos raros y tildes rotas:** corrupción de codificación (doble encoding) en el bloque `estadoPantallas`
+324: 1. `datos.js` tiene **5 funciones DUPLICADAS** que también existen en `logica.js` (gana la de `logica` por orden de carga): `generarIdUnico`, `generar
+340: - Resultado verificado: `datos.js` ya no define `generarIdUnico`, `generarCodigoInvitacion`, `guardarEnStorage`, `cargarDeStorage`, `obtenerFraseMotiv
+341: - Nota de trazabilidad: la versión de `obtenerFraseMotivacional` en `datos.js` era distinta (usaba misión/visión/valores) pero quedaba anulada por la 
+361: - **No se tocó ninguna línea de código ni dato en ese momento** (quedaron 14 corrupciones en DATOS — cadenas de la app — pendientes). **RESUELTO 28/08
+375: ### 26/08/2026 — RUTA DE TRABAJO ACORDADA PARA LA PRÓXIMA SESIÓN (orden de prioridad)
+376: El Arquitecto quiere no comenzar en 0 y avanzar por prioridad (un solo cupo por día):
+378: 2. **El "otro tema" que el Arquitecto quiere hablar antes que el duplicado** (lo menciona como su prioridad; se retoma con calma ya con GitHub funcion
+390: | 2 — Duración por prioridad | ✅ Hecho |
+391: | 3 — Anuncio motivacional + paso a la IA | ✅ Hecho |
+402: 1. **PUNTO 33:** en Organigrama Personal, guardar un contacto SIN teléfono ni email → debe salir la ventana verde "Entendido" y la IA debe hablar. Gua
+403: 2. **PUNTO 31:** abrir Organigrama General con 3 o más niveles → deben verse TODOS, no solo 2. Al registrarse un usuario nuevo, el árbol debe actualiz
+405: 4. **Idioma:** cambiar a English y confirmar que la ventana de aviso, las prioridades y los botones quedan traducidos.
+407: - [ ] **PRIORIDAD 1 — PUNTO 33 (terminar):** hoy `guardarContacto()` solo compara el **nombre** dentro de su propia lista. Falta (a) revisar duplicado
+408: - **Decisión pendiente del Arquitecto:** el PUNTO 33 pide **eliminar `#modal-contacto-id`**, pero ese campo oculto es lo que hace funcionar "Editar co
+409: - [ ] **PRIORIDAD 2 — PUNTO 31 (empezar):** `renderizarOrganigramaGeneral()` sigue dibujando **solo 2 niveles** (raíz + hijos directos) y **no persist
+414: - [ ] **SIGUIENTE PASO (prioridad del Arquitecto): desarrollar la PANTALLA COMUNICACIÓN** (Pantalla 5, hoy sin funcionalidad).

@@ -63,7 +63,12 @@ let usuarioActivo = {
     ultimoAcceso: null,
     requiereCambioContrasena: false, // Flag para contraseña temporal
     intentosLoginFallidos: 0, // Intentos de login fallidos de ESTE usuario (PUNTO 48 - por usuario, no global)
-    ultimaContrasenaTemporal: null // Fecha del último uso de contraseña temporal (PUNTO 48)
+    ultimaContrasenaTemporal: null, // Fecha del último uso de contraseña temporal (PUNTO 48)
+    // PUNTO 6 (Parte A) — marcas del día en curso. Se alimentan de `registrosAsistencia`
+    // (PUNTO 48), que es el histórico de 5 años; aquí queda la foto del día actual.
+    primeraEntradaDelDia: null, // "YYYY-MM-DD HH:MM" — primera entrada de HOY
+    ultimaSalidaDelDia: null,   // "YYYY-MM-DD HH:MM" — última salida de HOY
+    tiempoTotalDelDia: 0        // Minutos trabajados hoy (si sigue abierto, va sumando)
 };
 
 // ==========================================
@@ -228,6 +233,9 @@ Estructura:
     requiereCambioContrasena: false,
     intentosLoginFallidos: 0, // PUNTO 48 - por usuario, no global
     ultimaContrasenaTemporal: null, // PUNTO 48
+    primeraEntradaDelDia: null, // PUNTO 6A - "YYYY-MM-DD HH:MM" (primera entrada de hoy)
+    ultimaSalidaDelDia: null,   // PUNTO 6A - "YYYY-MM-DD HH:MM" (última salida de hoy)
+    tiempoTotalDelDia: 0,       // PUNTO 6A - minutos trabajados hoy
     fechaRegistro: Date,
     ultimoAcceso: Date
 }

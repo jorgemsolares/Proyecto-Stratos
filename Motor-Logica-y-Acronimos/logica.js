@@ -1144,6 +1144,64 @@ function registrarHoraEntrada(usuario) {
     }
     guardarEnStorage(STORAGE_KEYS.REGISTROS_ASISTENCIA, registrosAsistencia);
     registrarDiaSesionBancoDatos(usuario.id, registro); // PUNTO 34
+    actualizarMarcasDelDia(usuario, registro);         // PUNTO 6A
+}
+
+// ==========================================
+// 16.1.1 MARCAS DEL DÍA EN CURSO (PUNTO 6, Parte A)
+// El sistema marca SOLO la primera entrada del día y la última salida del día,
+// para las estadísticas de horario de trabajo. `registrosAsistencia` (PUNTO 48) es
+// el histórico de 5 años; aquí se escribe la "foto" del día de HOY en el usuario:
+//   primeraEntradaDelDia, ultimaSalidaDelDia, tiempoTotalDelDia.
+// ==========================================
+
+// Minutos del registro. Si el día sigue ABIERTO (no hay hora de salida), cuenta
+// desde la primera entrada hasta AHORA, para que el tiempo vaya sumando solo.
+function minutosHastaAhora(registro) {
+    if (!registro || !registro.fechaEntrada) return 0;
+    const fin = registro.fechaSalida ? new Date(registro.fechaSalida) : new Date();
+    const ms = fin - new Date(registro.fechaEntrada);
+    if (!ms || ms <= 0) return 0;
+    return Math.round(ms / 60000);
+}
+
+// Devuelve las marcas del día de HOY para un usuario (las calcula del histórico).
+function obtenerMarcasDelDia(usuario) {
+    const hoy = _fechaISO(new Date());
+    const registro = registrosAsistencia.find(r => r.usuarioId === usuario.id && r.diaLaboral === hoy);
+    if (!registro) {
+        return { primeraEntradaDelDia: null, ultimaSalidaDelDia: null, tiempoTotalDelDia: 0, registro: null };
+    }
+    return {
+        primeraEntradaDelDia: `${registro.diaLaboral} ${registro.horaEntrada}`,
+        ultimaSalidaDelDia: registro.horaSalida ? `${registro.diaLaboral} ${registro.horaSalida}` : null,
+        tiempoTotalDelDia: minutosHastaAhora(registro),
+        registro: registro
+    };
+}
+
+// Vuelca las marcas del día en el usuario y las guarda. Si el día todavía está
+// abierto, `tiempoTotalDelDia` va contando los minutos desde la primera entrada.
+function actualizarMarcasDelDia(usuario, registro) {
+    if (!usuario || !usuario.id) return;
+    const marcas = registro
+        ? {
+            primeraEntradaDelDia: `${registro.diaLaboral} ${registro.horaEntrada}`,
+            ultimaSalidaDelDia: registro.horaSalida ? `${registro.diaLaboral} ${registro.horaSalida}` : null,
+            tiempoTotalDelDia: minutosHastaAhora(registro)
+        }
+        : obtenerMarcasDelDia(usuario);
+    usuario.primeraEntradaDelDia = marcas.primeraEntradaDelDia;
+    usuario.ultimaSalidaDelDia = marcas.ultimaSalidaDelDia;
+    usuario.tiempoTotalDelDia = marcas.tiempoTotalDelDia;
+    const indice = baseDatosUsuarios.findIndex(u => u.id === usuario.id);
+    if (indice !== -1) baseDatosUsuarios[indice] = { ...usuario };
+    guardarEnStorage(STORAGE_KEYS.BASE_USUARIOS, baseDatosUsuarios);
+    if (usuarioActivo && usuarioActivo.id === usuario.id) {
+        usuarioActivo.primeraEntradaDelDia = marcas.primeraEntradaDelDia;
+        usuarioActivo.ultimaSalidaDelDia = marcas.ultimaSalidaDelDia;
+        usuarioActivo.tiempoTotalDelDia = marcas.tiempoTotalDelDia;
+    }
 }
 
 // Guarda la ÚLTIMA salida del día. Si el cierre cruza la medianoche, pertenece
@@ -1166,6 +1224,7 @@ function registrarHoraSalida(usuario) {
     registro.salidaTrasMedianoche = (_fechaISO(ahora) !== registro.diaLaboral);
     guardarEnStorage(STORAGE_KEYS.REGISTROS_ASISTENCIA, registrosAsistencia);
     registrarDiaSesionBancoDatos(usuario.id, registro); // PUNTO 34
+    actualizarMarcasDelDia(usuario, registro);         // PUNTO 6A
 }
 
 // Registra un intento de login (fallido o exitoso) en el perfil del usuario.
@@ -1409,6 +1468,28 @@ function migrarBancoDatos() {
     });
     Object.keys(bancoDatos).forEach(id => actualizarErroresBancoDatos(id, false));
     guardarBancoDatos();
+    // PUNTO 6A: rellena las marcas del día de los usuarios que ya existían,
+    // calculándolas desde su histórico de asistencia (sin borrar nada).
+    completarMarcasDelDia();
+}
+
+// PUNTO 6A — Agrega `primeraEntradaDelDia`, `ultimaSalidaDelDia` y
+// `tiempoTotalDelDia` a los usuarios que aún no las tengan, tomándolas del
+// registro de asistencia de HOY. Si no hay registro de hoy, quedan vacías.
+function completarMarcasDelDia() {
+    if (typeof obtenerMarcasDelDia !== 'function') return;
+    let cambios = 0;
+    baseDatosUsuarios.forEach(usuario => {
+        if (!usuario || !usuario.id) return;
+        const yaLasTiene = typeof usuario.primeraEntradaDelDia !== 'undefined';
+        if (yaLasTiene) return;
+        const marcas = obtenerMarcasDelDia(usuario);
+        usuario.primeraEntradaDelDia = marcas.primeraEntradaDelDia;
+        usuario.ultimaSalidaDelDia = marcas.ultimaSalidaDelDia;
+        usuario.tiempoTotalDelDia = marcas.tiempoTotalDelDia;
+        cambios++;
+    });
+    if (cambios > 0) guardarEnStorage(STORAGE_KEYS.BASE_USUARIOS, baseDatosUsuarios);
 }
 
 // ==========================================
