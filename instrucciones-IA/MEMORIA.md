@@ -116,6 +116,36 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 
 ## BITÁCORA (historial de lo realizado)
 
+### 04/10/2026 (tarde) — PUNTOS 33 Y 31: TERMINADOS + RESUBIDA A GITHUB
+Orden pedido por el Arquitecto en `explicacion.txt`: subir primero, luego 33, luego 31, luego traducciones.
+
+**1) RESUBIDA A GITHUB (commit `336f79b`):** se subió TODO lo que había pendiente de las sesiones anteriores (PUNTOS 48, 34 y la biometría del día). Verificado por el propio script: *"CONFIRMADO: local y GitHub están en el mismo commit"*.
+
+**2) PUNTO 33 — CRUCE DE INFORMACIÓN AL CREAR PRIMERA LÍNEA (terminado):**
+- **`logica.js` — nueva sección 32.1:** `_tr()` (texto traducido con valor por defecto), `normalizarParaComparar()`, `recorrerContactos()` (baja por **todos** los niveles del organigrama), `buscarContactoDuplicado()`, `mostrarVentanaAviso()`, `cerrarVentanaAviso()`, `responderVentanaAviso()` y `hablarTextoIA()`.
+- **2.1 Cruce completo:** ahora se cruza **nombre + puesto + teléfono + email** contra (a) `baseDatosUsuarios`, (b) **todos** los niveles del organigrama personal y (c) indirectos + observadores. Coincide si: el teléfono coincide, **o** el email coincide, **o** nombre y puesto coinciden juntos.
+- **2.1bis Tildes y apóstrofos respetados:** `normalizarParaComparar()` solo baja a minúsculas y junta espacios de sobra. **NO** quita tildes ni apóstrofos, porque `"O'Brien"` y `"Obrien"` son personas distintas (decisión del Arquitecto).
+- **2.2 Ventana de aviso (NO es un modal nuevo):** se agregó `#ventana-aviso-contacto` en `index.html` reutilizando las clases `.modal`, `.modal-content`, `.modal-header`, `.modal-body`, `.modal-footer`, con **botón verde (Sí)** y **botón rojo (No)** — exactamente los colores del modal de contacto. `hablarTextoIA()` hace que **la IA hable el mismo texto que se muestra**.
+- **2.3 Duplicado:** ventana "¿Continuar con la invitación?" con las frases exactas pedidas. **Sí** → sigue; **No** → se queda en el modal para editar.
+- **2.4 Sin teléfono ni email:** ventana informativa con el texto exacto; el botón verde dice "Entendido".
+- **2.5 Campo `#modal-contacto-id` ELIMINADO** (pedido explícito). Para no romper "Editar contacto" (el bug del 27/08), el modo edición ahora usa las variables que **ya existían** en `datos.js` 3.7: `contactoEnEdicion` y `tipoContactoActual`. Se quitó su uso de `mostrarFormularioContacto()` y `editarContactoDesdeDetalle()`.
+- **2.6 Regla:** teléfono y email opcionales, pero **al menos uno obligatorio**.
+- **Cuidado con el orden:** `guardarContacto()` ya no llama `cerrarModalContacto()` por su cuenta; ahora el cierre ocurre DENTRO de `continuarCreacionContacto()`, justo después de crear el contacto.
+
+**3) PUNTO 31 — ORGANIGRAMA GENERAL (terminado):**
+- **`datos.js`:** nueva clave `STORAGE_KEYS.ORGANIGRAMA_GENERAL` y `organigramaGeneral` documentado con su estructura real (`raices`, `nodos`, `generadoEn`, `totalUsuarios`).
+- **`logica.js` — nueva sección 29.1:** `normalizarUnicoNo1()` (3.3), `construirOrganigramaGeneral()` (3.1), `guardarOrganigramaGeneral()` y `cargarOrganigramaGeneral()` (3.2), `enlazarSubordinadosPrevios()` (3.4), `aplicarCrecimientoOrganigramaGeneral()` (3.4 y 3.6) y `renderizarOrganigramaGeneral()` reescrito para dibujar **todos** los niveles.
+- **3.5 Aviso de doble registro:** si el contacto ya existe **como usuario registrado y con otro jefe**, `guardarContacto()` muestra la ventana con el texto exacto ("…debajo de [Nombre del superior]. No se puede registrar en dos posiciones ni ser contacto directo de dos superiores.") y **no** manda la invitación. Si solo hay datos iguales, aplica la ventana de Sí/No del PUNTO 33.
+- **3.6 Cambio de No.1:** entra un No.1 nuevo → el anterior pierde `esNo1` y pasa a ser su subordinado; se avisa por pantalla.
+- **Extras de seguridad:** detecta **ciclos** (A→B→A) y **jefe inexistente** sin colgarse; nadie puede ser su propio jefe; cada usuario se dibuja una sola vez aunque tenga muchas ramas.
+- **`estilos.css` — secciones 3.16 y 3.17:** el árbol del organigrama general (`.organigrama-general-arbol`, `.org-general-rama`, `.org-general-conector`) y el ancho de la ventana de aviso. **Las clases antigas `.organigrama-general-grid` / `-subgrupo` que usaba el render NO existían en el CSS** (por eso el organigrama general salía sin forma); se sustituyeron por clases nuevas que sí están definidas.
+- **Enganche:** `aplicarCrecimientoOrganigramaGeneral()` se llama en los DOS caminos de `procesarRegistro` (usuario nuevo y usuario que vuelve a registrarse).
+
+**4) TRADUCCIONES (punto 4 de `explicacion.txt`):** añadidas con ES/EN: los 4 textos de la ventana de aviso, **prioridades** (alta/media/baja), los 2 mensajes de la cartelera que las usan, **tipos de invitación** (directo/indirecto/observador) y el mensaje de organigrama vacío. Total: 18 claves de biometría (turno anterior) + 17 nuevas hoy.
+
+**5) VERIFICACIÓN:** `logica.js` y `datos.js` parseados con un **parser real de JavaScript** → 0 errores. Se escribieron dos suites de prueba sin instalar nada: `_probar_biometria.py` (**26/26 OK**, antes) y `_probar_organigrama.py` (**22/22 OK**, hoy) que cubren árbol de 4 niveles, ciclos, No.1 duplicado, detección de duplicados en las 4 listas, contactos 2 niveles abajo, y que tildes/apóstrofos se respeten.
+- **Lo que NO se pudo verificar:** el navegador. La IA no puede abrirlo; el Arquitecto tiene que probar con **Ctrl+F5** en `http://127.0.0.1:5500/Cuerpo-y-Textos/index.html` (requisito del punto 5 de `explicacion.txt`, incluido el alta con biometría en ese contexto, que es el único local donde WebAuthn funciona).
+
 ### 04/10/2026 — PUNTOS 9-10-11 + 6: BIOMETRÍA TERMINADA (estaba a medias)
 - **Contexto:** la sesión anterior había dejado la biometría a medias (HTML, CSS y parte de `logica.js` escritos, pero con dos funciones que se llamaban y **no existían**: `intentarBiometria()` y `actualizarEstadoEnrolamiento()` → `ReferenceError`; la segunda incluso rompía `irAPantalla('registro-invitacion')`, o sea entrar al Perfil). Además no había WebAuthn real: la "inscripción" solo escribía un registro en localStorage y **no había entrada con biometría**. Se terminó todo el PUNTO.
 - **Diagnóstico (sin tocar código) que guió el trabajo:** quedan `intentarBiometria()` y `actualizarEstadoEnrolamiento()` sin definir; la clase CSS `.enrolado` nunca se aplicaba; faltan las traducciones `bio_enrol_titulo`/`bio_enrol_leyenda`; el bloque de Perfil no se atenuaba; la casilla `#config-biometria` no se leía ni se restauraba.
@@ -361,10 +391,18 @@ El Arquitecto quiere no comenzar en 0 y avanzar por prioridad (un solo cupo por 
 | 3 — Anuncio motivacional + paso a la IA | ✅ Hecho |
 | 6 — Saludo "Hola [Nombre]" + iconos biométricos | ✅ Hecho (04/10) |
 | 9-10-11 — Biometría | ✅ Hecho (04/10) |
-| 31 — Organigrama General recursivo y persistente | ❌ **Sin empezar** |
-| 33 — Cruce de datos al crear primera línea | 🟡 **A medias** |
+| 31 — Organigrama General recursivo y persistente | ✅ Hecho (04/10 tarde) |
+| 33 — Cruce de datos al crear primera línea | ✅ Hecho (04/10 tarde) |
 | 34 — Banco de datos por usuario | ✅ Hecho |
 | 48 — Login (horas, errores, aviso al jefe) | ✅ Hecho |
+
+**Los 8 puntos de `instrucciones.md` están terminados.** Ya no queda ninguno a medias.
+
+- [ ] **VERIFICACIÓN DEL ARQUITECTO EN EL NAVEGADOR (04/10/2026) — es lo único que falta.** Abrir la carpeta `Stratos` como raíz en VS Code y hacer **Ctrl+F5** en `http://127.0.0.1:5500/Cuerpo-y-Textos/index.html`, y revisar:
+  1. **PUNTO 33:** en Organigrama Personal, guardar un contacto SIN teléfono ni email → debe salir la ventana verde "Entendido" y la IA debe hablar. Guardar un contacto con datos repetidos → ventana "¿Continuar con la invitación?" (Sí/No). Y **Editar contacto** → debe seguir funcionando (ya no hay campo oculto).
+  2. **PUNTO 31:** abrir Organigrama General con 3 o más niveles → deben verse TODOS, no solo 2. Al registrarse un usuario nuevo, el árbol debe actualizarse solo.
+  3. **PUNTO 9-10-11 (biometría):** inscribir un método en Perfil → cerrar sesión → entrar con el icono. En un equipo SIN autenticador, los 3 botones deben verse atenuados y explicar por qué. **Ojo:** en `file://` no funciona; hay que usar Live Server o https.
+  4. **Idioma:** cambiar a English y confirmar que la ventana de aviso, las prioridades y los botones quedan traducidos.
 
 - [ ] **PRIORIDAD 1 — PUNTO 33 (terminar):** hoy `guardarContacto()` solo compara el **nombre** dentro de su propia lista. Falta (a) revisar duplicados cruzando **nombre + puesto + teléfono + email** contra TODO el organigrama (directos, indirectos y observadores), (b) la **ventana de confirmación Sí/No** con la frase de la IA, y (c) que la IA hable el resultado.
   - **Decisión pendiente del Arquitecto:** el PUNTO 33 pide **eliminar `#modal-contacto-id`**, pero ese campo oculto es lo que hace funcionar "Editar contacto" (se agregó el 27/08 para arreglar ese bug). **Recomendación de la IA: mantenerlo** y apartarse de esa línea del PUNTO; si se quita, se rompe la edición.

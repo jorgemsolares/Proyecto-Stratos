@@ -925,6 +925,9 @@ function procesarRegistro() {
                     invitacion.tiempoRespuestaMs = invitacion.fechaRespuesta - new Date(invitacion.fechaInvitacion);
                     guardarEnStorage(STORAGE_KEYS.BASE_USUARIOS, baseDatosUsuarios);
                     guardarEnStorage(STORAGE_KEYS.INVITACIONES, invitacionesPendientes);
+                    // PUNTO 31: el organigrama general reconoce a sus superiores,
+                    // iguales y subalternos previos y se actualiza solo.
+                    aplicarCrecimientoOrganigramaGeneral(usuarioExistente);
                     mostrarAvisoInmediato(`✓ Bienvenido de nuevo. Ahora eres parte del equipo de ${invitador.nombre}`, "exito");
                     datosInvitacionActual = {};
                     setTimeout(() => irAPantalla('pantalla-acceso'), 1500);
@@ -953,6 +956,9 @@ function procesarRegistro() {
         datosOrganigrama = reconstruirOrganigramaDesdeUsuario(nuevoUsuario);
         guardarEnStorage(STORAGE_KEYS.ORGANIGRAMA, datosOrganigrama);
     }
+    // PUNTO 31 (3.4 y 3.6): el organigrama general crece solo. Si el que entra es
+    // No.1 y ya había uno, el anterior pasa a ser su subordinado.
+    aplicarCrecimientoOrganigramaGeneral(nuevoUsuario);
     if (datosInvitacionActual && datosInvitacionActual.codigoInvitacion) {
         const invitacion = invitacionesPendientes.find(inv => inv.codigoInvitacion === datosInvitacionActual.codigoInvitacion);
         if (invitacion) {
@@ -2600,12 +2606,8 @@ function editarContactoDesdeDetalle() {
     const titulo = document.getElementById('modal-titulo');
     if (modal && titulo) {
         titulo.innerText = traducirTexto('mod_editar') || 'Editar Contacto';
-        // Marcar el contacto en modo edición: guardamos su id y su tipo en el campo oculto
-        const campoId = document.getElementById('modal-contacto-id');
-        if (campoId) {
-            campoId.value = contactoEnEdicion.id || '';
-            campoId.dataset.tipo = tipoContactoActual || 'directo';
-        }
+        // Modo edición: `contactoEnEdicion` y `tipoContactoActual` ya quedaron fijados
+        // arriba, así que NO hace falta ningún campo oculto (PUNTO 33, 2.5).
         document.getElementById('modal-nombre').value = contactoEnEdicion.nombre || '';
         document.getElementById('modal-puesto').value = contactoEnEdicion.puesto || '';
         document.getElementById('modal-pais').value = contactoEnEdicion.paisPrefijo || '+502';
@@ -2770,30 +2772,201 @@ function actualizarVistaPrevia() {
     }
 }
 
+// ==========================================
+// 29.1 ORGANIGRAMA GENERAL: RECURSIVO, PERSISTENTE Y CON UN SOLO No.1 (PUNTO 31)
+// Antes solo dibujaba 2 niveles y no guardaba nada. Ahora:
+//   - se construye con TODOS los niveles,
+//   - se guarda en localStorage y se recupera al abrir la app,
+//   - deja un solo No.1 en todo el sistema,
+//   - se rehace solo cuando alguien se inscribe o cambia de jefe.
+// ==========================================
+
+// Normaliza la jerarquía: un ÚNICO No.1 en todo el sistema (3.3).
+// Se queda el No.1 más antiguo; los demás pasan a ser colaboradores.
+function normalizarUnicoNo1() {
+    const marcados = baseDatosUsuarios.filter(u => u.esNo1);
+    if (marcados.length <= 1) return null;
+    const ganador = marcados.slice().sort((a, b) => {
+        const fa = a.fechaRegistro ? new Date(a.fechaRegistro).getTime() : 0;
+        const fb = b.fechaRegistro ? new Date(b.fechaRegistro).getTime() : 0;
+        return fa - fb;
+    })[0];
+    let huboCambios = false;
+    marcados.forEach(usuario => {
+        if (usuario.id === ganador.id) return;
+        usuario.esNo1 = false;
+        if (!usuario.superiorId) usuario.superiorId = ganador.id; // pasa a subordinado
+        huboCambios = true;
+    });
+    ganador.esNo1 = true;
+    if (huboCambios) guardarEnStorage(STORAGE_KEYS.BASE_USUARIOS, baseDatosUsuarios);
+    return ganador;
+}
+
+// Construye el organigrama general con TODOS los niveles (3.1).
+function construirOrganigramaGeneral() {
+    const usuarios = (Array.isArray(baseDatosUsuarios) ? baseDatosUsuarios : [])
+        .filter(u => u && u.id);
+    if (usuarios.length === 0) {
+        return { raices: [], nodos: {}, generadoEn: new Date().toISOString(), totalUsuarios: 0 };
+    }
+    const nodos = {};
+    usuarios.forEach(u => {
+        nodos[u.id] = {
+            id: u.id,
+            superiorId: u.superiorId || null,
+            nivel: null,
+            esNo1: !!u.esNo1,
+            activo: u.activo !== false
+        };
+    });
+
+    // Hijos de cada uno (para no repetir usuarios en el dibujo).
+    const hijosDe = {};
+    Object.keys(nodos).forEach(id => { hijosDe[id] = []; });
+    Object.keys(nodos).forEach(id => {
+        const jefe = nodos[id].superiorId;
+        if (!jefe || !nodos[jefe] || jefe === id) return; // nadie es su propio jefe
+        hijosDe[jefe].push(id);
+    });
+
+    // Raíces: sin jefe, o con un jefe que ya no existe.
+    const raices = Object.keys(nodos).filter(id => {
+        const jefe = nodos[id].superiorId;
+        return !jefe || !nodos[jefe];
+    });
+
+    // Recorrido en anchura: asigna el nivel de cada nodo y detecta ciclos.
+    const cola = raices.slice();
+    raices.forEach(id => { nodos[id].nivel = 0; });
+    while (cola.length > 0) {
+        const actual = cola.shift();
+        const nivel = nodos[actual].nivel || 0;
+        (hijosDe[actual] || []).forEach(idHijo => {
+            if (nodos[idHijo].nivel === null) {
+                nodos[idHijo].nivel = nivel + 1;
+                cola.push(idHijo);
+            }
+        });
+    }
+    // Ciclo (A->B->A): quien quedó sin nivel pasa a ser raíz.
+    Object.keys(nodos).forEach(id => {
+        if (nodos[id].nivel === null) {
+            nodos[id].nivel = 0;
+            raices.push(id);
+        }
+    });
+
+    // El No.1 siempre va primero.
+    const idNo1 = Object.keys(nodos).find(id => nodos[id].esNo1);
+    if (idNo1 && raices.indexOf(idNo1) === -1) raices.unshift(idNo1);
+
+    return {
+        raices: raices,
+        nodos: nodos,
+        generadoEn: new Date().toISOString(),
+        totalUsuarios: usuarios.length
+    };
+}
+
+// Guarda el organigrama general ya construido (3.2).
+function guardarOrganigramaGeneral() {
+    organigramaGeneral = construirOrganigramaGeneral();
+    guardarEnStorage(STORAGE_KEYS.ORGANIGRAMA_GENERAL, organigramaGeneral);
+    return organigramaGeneral;
+}
+
+// Recupera el organigrama general guardado; si no existe o quedó desactualizado
+// (cambió la cantidad de usuarios), lo vuelve a construir (3.2).
+function cargarOrganigramaGeneral(forzar) {
+    const guardado = cargarDeStorage(STORAGE_KEYS.ORGANIGRAMA_GENERAL);
+    const usuariosActuales = (Array.isArray(baseDatosUsuarios) ? baseDatosUsuarios : [])
+        .filter(u => u && u.id).length;
+    if (!forzar && guardado && guardado.nodos && guardado.totalUsuarios === usuariosActuales) {
+        organigramaGeneral = guardado;
+        return organigramaGeneral;
+    }
+    return guardarOrganigramaGeneral();
+}
+
+// Enlaza como subordinados a los usuarios que YA habían sido invitados por este
+// usuario pero que todavía no tenían jefe (3.4).
+function enlazarSubordinadosPrevios(usuarioId) {
+    let cambios = 0;
+    baseDatosUsuarios.forEach(usuario => {
+        if (usuario.id === usuarioId) return;
+        if (!usuario.superiorId && usuario.invitadoPor === usuarioId) {
+            usuario.superiorId = usuarioId;
+            cambios++;
+        }
+    });
+    if (cambios > 0) guardarEnStorage(STORAGE_KEYS.BASE_USUARIOS, baseDatosUsuarios);
+    return cambios;
+}
+
+// Crecimiento automático (3.4 y 3.6): se llama cuando alguien se inscribe.
+//   - reconoce a sus subordinados previos,
+//   - si el que entra es No.1 y ya había un No.1, lo deja subordinado,
+//   - y en ambos casos rehace y guarda el organigrama general.
+function aplicarCrecimientoOrganigramaGeneral(usuarioNuevo) {
+    if (!usuarioNuevo || !usuarioNuevo.id) return;
+    normalizarUnicoNo1();
+
+    const anteriorNo1 = baseDatosUsuarios.find(u => u.esNo1 && u.id !== usuarioNuevo.id);
+    let huboCambioDeNo1 = false;
+    if (usuarioNuevo.esNo1 && anteriorNo1) {
+        // 3.6: el nuevo No.1 desplaza al anterior, que pasa a subordinado suyo.
+        anteriorNo1.esNo1 = false;
+        if (!anteriorNo1.superiorId || anteriorNo1.superiorId === usuarioNuevo.id) {
+            anteriorNo1.superiorId = usuarioNuevo.id;
+        }
+        usuarioNuevo.esPrimeraLinea = true;
+        huboCambioDeNo1 = true;
+        guardarEnStorage(STORAGE_KEYS.BASE_USUARIOS, baseDatosUsuarios);
+    }
+
+    enlazarSubordinadosPrevios(usuarioNuevo.id);
+    guardarOrganigramaGeneral();
+
+    if (huboCambioDeNo1) {
+        mostrarAvisoInmediato(
+            `👑 ${usuarioNuevo.nombre} es ahora el No.1. ${anteriorNo1.nombre || anteriorNo1.nombreCompleto} queda como su subordinado.`,
+            "exito"
+        );
+    }
+}
+
+// Dibuja el organigrama general con TODOS los niveles (3.1).
 function renderizarOrganigramaGeneral() {
     const contenedor = document.getElementById('lienzo-organigrama-general');
     if (!contenedor) return;
     contenedor.innerHTML = '';
 
+    const vacio = `<p style="color: rgba(255,255,255,0.7); text-align: center; padding: 40px;">${_tr('org_vacio', 'No hay información de usuarios disponible para mostrar.')}</p>`;
     if (!Array.isArray(baseDatosUsuarios) || baseDatosUsuarios.length === 0) {
-        contenedor.innerHTML = '<p style="color: rgba(255,255,255,0.7); text-align: center; padding: 40px;">No hay información de usuarios disponible para mostrar.</p>';
+        contenedor.innerHTML = vacio;
         return;
     }
 
-    const usuariosPorId = {};
-    baseDatosUsuarios.forEach(usuario => {
-        usuariosPorId[usuario.id] = usuario;
-    });
+    // Un solo No.1 y organigrama guardado (o recién construido si cambió algo).
+    normalizarUnicoNo1();
+    const arbol = cargarOrganigramaGeneral();
+    if (!arbol || !arbol.nodos || Object.keys(arbol.nodos).length === 0) {
+        contenedor.innerHTML = vacio;
+        return;
+    }
 
-    const nodosRaiz = baseDatosUsuarios.filter(usuario => !usuario.superiorId || usuario.superiorId === null || usuario.superiorId === '' || !usuariosPorId[usuario.superiorId]);
+    const porId = {};
+    baseDatosUsuarios.forEach(usuario => { if (usuario && usuario.id) porId[usuario.id] = usuario; });
 
     const crearNodo = (usuario) => {
         const nodo = document.createElement('div');
-        // Añadimos la clase `nodo` para que comparta estilos y efectos con los nodos personales
         nodo.className = 'nodo nodo-general';
         nodo.style.cursor = 'pointer';
         nodo.onclick = () => verDetalleContactoGeneral(usuario.id);
-        const bandera = usuario.tipoActual === 'Observador' ? '👁️ ' : usuario.tipoActual === 'Indirecto' ? '🔗 ' : '';
+        const bandera = usuario.tipoActual === 'Observador' ? '👁️ '
+            : usuario.tipoActual === 'Indirecto' ? '🔗 '
+            : (usuario.esNo1 ? '👑 ' : '');
         nodo.innerHTML = `
             <div class="nodo-general-contenido">
                 <div class="titulo-nodo-general">${bandera}${usuario.nombreCompleto || usuario.nombre}</div>
@@ -2804,29 +2977,39 @@ function renderizarOrganigramaGeneral() {
         return nodo;
     };
 
-    const seccion = document.createElement('div');
-    seccion.className = 'organigrama-general-grid';
-
-    const ordenarPorJerarquia = [...nodosRaiz].sort((a, b) => {
-        if (a.esNo1 && !b.esNo1) return -1;
-        if (!a.esNo1 && b.esNo1) return 1;
-        return a.nombreCompleto.localeCompare(b.nombreCompleto);
+    // Hijos de cada nodo (para no repetir usuarios en el dibujo).
+    const hijosDe = {};
+    Object.keys(arbol.nodos).forEach(id => { hijosDe[id] = []; });
+    Object.keys(arbol.nodos).forEach(id => {
+        const jefe = arbol.nodos[id].superiorId;
+        if (jefe && hijosDe[jefe] && jefe !== id) hijosDe[jefe].push(id);
     });
 
-    ordenarPorJerarquia.forEach(usuario => {
-        seccion.appendChild(crearNodo(usuario));
-        const hijos = baseDatosUsuarios.filter(u => u.superiorId === usuario.id);
-        if (hijos.length > 0) {
-            const contenedorHijos = document.createElement('div');
-            contenedorHijos.className = 'organigrama-general-subgrupo';
-            hijos.forEach(hijo => {
-                contenedorHijos.appendChild(crearNodo(hijo));
-            });
-            seccion.appendChild(contenedorHijos);
-        }
-    });
+    // Cada rama: un nodo y, debajo, TODOS sus descendientes con un conector.
+    const dibujarRama = (id, nivel) => {
+        const usuario = porId[id];
+        if (!usuario) return null; // el nodo existe pero el usuario ya no
+        const fila = document.createElement('div');
+        fila.className = 'org-general-rama';
+        fila.style.marginLeft = (nivel * 24) + 'px';
+        fila.appendChild(crearNodo(usuario));
+        (hijosDe[id] || []).forEach(idHijo => {
+            const conector = document.createElement('div');
+            conector.className = 'org-general-conector';
+            fila.appendChild(conector);
+            const hijo = dibujarRama(idHijo, nivel + 1);
+            if (hijo) fila.appendChild(hijo);
+        });
+        return fila;
+    };
 
-    contenedor.appendChild(seccion);
+    const arbolHtml = document.createElement('div');
+    arbolHtml.className = 'organigrama-general-arbol';
+    (arbol.raices || []).forEach(idRaiz => {
+        const rama = dibujarRama(idRaiz, 0);
+        if (rama) arbolHtml.appendChild(rama);
+    });
+    contenedor.appendChild(arbolHtml);
 }
 
 // ==========================================
@@ -2854,8 +3037,10 @@ function mostrarFormularioContacto(tipo) {
     document.getElementById('modal-tel').value = '';
     document.getElementById('modal-email').value = '';
     document.getElementById('modal-acronimo-preview').textContent = '---';
-    document.getElementById('modal-contacto-id').value = '';
-    document.getElementById('modal-contacto-id').dataset.tipo = tipo;
+    // Sin campo oculto (PUNTO 33, 2.5): el tipo elegido y el contacto en edición
+    // viven en `tipoContactoActual` y `contactoEnEdicion` (datos.js 3.7).
+    contactoEnEdicion = null;
+    tipoContactoActual = tipo;
 
     // Cambiar el título según el tipo
     const titulo = document.getElementById('modal-titulo');
@@ -2879,32 +3064,40 @@ function guardarContacto() {
     const telefono = document.getElementById('modal-tel').value.trim();
     const email = document.getElementById('modal-email').value.trim();
     const acronimo = document.getElementById('modal-acronimo-preview').textContent;
-    const campoId = document.getElementById('modal-contacto-id');
 
-    // Requisito: nombre, puesto y al menos un medio de contacto
-    if (!nombre || !puesto || (!telefono && !email)) {
-        mostrarAvisoInmediato("✖ Complete nombre, puesto y un medio de contacto", "error");
+    // El tipo y el contacto en edición ya NO viajan en un campo oculto (PUNTO 33, 2.5):
+    // se leen de `tipoContactoActual` y `contactoEnEdicion` (datos.js 3.7).
+    const tipo = tipoContactoActual || 'directo';
+    const enEdicion = contactoEnEdicion;
+
+    if (!nombre || !puesto) {
+        mostrarAvisoInmediato("✖ Complete el nombre y el puesto", "error");
         return;
     }
 
-    // Tipo escogido (directo / indirecto / observador) y, si se está editando, el id del contacto
-    const tipo = (campoId && campoId.dataset && campoId.dataset.tipo) || 'directo';
-    const idEnEdicion = campoId ? campoId.value : '';
-
-    const acronimoContacto = (acronimo && acronimo !== '---') ? acronimo : generarAcronimo(puesto, true);
+    // 2.6 — Teléfono y email son opcionales, pero AL MENOS UNO es obligatorio.
+    if (!telefono && !email) {
+        mostrarVentanaAviso(
+            _tr('aviso_titulo_falta', 'Faltan datos de contacto'),
+            _tr('aviso_texto_falta', 'Necesitas un teléfono o un email para enviar la invitación. Por favor, agrega al menos uno.'),
+            false
+        );
+        return;
+    }
 
     // ---------- MODO EDICIÓN: actualiza el contacto tal cual ----------
-    if (idEnEdicion) {
+    if (enEdicion) {
         const datosActualizados = {
             nombre: nombre, nombreCompleto: nombre, puesto: puesto,
-            acronimo: acronimoContacto, telefono: telefono, email: email, paisPrefijo: pais
+            acronimo: (acronimo && acronimo !== '---') ? acronimo : generarAcronimo(puesto, true),
+            telefono: telefono, email: email, paisPrefijo: pais
         };
         let lista = null;
         if (tipo === 'directo') lista = (datosOrganigrama && datosOrganigrama.hijos) || [];
         else if (tipo === 'indirecto') lista = contactosIndirectos;
         else if (tipo === 'observador') lista = observadores;
 
-        const indice = (lista || []).findIndex(c => c.id === idEnEdicion);
+        const indice = (lista || []).findIndex(c => c.id === enEdicion.id);
         if (indice !== -1) {
             lista[indice] = Object.assign({}, lista[indice], datosActualizados);
             if (tipo === 'directo') guardarEnStorage(STORAGE_KEYS.ORGANIGRAMA, datosOrganigrama);
@@ -2917,7 +3110,37 @@ function guardarContacto() {
         }
     }
 
-    // ---------- MODO NUEVO: crea el contacto y lo agrega a su lista ----------
+    // ---------- MODO NUEVO: cruce de datos antes de crear (PUNTO 33, 2.1) ----------
+    const duplicado = buscarContactoDuplicado({ nombre: nombre, puesto: puesto, telefono: telefono, email: email });
+    if (duplicado) {
+        // 3.5 del PUNTO 31: si ya está en OTRA rama, no puede registrarse en dos posiciones.
+        if (duplicado.otraRama && duplicado.nombreSuperior) {
+            mostrarVentanaAviso(
+                _tr('aviso_titulo_registrado', 'Ya está registrado'),
+                _tr('aviso_texto_registrado', 'Este usuario ya está registrado en otra rama, debajo de')
+                    + ' ' + duplicado.nombreSuperior + '. '
+                    + _tr('aviso_texto_registrado_2', 'No se puede registrar en dos posiciones ni ser contacto directo de dos superiores.'),
+                false
+            );
+            return;
+        }
+        // 2.3 del PUNTO 33: si solo hay datos iguales, se pregunta si se continúa.
+        mostrarVentanaAviso(
+            _tr('aviso_titulo_duplicado', 'Contacto repetido'),
+            _tr('aviso_texto_duplicado', 'Ese contacto ya existe. El banco de datos ya tiene registrado datos iguales a los que acabas de teclear. ¿Continuar con la invitación?'),
+            true,
+            function () { continuarCreacionContacto(nombre, puesto, pais, telefono, email, acronimo, tipo); },
+            function () { /* No: se queda en el modal de contacto para editar los datos */ }
+        );
+        return;
+    }
+
+    continuarCreacionContacto(nombre, puesto, pais, telefono, email, acronimo, tipo);
+}
+
+// Crea el contacto, lo guarda y lanza la invitación (final de `guardarContacto`).
+function continuarCreacionContacto(nombre, puesto, pais, telefono, email, acronimo, tipo) {
+    const acronimoContacto = (acronimo && acronimo !== '---') ? acronimo : generarAcronimo(puesto, true);
     const nuevoContacto = {
         id: generarIdUnico(),
         nombre: nombre, nombreCompleto: nombre, puesto: puesto,
@@ -2939,18 +3162,12 @@ function guardarContacto() {
             };
         }
         if (!datosOrganigrama.hijos) datosOrganigrama.hijos = [];
-        const yaExisteDir = datosOrganigrama.hijos.some(h => h.nombre === nombre);
-        if (yaExisteDir) { mostrarAvisoInmediato("✖ Este contacto ya existe en el organigrama", "error"); return; }
         datosOrganigrama.hijos.push(nuevoContacto);
         guardarEnStorage(STORAGE_KEYS.ORGANIGRAMA, datosOrganigrama);
     } else if (tipo === 'indirecto') {
-        const yaExisteInd = contactosIndirectos.some(c => c.nombre === nombre);
-        if (yaExisteInd) { mostrarAvisoInmediato("✖ Este contacto indirecto ya existe", "error"); return; }
         contactosIndirectos.push(nuevoContacto);
         guardarEnStorage(STORAGE_KEYS.INDIRECTOS, contactosIndirectos);
     } else if (tipo === 'observador') {
-        const yaExisteObs = observadores.some(c => c.nombre === nombre);
-        if (yaExisteObs) { mostrarAvisoInmediato("✖ Este observador ya existe", "error"); return; }
         observadores.push(nuevoContacto);
         guardarEnStorage(STORAGE_KEYS.OBSERVADORES, observadores);
     }
@@ -2977,6 +3194,155 @@ function guardarContacto() {
     cerrarModalContacto();
     renderizarOrganigrama();
     mostrarAvisoInmediato(`✓ Contacto ${nombre} guardado`, "exito");
+}
+
+// ==========================================
+// 32.1 CRUCE DE DATOS Y VENTANA DE AVISO (PUNTO 33)
+// Al guardar un contacto se cruzan nombre + puesto + teléfono + email contra
+// TODAS las listas (usuarios registrados, organigrama, indirectos y observadores).
+// La IA habla el mismo texto que aparece en la ventana.
+// ==========================================
+
+// Texto traducido con valor por defecto en español.
+function _tr(clave, porDefecto) {
+    const t = typeof traducirTexto === 'function' ? traducirTexto(clave) : '';
+    return t || porDefecto;
+}
+
+// Para comparar nombres: SOLO se ignoran mayúsculas y espacios de sobra.
+// Las tildes y los apostrofos se respetan (decisión del Arquitecto 04/10/2026): no se
+// quitan al comparar, porque "O'Brien" y "Obrien" son personas distintas.
+function normalizarParaComparar(texto) {
+    return String(texto == null ? '' : texto)
+        .toLowerCase()
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+// Recorre TODOS los niveles del organigrama personal (directos, nietos, etc.).
+function recorrerContactos(nodo, lista) {
+    if (!nodo) return [];
+    const salida = Array.isArray(lista) ? lista : [];
+    salida.push(nodo);
+    (nodo.hijos || []).forEach(hijo => recorrerContactos(hijo, salida));
+    return salida;
+}
+
+// Devuelve el registro que coincide con los datos tecleados, o null.
+// "Coincide" = mismo teléfono, o mismo email, o mismo nombre Y mismo puesto.
+function buscarContactoDuplicado(datos) {
+    const nombre = normalizarParaComparar(datos.nombre);
+    const puesto = normalizarParaComparar(datos.puesto);
+    const telefono = normalizarParaComparar(datos.telefono);
+    const email = normalizarParaComparar(datos.email);
+    const enEdicion = (contactoEnEdicion && contactoEnEdicion.id) ? contactoEnEdicion.id : null;
+
+    const coincide = (registro) => {
+        if (!registro) return false;
+        if (registro.id && registro.id === enEdicion) return false; // no se compara consigo mismo
+        const rNombre = normalizarParaComparar(registro.nombreCompleto || registro.nombre);
+        const rPuesto = normalizarParaComparar(registro.puesto || registro.posicion);
+        const rTel = normalizarParaComparar(registro.telefono);
+        const rMail = normalizarParaComparar(registro.email);
+        if (telefono && rTel && telefono === rTel) return true;
+        if (email && rMail && email === rMail) return true;
+        if (nombre && rNombre && nombre === rNombre && puesto && rPuesto && puesto === rPuesto) return true;
+        return false;
+    };
+
+    // 1) Usuarios ya registrados en la app.
+    for (let i = 0; i < baseDatosUsuarios.length; i++) {
+        const usuario = baseDatosUsuarios[i];
+        if (!coincide(usuario)) continue;
+        const superior = usuario.superiorId
+            ? baseDatosUsuarios.find(u => u.id === usuario.superiorId)
+            : null;
+        // Si su jefe NO es quien está invitando, está en otra rama (PUNTO 31, 3.5).
+        const otraRama = !!(usuario.superiorId && usuario.superiorId !== (usuarioActivo && usuarioActivo.id));
+        return {
+            registro: usuario,
+            otraRama: otraRama,
+            nombreSuperior: (otraRama && superior) ? (superior.nombreCompleto || superior.nombre) : null
+        };
+    }
+
+    // 2) Contactos del propio organigrama (TODOS los niveles).
+    const delOrganigrama = recorrerContactos(datosOrganigrama, []);
+    for (let i = 0; i < delOrganigrama.length; i++) {
+        if (coincide(delOrganigrama[i])) {
+            return { registro: delOrganigrama[i], otraRama: false, nombreSuperior: null };
+        }
+    }
+
+    // 3) Contactos indirectos y observadores.
+    const otrasListas = (typeof contactosIndirectos !== 'undefined' ? contactosIndirectos : [])
+        .concat(typeof observadores !== 'undefined' ? observadores : []);
+    for (let i = 0; i < otrasListas.length; i++) {
+        if (coincide(otrasListas[i])) {
+            return { registro: otrasListas[i], otraRama: false, nombreSuperior: null };
+        }
+    }
+
+    return null;
+}
+
+let ventanaAvisoConfirmar = null;
+let ventanaAvisoCancelar = null;
+let ventanaAvisoEsSiNo = false;
+
+// Muestra la ventana de aviso con los MISMOS colores y diseño del modal de
+// contacto. Si `pideSiNo` es false, es informativa: el botón verde dice "Entendido".
+function mostrarVentanaAviso(titulo, texto, pideSiNo, alConfirmar, alCancelar) {
+    const ventana = document.getElementById('ventana-aviso-contacto');
+    if (!ventana) return;
+    const campoTitulo = document.getElementById('ventana-aviso-titulo');
+    const campoTexto = document.getElementById('ventana-aviso-texto');
+    const botonSi = document.getElementById('ventana-aviso-si');
+    const botonNo = document.getElementById('ventana-aviso-no');
+    if (campoTitulo) campoTitulo.innerText = titulo;
+    if (campoTexto) campoTexto.innerText = texto;
+    if (botonSi) botonSi.innerText = pideSiNo ? _tr('aviso_si', 'SÍ') : _tr('aviso_entendido', 'ENTENDIDO');
+    if (botonNo) botonNo.innerText = pideSiNo ? _tr('aviso_no', 'NO') : _tr('aviso_cancelar', 'CERRAR');
+    ventanaAvisoConfirmar = alConfirmar || null;
+    ventanaAvisoCancelar = alCancelar || null;
+    ventanaAvisoEsSiNo = !!pideSiNo;
+    ventana.style.display = 'flex';
+    hablarTextoIA(texto); // la IA habla lo mismo que se muestra
+}
+
+function cerrarVentanaAviso() {
+    const ventana = document.getElementById('ventana-aviso-contacto');
+    if (ventana) ventana.style.display = 'none';
+    ventanaAvisoConfirmar = null;
+    ventanaAvisoCancelar = null;
+}
+
+// Botones verde (Sí) y rojo (No) de la ventana de aviso.
+function responderVentanaAviso(afirmativo) {
+    const eraSiNo = ventanaAvisoEsSiNo;
+    const alConfirmar = ventanaAvisoConfirmar;
+    const alCancelar = ventanaAvisoCancelar;
+    cerrarVentanaAviso();
+    if (afirmativo) {
+        if (alConfirmar) alConfirmar();
+    } else if (alCancelar) {
+        alCancelar();
+    } else if (!eraSiNo) {
+        // Aviso informativo: el botón rojo (CERRAR) cierra también el modal de contacto.
+        cerrarModalContacto();
+    }
+}
+
+// La IA habla un texto suelto (sin abrir su ventana ni cerrar sola).
+function hablarTextoIA(texto) {
+    if (!texto || !iaSintesis) return;
+    try {
+        iaSintesis.cancel();
+        const voz = new SpeechSynthesisUtterance(texto);
+        voz.lang = (configuracionPersonal && configuracionPersonal.idioma === 'en') ? 'en-US' : 'es-ES';
+        voz.rate = 1.05;
+        iaSintesis.speak(voz);
+    } catch (e) {}
 }
 
 // Nota: las funciones restantes (renderizarOrganigramaGeneral, construirOrganigramaGeneral, etc.) no se modifican y siguen funcionando igual.

@@ -449,6 +449,33 @@ const TRADUCCIONES = {
     "bio_error_verificar": { es: "No se pudo verificar la biometría.", en: "Could not verify the biometric." },
     "bio_error_inscribir": { es: "No se pudo inscribir la biometría en este dispositivo.", en: "Could not enroll the biometric on this device." },
     "bio_bienvenida": { es: "Hola", en: "Hello" },
+    // VENTANA DE AVISO DEL CONTACTO (PUNTO 33)
+    "aviso_titulo": { es: "Aviso", en: "Notice" },
+    "aviso_si": { es: "SÍ", en: "YES" },
+    "aviso_no": { es: "NO", en: "NO" },
+    "aviso_entendido": { es: "ENTENDIDO", en: "GOT IT" },
+    "aviso_cancelar": { es: "CERRAR", en: "CLOSE" },
+    "aviso_titulo_falta": { es: "Faltan datos de contacto", en: "Missing contact details" },
+    "aviso_texto_falta": { es: "Necesitas un teléfono o un email para enviar la invitación. Por favor, agrega al menos uno.", en: "You need a phone number or an email to send the invitation. Please add at least one." },
+    "aviso_titulo_duplicado": { es: "Contacto repetido", en: "Duplicate contact" },
+    "aviso_texto_duplicado": { es: "Ese contacto ya existe. El banco de datos ya tiene registrado datos iguales a los que acabas de teclear. ¿Continuar con la invitación?", en: "That contact already exists. The database already has records identical to the ones you just typed. Continue with the invitation?" },
+    "aviso_titulo_registrado": { es: "Ya está registrado", en: "Already registered" },
+    "aviso_texto_registrado": { es: "Este usuario ya está registrado en otra rama, debajo de", en: "This user is already registered in another branch, under" },
+    "aviso_texto_registrado_2": { es: "No se puede registrar en dos posiciones ni ser contacto directo de dos superiores.", en: "They cannot be registered in two positions nor be a direct contact of two managers." },
+    // PRIORIDADES DE LA CARTELERA (PUNTO 2) — faltaba el inglés
+    "prio_alta": { es: "Alta", en: "High" },
+    "prio_media": { es: "Media", en: "Medium" },
+    "prio_baja": { es: "Baja", en: "Low" },
+    "cartelera_solicitud": { es: "🔑 Solicitud de contraseña (prioridad ALTA)", en: "🔑 Password request (HIGH priority)" },
+    "cartelera_sugerencia": { es: "🔐 Te sugerimos cambiar tu contraseña", en: "🔐 We suggest changing your password" },
+    // MENSAJES DE INVITACIÓN POR TIPO (PUNTO 33) — faltaba el inglés
+    "inv_tipo_directo": { es: "colaborador directo", en: "direct collaborator" },
+    "inv_tipo_indirecto": { es: "contacto indirecto", en: "indirect contact" },
+    "inv_tipo_observador": { es: "observador", en: "observer" },
+    "inv_enviada": { es: "Invitación enviada", en: "Invitation sent" },
+    // ORGANIGRAMA GENERAL (PUNTO 31)
+    "org_vacio": { es: "No hay información de usuarios disponible para mostrar.", en: "There is no user information available to display." },
+    "org_no1": { es: "No.1", en: "No.1" },
     "cfg_rec": { es: "Recuperación de Contraseñas", en: "Password Recovery" },
     "cfg_rec_desc": { es: "Ayuda a cualquier usuario a recuperar su contraseña.", en: "Help any user recover their password." },
     "cfg_rec_traz": { es: "La solicitud quedará registrada con fines de trazabilidad.", en: "The request is recorded for traceability purposes." },
@@ -595,11 +622,28 @@ let datosInvitacionActual = {
 // ==========================================
 // 3.5 ORGANIGRAMA GENERAL (Consulta) - GRUPO 3
 // ==========================================
-// Se construye automáticamente de forma orgánica
+// Se construye automáticamente de forma orgánica (PUNTO 31) y se PERSISTE
+// para no reconstruirlo cada vez que se abre la pantalla.
 let organigramaGeneral = null;
 /*
-Se genera dinámicamente combinando todos los 
-organigramas individuales de cada No.1
+Estructura guardada en localStorage (STORAGE_KEYS.ORGANIGRAMA_GENERAL):
+{
+    raices: ["id", ...],        // usuarios sin jefe (o cuyo jefe ya no existe)
+    nodos: {                    // un registro por usuario
+        "id": {
+            id: "...",
+            superiorId: null,   // quién es su jefe directo
+            nivel: 0,           // 0 = raíz; los hijos suman 1
+            esNo1: false,
+            activo: true
+        }
+    },
+    generadoEn: "2026-10-04T...",
+    totalUsuarios: 0
+}
+Reglas:
+- Solo puede haber UN No.1 en todo el sistema (se normaliza al construir).
+- Cada usuario aparece una sola vez, aunque tenga varias ramas debajo.
 */
 
 // ==========================================
@@ -668,6 +712,7 @@ const STORAGE_KEYS = {
     BANCO_DATOS: "stratos_banco_datos", // PUNTO 34 - ficha por usuario
     RESPALDO_MIGRACION: "stratos_respaldo_migracion", // PUNTO 34 - respaldo previo a migrar
     BIOMETRIA: "stratos_biometria", // PUNTO 9-10-11 - método biométrico enrolado por usuario y dispositivo
+    ORGANIGRAMA_GENERAL: "stratos_organigrama_general", // PUNTO 31 - organigrama general ya construido
     TOKEN_SESION: "stratos_token_sesion", // Añadido para guardar el token
     ULTIMO_USUARIO: "stratos_ultimo_usuario", // Último usuario que entró al sistema en este dispositivo
     ULTIMO_SALUDO: "stratos_ultimo_saludo_fecha" // Fecha del último saludo mostrado en la cartelera

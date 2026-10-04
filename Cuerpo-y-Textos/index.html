@@ -478,9 +478,7 @@
                     <input type="tel" id="modal-tel" placeholder="Teléfono" data-i18n="mod_tel" style="flex: 3;">
                 </div>
                 <input type="email" id="modal-email" placeholder="Email" data-i18n="mod_email" spellcheck="true">
-                <!-- Campo oculto para identificar el tipo de contacto (directo/indirecto/observador) y si se está editando (contiene el id) -->
-                <input type="hidden" id="modal-contacto-id">
-                
+
                 <p class="descripcion-tipo" id="descripcion-tipo-contacto"></p>
             </div>
             <div class="modal-footer">
@@ -489,6 +487,26 @@
             </div>
         </div>
     </div>
+
+    <!-- ============================================ -->
+    <!-- 4.1.1 VENTANA DE AVISO DEL CONTACTO (PUNTO 33) — mismos colores y diseño del modal de arriba -->
+    <!-- Reutiliza las clases .modal / .modal-content / .btn-principal (verde) y .btn-peligro (rojo). -->
+    <!-- ============================================ -->
+<div id="ventana-aviso-contacto" class="modal ventana-aviso" style="display:none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="ventana-aviso-titulo" data-i18n="aviso_titulo">Aviso</h3>
+            <button type="button" onclick="cerrarVentanaAviso()" class="btn-cerrar">✕</button>
+        </div>
+        <div class="modal-body" style="flex-direction: column; align-items: flex-start; gap: 12px;">
+            <p id="ventana-aviso-texto" style="margin: 0; line-height: 1.5;"></p>
+        </div>
+        <div class="modal-footer">
+            <button id="ventana-aviso-si" class="btn-principal" onclick="responderVentanaAviso(true)" data-i18n="aviso_si">SÍ</button>
+            <button id="ventana-aviso-no" class="btn-peligro" onclick="responderVentanaAviso(false)" data-i18n="aviso_no">NO</button>
+        </div>
+    </div>
+</div>
 
     <!-- ============================================ -->
     <!-- 4.2 MODAL PARA VER DETALLES DE CONTACTO (ver los datos y poder editar, eliminar o cerrar) -->

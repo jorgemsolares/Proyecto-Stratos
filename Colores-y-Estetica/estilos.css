@@ -1693,6 +1693,69 @@ textarea {
 }
 
 /* ==========================================
+3.16 ÁRBOL DEL ORGANIGRAMA GENERAL (PUNTO 31)
+Cada rama muestra un usuario y, debajo, TODOS sus descendientes unidos por un
+conector. Antes estas clases (.organigrama-general-grid / -subgrupo) no existían
+en el CSS, por eso el organigrama general salía sin forma.
+========================================== */
+.organigrama-general-arbol {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    width: 100%;
+    padding: 10px 0;
+}
+
+.org-general-rama {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+}
+
+.org-general-rama .nodo-general {
+    margin: 4px 0;
+}
+
+/* Conector vertical entre un jefe y su subordinado */
+.org-general-conector {
+    width: 2px;
+    height: 18px;
+    margin-left: 26px;
+    background: linear-gradient(to bottom, rgba(0, 255, 136, 0.55), rgba(0, 255, 136, 0.15));
+}
+
+/* En celular la sangría se reduce para que quepa el árbol */
+@media (max-width: 768px) {
+    .org-general-rama {
+        margin-left: 0 !important;
+    }
+    .org-general-conector {
+        height: 12px;
+        margin-left: 18px;
+    }
+}
+
+/* ==========================================
+3.17 VENTANA DE AVISO DEL CONTACTO (PUNTO 33)
+Usa los mismos colores del modal de contacto; solo se ajusta el ancho y el
+espaciado. El botón verde es "Sí" y el rojo "No".
+========================================== */
+.ventana-aviso .modal-content {
+    max-width: 460px;
+}
+
+.ventana-aviso .modal-body p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.95rem;
+}
+
+.ventana-aviso .modal-footer {
+    gap: 10px;
+}
+
+/* ==========================================
 5.2 MENSAJE MOTIVACIONAL (No usado actualmente) (bloque de estilos preparado para futuras frases o citas motivacionales en la app)
 ========================================== */
 .mensaje-motivacional {

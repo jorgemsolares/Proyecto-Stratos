@@ -34,8 +34,23 @@ _f.txt
 _f2.txt
 
 # Validadores locales creados por la IA (04/10/2026): comprueban la sintaxis de los
-# .js y la parte criptografica de la biometria. Son utiles, pero no van a GitHub.
+# .js y la logica nueva. Son utiles, pero no van a GitHub.
 _validar_js.py
 _probar_biometria.py
+_probar_organigrama.py
 _validar_js.txt
 _probar_biometria.txt
+_probar_organigrama.txt
+_v2.txt
+_v3.txt
+_n.txt
+_tail.txt
+_pip.txt
+_pip2.txt
+_final.txt
+_rev.txt
+_dbg.txt
+_leido.txt
+_lista.txt
+# Salida del informe de subida (temporal de la IA)
+_subida.txt
