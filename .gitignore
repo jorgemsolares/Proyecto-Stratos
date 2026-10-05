@@ -43,6 +43,36 @@ _validar_js.txt
 _probar_biometria.txt
 _probar_organigrama.txt
 _probar_marcas.txt
+
+# Archivos temporales que la IA crea al verificar o al sincronizar (04/10/2026).
+# Se guardan en la carpeta del usuario; si se caen aquí, no se suben.
+_up.txt
+_up2.txt
+_up3.txt
+_subida.txt
+_subida2.txt
+_s.txt
+_s2.txt
+_s3.txt
+_estado.txt
+_estado_final.txt
+_final.txt
+_chk.txt
+_n.txt
+_v2.txt
+_v3.txt
+_tail.txt
+_pip.txt
+_pip2.txt
+_dbg.txt
+_leido.txt
+_lista.txt
+_rev.txt
+_e.txt
+_b.txt
+_g.txt
+_f.txt
+_f2.txt
 _v2.txt
 _v3.txt
 _n.txt
