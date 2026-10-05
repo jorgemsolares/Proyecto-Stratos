@@ -69,11 +69,13 @@
    - `_probar_marcas.py` → prueba las marcas del día del PUNTO 6A (entrada/salida/tiempo).
 
 10. **`instrucciones-IA/instrucciones.md` y `explicacion.txt` son archivos DE ÓRDENES, no de memoria.**
-    - El Arquitecto escribe ahí lo que quiere el día y **al terminar la sesión los borra**.
+    - El Arquitecto escribe ahí lo que quiere el día y **al terminar la sesión los limpia**.
     - Por eso son VOLÁTILES: **nada importante puede quedarse solo ahí.** Todo lo que
       sobreviva (decisiones, límites, lo aplicado, lo pendiente) va a esta `MEMORIA.md`.
-    - El 04/10/2026 el Arquitecto confirmó esta dinámica y ambos archivos quedaron
-      vacíos/borrados, con todo su contenido ya volcado en la BITÁCORA.
+    - **Regla importante (confirmada por el Arquitecto el 04/10/2026): se VACÍAN, NO SE BORRAN.**
+      Los dos archivos **deben seguir existiendo** (vacíos) para que el flujo de trabajo
+      del día siguiente funcione. Borrarlos por error deja al Arquitecto sin dónde escribir.
+    - El 04/10/2026 se vaciaron los dos y su contenido quedó volcado en la BITÁCORA.
 
 > **NOTA (duplicación — RESUELTA 28/08/2026):** La carpeta vieja duplicada
 > `Proyecto-Stratos` fue ELIMINADA. Ahora hay UN SOLO repositorio en la raíz,
