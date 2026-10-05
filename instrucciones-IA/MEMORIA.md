@@ -60,13 +60,19 @@
    - `subir_automatico.ps1` → vigilante: respalda y sube al guardar (endurecido 17/09).
    - `.vscode\tasks.json` → las 4 tareas que se lanzan desde VS Code.
 
-9. **Validadores locales creados por la IA el 04/10/2026** (NO se suben; viven en el PC):
-   - `_validar_js.py` → revisa que `logica.js` y `datos.js` no tengan errores de sintaxis
-     (usa un parser real de JavaScript; este equipo **no tiene Node**, por eso existe).
-   - `_probar_biometria.py` → prueba la parte criptográfica de la biometría (CBOR → SPKI y
-     verificación ECDSA). Encontró 2 bugs reales el 04/10. Se ejecuta sin instalar nada.
-   - `_probar_organigrama.py` → prueba el árbol del Organigrama General (PUNTOS 31 y 33).
-   - `_probar_marcas.py` → prueba las marcas del día del PUNTO 6A (entrada/salida/tiempo).
+9. **`Pruebas/`** (carpeta creada el 04/10/2026, **SÍ sube a GitHub**)
+   - Contiene `README.md` y las 4 pruebas que usa la IA para comprobar el código
+     **sin abrir el navegador**: `_validar_js.py` (sintaxis), `_probar_biometria.py`
+     (26), `_probar_organigrama.py` (22) y `_probar_marcas.py` (10).
+   - **Último resultado: 58/58 en verde.** Se pueden correr desde cualquier carpeta:
+     `python Pruebas/_probar_biometria.py`.
+   - Solo `_validar_js.py` necesita `pip install esprima`; si no está, avisa y hace
+     una revisión más básica. Las otras tres no necesitan instalar nada.
+   - Los `resultado_*.txt` que generan NO se suben (están en el `.gitignore`).
+   - **Por qué se suben:** son pruebas de regresión. Ya detectaron 2 bugs reales en la
+     biometría antes de que llegaran al navegador. Toda IA que retome el proyecto
+     puede correrlas antes de dar por terminado un cambio.
+   - **Regla:** si una prueba falla, el trabajo NO está terminado y no se sube a GitHub.
 
 10. **`instrucciones-IA/instrucciones.md` y `explicacion.txt` son archivos DE ÓRDENES, no de memoria.**
     - El Arquitecto escribe ahí lo que quiere el día y **al terminar la sesión los limpia**.

@@ -33,16 +33,9 @@ _bit.txt
 _f.txt
 _f2.txt
 
-# Validadores locales creados por la IA (04/10/2026): comprueban la sintaxis de los
-# .js y la logica nueva. Son utiles, pero no van a GitHub.
-_validar_js.py
-_probar_biometria.py
-_probar_organigrama.py
-_probar_marcas.py
-_validar_js.txt
-_probar_biometria.txt
-_probar_organigrama.txt
-_probar_marcas.txt
+# Pruebas de la IA (04/10/2026) — AHORA SÍ VAN A GITHUB, viven en la carpeta Pruebas/.
+# Ver Pruebas/README.md. Los archivos resultado_*.txt que generan NO se suben.
+Pruebas/resultado_*.txt
 
 # Archivos temporales que la IA crea al verificar o al sincronizar (04/10/2026).
 # Se guardan en la carpeta del usuario; si se caen aquí, no se suben.
