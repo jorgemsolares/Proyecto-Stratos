@@ -133,6 +133,34 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 
 ## BITÁCORA (historial de lo realizado)
 
+### 07/10/2026 (tarde) — INSTRUCCIONES NUEVAS PUNTOS 1-11: CENTRADO + SALUDO POR CAMPO NOMBRE
+- **Punto 1 — hecho:** `.organigrama-general-arbol` a `align-items: center`; rama raíz (nivel 0) con clase `org-general-rama-nivel-0` centrada y `marginLeft 0`. Sin cambiar tamaño ni otros nodos.
+- **Punto 2 — verificado:** `DURACION_PRIORIDAD_CARTELERA` 10/6/4 + clasificación por remitente intactos.
+- **Punto 3 — hecho:** `actualizarSaludoLogin()` ahora busca el usuario por `nombreCompleto` y muestra su campo `Nombre` ("Jorge Mario"); si no hay coincidencia usa primera palabra; ajuste de letra en una línea intacto.
+- **Punto 4 — verificado:** `irAPantalla()` oculta `#zona-superior` en Login.
+- **Punto 5 — verificado:** saludo 1ª vez con `ULTIMO_SALUDO` intacto.
+- **Punto 6 — verificado:** sin `#config-nombre-asistente` en código.
+- **Punto 7 — verificado:** sin `#config-biometria` en código.
+- **Punto 8 — verificado:** motivacional con prioridad media (6 s) intacto.
+- **Punto 9 — verificado:** filtro 51-200/máx 250, coma ≥50, punto/`;` siempre, sin guiones/números solos.
+- **Punto 10 — verificado:** `bancoDatos` + `migrarBancoDatos()` con respaldo previo intactos.
+- **Punto 11 — verificado:** hora entrada/salida, errores por usuario, aviso al jefe a los 7 intentos, temporal con cambio obligatorio, sugerencia IA >6 errores/semana, nombre IA configurable, sello "Escribe aquí...".
+- **Pendiente:** verificación del Arquitecto en navegador (Ctrl+F5) + sincronizar GitHub (terminal sin respuesta; lo sube el vigilante).
+
+### 07/10/2026 — PUNTOS 1-10 (instrucciones.md): ICONOS SIN SATURAR + LETRERO + ACRÓNIMO + SIN CORONA/ROL + COMA CON 50
+- **Punto 1 — hecho:** los SVG tenían fondo blanco + forma negra y el filtro CSS los volvía bloques verdes. Forma a `#00ff88` + fondo a `none` en `rostro.svg`, `patron.svg`, `huella.svg`; quitado el `filter` saturador de `.btn-biometria img` (44px, halo intacto, sin mover de lugar).
+- **Punto 2 — hecho:** letrero de Perfil a "Selecciona la opción biométrica a enrolar en este dispositivo." (HTML + `bio_enrol_leyenda` ES/EN). Iconos ya sin saturar por Punto 1.
+- **Punto 3 — hecho (sesión anterior, verificado):** `actualizarSaludoLogin()` muestra campo Nombre completo + reduce letra en una línea.
+- **Punto 4 — verificado:** `irAPantalla()` oculta `#zona-superior` en Login; sin rotación ahí.
+- **Punto 5 — verificado:** saludo 1ª vez con `ULTIMO_SALUDO` intacto.
+- **Punto 6 — verificado:** sin `#config-nombre-asistente` en código (solo mención histórica en MEMORIA).
+- **Punto 7 — verificado:** sin `#config-biometria` en código (solo mención histórica en MEMORIA).
+- **Punto 8 — hecho:** coma = delimitador solo si el fragmento tiene al menos 50 caracteres; punto y punto y coma siempre delimitan.
+- **Punto 9 — hecho:** `.badge-visor` y `#modal-acronimo-preview` a `var(--color-letras)` (antes `#0b0f19` oscuro).
+- **Punto 10 — hecho:** quitada corona `👑` del nodo No.1 y campo `Rol:` del detalle general. La corona restante es solo el aviso de cambio de No.1 (no el nodo). Nodo sin descentrado (árbol en columna flexible, no se tocó CSS).
+- **Pendiente:** verificación del Arquitecto en navegador (Ctrl+F5).
+- **07/10/2026 (sincronización):** intentada con `git status/log` — la terminal devolvió error sin salida observable, así que NO se confirmó ni se forzó `push` (protocolo: nunca adivinar ni dejar rebase a medias). El vigilante automático (`subir_automatico.ps1`, arranca solo al encender el PC) subirá los cambios (MEMORIA + 10 puntos) en cuanto corra; verificar con Tarea 1) Estado Git → AL DÍA y Tarea 2) Sincronizar si hace falta.
+
 ### 04/10/2026 (noche) — PUNTO 6 PARTE A: PRIMERA ENTRADA / ÚLTIMA SALIDA DEL DÍA
 El PUNTO 6 tenía dos partes (A: saludo + marcas del día; B: iconos). La B quedó hecha el 16/09, pero **la Parte A estaba incompleta**: el saludo en vivo y el saludo en cartelera existían, y el PUNTO 48 había creado el histórico de asistencia, pero **nunca se escribieron los 3 campos que pide el punto 6 sobre el usuario**. Quedó cerrado ahora.
 - **`datos.js`:** `usuarioActivo` y la estructura de `baseDatosUsuarios` ganan `primeraEntradaDelDia` ("YYYY-MM-DD HH:MM"), `ultimaSalidaDelDia` (igual, `null` si sigue abierto) y `tiempoTotalDelDia` (minutos).

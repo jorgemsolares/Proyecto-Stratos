@@ -45,9 +45,10 @@ function mostrarAvisoInmediato(texto, tipo) {
 }
 
 // ==========================================
-// 3. FUNCIÓN PARA FRAGMENTAR MISIÓN, VISIÓN Y VALORES (PUNTO 3)
-// Segmentos: ideal 51-200 caracteres, máx 250. Delimitadores: coma (,), punto (.)
-// y punto y coma (;). Un segmento corto (<51) se une al ANTERIOR si venía de coma,
+// 3. FUNCIÓN PARA FRAGMENTAR MISIÓN, VISIÓN Y VALORES (PUNTO 8)
+// Segmentos: ideal 51-200 caracteres, máx 250. Delimitadores: coma (solo si el
+// fragmento tiene al menos 50 caracteres), punto (.) y punto y coma (;) siempre.
+// Un segmento corto (<51) se une al ANTERIOR si venía de coma,
 // o al SIGUIENTE si venía de punto / punto y coma. Filtro: sin guiones ni números solos.
 // ==========================================
 function obtenerFragmentosMisionVisionValores() {
@@ -76,16 +77,27 @@ function esFragmentoValido(fragmento) {
     return true;
 }
 
-// Segmenta un texto en oraciones completas según las reglas del PUNTO 3.
+// Segmenta un texto en oraciones completas según las reglas del PUNTO 8:
+// coma = delimitador solo si el fragmento tiene al menos 50 caracteres;
+// punto y punto y coma = siempre delimitadores.
 function segmentarTextoEnOraciones(texto, idealMin, idealMax, max) {
-    // 1) Tokeniza conservando el delimitador que cierra cada parte
+    // 1) Tokeniza: punto y punto y coma siempre cortan; la coma solo si el
+    // fragmento acumulado ya tiene al menos 50 caracteres
     const partes = [];
     let buffer = '';
     for (const ch of texto) {
-        if (ch === ',' || ch === '.' || ch === ';') {
+        if (ch === '.' || ch === ';') {
             buffer += ch;
             partes.push({ texto: buffer.trim(), delimitador: ch });
             buffer = '';
+        } else if (ch === ',') {
+            if ((buffer.trim().length) >= 50) {
+                buffer += ch;
+                partes.push({ texto: buffer.trim(), delimitador: ch });
+                buffer = '';
+            } else {
+                buffer += ch;
+            }
         } else {
             buffer += ch;
         }
@@ -278,6 +290,12 @@ function iniciarRotacionMensajes() {
         clearTimeout(intervaloRotacionMensajes);
         intervaloRotacionMensajes = null;
     }
+    // PUNTO 4: en Login no hay cartelera; se detiene la rotación y se oculta el mensaje.
+    if (typeof pantallaActual !== 'undefined' && pantallaActual === 'pantalla-acceso') {
+        const mensajeDiv = document.getElementById('mensaje-personalizado');
+        if (mensajeDiv) mensajeDiv.style.display = 'none';
+        return;
+    }
     if (temporizadorAviso) {
         clearTimeout(temporizadorAviso);
         temporizadorAviso = null;
@@ -369,6 +387,9 @@ function irAPantalla(id) {
     pantallaActual = id;
     // El botón de IA aparece en todas las pantallas excepto Login (PUNTO 7)
     mostrarBotonIA(id !== 'pantalla-acceso');
+    // PUNTO 4: la cartelera solo aparece en pantallas internas (no en Login)
+    const zonaSuperior = document.getElementById('zona-superior');
+    if (zonaSuperior) zonaSuperior.style.display = (id === 'pantalla-acceso') ? 'none' : '';
     ajustarLayoutAdaptativo();
     if (typeof estadoPantallas !== 'undefined' && estadoPantallas[id]) {
         estadoPantallas[id].visitada = true;
@@ -1545,12 +1566,13 @@ function cargarNombreRecordado() {
         const checkRecordar = document.getElementById('guardar-local');
         if (campoNombre) campoNombre.value = nombreGuardado;
         if (checkRecordar) checkRecordar.checked = true;
-        if (spanNombre) spanNombre.innerText = nombreGuardado.split(' ')[0];
+        if (spanNombre) { spanNombre.innerText = nombreGuardado; spanNombre.style.whiteSpace = 'nowrap'; }
     } else {
-        // Sin "recordar": el saludo usa el último usuario del sistema, si existe (PUNTO 6)
+        // Sin "recordar": el saludo usa el último usuario del sistema, si existe (PUNTO 3: nombre completo)
         const ultimoUsuario = localStorage.getItem(STORAGE_KEYS.ULTIMO_USUARIO);
         if (spanNombre) {
-            spanNombre.innerText = ultimoUsuario ? ultimoUsuario.replace(/^"|"$/g, '').split(' ')[0] : "de nuevo";
+            spanNombre.innerText = ultimoUsuario ? ultimoUsuario.replace(/^"|"$/g, '') : "de nuevo";
+            spanNombre.style.whiteSpace = 'nowrap';
         }
     }
     const datalist = document.getElementById('lista-usuarios');
@@ -1563,19 +1585,33 @@ function cargarNombreRecordado() {
 }
 
 // ==========================================
-// 20.1 SALUDO DEL LOGIN (actualiza el "Hola [Nombre]" en vivo; usa el último usuario del sistema si el campo está vacío — PUNTO 6)
+// 20.1 SALUDO DEL LOGIN (PUNTO 3: lee el campo "Nombre" del perfil, no el nombre completo de Login)
 // ==========================================
 function actualizarSaludoLogin() {
     const spanNombre = document.getElementById('nombre-usuario-login');
     if (!spanNombre) return;
     const campoNombre = document.getElementById('acc-nombre-completo');
     const texto = campoNombre ? campoNombre.value.trim().replace(/^"|"$/g, '') : '';
+    let nombre = '';
     if (texto) {
-        spanNombre.innerText = texto.split(' ')[0];
+        // PUNTO 3: el saludo usa el campo "Nombre" del perfil del usuario que coincide,
+        // no el nombre completo escrito en Login
+        const coincidencia = (typeof baseDatosUsuarios !== 'undefined' ? baseDatosUsuarios : [])
+            .find(u => u && u.nombreCompleto && u.nombreCompleto.toLowerCase() === texto.toLowerCase());
+        nombre = (coincidencia && coincidencia.nombre) ? coincidencia.nombre : texto.split(' ')[0];
     } else {
         const ultimoUsuario = localStorage.getItem(STORAGE_KEYS.ULTIMO_USUARIO);
-        spanNombre.innerText = ultimoUsuario ? ultimoUsuario.replace(/^"|"$/g, '').split(' ')[0] : "de nuevo";
+        nombre = ultimoUsuario ? ultimoUsuario.replace(/^"|"$/g, '').split(' ')[0] : "de nuevo";
     }
+    spanNombre.innerText = nombre;
+    // PUNTO 3: si el nombre es largo, se reduce la letra para que siga en una línea
+    const largo = nombre.length;
+    let tam = '1.5rem';
+    if (largo > 30) tam = '1rem';
+    else if (largo > 22) tam = '1.1rem';
+    else if (largo > 15) tam = '1.25rem';
+    spanNombre.style.fontSize = tam;
+    spanNombre.style.whiteSpace = 'nowrap';
 }
 
 // ==========================================
@@ -1595,7 +1631,7 @@ function verificarDispositivoBiometrico() {
     return PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable().catch(() => false);
 }
 
-// ¿El usuario dejó habilitada la biometría en Configuración?
+// ¿El usuario dejó habilitada la biometría? (PUNTO 7: ya no hay casilla; queda habilitada al inscribir en Perfil)
 function biometriaHabilitada() { return !!(configuracionPersonal && configuracionPersonal.biometria); }
 
 // Texto de un aviso ya traducido (si la clave no existe, se usa el texto en español).
@@ -1822,12 +1858,10 @@ function enrolarBiometria(metodo) {
             fecha: new Date().toISOString()
         };
         guardarEnStorage(STORAGE_KEYS.BIOMETRIA, mapa);
-        // Al inscribir, la biometría queda habilitada en Configuración.
+        // Al inscribir, la biometría queda habilitada (PUNTO 7: ya no hay casilla).
         if (!biometriaHabilitada()) {
             configuracionPersonal.biometria = true;
             guardarEnStorage(STORAGE_KEYS.CONFIG_PERSONAL, configuracionPersonal);
-            const casilla = document.getElementById('config-biometria');
-            if (casilla) casilla.checked = true;
         }
         actualizarEstadoEnrolamiento();
         registrarActividadBancoDatos(usuarioActivo.id, 'biometria',
@@ -1935,7 +1969,7 @@ function intentarBiometria(metodo) {
         return;
     }
     if (!biometriaHabilitada()) {
-        avisar(_bioTexto('bio_desactivada', 'Activa "Habilitar autenticación biométrica" en Configuración.'));
+        avisar(_bioTexto('bio_desactivada', 'Inscribe tu biometría desde tu Perfil.'));
         return;
     }
 
@@ -2616,7 +2650,6 @@ function verDetalleContactoGeneral(id) {
                 <p><strong>Acrónimo:</strong> ${usuario.acronimo || '---'}</p>
                 <p><strong>Teléfono:</strong> ${usuario.telefono || 'No especificado'}</p>
                 <p><strong>Email:</strong> ${usuario.email || 'No especificado'}</p>
-                <p><strong>Rol:</strong> ${usuario.rol || 'Colaborador'}</p>
             `;
             modal.style.display = 'flex';
         }
@@ -2629,9 +2662,9 @@ function editarPerfil() { irAPantalla('registro-invitacion'); }
 
 function guardarConfiguracion() {
     const config = {
-        nombreAsistente: (document.getElementById('config-nombre-asistente')?.value || '').trim() || 'Vero',
+        nombreAsistente: (configuracionPersonal && configuracionPersonal.nombreAsistente) || 'Vero',
         idioma: document.getElementById('config-idioma')?.value || 'es',
-        biometria: document.getElementById('config-biometria')?.checked || false
+        biometria: !!(configuracionPersonal && configuracionPersonal.biometria)
     };
     configuracionPersonal = config;
     guardarEnStorage(STORAGE_KEYS.CONFIG_PERSONAL, configuracionPersonal);
@@ -3047,7 +3080,7 @@ function renderizarOrganigramaGeneral() {
         nodo.onclick = () => verDetalleContactoGeneral(usuario.id);
         const bandera = usuario.tipoActual === 'Observador' ? '👁️ '
             : usuario.tipoActual === 'Indirecto' ? '🔗 '
-            : (usuario.esNo1 ? '👑 ' : '');
+            : '';
         nodo.innerHTML = `
             <div class="nodo-general-contenido">
                 <div class="titulo-nodo-general">${bandera}${usuario.nombreCompleto || usuario.nombre}</div>
@@ -3071,8 +3104,8 @@ function renderizarOrganigramaGeneral() {
         const usuario = porId[id];
         if (!usuario) return null; // el nodo existe pero el usuario ya no
         const fila = document.createElement('div');
-        fila.className = 'org-general-rama';
-        fila.style.marginLeft = (nivel * 24) + 'px';
+        fila.className = 'org-general-rama' + (nivel === 0 ? ' org-general-rama-nivel-0' : '');
+        fila.style.marginLeft = (nivel === 0) ? '0px' : (nivel * 24) + 'px';
         fila.appendChild(crearNodo(usuario));
         (hijosDe[id] || []).forEach(idHijo => {
             const conector = document.createElement('div');

@@ -415,7 +415,7 @@ textarea {
 ========================================== */
 .badge-visor {
     background: var(--color-primario);
-    color: #0b0f19;
+    color: var(--color-letras);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1313,11 +1313,23 @@ textarea {
 /* PUNTO 6 (Parte B) / 9-10-11: iconos SVG de trazo fino en verde Stratos */
 .btn-biometria {
     color: var(--color-primario);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .btn-biometria svg {
     width: 26px;
     height: 26px;
     display: block;
+}
+/* PUNTO 1: SVG externos de iconos/ en verde Stratos sin saturar (la forma va verde, el fondo transparente) */
+.btn-biometria img {
+    width: 26px;
+    height: 26px;
+    display: block;
+    object-fit: contain;
+    background: transparent;
+    border-radius: 50%;
 }
 
 /* Opción ya enrolada en este dispositivo (resaltada) */
@@ -1701,10 +1713,17 @@ en el CSS, por eso el organigrama general salía sin forma.
 .organigrama-general-arbol {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 4px;
     width: 100%;
     padding: 10px 0;
+}
+
+/* PUNTO 1: el nodo del No.1 (raíz, nivel 0) va centrado arriba */
+.org-general-rama-nivel-0 {
+    align-items: center;
+    margin-left: 0;
+    width: 100%;
 }
 
 .org-general-rama {

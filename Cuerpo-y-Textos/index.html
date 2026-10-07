@@ -103,16 +103,16 @@
         <!-- ENROLAMIENTO BIOMÉTRICO (el usuario inscribe rostro/patrón/huella en ESTE dispositivo — PUNTO 9-10-11) -->
         <div id="biometria-enrolamiento" class="biometria-enrolamiento">
             <p class="titulo-biometria" data-i18n="bio_enrol_titulo">🔐 Autenticación biométrica (este dispositivo)</p>
-            <p class="leyenda-biometria" data-i18n="bio_enrol_leyenda">Inscribe la opción con la que quieres entrar de aquí en adelante (rostro, patrón o huella).</p>
+            <p class="leyenda-biometria" data-i18n="bio_enrol_leyenda">Selecciona la opción biométrica a enrolar en este dispositivo.</p>
             <div id="opciones-biometria-perfil" class="opciones-biometria">
                 <button type="button" class="btn-biometria" id="perfil-bio-facial" title="Inscribir rostro" data-i18n-title="bio_facial" onclick="enrolarBiometria('facial')">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10.5" r="0.9"/><circle cx="15" cy="10.5" r="0.9"/><path d="M8.5 15c1 1 2.2 1.5 3.5 1.5s2.5-.5 3.5-1.5"/></svg>
+                    <img src="../Colores-y-Estetica/iconos/rostro.svg" alt="Facial">
                 </button>
                 <button type="button" class="btn-biometria" id="perfil-bio-patron" title="Inscribir patrón" data-i18n-title="bio_patron" onclick="enrolarBiometria('patron')">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="5" r="1.1"/><circle cx="12" cy="5" r="1.1"/><circle cx="19" cy="5" r="1.1"/><circle cx="5" cy="12" r="1.1"/><circle cx="12" cy="12" r="1.1"/><circle cx="19" cy="12" r="1.1"/><circle cx="5" cy="19" r="1.1"/><circle cx="12" cy="19" r="1.1"/><circle cx="19" cy="19" r="1.1"/><path d="M5 5l7 7 7 7"/></svg>
+                    <img src="../Colores-y-Estetica/iconos/patron.svg" alt="Patrón">
                 </button>
                 <button type="button" class="btn-biometria" id="perfil-bio-huella" title="Inscribir huella" data-i18n-title="bio_huella" onclick="enrolarBiometria('huella')">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 11v3"/><path d="M8.5 8.2a5 5 0 0 1 7 0"/><path d="M6.6 10.5a8 8 0 0 1 10.8 0"/><path d="M5 13.2a11 11 0 0 1 14 0"/><path d="M7.5 15.8a8 8 0 0 1 9 0"/><path d="M10 18.4a5 5 0 0 1 4 0"/></svg>
+                    <img src="../Colores-y-Estetica/iconos/huella.svg" alt="Huella">
                 </button>
             </div>
             <p id="mensaje-biometria-perfil" class="aviso-letrero"></p>
@@ -151,13 +151,13 @@
         <!-- OPCIONES DE AUTENTICACIÓN BIOMÉTRICA (facial/patrón/huella; se habilitan según el dispositivo — PUNTO 6) -->
         <div id="opciones-biometria" class="opciones-biometria">
             <button type="button" class="btn-biometria" id="bio-facial" title="Reconocimiento facial" data-i18n-title="bio_facial" onclick="intentarBiometria('facial')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10.5" r="0.9"/><circle cx="15" cy="10.5" r="0.9"/><path d="M8.5 15c1 1 2.2 1.5 3.5 1.5s2.5-.5 3.5-1.5"/></svg>
+                <img src="../Colores-y-Estetica/iconos/rostro.svg" alt="Facial">
             </button>
             <button type="button" class="btn-biometria" id="bio-patron" title="Patrón de desbloqueo" data-i18n-title="bio_patron" onclick="intentarBiometria('patron')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="5" r="1.1"/><circle cx="12" cy="5" r="1.1"/><circle cx="19" cy="5" r="1.1"/><circle cx="5" cy="12" r="1.1"/><circle cx="12" cy="12" r="1.1"/><circle cx="19" cy="12" r="1.1"/><circle cx="5" cy="19" r="1.1"/><circle cx="12" cy="19" r="1.1"/><circle cx="19" cy="19" r="1.1"/><path d="M5 5l7 7 7 7"/></svg>
+                <img src="../Colores-y-Estetica/iconos/patron.svg" alt="Patrón">
             </button>
             <button type="button" class="btn-biometria" id="bio-huella" title="Huella digital" data-i18n-title="bio_huella" onclick="intentarBiometria('huella')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 11v3"/><path d="M8.5 8.2a5 5 0 0 1 7 0"/><path d="M6.6 10.5a8 8 0 0 1 10.8 0"/><path d="M5 13.2a11 11 0 0 1 14 0"/><path d="M7.5 15.8a8 8 0 0 1 9 0"/><path d="M10 18.4a5 5 0 0 1 4 0"/></svg>
+                <img src="../Colores-y-Estetica/iconos/huella.svg" alt="Huella">
             </button>
         </div>
 
@@ -315,10 +315,7 @@
                 <div class="config-section">
                     <h3 data-i18n="cfg_ia">🤖 Configuración de IA</h3>
                     <p class="descripcion-app" data-i18n="cfg_ia_desc">Personaliza a tu asistente de Stratos.</p>
-                    <!-- Nombre del asistente (el comando de activación es "Hola [nombre]" — PUNTO 7) -->
-                    <div class="formulario" style="margin-bottom: 10px;">
-                        <input type="text" id="config-nombre-asistente" placeholder="Nombre de tu asistente *" data-i18n="cfg_ia_nombre" maxlength="20" spellcheck="true">
-                    </div>
+                    <!-- PUNTO 6: sin campo de nombre; la IA lo pide en su primera interacción -->
                     <!-- Botón de IA (diseño de esfera; la lógica de la IA se conecta en el PUNTO 7) -->
                     <button type="button" id="boton-ia-configuracion" class="boton-ia">
                         <span class="rotulo-ia-linea1" data-i18n="cfg_ia_boton1">Configuración</span>
@@ -336,10 +333,7 @@
                 
                 <div class="config-section">
                     <h3 data-i18n="cfg_seguridad">🔒 Seguridad</h3>
-                    <label class="checkbox-container">
-                        <input type="checkbox" id="config-biometria">
-                        <span data-i18n="cfg_biometria">Habilitar autenticación biométrica</span>
-                    </label>
+                    <p class="descripcion-app">La biometría se inscribe desde tu Perfil.</p>
                 </div>
                 
                 <div class="config-section">
@@ -467,7 +461,7 @@
                 <!-- Visor de acrónimo en tiempo real -->
                 <div class="fila-dinamica" style="margin-top: 10px; align-items: center;">
                     <span style="flex: 1; color: rgba(255,255,255,0.7);" data-i18n="mod_acronimo">Acrónimo:</span>
-                    <div id="modal-acronimo-preview" class="badge-visor" style="flex: 1; text-align: center; background: var(--color-primario); color: #0b0f19; padding: 8px; border-radius: 8px;">---</div>
+                    <div id="modal-acronimo-preview" class="badge-visor" style="flex: 1; text-align: center; background: var(--color-primario); color: var(--color-letras); padding: 8px; border-radius: 8px;">---</div>
                 </div>
                 <div class="fila-dinamica">
                     <select id="modal-pais" class="selector-pais" style="flex: 1;">

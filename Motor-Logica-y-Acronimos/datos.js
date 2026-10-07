@@ -440,7 +440,7 @@ const TRADUCCIONES = {
     "cfg_biometria": { es: "Habilitar autenticación biométrica", en: "Enable biometric authentication" },
     // BIOMETRÍA (PUNTOS 6 y 9-10-11) — inscripción en Perfil y entrada directa
     "bio_enrol_titulo": { es: "🔐 Autenticación biométrica (este dispositivo)", en: "🔐 Biometric authentication (this device)" },
-    "bio_enrol_leyenda": { es: "Inscribe la opción con la que quieres entrar de aquí en adelante (rostro, patrón o huella).", en: "Enroll the option you will use from now on (face, pattern or fingerprint)." },
+    "bio_enrol_leyenda": { es: "Selecciona la opción biométrica a enrolar en este dispositivo.", en: "Select the biometric option to enroll on this device." },
     "bio_facial": { es: "Reconocimiento facial", en: "Face recognition" },
     "bio_patron": { es: "Patrón de desbloqueo", en: "Unlock pattern" },
     "bio_huella": { es: "Huella digital", en: "Fingerprint" },
@@ -449,7 +449,7 @@ const TRADUCCIONES = {
     "bio_sin_inscribir": { es: "Aún no has inscrito ninguna biometría en este dispositivo.", en: "You have not enrolled any biometric on this device yet." },
     "bio_sin_webauthn": { es: "Este navegador no admite autenticación biométrica.", en: "This browser does not support biometric authentication." },
     "bio_contexto_seguro": { es: "Abre la app con Live Server o desde una dirección https para usar la biometría.", en: "Open the app with Live Server or from an https address to use biometrics." },
-    "bio_desactivada": { es: 'Activa "Habilitar autenticación biométrica" en Configuración.', en: 'Enable "biometric authentication" in Settings.' },
+    "bio_desactivada": { es: "Inscribe tu biometría desde tu Perfil.", en: "Enroll your biometrics from your Profile." },
     "bio_nadie_inscrito": { es: "Todavía no hay biometría inscrita. Inscríbela desde tu Perfil.", en: "No biometric enrolled yet. Enroll it from your Profile." },
     "bio_usuario_no_inscrito": { es: "Ese usuario no tiene biometría inscrita en este dispositivo.", en: "That user has no biometric enrolled on this device." },
     "bio_metodo_inscrito": { es: "La opción que tienes inscrita es:", en: "The option you enrolled is:" },
@@ -798,11 +798,8 @@ window.addEventListener('DOMContentLoaded', function() {
         configuracionPersonal = configuracionGuardada;
         const selectorIdioma = document.getElementById('config-idioma');
         if (selectorIdioma && configuracionGuardada.idioma) selectorIdioma.value = configuracionGuardada.idioma;
-        const campoAsistente = document.getElementById('config-nombre-asistente');
-        if (campoAsistente && configuracionPersonal.nombreAsistente) campoAsistente.value = configuracionPersonal.nombreAsistente;
-        // PUNTO 9-10-11: se restaura el estado de la casilla de biometría
-        const casillaBio = document.getElementById('config-biometria');
-        if (casillaBio) casillaBio.checked = !!configuracionPersonal.biometria;
+        // PUNTO 6: ya no hay campo de nombre de asistente; el nombre lo pide la IA en su primera interacción.
+        // PUNTO 7: ya no hay casilla de biometría; el estado vive en configuracionPersonal.biometria.
     }
     if (typeof aplicarIdioma === 'function') aplicarIdioma(configuracionPersonal.idioma || 'es');
 });

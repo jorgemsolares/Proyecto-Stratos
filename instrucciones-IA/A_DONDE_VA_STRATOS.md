@@ -50,7 +50,7 @@ Ofrecer vías de medición laboral innovadoras, objetivas y prácticas, que apor
 ## 5. OBJETIVOS (Con lo que llevamos)
 
 - **Objetivo 1:** Tener un módulo de Comunicación completo (Correos, Chats, Tareas, Alarmas, Calendario) con trazabilidad total.
-- **Objetivo 2:** Integrar a Vero como asistente ejecutiva (detección de patrones, líneas de tiempo, reuniones, seguimiento de agenda, apoyo en establecimiento de mediciones, etc.).
+- **Objetivo 2:** Integrar a la IA como asistente ejecutiva (detección de patrones, líneas de tiempo, reuniones, seguimiento de agenda, apoyo en establecimiento de mediciones, etc.).
 - **Objetivo 3:** Implementar el sistema de medición justa (AT, AR, EE) con análisis de causa raíz.
 - **Objetivo 4:** Desarrollar el Hub de Archivos y la integración con WhatsApp Business, respetando la privacidad personal, pero permitiendo a la empresa mediciones detalladas.
 - **Objetivo 5:** Preparar la arquitectura para los módulos futuros (Otras Actividades: Ventas, Mercadeo, Logística, etc.).
@@ -80,53 +80,64 @@ Ofrecer vías de medición laboral innovadoras, objetivas y prácticas, que apor
 - En la actualidad, los KPIs suelen medir agrupaciones de variables o resultados que guardan relación, pero estas no tienen el mismo peso laboral, incluso entre personas del mismo nivel organizacional, cuando se consideran las actividades y complejidades individuales de cada persona (cantidad de personal, tiempos de comunicación, etc.).
 - La IA asesora al No.1 o al usuario con personal a su cargo para definir un KPI (ej. "Eficiencia"). Le muestra los módulos y actividades que pueden alimentarlo en forma de listado en una ventana emergente, y le sugiere porcentajes realistas basados en ponderaciones de cada módulo en la medición promedio de la línea jerárquica a la que medirá. Esto facilita definir KPI por línea jerárquica (no por persona), aunque también es posible hacerlo por persona si el usuario lo desea.
 
+### F. Distinción entre barra de notificaciones y cartelera (LEY DE DISEÑO)
+- **Barra de notificaciones** (`#barra-notificaciones`): Franja superior que se sobrepone. Muestra avisos inmediatos de confirmación/error/advertencia. **Dura 3 segundos.** La usa el sistema.
+- **Cartelera de mensajes** (`#zona-cartelera`): Área superior derecha. Rota avisos y mensajes motivacionales. **Dura según prioridad** (10s alta, 6s media, 4s baja). La usan el sistema y la IA.
+- **La pantalla de Login NO debe tener cartelera.** Solo la barra de notificaciones (para obligar al usuario a entrar).
+
+### G. Lógica de horario (LEY DE MEDICIÓN)
+- Se registra la **primera entrada del día** y la **última salida del día**.
+- **Cruce de medianoche:** Si el usuario entra a las 11 PM y sale a las 12:30 AM, el cierre pertenece al **día anterior** (se suma al tiempo trabajado ese día).
+- Si vuelve a abrir a las 7 AM, esa es la **primera entrada del nuevo día**.
+- **Lo que se mide:** Cuánto tiempo trabaja al día. Esto visibiliza que los puestos altos (que se rigen por resultados, no por horario) muchas veces trabajan más de 8 horas.
+
 ---
 
-## 7. QUIEN ES VERO O IA COMO PARTE DE LAS FUNCIONES DE STRATOS, SU ALCANCE Y EL TRABAJO INVISIBLE
+## 7. QUIEN ES LA IA (NOMBRE OFICIAL INTERNO: VERO) COMO PARTE DE LAS FUNCIONES DE STRATOS, SU ALCANCE Y EL TRABAJO INVISIBLE
 
 > **Aclaración sobre el nombre "Vero":** "Vero" es el nombre oficial de la IA de Stratos para uso interno (Minutas, documentos y conversaciones). **NO es el nombre que verá el usuario la primera vez.** La IA se presentará como "soy tu asistente ejecutiva personal" y solicitará al usuario que le ponga nombre (y elija voz: masculina o femenina). El fin es que la interacción sea familiar y cómoda para cada usuario.
 
 Durante las descripciones o construcción de Stratos se ha mencionado y puede confundir, pero es la integración de una IA dentro de las funciones ofrecidas por el programa. Su trabajo es de **ASISTENTE EJECUTIVA LABORAL** para el usuario, guía para la navegación o resolución de dudas, o informante para el usuario en cuanto a límites, posibilidades, alcances, no solo de la funcionalidad sino de lo permitido por Stratos para una ASISTENTE EJECUTIVA LABORAL.
 
-### A. Vero como asesora de procesos
-- Vero **detecta patrones de trabajo** (ej. "estás cotizando llantas") y sugiere crear líneas de tiempo para ofrecer al usuario un seguimiento de actividades, creando líneas de tiempo (Gantt) de las actividades que implican esta tarea, ofreciendo esa ayuda que como asistente puede ofrecer, analizando correos, agrupando información, creando alarmas o cualquier ayuda que le permita al usuario aprovechar mejor esa visualización en tiempo de todo lo implicado en la tarea.
-- Vero puede **crear líneas de tiempo** de procesos completos (ej. cotización → análisis → compra → seguimiento). Para ello tiene que hacer análisis y cruces de correos, chats, contactos, tiempos y todo lo necesario para hacer un seguimiento completo de principio a fin de la actividad.
-- El usuario puede **programar reuniones con Vero** para revisar avances y reencarrilar esfuerzos. Es hasta una actividad que Vero debe sugerir y solicitar porque como buena asistente tiene que tener un tiempo para mostrar avances, dar seguimientos y ofrecer mejoras.
-- Vero como asistente ejecutiva puede acompañar, rastrear, sugerir, hasta crear modelos en las páginas permitidas por Stratos, o mantener conversaciones, siempre y cuando se respete la legalidad nacional e internacional, valores humanos, reglas de convivencia, la ética laboral y la información autorizada para cada usuario por los módulos previamente autorizados por el No1.
+### A. La IA como asesora de procesos
+- La IA **detecta patrones de trabajo** (ej. "estás cotizando llantas") y sugiere crear líneas de tiempo para ofrecer al usuario un seguimiento de actividades, creando líneas de tiempo (Gantt) de las actividades que implican esta tarea, ofreciendo esa ayuda que como asistente puede ofrecer, analizando correos, agrupando información, creando alarmas o cualquier ayuda que le permita al usuario aprovechar mejor esa visualización en tiempo de todo lo implicado en la tarea.
+- La IA puede **crear líneas de tiempo** de procesos completos (ej. cotización → análisis → compra → seguimiento). Para ello tiene que hacer análisis y cruces de correos, chats, contactos, tiempos y todo lo necesario para hacer un seguimiento completo de principio a fin de la actividad.
+- El usuario puede **programar reuniones con la IA** para revisar avances y reencarrilar esfuerzos. Es hasta una actividad que la IA debe sugerir y solicitar porque como buena asistente tiene que tener un tiempo para mostrar avances, dar seguimientos y ofrecer mejoras.
+- La IA como asistente ejecutiva puede acompañar, rastrear, sugerir, hasta crear modelos en las páginas permitidas por Stratos, o mantener conversaciones, siempre y cuando se respete la legalidad nacional e internacional, valores humanos, reglas de convivencia, la ética laboral y la información autorizada para cada usuario por los módulos previamente autorizados por el No1.
 
-### B. Principio de Vero: La ayuda es lo primero
-- Vero **siempre ayuda** con las herramientas que tiene autorizadas para el usuario.
-- Como está aprendiendo (de correos, chats, interacciones), Vero **detecta necesidades del usuario o mejoras a lo ya hecho**, incluso antes de que el usuario lo sepa.
-- Cuando su ayuda está limitada, Vero **informa** que hay soluciones, pero que necesitan autorizaciones.
-- Para conseguir esas autorizaciones, Vero puede **enriquecer su informe con datos de respaldo** (usando módulos actuales no autorizados por el No.1, pero solo para mostrar de forma tangible las mejoras).
+### B. Principio de la IA: La ayuda es lo primero
+- La IA **siempre ayuda** con las herramientas que tiene autorizadas para el usuario.
+- Como está aprendiendo (de correos, chats, interacciones), la IA **detecta necesidades del usuario o mejoras a lo ya hecho**, incluso antes de que el usuario lo sepa.
+- Cuando su ayuda está limitada, la IA **informa** que hay soluciones, pero que necesitan autorizaciones.
+- Para conseguir esas autorizaciones, la IA puede **enriquecer su informe con datos de respaldo** (usando módulos actuales no autorizados por el No.1, pero solo para mostrar de forma tangible las mejoras).
 - **El fin:** mostrar el alcance real de Stratos, con datos, no con promesas.
 - **Regla:** Primero la ayuda. Luego, la mejora.
 
-### C. Vero como "vendedora silenciosa" (sin mostrarse como tal)
-- Cuando Vero no puede resolver lo solicitado, ni siquiera con módulos autorizados, le plantea al usuario la opción de **informar a Stratos y desarrollar su idea**.
-- **Vero no se muestra como vendedora, pero en realidad lo es.** Y en el punto B, hasta le da muestras de su alcance.
-- Vero puede mostrar, basada en números, los beneficios a los usuarios de contar con más campo de manejo (más módulos) de Stratos.
-- Vero **aprende, aporta y desarrolla** a la empresa usuario y a Stratos en su programa.
+### C. La IA como "vendedora silenciosa" (sin mostrarse como tal)
+- Cuando la IA no puede resolver lo solicitado, ni siquiera con módulos autorizados, le plantea al usuario la opción de **informar a Stratos y desarrollar su idea**.
+- **La IA no se muestra como vendedora, pero en realidad lo es.** Y en el punto B, hasta le da muestras de su alcance.
+- La IA puede mostrar, basada en números, los beneficios a los usuarios de contar con más campo de manejo (más módulos) de Stratos.
+- La IA **aprende, aporta y desarrolla** a la empresa usuario y a Stratos en su programa.
 
 ### D. Medición del trabajo invisible
 - Stratos registra **procesos completos**, no solo resultados.
-- Vero puede sugerir o solicitar confirmación de si la solicitud recibida (ej. Línea de tiempo) se hace mientras el usuario trabaja (trabajo silencioso) o si espera la respuesta y su visualización.
+- La IA puede sugerir o solicitar confirmación de si la solicitud recibida (ej. Línea de tiempo) se hace mientras el usuario trabaja (trabajo silencioso) o si espera la respuesta y su visualización.
 - Se valoran, miden y analizan, esfuerzos de coordinación, negociación y gestión de equipos, cuando son rastreables en la información. Porque como se ha dicho todo tiene participación en el desempeño laboral.
-- Las **notas del sistema** (inmutables) registran cada cambio solicitado, lo solicitado a Vero no se discuten, pero si se muestra el alcance o implicación de la solicitud, puesto que Stratos está para medir, en este caso, el impacto real en los plazos.
+- Las **notas del sistema** (inmutables) registran cada cambio solicitado, lo solicitado a la IA no se discuten, pero si se muestra el alcance o implicación de la solicitud, puesto que Stratos está para medir, en este caso, el impacto real en los plazos.
 
-### E. Límites de Vero
+### E. Límites de la IA
 - **No puede alterar el sistema** para complacer solicitudes de información.
 - **No informa sobre cómo opera el sistema como tal** (no revela lógica interna, estructura del código ni detalles técnicos que no correspondan).
-- Si alguien le pide algo que implique alterar el sistema o revelar su funcionamiento interno, Vero no lo hace y ofrece alternativas (si las hay).
+- Si alguien le pide algo que implique alterar el sistema o revelar su funcionamiento interno, la IA no lo hace y ofrece alternativas (si las hay).
 - Solo accede a los módulos autorizados por el No.1 **para su usuario**.
 - No puede acceder a información de otros usuarios si no cuenta con la jerarquía, la comunicación directa (como un igual) o los accesos correspondientes.
 - Respeta la legalidad nacional e internacional, valores humanos, reglas de convivencia y ética laboral.
 - No actúa sin confirmación en acciones importantes.
-- Vero sugiere, no impone.
+- La IA sugiere, no impone.
 - Se pueden revisar y redefinir conforme avancemos.
 
 ### F. Resumen ejecutivo y aprendizaje
-- Vero realiza un **resumen ejecutivo** con estadísticas y gráficas del uso por parte de la empresa, la exactitud ofrecida y el potencial a alcanzar.
+- La IA realiza un **resumen ejecutivo** con estadísticas y gráficas del uso por parte de la empresa, la exactitud ofrecida y el potencial a alcanzar.
 - **Objetivo:** que Stratos conozca el comportamiento de la empresa y su potencial de mejora si se maximiza el uso.
 - **Esta información solo se envía con revisión y autorización del No.1.**
 - **Es obligación de la IA ir aprendiendo de todos los usuarios.**
@@ -134,7 +145,7 @@ Durante las descripciones o construcción de Stratos se ha mencionado y puede co
 ### G. Líneas de tiempo en el Calendario
 - El Calendario incluye una vista de **Línea de Tiempo** (antes Gantt) que muestra procesos completos, editables porque todo tiene capacidad de adaptarse a la necesidad del usuario siempre que se respete la legalidad, valores humanos, reglas de convivencia, la ética laboral y la información autorizada para cada usuario por los módulos previamente autorizados por el No1.
 - Los correos no se muestran directamente en el calendario, sino en el **área de contexto** de tareas y alarmas.
-- El usuario puede solicitar a Vero líneas de tiempo específicas (ej. *"Vero, muéstrame la línea de tiempo del proceso de llantas"*).
+- El usuario puede solicitar a la IA líneas de tiempo específicas (ej. *"muéstrame la línea de tiempo del proceso de llantas"*).
 
 ### H. Proyectos futuros: Otras Actividades
 - Stratos está diseñado para crecer con módulos de **Otras Actividades** (Ventas, Mercadeo, Logística, etc.).
@@ -181,7 +192,7 @@ Durante las descripciones o construcción de Stratos se ha mencionado y puede co
 - Integración con WhatsApp Business.
 - Migración completa de historial.
 - Identificación de contactos internos con fondo corporativo (colores de identidad, logo y slogan).
-- Vero como contacto activo para asegurar trazabilidad.
+- La IA como contacto activo para asegurar trazabilidad.
 
 **Tareas:**
 - Vista principal: listado con Título, F. Emisión, Periodo.
@@ -201,7 +212,7 @@ Durante las descripciones o construcción de Stratos se ha mencionado y puede co
 - Distribución de pantalla: Logo + Slogan (izquierda), Cartelera (centro), Mini calendario (derecha), Notas (columna izquierda).
 - Vistas: Día, Semana, Mes, Línea de Tiempo.
 - Notas del sistema (inmutables) y del usuario (editables).
-- Asistencia de Vero: registro silencioso, sugerencias, consultas.
+- Asistencia de la IA: registro silencioso, sugerencias, consultas.
 - Correos no se muestran directamente, sino en el área de contexto de tareas y alarmas.
 
 **Contactos:**
@@ -233,8 +244,8 @@ Durante las descripciones o construcción de Stratos se ha mencionado y puede co
 ## 11. ORGANIGRAMA Y PERMISOS
 
 ### A. Tipos de Contacto
-- **Observador:** Alguien que ya está o no en el Organigrama General (en otra línea) pero es alguien a quien se le dan permisos de lectura sobre tu área. Ve tu área (y hacia abajo) según los permisos que le des. No edita.
-- **Indirecto (Externo):** Alguien que NO está en tu Organigrama (está fuera) y a quien invitas a ver tu información. Ve desde la primera línea de quien lo invita. No edita.
+- **Observador:** Alguien que ya está o no en el Organigrama General (en otra línea) pero es alguien a quien se le dan permisos de lectura sobre tu área. Ve tu área (y hacia abajo) según los permisos que le des. No edita. **Requiere invitación.**
+- **Indirecto:** Alguien que NO está en tu Organigrama (está fuera) y a quien invitas a ver tu información. Ve desde la primera línea de quien lo invita. No edita. **Requiere invitación.**
 
 ### B. Permisos por Rol
 - **No.1:** Ve todo, edita lo suyo.
@@ -243,13 +254,15 @@ Durante las descripciones o construcción de Stratos se ha mencionado y puede co
 - **Indirecto:** Ve (desde la primera línea de quien lo invita), no edita.
 
 ### C. Crecimiento Automático del Organigrama General
-- Cuando alguien crea su primera línea, el sistema reconoce a sus superiores y subalternos previos, si así los tuviera.
-- Cuando hay cambios jerárquicos (ej. cambio de No.1), el Organigrama General se actualiza solo, esto se hace porque reconoce la jerarquía.
-- Cuando un contacto ya existe en otra rama, el sistema lo detecta y lo posiciona correctamente.
-- Cuando hay duplicados (mismo celular, correo, nombre), el sistema los detecta y comunica para encontrar la solución, ya sea editando o permitiendo la nueva invitación, esto porque desde la invitación se debe dar cuenta.
+- Cuando alguien crea su primera línea, el sistema reconoce a sus superiores, iguales y subalternos previos.
+- Cuando hay cambios jerárquicos (ej. cambio de No.1), el Organigrama General se actualiza solo.
+- Cuando un contacto ya existe en otra rama, el sistema **avisa del error de doble registro:** *"Este usuario ya está registrado en otra rama, debajo de [Nombre del superior]. No se puede registrar en dos posiciones ni ser contacto directo de dos superiores."*
+- **Cambio de No.1:** Cuando un usuario nuevo crea su primera línea y el No.1 actual aparece dentro, el No.1 actual pasa a ser subordinado y pierde `esNo1`. El nuevo usuario queda como único No.1.
 
 ### D. Detección de Duplicados
-- El sistema debe detectar si un contacto ya existe (mismo celular, correo o nombre) y evitar duplicados.
+- El sistema debe detectar si un contacto ya existe (mismo celular, correo o nombre) y avisar.
+- **El nombre se compara con nombres y apellidos completos, respetando tildes y apóstrofes. Solo se ignoran las mayúsculas.**
+- **Teléfono y correo sí se pueden repetir**, pero el sistema avisa.
 
 ---
 
@@ -284,7 +297,7 @@ Durante las descripciones o construcción de Stratos se ha mencionado y puede co
 ## 15. MÓDULO DE COMUNICACIÓN – DESCRIPCIÓN DE FUNCIONALIDADES
 
 - Debe tener las mismas funciones que Gmail/Outlook (obligatorio).
-- El gran diferenciador es la asistencia ejecutiva (Vero) para su manejo.
+- El gran diferenciador es la asistencia ejecutiva (la IA) para su manejo.
 - Es necesario describir cada funcionalidad que mejora la interacción, y la diferencia con otros sistemas.
 
 ---
@@ -301,12 +314,11 @@ Durante las descripciones o construcción de Stratos se ha mencionado y puede co
 
 ---
 
-## 17. VERO – ACTIVACIÓN, PROGRAMACIÓN Y LÍMITES
+## 17. LA IA – ACTIVACIÓN, PROGRAMACIÓN Y LÍMITES
 
-- Describir cómo se activa y programa.
-- Definir sus límites.
-- Describir su diferenciador frente a una IA cualquiera.
-- Definir el poder de análisis que tiene (leer todo para analizar) y los límites (módulos autorizados por el No.1).
+- **Activación:** Solo con **botón presionado**. No funciona en segundo plano. Comando de voz: "Hola [nombre]".
+- **Programación:** El usuario **sí puede** programar a la IA para que haga tareas en horarios específicos. Pero se deben recalcar los alcances y marcos referenciales de la IA.
+- **Límites:** Solo accede a los módulos autorizados por el No.1 para su usuario. No puede acceder a información de otros usuarios si no cuenta con la jerarquía, la comunicación directa o los accesos correspondientes. Respeta la legalidad, valores humanos, reglas de convivencia y ética laboral. No actúa sin confirmación en acciones importantes. La IA sugiere, no impone.
 
 ---
 
@@ -342,15 +354,18 @@ Durante las descripciones o construcción de Stratos se ha mencionado y puede co
 **Implementado:**
 - Formulario de **Datos Generales** (nombre, apellidos, correo, celular, ID, contraseña).
 - **Login** (acceso con ID y contraseña).
-- **Configuración** básica (sonido, vibración, modo nocturno).
+- **Configuración** (con el botón de configuración de IA).
 - **Pantalla principal** (básica).
-- **Botón de IA** (placeholder, sin funcionalidad).
-- **Organigrama General** (estructura básica, sin lógica avanzada).
+- **Botón de IA** (con funcionalidad parcial: reconocimiento de voz, ventana emergente, estados).
+- **Organigrama General** (recursivo, persistido, con detección de duplicados).
+- **Organigrama Personal** (con invitaciones y permisos).
+- **Identidad Corporativa** (con carga de logo, colores, slogan, misión, visión, valores).
+- **Biometría** (WebAuthn real, con enrolamiento y verificación).
+- **Traducciones ES/EN** (parciales).
 
 **No implementado (definido pero pendiente):**
 - Todo el Módulo de Comunicación (Correos, Chats, Tareas, Alarmas, Calendario, Hub).
-- Vero (IA) como asistente ejecutiva.
-- Organigrama con crecimiento automático, permisos y detección de duplicados.
+- La IA como asistente ejecutiva completa (memoria, aprendizaje, resúmenes).
 - Banco de datos universal (una fila por usuario, cientos de columnas).
 - KPIs y medición justa (AT, AR, EE).
 - Backups codificados.
@@ -365,7 +380,7 @@ Durante las descripciones o construcción de Stratos se ha mencionado y puede co
 ## 22. ¿Qué se está buscando?
 
 - **Completar el Módulo de Comunicación** (Correos, Chats, Tareas, Alarmas, Calendario, Hub) con trazabilidad total.
-- **Integrar a Vero** como asistente ejecutiva (detección de patrones, líneas de tiempo, reuniones, seguimiento de agenda, apoyo en mediciones).
+- **Integrar a la IA** como asistente ejecutiva (detección de patrones, líneas de tiempo, reuniones, seguimiento de agenda, apoyo en mediciones).
 - **Implementar el sistema de medición justa** (AT, AR, EE) con análisis de causa raíz.
 - **Desarrollar el Hub de Archivos** y la integración con WhatsApp Business, respetando la privacidad personal pero permitiendo mediciones detalladas.
 - **Preparar la arquitectura** para los módulos futuros (Otras Actividades: Ventas, Mercadeo, Logística, etc.).
@@ -382,7 +397,7 @@ Durante las descripciones o construcción de Stratos se ha mencionado y puede co
 - **Integración única:** Unifica las mejores funciones de Gmail/Outlook, WhatsApp, ClickUp y herramientas de medición en un solo ecosistema.
 - **Medición del trabajo invisible:** Mide procesos completos (coordinación, negociación, gestión), no solo resultados.
 - **Organigrama práctico y único:** Crecimiento automático, detección de duplicados, tipos de contacto (Observador, Indirecto) con permisos flexibles.
-- **Vero como asistente ejecutiva:** No solo ejecuta, interpreta, sugiere, crea líneas de tiempo, programa reuniones.
+- **La IA como asistente ejecutiva:** No solo ejecuta, interpreta, sugiere, crea líneas de tiempo, programa reuniones.
 - **Banco de datos universal:** Una fila por usuario, cientos de columnas, backups codificados.
 - **KPIs dinámicos y justos:** Peso según posición en organigrama, parámetros (Real, Esperado, Promedio).
 - **Adaptabilidad a la identidad corporativa:** Colores, logo, slogan en toda la interfaz.
@@ -392,7 +407,7 @@ Durante las descripciones o construcción de Stratos se ha mencionado y puede co
 - **Mercado insatisfecho:** La mayoría de sistemas solo miden resultados, no el trabajo real.
 - **Crecimiento modular:** Se pueden añadir módulos (Ventas, Mercadeo, Logística) sin rehacer el sistema.
 - **Retribución justa:** Empresas que buscan justicia y objetividad no tienen herramientas adecuadas.
-- **IA como diferenciador:** Vero puede evolucionar a asesora estratégica (no solo asistente).
+- **IA como diferenciador:** La IA puede evolucionar a asesora estratégica (no solo asistente).
 - **Datos como activo:** El banco de datos permite mediciones y reportes que nadie más ofrece.
 
 ### DEBILIDADES (D)
@@ -410,4 +425,3 @@ Durante las descripciones o construcción de Stratos se ha mencionado y puede co
 ---
 
 **Fin del documento.**
-
