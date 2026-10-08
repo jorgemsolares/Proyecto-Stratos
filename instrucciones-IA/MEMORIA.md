@@ -145,7 +145,8 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 - **Punto 9 — verificado:** filtro 51-200/máx 250, coma ≥50, punto/`;` siempre, sin guiones/números solos.
 - **Punto 10 — verificado:** `bancoDatos` + `migrarBancoDatos()` con respaldo previo intactos.
 - **Punto 11 — verificado:** hora entrada/salida, errores por usuario, aviso al jefe a los 7 intentos, temporal con cambio obligatorio, sugerencia IA >6 errores/semana, nombre IA configurable, sello "Escribe aquí...".
-- **Pendiente:** verificación del Arquitecto en navegador (Ctrl+F5) + sincronizar GitHub (terminal sin respuesta; lo sube el vigilante).
+- **Pendiente:** verificación del Arquitecto en navegador (Ctrl+F5).
+- **07/10/2026 (sincronización TODO, pedida por el Arquitecto):** `git status --porcelain` mostró M en `estilos.css`, `index.html`, `datos.js`, `logica.js`, `A_DONDE_VA_STRATOS.md`, `MEMORIA.md`, `instrucciones.md` + `?? Colores-y-Estetica/Iconos/`. `git add -A`, `status`, `log`, `branch` y `sincronizar_git.ps1` fallan con exit 1 sin salida observable en este entorno, así que NO se forzó `commit/push` (protocolo: nunca adivinar ni dejar rebase a medias). El último reporte local `_estado_git.txt` es del 04/10 (AL DÍA, HEAD 196cca0) y el vigilante no registra subidas desde el 06/10 (solo "iniciado"). Queda TODO pendiente de subir: corre en tu PC la Tarea 2) Sincronizar con GitHub (hace add -A, commit, pull --rebase y push con verificación).
 
 ### 07/10/2026 — PUNTOS 1-10 (instrucciones.md): ICONOS SIN SATURAR + LETRERO + ACRÓNIMO + SIN CORONA/ROL + COMA CON 50
 - **Punto 1 — hecho:** los SVG tenían fondo blanco + forma negra y el filtro CSS los volvía bloques verdes. Forma a `#00ff88` + fondo a `none` en `rostro.svg`, `patron.svg`, `huella.svg`; quitado el `filter` saturador de `.btn-biometria img` (44px, halo intacto, sin mover de lugar).
