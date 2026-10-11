@@ -1719,18 +1719,20 @@ en el CSS, por eso el organigrama general salía sin forma.
     padding: 10px 0;
 }
 
-/* PUNTO 1: el nodo del No.1 (raíz, nivel 0) va centrado arriba */
-.org-general-rama-nivel-0 {
-    align-items: center;
-    margin-left: 0;
-    width: 100%;
-}
-
 .org-general-rama {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 0;
+}
+
+/* PUNTO 1: el nodo del No.1 (raíz, nivel 0) va centrado arriba.
+   Va DESPUÉS de .org-general-rama para que su align-items:center
+   gane en cascada (misma especificidad, manda la última regla). */
+.org-general-rama-nivel-0 {
+    align-items: center;
+    margin-left: 0;
+    width: 100%;
 }
 
 .org-general-rama .nodo-general {

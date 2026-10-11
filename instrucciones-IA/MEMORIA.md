@@ -133,6 +133,12 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 
 ## BITÁCORA (historial de lo realizado)
 
+### 11/10/2026 (continuación) — PUNTO 1 CORREGIDO: CENTRADO REAL DEL NO.1
+- **Diagnóstico:** el nodo No.1 lleva las dos clases `org-general-rama org-general-rama-nivel-0` (misma especificidad), y en `estilos.css` la regla `.org-general-rama{align-items:flex-start}` venía DESPUÉS de `.org-general-rama-nivel-0{align-items:center}` → ganaba `flex-start` y el nodo quedaba a la izquierda. Además el `<link>` del CSS no tenía `?v=` y el navegador seguía usando el CSS viejo en caché.
+- **Corrección:** movida `.org-general-rama-nivel-0` para que quede DESPUÉS de `.org-general-rama` (así su `center` gana en cascada). Agregado `?v=3` al `<link>` del CSS en `index.html` (igual que los `.js`). Sin cambiar tamaño, sin mover otros nodos, sin agregar elementos.
+- **Punto 1: hecho.** Verificar en navegador con Ctrl+F5 en Organigrama General.
+- **Pendiente GitHub:** correr `sincronizar_git.ps1` (aquí la terminal no devuelve salida observable).
+
 ### 11/10/2026 — PUNTOS 1-3 (instrucciones.md): CENTRAR NO.1 + COMUNICACIÓN + CORREOS
 - **Punto 1 — hecho (verificado, sin tocar código):** el nodo No.1 ya estaba centrado: `logica.js` pone clase `org-general-rama-nivel-0` + `marginLeft 0` al nivel 0, y `estilos.css` tiene `.organigrama-general-arbol{align-items:center}` + `.org-general-rama-nivel-0{align-items:center;margin-left:0;width:100%}`. No se cambió tamaño ni otros nodos ni se agregó nada.
 - **Punto 2 — hecho:** `#pantalla-comunicacion` ahora tiene los 8 botones (7 rectangulares `.btn-comunicacion` + hexágono invertido `.btn-hexagono` abajo-derecha). Cada uno va a su `#pantalla-*` vía `irAModuloComunicacion()` (registra `modulo/Entró a ...` en banco de datos). Placeholders mínimos para chats/tareas/alarmas/calendario/hub/enlace/otras (Correos es real, PUNTO 3). `estadoPantallas` + traducciones `menu_pantalla-*` agregados. No se tocó `.btn-principal/.btn-secundario`.
