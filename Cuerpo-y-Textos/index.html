@@ -291,17 +291,97 @@
 </section>
 
         <!-- ============================================ -->
-        <!-- 2.5 PANTALLA 5 - COMUNICACIÓN (módulo de mensajes; próximo a desarrollar) -->
+        <!-- 2.5 PANTALLA 5 - COMUNICACIÓN (8 submódulos — PUNTO 2) -->
         <!-- ============================================ -->
         <section id="pantalla-comunicacion" class="pantalla">
             <h2 data-i18n="com_titulo">Centro de Comunicación</h2>
-            <p class="descripcion-app" data-i18n="com_desc">Módulo de comunicación en desarrollo</p>
-            <div style="text-align: center; padding: 60px 20px;">
-                <p style="font-size: 3rem;">💬</p>
-                <p style="font-size: 1.2rem; color: rgba(255,255,255,0.7);" data-i18n="com_disponible">
-                    Este módulo estará disponible próximamente
-                </p>
+            <p class="descripcion-app" data-i18n="com_desc">Elige el módulo</p>
+            <div class="grid-comunicacion">
+                <button type="button" class="btn-comunicacion" onclick="irAModuloComunicacion('pantalla-correos')">📧 Correos</button>
+                <button type="button" class="btn-comunicacion" onclick="irAModuloComunicacion('pantalla-chats')">💬 Chats</button>
+                <button type="button" class="btn-comunicacion" onclick="irAModuloComunicacion('pantalla-tareas')">✅ Tareas</button>
+                <button type="button" class="btn-comunicacion" onclick="irAModuloComunicacion('pantalla-alarmas')">⏰ Alarmas</button>
+                <button type="button" class="btn-comunicacion" onclick="irAModuloComunicacion('pantalla-calendario')">📅 Calendario</button>
+                <button type="button" class="btn-comunicacion" onclick="irAModuloComunicacion('pantalla-hub')">📁 Hub de Archivos</button>
+                <button type="button" class="btn-comunicacion" onclick="irAModuloComunicacion('pantalla-enlace-movil')">📱 Enlace Móvil</button>
             </div>
+            <div class="contenedor-otras-actividades">
+                <button type="button" class="btn-hexagono" onclick="irAModuloComunicacion('pantalla-otras-actividades')">⬡ Otras Actividades</button>
+            </div>
+        </section>
+        <!-- 2.5.1 SUBMÓDULOS PLACEHOLDER (destinos de los 8 botones; Correos se desarrolla en PUNTO 3) -->
+        <section id="pantalla-chats" class="pantalla">
+            <h2>Chats</h2>
+            <p class="descripcion-app">Módulo en preparación</p>
+            <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;">💬</p></div>
+            <div style="text-align:center;"><button type="button" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')">← Volver</button></div>
+        </section>
+        <section id="pantalla-tareas" class="pantalla">
+            <h2>Tareas</h2>
+            <p class="descripcion-app">Módulo en preparación</p>
+            <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;">✅</p></div>
+            <div style="text-align:center;"><button type="button" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')">← Volver</button></div>
+        </section>
+        <section id="pantalla-alarmas" class="pantalla">
+            <h2>Alarmas</h2>
+            <p class="descripcion-app">Módulo en preparación</p>
+            <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;">⏰</p></div>
+            <div style="text-align:center;"><button type="button" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')">← Volver</button></div>
+        </section>
+        <section id="pantalla-calendario" class="pantalla">
+            <h2>Calendario</h2>
+            <p class="descripcion-app">Módulo en preparación</p>
+            <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;">📅</p></div>
+            <div style="text-align:center;"><button type="button" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')">← Volver</button></div>
+        </section>
+        <section id="pantalla-hub" class="pantalla">
+            <h2>Hub de Archivos</h2>
+            <p class="descripcion-app">Módulo en preparación</p>
+            <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;">📁</p></div>
+            <div style="text-align:center;"><button type="button" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')">← Volver</button></div>
+        </section>
+        <section id="pantalla-enlace-movil" class="pantalla">
+            <h2>Enlace Móvil</h2>
+            <p class="descripcion-app">Módulo en preparación</p>
+            <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;">📱</p></div>
+            <div style="text-align:center;"><button type="button" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')">← Volver</button></div>
+        </section>
+        <section id="pantalla-otras-actividades" class="pantalla">
+            <h2>Otras Actividades</h2>
+            <p class="descripcion-app">Módulo en preparación</p>
+            <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;">⬡</p></div>
+            <div style="text-align:center;"><button type="button" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')">← Volver</button></div>
+        </section>
+        <!-- ============================================ -->
+        <!-- 2.5.2 PANTALLA DE CORREOS (6 vistas — PUNTO 3; sin sincronización real ni IA) -->
+        <!-- ============================================ -->
+        <section id="pantalla-correos" class="pantalla">
+            <h2>📧 Correos</h2>
+            <p class="descripcion-app">Bandeja local (sin sincronización real todavía)</p>
+            <div class="barra-vistas-correo">
+                <button type="button" class="btn-vista-correo activo" data-vista="recibidos" onclick="cambiarVistaCorreo('recibidos')">Recibidos</button>
+                <button type="button" class="btn-vista-correo" data-vista="enviados" onclick="cambiarVistaCorreo('enviados')">Enviados</button>
+                <button type="button" class="btn-vista-correo" data-vista="carpetas" onclick="cambiarVistaCorreo('carpetas')">Carpetas</button>
+                <button type="button" class="btn-vista-correo" data-vista="eliminados" onclick="cambiarVistaCorreo('eliminados')">Eliminados</button>
+                <button type="button" class="btn-vista-correo" data-vista="borradores" onclick="cambiarVistaCorreo('borradores')">Borradores</button>
+                <button type="button" class="btn-vista-correo" data-vista="spam" onclick="cambiarVistaCorreo('spam')">Spam</button>
+            </div>
+            <div class="barra-busqueda-correo">
+                <input type="text" id="busqueda-correo" class="input-estilizado" placeholder="Buscar..." oninput="buscarEnCorreoVista()">
+            </div>
+            <div id="lista-correos" class="lista-correos"></div>
+            <div id="detalle-correo" class="detalle-correo" style="display:none;">
+                <button type="button" class="btn-secundario" onclick="cerrarDetalleCorreo()">← Volver al listado</button>
+                <h3 id="detalle-correo-asunto"></h3>
+                <p id="detalle-correo-meta" class="descripcion-app"></p>
+                <p id="detalle-correo-cuerpo"></p>
+                <div class="fila-botones-final">
+                    <button type="button" class="btn-principal" onclick="accionCorreoActual('responder')">Responder</button>
+                    <button type="button" class="btn-secundario" onclick="accionCorreoActual('archivar')">Archivar</button>
+                    <button type="button" class="btn-peligro" onclick="accionCorreoActual('eliminar')">Eliminar</button>
+                </div>
+            </div>
+            <div style="text-align:center;margin-top:16px;"><button type="button" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')">← Volver a Comunicación</button></div>
         </section>
 
         <!-- ============================================ -->

@@ -281,6 +281,54 @@ estadoPantallas = {
         icono: "💬",
         visiblePara: ["todos"]
     },
+    "pantalla-correos": {
+        visitada: false,
+        nombre: "Correos",
+        icono: "📧",
+        visiblePara: ["todos"]
+    },
+    "pantalla-chats": {
+        visitada: false,
+        nombre: "Chats",
+        icono: "💬",
+        visiblePara: ["todos"]
+    },
+    "pantalla-tareas": {
+        visitada: false,
+        nombre: "Tareas",
+        icono: "✅",
+        visiblePara: ["todos"]
+    },
+    "pantalla-alarmas": {
+        visitada: false,
+        nombre: "Alarmas",
+        icono: "⏰",
+        visiblePara: ["todos"]
+    },
+    "pantalla-calendario": {
+        visitada: false,
+        nombre: "Calendario",
+        icono: "📅",
+        visiblePara: ["todos"]
+    },
+    "pantalla-hub": {
+        visitada: false,
+        nombre: "Hub de Archivos",
+        icono: "📁",
+        visiblePara: ["todos"]
+    },
+    "pantalla-enlace-movil": {
+        visitada: false,
+        nombre: "Enlace Móvil",
+        icono: "📱",
+        visiblePara: ["todos"]
+    },
+    "pantalla-otras-actividades": {
+        visitada: false,
+        nombre: "Otras Actividades",
+        icono: "⬡",
+        visiblePara: ["todos"]
+    },
     "pantalla-configuracion": { 
         visitada: false, 
         nombre: "Configuración",
@@ -563,8 +611,16 @@ const TRADUCCIONES = {
     "org_continuar": { es: "CONTINUAR A COMUNICACIÓN", en: "CONTINUE TO COMMUNICATION" },
     // PANTALLA 5 - COMUNICACIÓN
     "com_titulo": { es: "Centro de Comunicación", en: "Communication Center" },
-    "com_desc": { es: "Módulo de comunicación en desarrollo", en: "Communication module under development" },
+    "com_desc": { es: "Elige el módulo", en: "Choose the module" },
     "com_disponible": { es: "Este módulo estará disponible próximamente", en: "This module will be available soon" },
+    "menu_pantalla-correos": { es: "Correos", en: "Emails" },
+    "menu_pantalla-chats": { es: "Chats", en: "Chats" },
+    "menu_pantalla-tareas": { es: "Tareas", en: "Tasks" },
+    "menu_pantalla-alarmas": { es: "Alarmas", en: "Alarms" },
+    "menu_pantalla-calendario": { es: "Calendario", en: "Calendar" },
+    "menu_pantalla-hub": { es: "Hub de Archivos", en: "File Hub" },
+    "menu_pantalla-enlace-movil": { es: "Enlace Móvil", en: "Mobile Link" },
+    "menu_pantalla-otras-actividades": { es: "Otras Actividades", en: "Other Activities" },
     // MODAL AGREGAR / EDITAR CONTACTO
     "mod_titulo": { es: "Agregar Contacto", en: "Add Contact" },
     "mod_nombre": { es: "Nombre (como tú lo conoces) *", en: "Name (as you know them) *" },
@@ -589,6 +645,46 @@ const TRADUCCIONES = {
     "cambio_conf": { es: "Confirmar Contraseña *", en: "Confirm Password *" },
     "cambio_boton": { es: "🔒 CAMBIAR CONTRASEÑA Y CONTINUAR", en: "🔒 CHANGE PASSWORD AND CONTINUE" }
 };
+
+// ==========================================
+// 4.3 MÓDULO DE CORREOS (bandeja local — PUNTO 3; sin sincronización real ni IA)
+// Métricas que pide el PUNTO 3 (solo conteos/tiempos locales, sin servidor):
+//   Recibidos: ingreso/salida de la vista (hora+min), recibidos del día, contactos
+//     únicos (destinatario principal, no copias), solo-copia (conteo, tiempo
+//     abierto→cerrado, marcados leído sin abrir).
+//   Enviados: respondidos y tiempo abrir→responder, sin correlación (conteo y
+//     tiempo), personas, acciones y procesos derivados.
+//   Carpetas: cada cuánto pasan a carpetas, peso. Eliminados: tiempo/período/
+//     cantidad/peso, si borra más de lo habitual. Borradores y Spam: conteos.
+// ==========================================
+let correosLocales = [];
+let vistaCorreoActual = 'recibidos';
+let correoAbiertoId = null;
+let correoAbiertoEn = null;
+let metricasCorreos = {
+    ingresosVistas: {},
+    salidasVistas: {},
+    recibidosPorDia: {},
+    contactosUnicos: {},
+    soloCopia: { conteo: 0, tiemposLecturaMs: [], marcadosSinAbrir: 0 },
+    enviados: { respondidos: 0, tiemposRespuestaMs: [], sinCorrelacion: 0, tiemposSinCorrelacionMs: [], personas: {}, acciones: 0, procesos: 0 },
+    carpetas: { movimientos: [], pesoTotal: 0 },
+    eliminados: { movimientos: [], cantidad: 0, pesoBorrado: 0 },
+    borradores: 0,
+    spam: { conteo: 0, tipos: {} }
+};
+let correoMetricasPendiente = null; // { id, soloCopia, abiertoEn, respondidoEn }
+
+/* Estructura de cada correo local:
+{
+    id, vista: "recibidos"|"enviados"|"carpetas"|"eliminados"|"borradores"|"spam",
+    remitente, destinatarios: ["principal"], copias: [],
+    asunto, previa, cuerpo, fecha: ISO, pesoKb,
+    soloCopia: bool, leido: bool, abiertoEn: ISO|null, cerradoEn: ISO|null,
+    respondidoEn: ISO|null, accionGenerada: ""|"tarea"|"alarma"|"llamada"|"reunion",
+    procesoActivado: ""|"compra"|"pago"|"cotizacion",
+    carpeta: "", tipoSpam: "", esDesconocido: bool, borradoEn: ISO|null
+} */
 
 // ==========================================
 // 4.1 SISTEMA DE INVITACIONES - GRUPO 4
@@ -720,6 +816,7 @@ const STORAGE_KEYS = {
     BANCO_DATOS: "stratos_banco_datos", // PUNTO 34 - ficha por usuario
     RESPALDO_MIGRACION: "stratos_respaldo_migracion", // PUNTO 34 - respaldo previo a migrar
     BIOMETRIA: "stratos_biometria", // PUNTO 9-10-11 - método biométrico enrolado por usuario y dispositivo
+    CORREOS: "stratos_correos", // PUNTO 3 - bandeja local + métricas
     ORGANIGRAMA_GENERAL: "stratos_organigrama_general", // PUNTO 31 - organigrama general ya construido
     TOKEN_SESION: "stratos_token_sesion", // Añadido para guardar el token
     ULTIMO_USUARIO: "stratos_ultimo_usuario", // Último usuario que entró al sistema en este dispositivo

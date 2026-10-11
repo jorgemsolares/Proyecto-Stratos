@@ -133,6 +133,12 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 
 ## BITÁCORA (historial de lo realizado)
 
+### 11/10/2026 — PUNTOS 1-3 (instrucciones.md): CENTRAR NO.1 + COMUNICACIÓN + CORREOS
+- **Punto 1 — hecho (verificado, sin tocar código):** el nodo No.1 ya estaba centrado: `logica.js` pone clase `org-general-rama-nivel-0` + `marginLeft 0` al nivel 0, y `estilos.css` tiene `.organigrama-general-arbol{align-items:center}` + `.org-general-rama-nivel-0{align-items:center;margin-left:0;width:100%}`. No se cambió tamaño ni otros nodos ni se agregó nada.
+- **Punto 2 — hecho:** `#pantalla-comunicacion` ahora tiene los 8 botones (7 rectangulares `.btn-comunicacion` + hexágono invertido `.btn-hexagono` abajo-derecha). Cada uno va a su `#pantalla-*` vía `irAModuloComunicacion()` (registra `modulo/Entró a ...` en banco de datos). Placeholders mínimos para chats/tareas/alarmas/calendario/hub/enlace/otras (Correos es real, PUNTO 3). `estadoPantallas` + traducciones `menu_pantalla-*` agregados. No se tocó `.btn-principal/.btn-secundario`.
+- **Punto 3 — hecho:** `#pantalla-correos` con 6 vistas (Recibidos/Enviados/Carpetas/Eliminados/Borradores/Spam), cada una con búsqueda + listado (remitente/asunto/previa/fecha) + acciones (responder/archivar/eliminar). Click abre detalle. Métricas locales en `metricasCorreos` + banco (`correos/Ingresó/Salió/Acción`): ingreso/salida por vista con hora+min, recibidos del día, contactos únicos (principal, no copias), solo-copia (conteo/tiempos/marcar-sin-abrir), enviados (respondidos/tiempos/personas/acciones/procesos/sin-correlación), carpetas (frecuencia/peso), eliminados (tiempo/cantidad/peso/aviso si borra +50% del promedio), borradores y spam (conteo/tipos/desconocidos). Sin Gmail/Outlook real, sin IA. Clave `STORAGE_KEYS.CORREOS`.
+- **Pendiente:** verificación del Arquitecto en navegador (Ctrl+F5) + correr `python Pruebas/_validar_js.py` en su PC (aquí la terminal no devuelve salida observable) + Tarea 2) Sincronizar con GitHub.
+
 ### 07/10/2026 (tarde) — INSTRUCCIONES NUEVAS PUNTOS 1-11: CENTRADO + SALUDO POR CAMPO NOMBRE
 - **Punto 1 — hecho:** `.organigrama-general-arbol` a `align-items: center`; rama raíz (nivel 0) con clase `org-general-rama-nivel-0` centrada y `marginLeft 0`. Sin cambiar tamaño ni otros nodos.
 - **Punto 2 — verificado:** `DURACION_PRIORIDAD_CARTELERA` 10/6/4 + clasificación por remitente intactos.

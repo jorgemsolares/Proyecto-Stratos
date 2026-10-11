@@ -367,6 +367,16 @@ function cargarSugerencias() {
 // ==========================================
 // 7. NAVEGACIÓN ENTRE PANTALLAS (muestra/oculta pantallas, registra el historial y activa cada módulo)
 // ==========================================
+// ==========================================
+// 7.1 MÓDULOS DE COMUNICACIÓN (PUNTO 2: cada botón lleva a su pantalla y registra la entrada en el banco de datos)
+// ==========================================
+function irAModuloComunicacion(id) {
+    if (usuarioActivo && usuarioActivo.id && typeof registrarActividadBancoDatos === 'function') {
+        try { registrarActividadBancoDatos(usuarioActivo.id, 'modulo', 'Entró a ' + id); } catch (e) {}
+    }
+    irAPantalla(id);
+}
+
 function irAPantalla(id) {
     const destino = document.getElementById(id);
     if (!destino) return;
@@ -401,6 +411,7 @@ function irAPantalla(id) {
     if (id === 'pantalla-identidad') cargarDatosPantalla3();
     if (id === 'pantalla-organigrama-general') renderizarOrganigramaGeneral();
     if (id === 'pantalla-organigrama') renderizarOrganigrama();
+    if (id === 'pantalla-correos' && typeof registrarEntradaCorreosInicial === 'function') registrarEntradaCorreosInicial();
     actualizarMenuTuerca();
     aplicarBrandingGlobal();
     verificarMensajeIdentidad();
@@ -3460,6 +3471,242 @@ function hablarTextoIA(texto) {
 }
 
 // Nota: las funciones restantes (renderizarOrganigramaGeneral, construirOrganigramaGeneral, etc.) no se modifican y siguen funcionando igual.
+
+// ==========================================
+// 32.1 MÓDULO DE CORREOS (6 vistas — PUNTO 3; bandeja local, sin sincronización real ni IA)
+// Métricas del PUNTO 3: ingreso/salida por vista (hora+min), recibidos del día,
+// contactos únicos (principal, no copias), solo-copia, tiempos abrir→cerrar y
+// abrir→responder, carpetas/eliminados (tiempo/cantidad/peso), borradores y spam.
+// ==========================================
+function guardarCorreosLocales() {
+    try {
+        if (typeof guardarEnStorage === 'function' && typeof STORAGE_KEYS !== 'undefined' && STORAGE_KEYS.CORREOS) {
+            guardarEnStorage(STORAGE_KEYS.CORREOS, { correos: correosLocales, metricas: metricasCorreos });
+        }
+    } catch (e) {}
+}
+
+function cargarCorreosLocales() {
+    try {
+        if (typeof cargarDeStorage === 'function' && typeof STORAGE_KEYS !== 'undefined' && STORAGE_KEYS.CORREOS) {
+            const g = cargarDeStorage(STORAGE_KEYS.CORREOS);
+            if (g && Array.isArray(g.correos)) correosLocales = g.correos;
+            if (g && g.metricas) metricasCorreos = Object.assign(metricasCorreos, g.metricas);
+        }
+    } catch (e) {}
+}
+
+function nombreCorreoVista(v) { return { recibidos: 'Recibidos', enviados: 'Enviados', carpetas: 'Carpetas', eliminados: 'Eliminados', borradores: 'Borradores', spam: 'Spam' }[v] || v; }
+
+function registrarIngresoVistaCorreo(vista) {
+    const ahora = new Date();
+    const hm = (typeof _horaHM === 'function') ? _horaHM(ahora) : (ahora.getHours() + ':' + ahora.getMinutes());
+    if (!metricasCorreos.ingresosVistas[vista]) metricasCorreos.ingresosVistas[vista] = [];
+    metricasCorreos.ingresosVistas[vista].push({ fecha: ahora.toISOString(), hora: hm });
+    if (usuarioActivo && usuarioActivo.id && typeof registrarActividadBancoDatos === 'function') {
+        try { registrarActividadBancoDatos(usuarioActivo.id, 'correos', 'Ingresó a ' + nombreCorreoVista(vista) + ' a las ' + hm); } catch (e) {}
+    }
+    guardarCorreosLocales();
+}
+
+function registrarSalidaVistaCorreo(vista) {
+    const ahora = new Date();
+    const hm = (typeof _horaHM === 'function') ? _horaHM(ahora) : (ahora.getHours() + ':' + ahora.getMinutes());
+    if (!metricasCorreos.salidasVistas[vista]) metricasCorreos.salidasVistas[vista] = [];
+    metricasCorreos.salidasVistas[vista].push({ fecha: ahora.toISOString(), hora: hm });
+    if (usuarioActivo && usuarioActivo.id && typeof registrarActividadBancoDatos === 'function') {
+        try { registrarActividadBancoDatos(usuarioActivo.id, 'correos', 'Salió de ' + nombreCorreoVista(vista) + ' a las ' + hm); } catch (e) {}
+    }
+    guardarCorreosLocales();
+}
+
+function cambiarVistaCorreo(vista) {
+    if (vistaCorreoActual && vistaCorreoActual !== vista) {
+        try { registrarSalidaVistaCorreo(vistaCorreoActual); } catch (e) {}
+        try { cerrarDetalleCorreo(true); } catch (e) {}
+    }
+    vistaCorreoActual = vista;
+    document.querySelectorAll('.btn-vista-correo').forEach(b => b.classList.toggle('activo', b.getAttribute('data-vista') === vista));
+    try { registrarIngresoVistaCorreo(vista); } catch (e) {}
+    renderizarListaCorreos();
+}
+// FIN-PARTE-1-CORREOS
+function correosFiltradosVista() {
+    const q = (document.getElementById('busqueda-correo') ? document.getElementById('busqueda-correo').value : '').toLowerCase();
+    return correosLocales.filter(c => {
+        if (!c || c.vista !== vistaCorreoActual) return false;
+        if (!q) return true;
+        return ((c.remitente || '') + ' ' + (c.asunto || '') + ' ' + (c.previa || '') + ' ' + (c.cuerpo || '')).toLowerCase().includes(q);
+    });
+}
+
+function renderizarListaCorreos() {
+    const lista = document.getElementById('lista-correos');
+    if (!lista) return;
+    const items = correosFiltradosVista();
+    if (items.length === 0) {
+        lista.innerHTML = '<p class="descripcion-app" style="text-align:center;">Sin correos en ' + nombreCorreoVista(vistaCorreoActual) + '.</p>';
+        return;
+    }
+    lista.innerHTML = '';
+    items.forEach(c => {
+        const d = document.createElement('div');
+        d.className = 'item-correo';
+        const fecha = c.fecha ? new Date(c.fecha) : null;
+        const f = fecha ? (fecha.toLocaleDateString('es') + ' ' + fecha.toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' })) : '';
+        d.innerHTML = '<div class="item-correo-remitente"></div><div class="item-correo-asunto"></div><div class="item-correo-previa"></div><div class="item-correo-fecha"></div>';
+        d.querySelector('.item-correo-remitente').textContent = c.remitente || '';
+        d.querySelector('.item-correo-asunto').textContent = c.asunto || '';
+        d.querySelector('.item-correo-previa').textContent = c.previa || '';
+        d.querySelector('.item-correo-fecha').textContent = f;
+        d.onclick = () => abrirDetalleCorreo(c.id);
+        lista.appendChild(d);
+    });
+}
+
+function buscarEnCorreoVista() { renderizarListaCorreos(); }
+
+function abrirDetalleCorreo(id) {
+    const c = correosLocales.find(x => x && x.id === id);
+    if (!c) return;
+    correoAbiertoId = id;
+    correoAbiertoEn = new Date();
+    c.abiertoEn = correoAbiertoEn.toISOString();
+    correoMetricasPendiente = { id, soloCopia: !!c.soloCopia, abiertoEn: correoAbiertoEn };
+    const det = document.getElementById('detalle-correo');
+    if (det) det.style.display = 'block';
+    const a = document.getElementById('detalle-correo-asunto');
+    const m = document.getElementById('detalle-correo-meta');
+    const b = document.getElementById('detalle-correo-cuerpo');
+    if (a) a.textContent = c.asunto || '';
+    if (m) m.textContent = (c.remitente || '') + ' → ' + ((c.destinatarios || []).join(', ') || '');
+    if (b) b.textContent = c.cuerpo || c.previa || '';
+    guardarCorreosLocales();
+}
+
+function cerrarDetalleCorreo(silencioso) {
+    if (correoMetricasPendiente && correoAbiertoEn) {
+        try {
+            const c = correosLocales.find(x => x && x.id === correoMetricasPendiente.id);
+            const cerradoEn = new Date();
+            const ms = cerradoEn - correoAbiertoEn;
+            if (c) {
+                c.cerradoEn = cerradoEn.toISOString();
+                if (c.vista === 'recibidos' && correoMetricasPendiente.soloCopia && ms >= 0) {
+                    metricasCorreos.soloCopia.tiemposLecturaMs.push(ms);
+                }
+                if (c.respondidoEn && correoMetricasPendiente.abiertoEn) {
+                    const resp = new Date(c.respondidoEn) - correoMetricasPendiente.abiertoEn;
+                    if (resp >= 0) metricasCorreos.enviados.tiemposRespuestaMs.push(resp);
+                }
+            }
+        } catch (e) {}
+        guardarCorreosLocales();
+    }
+    correoAbiertoId = null;
+    correoAbiertoEn = null;
+    correoMetricasPendiente = null;
+    const det = document.getElementById('detalle-correo');
+    if (det) det.style.display = 'none';
+}
+
+function accionCorreoActual(accion) {
+    const c = correosLocales.find(x => x && x.id === correoAbiertoId);
+    if (!c) return;
+    const ahora = new Date();
+    if (accion === 'responder') {
+        c.respondidoEn = ahora.toISOString();
+        metricasCorreos.enviados.respondidos++;
+        // Personas involucradas: destinatario principal (no copias).
+        (c.destinatarios || []).forEach(d => { if (d) metricasCorreos.enviados.personas[d] = (metricasCorreos.enviados.personas[d] || 0) + 1; });
+        // Acciones generadas (tarea/alarma/llamada/reunión) y procesos (compra/pago/cotización).
+        if (c.accionGenerada) metricasCorreos.enviados.acciones++;
+        if (c.procesoActivado) metricasCorreos.enviados.procesos++;
+    } else if (accion === 'archivar') {
+        c.vista = 'carpetas';
+        c.carpeta = c.carpeta || 'Archivo';
+        metricasCorreos.carpetas.movimientos.push({ fecha: ahora.toISOString(), desde: vistaCorreoActual });
+        metricasCorreos.carpetas.pesoTotal += (c.pesoKb || 0);
+    } else if (accion === 'eliminar') {
+        c.vista = 'eliminados';
+        c.borradoEn = ahora.toISOString();
+        metricasCorreos.eliminados.movimientos.push({ fecha: ahora.toISOString(), desde: vistaCorreoActual });
+        metricasCorreos.eliminados.cantidad++;
+        metricasCorreos.eliminados.pesoBorrado += (c.pesoKb || 0);
+        // Si borra más de lo habitual: promedio diario +50% (solo conteo local).
+        try {
+            const porDia = {};
+            metricasCorreos.eliminados.movimientos.forEach(m => {
+                const d = (m.fecha || '').slice(0, 10);
+                if (d) porDia[d] = (porDia[d] || 0) + 1;
+            });
+            const dias = Object.keys(porDia).length;
+            const hoy = ahora.toISOString().slice(0, 10);
+            if (dias > 1) {
+                const prom = Object.values(porDia).reduce((a, b) => a + b, 0) / dias;
+                if ((porDia[hoy] || 0) > prom * 1.5 && typeof mostrarAvisoInmediato === 'function') {
+                    mostrarAvisoInmediato('⚠️ Estás borrando más de lo habitual hoy.', 'advertencia');
+                }
+            }
+        } catch (e) {}
+        // Correos sin correlación: enviado que se elimina sin responder ni reenviar.
+        if (vistaCorreoActual === 'enviados' && !c.respondidoEn) {
+            metricasCorreos.enviados.sinCorrelacion++;
+            if (c.abiertoEn) {
+                const ms = ahora - new Date(c.abiertoEn);
+                if (ms >= 0) metricasCorreos.enviados.tiemposSinCorrelacionMs.push(ms);
+            }
+        }
+    }
+    if (usuarioActivo && usuarioActivo.id && typeof registrarActividadBancoDatos === 'function') {
+        try { registrarActividadBancoDatos(usuarioActivo.id, 'correos', 'Acción ' + accion + ' en correo ' + (c.asunto || c.id)); } catch (e) {}
+    }
+    guardarCorreosLocales();
+    cerrarDetalleCorreo();
+    renderizarListaCorreos();
+}
+
+function registrarEntradaCorreosInicial() {
+    try { cargarCorreosLocales(); } catch (e) {}
+    try { actualizarConteosCorreo(); } catch (e) {}
+    try { registrarIngresoVistaCorreo('recibidos'); } catch (e) {}
+    try { renderizarListaCorreos(); } catch (e) {}
+}
+
+// Recalcula conteos por vista (recibidos del día, borradores, spam/tipos, etc.)
+// a partir de la bandeja local. Se llama al entrar y al cambiar vistas.
+function actualizarConteosCorreo() {
+    try {
+        const hoy = new Date().toISOString().slice(0, 10);
+        metricasCorreos.recibidosPorDia[hoy] = correosLocales.filter(c => c && c.vista === 'recibidos').length;
+        metricasCorreos.borradores = correosLocales.filter(c => c && c.vista === 'borradores').length;
+        const spam = correosLocales.filter(c => c && c.vista === 'spam');
+        metricasCorreos.spam.conteo = spam.length;
+        metricasCorreos.spam.tipos = {};
+        spam.forEach(c => {
+            const t = c.tipoSpam || (c.esDesconocido ? 'desconocido' : 'general');
+            metricasCorreos.spam.tipos[t] = (metricasCorreos.spam.tipos[t] || 0) + 1;
+        });
+        // Contactos únicos = destinatarios principales (no copias).
+        metricasCorreos.contactosUnicos = {};
+        correosLocales.forEach(c => {
+            if (!c || c.vista !== 'recibidos') return;
+            (c.destinatarios || []).forEach(d => { if (d) metricasCorreos.contactosUnicos[d] = (metricasCorreos.contactosUnicos[d] || 0) + 1; });
+        });
+        metricasCorreos.soloCopia.conteo = correosLocales.filter(c => c && c.vista === 'recibidos' && c.soloCopia).length;
+        guardarCorreosLocales();
+    } catch (e) {}
+}
+
+// Marca un correo como leído sin abrirlo (métrica de Recibidos).
+function marcarCorreoLeidoSinAbrir(id) {
+    const c = correosLocales.find(x => x && x.id === id);
+    if (!c) return;
+    c.leido = true;
+    metricasCorreos.soloCopia.marcadosSinAbrir++;
+    guardarCorreosLocales();
+    renderizarListaCorreos();
+}
 
 // ==========================================
 // 33. ASISTENTE DE IA (BOTÓN FLOTANTE, VOZ Y VENTANA EMERGENTE — PUNTO 7)
