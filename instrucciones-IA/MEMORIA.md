@@ -137,6 +137,7 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 - **Punto 1 — hecho:** halo de `.btn-comunicacion` y `.btn-hexagono` (hover/active) a verde Stratos fijo `#00ff88`/`rgba(0,255,136,...)`. Fondo/borde/texto corporativos intactos. Sin quitar halo, sin cambiar efecto.
 - **Punto 2 — hecho:** `.icono-comunicacion` de 26px a 48px (círculo con aro oscuro, texto intacto). Sin cambiar tamaño del botón.
 - **Punto 3 — hecho:** botón Reuniones rectangular junto a los demás (icono `reuniones.svg` recoloreado a `#00ff88`) → `#pantalla-reuniones` placeholder con Volver. `irAModuloComunicacion()` ya lo lleva y registra en banco. `estadoPantallas` + `menu_pantalla-reuniones` agregados. Sin tocar otros botones, sin más botones.
+- **Icono Otras Actividades — hecho:** hexágono con `otras actividades.svg` (recoloreado a `#00ff88`, 40px, contenido centrado en columna). Sin tocar tamaño del hexágono.
 - **Pendiente:** Ctrl+F5 en Comunicación + Tarea 2) Sincronizar con GitHub (aquí la terminal no devuelve salida).
 
 ### 12/10/2026 — PUNTOS 1-2 (instrucciones.md): ICONOS VERDES + COLORES CORPORATIVOS
