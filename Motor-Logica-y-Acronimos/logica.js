@@ -2830,13 +2830,15 @@ function seleccionarColor(color, elemento) { document.querySelectorAll('.color-c
 function aplicarCambiosVisuales() {
     const root = document.documentElement.style;
     if (configuracionEstetica.colorFondo) root.setProperty('--color-fondo', configuracionEstetica.colorFondo);
-    if (configuracionEstetica.colorTexto) root.setProperty('--color-texto', configuracionEstetica.colorTexto);
-    if (configuracionEstetica.colorBotones) root.setProperty('--color-primario', configuracionEstetica.colorBotones);
+    if (configuracionEstetica.colorTexto) { root.setProperty('--color-texto', configuracionEstetica.colorTexto); root.setProperty('--color-letras', configuracionEstetica.colorTexto); }
+    // PUNTO 2: el color de botones del usuario vive en --color-botones (además de --color-primario por compatibilidad).
+    if (configuracionEstetica.colorBotones) { root.setProperty('--color-primario', configuracionEstetica.colorBotones); root.setProperty('--color-botones', configuracionEstetica.colorBotones); }
     const appContainer = document.getElementById('app-container');
     if (appContainer) appContainer.style.backgroundColor = configuracionEstetica.colorFondo;
     const textos = document.querySelectorAll('#app-container input, #app-container textarea, #app-container p, #app-container span, #app-container h2, #app-container h3, #app-container label, #app-container .descripcion-app');
     textos.forEach(el => el.style.color = configuracionEstetica.colorTexto);
-    const botones = document.querySelectorAll('#app-container .btn-principal, #app-container .btn-secundario, #app-container .btn-opcion, #app-container .btn-accion');
+    // PUNTO 2: TODOS los botones usan color de botones + color de letras del usuario (incluye Comunicación y Correos).
+    const botones = document.querySelectorAll('#app-container .btn-principal, #app-container .btn-secundario, #app-container .btn-opcion, #app-container .btn-accion, #app-container .btn-comunicacion, #app-container .btn-hexagono, #app-container .btn-vista-correo.activo');
     botones.forEach(btn => {
         btn.style.backgroundColor = configuracionEstetica.colorBotones;
         btn.style.color = configuracionEstetica.colorTexto;

@@ -21,6 +21,8 @@
     
     /* NUEVA VARIABLE PARA COLOR DE LETRAS (Agregada para heredar a inputs y nodos) */
     --color-letras: #ffffff;
+    /* PUNTO 2: color de botones de Identidad Corporativa (por defecto = primario) */
+    --color-botones: #00ff88;
 }
 
 * {
@@ -1880,15 +1882,36 @@ No toca .btn-principal / .btn-secundario existentes.
     text-transform: uppercase;
     letter-spacing: 1px;
     border-radius: var(--radio-bordes);
-    border: 2px solid var(--color-primario);
-    background: linear-gradient(135deg, #1a1a2e, #16213e);
-    color: var(--color-primario);
+    border: 2px solid var(--color-botones, var(--color-primario));
+    background: var(--color-botones, var(--color-primario));
+    color: var(--color-letras, #0b0f19);
     cursor: pointer;
     transition: all var(--transicion-rapida);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
 .btn-comunicacion:hover {
-    box-shadow: 0 0 18px 3px rgba(0, 255, 136, 0.35);
+    box-shadow: 0 0 18px 3px var(--color-botones, rgba(0, 255, 136, 0.35)), 0 0 40px 8px var(--color-botones, rgba(0, 255, 136, 0.15));
     transform: translateY(-2px);
+}
+.btn-comunicacion:active {
+    box-shadow: 0 0 25px 8px var(--color-botones, var(--color-primario)), inset 0 0 10px var(--color-botones, var(--color-primario));
+    transform: translateY(0) scale(0.98);
+}
+/* PUNTO 1: icono SVG a la izquierda del texto, tamaño acorde al botón.
+   Los SVG van en verde Stratos (#00ff88); llevan aro oscuro detrás para
+   que el verde se vea claro sobre el fondo del botón corporativo. */
+.icono-comunicacion {
+    width: 26px;
+    height: 26px;
+    display: inline-block;
+    object-fit: contain;
+    background: #0b0f19;
+    border-radius: 50%;
+    padding: 3px;
+    flex-shrink: 0;
 }
 .contenedor-otras-actividades {
     display: flex;
@@ -1904,14 +1927,18 @@ No toca .btn-principal / .btn-secundario existentes.
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: #0b0f19;
-    background: var(--color-primario);
+    color: var(--color-letras, #0b0f19);
+    background: var(--color-botones, var(--color-primario));
     clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
     transition: all var(--transicion-rapida);
 }
 .btn-hexagono:hover {
-    box-shadow: 0 0 22px 5px rgba(0, 255, 136, 0.45);
+    box-shadow: 0 0 22px 5px var(--color-botones, rgba(0, 255, 136, 0.45)), 0 0 50px 10px var(--color-botones, rgba(0, 255, 136, 0.15));
     transform: translateY(-2px);
+}
+.btn-hexagono:active {
+    box-shadow: 0 0 25px 8px var(--color-botones, var(--color-primario)), inset 0 0 10px var(--color-botones, var(--color-primario));
+    transform: translateY(0) scale(0.98);
 }
 @media (max-width: 768px) {
     .grid-comunicacion { grid-template-columns: 1fr; }

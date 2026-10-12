@@ -133,6 +133,11 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 
 ## BITÁCORA (historial de lo realizado)
 
+### 12/10/2026 — PUNTOS 1-2 (instrucciones.md): ICONOS VERDES + COLORES CORPORATIVOS
+- **Punto 1 — hecho:** 7 botones `.btn-comunicacion` con `<img class="icono-comunicacion">` a la izquierda (26px, `enlace%20movil.svg` con `%20`). 7 SVG recoloreados `fill #000000→#00ff88` (correos/chats/tareas/alarmas/calendario/hub/enlace movil). `llamar.svg` existe pero NO se usó: no hay botón Llamar (prohibido agregar). Sin icono en hexágono Otras (no está en la lista). Sin cambio de diseño/estructura.
+- **Punto 2 — hecho:** botones usan `--color-botones` (fondo/borde/halo) + `--color-letras` (texto). `:root` gana `--color-botones:#00ff88`; `aplicarCambiosVisuales()` la setea desde `configuracionEstetica.colorBotones` (+`--color-letras` desde `colorTexto`) y su selector ahora incluye `.btn-comunicacion/.btn-hexagono/.btn-vista-correo.activo`. Halo Stratos igual al existente (hover eleva+brilla, active presiona). Sin colores fijos nuevos (fallbacks solo si no hay identidad).
+- **Pendiente:** Ctrl+F5 en Comunicación + Tarea 2) Sincronizar con GitHub (aquí la terminal no devuelve salida).
+
 ### 11/10/2026 (continuación) — PUNTO 1 CORREGIDO: CENTRADO REAL DEL NO.1
 - **Diagnóstico:** el nodo No.1 lleva las dos clases `org-general-rama org-general-rama-nivel-0` (misma especificidad), y en `estilos.css` la regla `.org-general-rama{align-items:flex-start}` venía DESPUÉS de `.org-general-rama-nivel-0{align-items:center}` → ganaba `flex-start` y el nodo quedaba a la izquierda. Además el `<link>` del CSS no tenía `?v=` y el navegador seguía usando el CSS viejo en caché.
 - **Corrección:** movida `.org-general-rama-nivel-0` para que quede DESPUÉS de `.org-general-rama` (así su `center` gana en cascada). Agregado `?v=3` al `<link>` del CSS en `index.html` (igual que los `.js`). Sin cambiar tamaño, sin mover otros nodos, sin agregar elementos.
