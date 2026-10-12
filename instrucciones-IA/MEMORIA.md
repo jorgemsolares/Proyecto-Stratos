@@ -133,6 +133,12 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 
 ## BITÁCORA (historial de lo realizado)
 
+### 12/10/2026 (tarde) — PUNTOS 1-3 (instrucciones.md): HALO VERDE + ICONOS GRANDES + REUNIONES
+- **Punto 1 — hecho:** halo de `.btn-comunicacion` y `.btn-hexagono` (hover/active) a verde Stratos fijo `#00ff88`/`rgba(0,255,136,...)`. Fondo/borde/texto corporativos intactos. Sin quitar halo, sin cambiar efecto.
+- **Punto 2 — hecho:** `.icono-comunicacion` de 26px a 48px (círculo con aro oscuro, texto intacto). Sin cambiar tamaño del botón.
+- **Punto 3 — hecho:** botón Reuniones rectangular junto a los demás (icono `reuniones.svg` recoloreado a `#00ff88`) → `#pantalla-reuniones` placeholder con Volver. `irAModuloComunicacion()` ya lo lleva y registra en banco. `estadoPantallas` + `menu_pantalla-reuniones` agregados. Sin tocar otros botones, sin más botones.
+- **Pendiente:** Ctrl+F5 en Comunicación + Tarea 2) Sincronizar con GitHub (aquí la terminal no devuelve salida).
+
 ### 12/10/2026 — PUNTOS 1-2 (instrucciones.md): ICONOS VERDES + COLORES CORPORATIVOS
 - **Punto 1 — hecho:** 7 botones `.btn-comunicacion` con `<img class="icono-comunicacion">` a la izquierda (26px, `enlace%20movil.svg` con `%20`). 7 SVG recoloreados `fill #000000→#00ff88` (correos/chats/tareas/alarmas/calendario/hub/enlace movil). `llamar.svg` existe pero NO se usó: no hay botón Llamar (prohibido agregar). Sin icono en hexágono Otras (no está en la lista). Sin cambio de diseño/estructura.
 - **Punto 2 — hecho:** botones usan `--color-botones` (fondo/borde/halo) + `--color-letras` (texto). `:root` gana `--color-botones:#00ff88`; `aplicarCambiosVisuales()` la setea desde `configuracionEstetica.colorBotones` (+`--color-letras` desde `colorTexto`) y su selector ahora incluye `.btn-comunicacion/.btn-hexagono/.btn-vista-correo.activo`. Halo Stratos igual al existente (hover eleva+brilla, active presiona). Sin colores fijos nuevos (fallbacks solo si no hay identidad).

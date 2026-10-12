@@ -1893,24 +1893,24 @@ No toca .btn-principal / .btn-secundario existentes.
     gap: 10px;
 }
 .btn-comunicacion:hover {
-    box-shadow: 0 0 18px 3px var(--color-botones, rgba(0, 255, 136, 0.35)), 0 0 40px 8px var(--color-botones, rgba(0, 255, 136, 0.15));
+    box-shadow: 0 0 18px 3px rgba(0, 255, 136, 0.35), 0 0 40px 8px rgba(0, 255, 136, 0.15);
     transform: translateY(-2px);
 }
 .btn-comunicacion:active {
-    box-shadow: 0 0 25px 8px var(--color-botones, var(--color-primario)), inset 0 0 10px var(--color-botones, var(--color-primario));
+    box-shadow: 0 0 25px 8px #00ff88, inset 0 0 10px #00ff88;
     transform: translateY(0) scale(0.98);
 }
-/* PUNTO 1: icono SVG a la izquierda del texto, tamaño acorde al botón.
+/* PUNTO 2: icono SVG a la izquierda del texto, tamaño MÁXIMO que el botón permite.
    Los SVG van en verde Stratos (#00ff88); llevan aro oscuro detrás para
    que el verde se vea claro sobre el fondo del botón corporativo. */
 .icono-comunicacion {
-    width: 26px;
-    height: 26px;
+    width: 48px;
+    height: 48px;
     display: inline-block;
     object-fit: contain;
     background: #0b0f19;
     border-radius: 50%;
-    padding: 3px;
+    padding: 4px;
     flex-shrink: 0;
 }
 .contenedor-otras-actividades {
@@ -1933,11 +1933,11 @@ No toca .btn-principal / .btn-secundario existentes.
     transition: all var(--transicion-rapida);
 }
 .btn-hexagono:hover {
-    box-shadow: 0 0 22px 5px var(--color-botones, rgba(0, 255, 136, 0.45)), 0 0 50px 10px var(--color-botones, rgba(0, 255, 136, 0.15));
+    box-shadow: 0 0 22px 5px rgba(0, 255, 136, 0.45), 0 0 50px 10px rgba(0, 255, 136, 0.15);
     transform: translateY(-2px);
 }
 .btn-hexagono:active {
-    box-shadow: 0 0 25px 8px var(--color-botones, var(--color-primario)), inset 0 0 10px var(--color-botones, var(--color-primario));
+    box-shadow: 0 0 25px 8px #00ff88, inset 0 0 10px #00ff88;
     transform: translateY(0) scale(0.98);
 }
 @media (max-width: 768px) {

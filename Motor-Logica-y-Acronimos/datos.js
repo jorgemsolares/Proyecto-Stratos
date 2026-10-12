@@ -329,6 +329,12 @@ estadoPantallas = {
         icono: "⬡",
         visiblePara: ["todos"]
     },
+    "pantalla-reuniones": {
+        visitada: false,
+        nombre: "Reuniones",
+        icono: "📹",
+        visiblePara: ["todos"]
+    },
     "pantalla-configuracion": { 
         visitada: false, 
         nombre: "Configuración",
@@ -621,6 +627,7 @@ const TRADUCCIONES = {
     "menu_pantalla-hub": { es: "Hub de Archivos", en: "File Hub" },
     "menu_pantalla-enlace-movil": { es: "Enlace Móvil", en: "Mobile Link" },
     "menu_pantalla-otras-actividades": { es: "Otras Actividades", en: "Other Activities" },
+    "menu_pantalla-reuniones": { es: "Reuniones", en: "Meetings" },
     // MODAL AGREGAR / EDITAR CONTACTO
     "mod_titulo": { es: "Agregar Contacto", en: "Add Contact" },
     "mod_nombre": { es: "Nombre (como tú lo conoces) *", en: "Name (as you know them) *" },
