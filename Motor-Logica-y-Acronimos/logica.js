@@ -2157,8 +2157,8 @@ function aplicarBrandingGlobal() {
     if (tieneDatosGuardados) {
         const root = document.documentElement;
         if (identidadCorporativa.colorFondo) root.style.setProperty('--color-fondo', identidadCorporativa.colorFondo);
-        if (identidadCorporativa.colorTexto) root.style.setProperty('--color-texto', identidadCorporativa.colorTexto);
-        if (identidadCorporativa.colorBotones) root.style.setProperty('--color-primario', identidadCorporativa.colorBotones);
+        if (identidadCorporativa.colorTexto) { root.style.setProperty('--color-texto', identidadCorporativa.colorTexto); root.style.setProperty('--color-letras', identidadCorporativa.colorTexto); }
+        if (identidadCorporativa.colorBotones) { root.style.setProperty('--color-primario', identidadCorporativa.colorBotones); root.style.setProperty('--color-botones', identidadCorporativa.colorBotones); }
         if (identidadCorporativa.tipografia) root.style.setProperty('--familia-tipografica', identidadCorporativa.tipografia);
         
         if (brandingEmpresa) brandingEmpresa.style.display = 'flex';
@@ -2543,7 +2543,7 @@ function renderizarOrganigrama() {
     if (contactosIndirectos.length > 0) {
         const divIndirectos = document.createElement('div');
         divIndirectos.className = 'seccion-separadora';
-        divIndirectos.innerHTML = '<h3 style="color: #00ff88; margin-top: 30px;">Contactos Indirectos</h3>';
+        divIndirectos.innerHTML = '<h3 style="color: var(--color-letras, #00ff88); margin-top: 30px;">Contactos Indirectos</h3>';
         divIndirectos.style.display = 'flex';
         divIndirectos.style.flexWrap = 'wrap';
         divIndirectos.style.gap = '15px';
@@ -2567,7 +2567,7 @@ function renderizarOrganigrama() {
     if (observadores.length > 0) {
         const divObservadores = document.createElement('div');
         divObservadores.className = 'seccion-separadora';
-        divObservadores.innerHTML = '<h3 style="color: #00ff88; margin-top: 30px;">Observadores</h3>';
+        divObservadores.innerHTML = '<h3 style="color: var(--color-letras, #00ff88); margin-top: 30px;">Observadores</h3>';
         divObservadores.style.display = 'flex';
         divObservadores.style.flexWrap = 'wrap';
         divObservadores.style.gap = '15px';

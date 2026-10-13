@@ -133,6 +133,14 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 
 ## BITÁCORA (historial de lo realizado)
 
+### 12/10/2026 — PUNTO 1 (instrucciones.md): REGLA GENERAL DE BOTONES EN TODO EL SISTEMA
+- **Hecho:** todos los botones del sistema cumplen la regla. En `estilos.css`, las clases `.btn-principal` (verde `#00ff88`), `.btn-secundario` (naranja `#ff8c00`), `.btn-peligro` (rojo `#e53935`), `.btn-accion` (verde) y `.btn-cerrar` (rojo) usan fondo `--color-botones` y letras `--color-letras` definidos por el usuario; el halo/contorno va en el color de la FUNCIÓN y la animación (hover eleva+brilla / active presiona) aplica a todas.
+- **HTML (`index.html`):** en el modal de contacto, CANCELAR pasó de `.btn-secundario` a `.btn-peligro` (acción que descarta = rojo). En el modal de detalle, CERRAR pasó de `.btn-principal` a `.btn-peligro`; EDITAR = `.btn-secundario` (naranja), ELIMINAR = `.btn-peligro` (rojo). Títulos de modal con `--color-letras`.
+- **`logica.js`:** `aplicarBrandingGlobal()` ahora setea además `--color-letras` y `--color-botones` (antes solo `--color-texto`/`--color-primario`); los títulos dinámicos "Contactos Indirectos" y "Observadores" pasaron de `#00ff88` fijo a `var(--color-letras)`. `.controles-nodo button` ya usa `--color-botones`/`--color-letras`.
+- **No se cambió** función, tamaño, cantidad de botones ni estructura de modales/pantallas (regla inviolable respetada).
+- **Pendiente:** verificación del Arquitecto en navegador (Ctrl+F5) + Tarea 2) Sincronizar con GitHub.
+
+
 ### 12/10/2026 (tarde) — PUNTOS 1-3 (instrucciones.md): HALO VERDE + ICONOS GRANDES + REUNIONES
 - **Punto 1 — hecho:** halo de `.btn-comunicacion` y `.btn-hexagono` (hover/active) a verde Stratos fijo `#00ff88`/`rgba(0,255,136,...)`. Fondo/borde/texto corporativos intactos. Sin quitar halo, sin cambiar efecto.
 - **Punto 2 — hecho:** `.icono-comunicacion` de 26px a 48px (círculo con aro oscuro, texto intacto). Sin cambiar tamaño del botón.

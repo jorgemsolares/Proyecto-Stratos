@@ -337,7 +337,7 @@ input, textarea, select {
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: var(--radio-bordes);
     padding: 14px;
-    color: white;
+    color: var(--color-letras, #ffffff);
     font-size: 1rem;
     outline: none;
     transition: all var(--transicion-rapida);
@@ -567,38 +567,47 @@ textarea {
     transition: 0.05s linear;
 }
 
+/* REGLA GENERAL DE BOTONES (PUNTO 1, 12/10/2026):
+   - Fondo: color de Botones del usuario (--color-botones).
+   - Letras: color de Letras del usuario (--color-letras).
+   - Halo y contorno: color de la FUNCIÓN del botón:
+     principal (Grabar/Enviar/Confirmar/Guardar/Aceptar/Entrar) = verde #00ff88;
+     secundaria (Editar/Cambiar/Modificar/Actualizar) = naranja #ff8c00;
+     irreversible o que descarta (Eliminar/Borrar/Cancelar/Cerrar) = rojo #e53935.
+   La animación (elevar + halo) aplica a TODOS. No se cambia función ni tamaño. */
+
 /* ==========================================
-   3.7.4 BOTÓN PRINCIPAL (VERDE LUMINOSO) (el botón de las acciones principales de la app: continuar, guardar o confirmar)
+   3.7.4 BOTÓN PRINCIPAL (acción principal: continuar, guardar, confirmar, entrar)
    ========================================== */
 .btn-principal {
-    background: var(--color-primario);
-    color: #0b0f19;
-    border: 2px solid var(--color-primario);
+    background: var(--color-botones, var(--color-primario));
+    color: var(--color-letras, #0b0f19);
+    border: 2px solid #00ff88;
     box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
 }
 
 .btn-principal:hover {
-    background: #00dd77;
+    background: var(--color-botones, #00dd77);
     border-color: #00ff88;
     box-shadow: 0 12px 28px rgba(0, 255, 136, 0.5);
 }
 
 .btn-principal:active {
-    box-shadow: 0 0 25px 8px var(--color-primario), inset 0 0 10px var(--color-primario);
+    box-shadow: 0 0 25px 8px #00ff88, inset 0 0 10px #00ff88;
 }
 
 /* ==========================================
-   3.7.5 BOTÓN SECUNDARIO (NARANJA LUMINOSO - PRECAUCIÓN) (el botón de acciones de precaución o secundarias, en color naranja)
+   3.7.5 BOTÓN SECUNDARIO (acción secundaria: editar, cambiar, modificar, actualizar)
    ========================================== */
 .btn-secundario {
-    background: #ff8c00;
-    color: #0b0f19;
+    background: var(--color-botones, #ff8c00);
+    color: var(--color-letras, #0b0f19);
     border: 2px solid #ff8c00;
     box-shadow: 0 5px 15px rgba(255, 140, 0, 0.3);
 }
 
 .btn-secundario:hover {
-    background: #ffa500;
+    background: var(--color-botones, #ffa500);
     border-color: #ffaa33;
     box-shadow: 0 12px 28px rgba(255, 140, 0, 0.5);
     transform: translateY(-4px) scale(1.03);
@@ -610,17 +619,17 @@ textarea {
 }
 
 /* ==========================================
-   3.7.6 BOTÓN PELIGRO (ROJO LUMINOSO - IRREVERSIBLE) (el botón de acciones irreversibles o de riesgo, como borrar o eliminar un dato)
+   3.7.6 BOTÓN PELIGRO (acción irreversible o que descarta: eliminar, borrar, cancelar, cerrar)
    ========================================== */
 .btn-peligro {
-    background: #e53935;
-    color: #ffffff;
+    background: var(--color-botones, #e53935);
+    color: var(--color-letras, #ffffff);
     border: 2px solid #e53935;
     box-shadow: 0 5px 15px rgba(229, 57, 53, 0.3);
 }
 
 .btn-peligro:hover {
-    background: #ff1744;
+    background: var(--color-botones, #ff1744);
     border-color: #ff5252;
     box-shadow: 0 12px 28px rgba(229, 57, 53, 0.5);
     transform: translateY(-4px) scale(1.03);
@@ -632,24 +641,25 @@ textarea {
 }
 
 /* ==========================================
-   3.7.7 BOTÓN DE ACCIÓN (VERDE - PARA ORGANIGRAMA) (el botón verde compacto que se usa dentro de las fichas del organigrama)
+   3.7.7 BOTÓN DE ACCIÓN (acción principal compacta: se usa dentro de las fichas del organigrama)
    ========================================== */
 .btn-accion {
-    background: var(--color-primario);
-    color: #0b0f19;
-    border: 2px solid var(--color-primario);
+    background: var(--color-botones, var(--color-primario));
+    color: var(--color-letras, #0b0f19);
+    border: 2px solid #00ff88;
     padding: 8px 16px;
     font-size: 0.8rem;
+    box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
 }
 
 .btn-accion:hover {
-    background: #00dd77;
+    background: var(--color-botones, #00dd77);
     border-color: #00ff88;
     box-shadow: 0 12px 28px rgba(0, 255, 136, 0.4);
 }
 
 .btn-accion:active {
-    box-shadow: 0 0 25px 8px var(--color-primario), inset 0 0 10px var(--color-primario);
+    box-shadow: 0 0 25px 8px #00ff88, inset 0 0 10px #00ff88;
 }
 
 /* ==========================================
@@ -667,13 +677,13 @@ textarea {
 
 .btn-opcion:hover,
 .btn-opcion.activo {
-    background: var(--color-primario);
-    color: #0b0f19;
-    border-color: var(--color-primario);
+    background: var(--color-botones, var(--color-primario));
+    color: var(--color-letras, #0b0f19);
+    border-color: #00ff88;
 }
 
 .btn-opcion:active {
-    box-shadow: 0 0 25px 8px var(--color-primario), inset 0 0 10px var(--color-primario);
+    box-shadow: 0 0 25px 8px #00ff88, inset 0 0 10px #00ff88;
 }
 
 /* ==========================================
@@ -703,9 +713,9 @@ textarea {
    3.7.10 BOTÓN CERRAR (X) (la "X" que cierra las ventanas emergentes o modales)
    ========================================== */
 .btn-cerrar {
-    background: rgba(255, 77, 77, 0.2);
-    border: none;
-    color: var(--color-error);
+    background: var(--color-botones, var(--color-primario));
+    border: 2px solid #e53935;
+    color: var(--color-letras, #0b0f19);
     font-size: 1.2rem;
     width: 30px;
     height: 30px;
@@ -714,19 +724,20 @@ textarea {
     align-items: center;
     justify-content: center;
     padding: 0;
+    box-shadow: 0 5px 15px rgba(229, 57, 53, 0.3);
 }
 
 .btn-cerrar:hover {
-    background: var(--color-error);
-    color: white;
+    background: var(--color-botones, var(--color-primario));
+    color: var(--color-letras, #0b0f19);
     transform: rotate(90deg) translateY(-4px) scale(1.03);
-    box-shadow: 0 12px 28px rgba(255, 77, 77, 0.4);
-    border-color: var(--color-error);
+    box-shadow: 0 12px 28px rgba(229, 57, 53, 0.5);
+    border-color: #e53935;
 }
 
 .btn-cerrar:active {
     transform: rotate(90deg) scale(0.95);
-    box-shadow: 0 0 25px 8px var(--color-error), inset 0 0 10px var(--color-error);
+    box-shadow: 0 0 25px 8px #e53935, inset 0 0 10px #e53935;
 }
 
 /* ==========================================
@@ -904,7 +915,7 @@ textarea {
     border: 1px solid var(--color-primario);
     border-radius: var(--radio-bordes);
     padding: 8px 12px;
-    color: white;
+    color: var(--color-letras, #ffffff);
     font-size: 0.9rem;
     outline: none;
     transition: all var(--transicion-rapida);
@@ -923,7 +934,7 @@ textarea {
 
 .input-estilizado-mejorado option {
     background: #1a1a2e;
-    color: white;
+    color: var(--color-letras, #ffffff);
     padding: 10px;
 }
 
@@ -933,7 +944,7 @@ textarea {
     border-radius: var(--radio-bordes);
     text-align: center;
     font-size: 1.1rem;
-    color: white;
+    color: var(--color-letras, #ffffff);
     min-height: 80px;
     display: flex;
     align-items: center;
@@ -976,7 +987,7 @@ textarea {
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: var(--radio-bordes);
     padding: 10px;
-    color: white;
+    color: var(--color-letras, #ffffff);
     font-size: 0.9rem;
     outline: none;
     transition: all var(--transicion-rapida);
@@ -1078,7 +1089,7 @@ textarea {
 #lista-hojas-dinamica a:hover {
     background: rgba(0, 255, 136, 0.1);
     border-left-color: var(--color-primario);
-    color: white;
+    color: var(--color-letras, #ffffff);
 }
 
 #lista-hojas-dinamica a.activo {
@@ -1150,6 +1161,7 @@ textarea {
 .modal-header h3 {
     margin: 0;
     font-size: 1.2rem;
+    color: var(--color-letras, var(--color-texto));
 }
 
 .modal-body {
@@ -1565,7 +1577,8 @@ textarea {
     font-size: 0.9rem;
     font-weight: bold;
     margin-bottom: 5px;
-    color: white;
+    /* PUNTO 1: el nombre del nodo respeta el color de Letras del usuario */
+    color: var(--color-letras, #ffffff);
 }
 
 .controles-nodo {
@@ -1575,10 +1588,12 @@ textarea {
     justify-content: center;
 }
 
+/* PUNTO 1 (regla general de botones): fondo = color de Botones (--color-botones),
+   letras = color de Letras (--color-letras). Halo/contorno verde (control de acción principal). */
 .controles-nodo button {
-    background: var(--color-primario);
-    color: #0b0f19;
-    border: none;
+    background: var(--color-botones, var(--color-primario));
+    color: var(--color-letras, #0b0f19);
+    border: 2px solid #00ff88;
     width: 25px;
     height: 25px;
     border-radius: 50%;
@@ -1612,7 +1627,8 @@ textarea {
 .nombre-nodo-personal {
     font-size: 0.9rem;
     font-weight: bold;
-    color: white;
+    /* PUNTO 1: el nombre del nodo personal respeta el color de Letras del usuario */
+    color: var(--color-letras, #ffffff);
     text-align: center;
     word-break: break-word;
 }
@@ -1984,14 +2000,24 @@ No toca .btn-principal / .btn-secundario existentes.
     text-transform: uppercase;
     letter-spacing: 1px;
     border-radius: 8px;
-    border: 1px solid rgba(0, 255, 136, 0.4);
-    background: rgba(0, 255, 136, 0.06);
-    color: var(--color-primario);
+    border: 1px solid #00ff88;
+    background: var(--color-botones, rgba(0, 255, 136, 0.06));
+    color: var(--color-letras, var(--color-primario));
     cursor: pointer;
 }
+.btn-vista-correo:hover {
+    box-shadow: 0 12px 28px rgba(0, 255, 136, 0.4);
+    transform: translateY(-4px) scale(1.03);
+}
+.btn-vista-correo:active {
+    box-shadow: 0 0 25px 8px #00ff88, inset 0 0 10px #00ff88;
+    transform: translateY(0) scale(0.98);
+}
 .btn-vista-correo.activo {
-    background: var(--color-primario);
-    color: #0b0f19;
+    background: var(--color-botones, var(--color-primario));
+    color: var(--color-letras, #0b0f19);
+    border-color: #00ff88;
+    box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
 }
 .barra-busqueda-correo { margin: 8px 0 12px 0; }
 .lista-correos {
