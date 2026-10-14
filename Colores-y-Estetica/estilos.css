@@ -1475,7 +1475,7 @@ textarea {
 .ventana-ia-linea-usuario {
     margin: 0 0 6px 0;
     font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.95);
+    color: var(--color-letras);
     font-style: italic;
 }
 

@@ -139,6 +139,13 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 - **`logica.js`:** `aplicarBrandingGlobal()` ahora setea además `--color-letras` y `--color-botones` (antes solo `--color-texto`/`--color-primario`); los títulos dinámicos "Contactos Indirectos" y "Observadores" pasaron de `#00ff88` fijo a `var(--color-letras)`. `.controles-nodo button` ya usa `--color-botones`/`--color-letras`.
 - **No se cambió** función, tamaño, cantidad de botones ni estructura de modales/pantallas (regla inviolable respetada).
 - **Pendiente:** verificación del Arquitecto en navegador (Ctrl+F5) + Tarea 2) Sincronizar con GitHub.
+### 12/10/2026 (noche) — PUNTO 1, APARTADO 3 (color de letras): CIERRE ACOTADO
+- **Decisión del Arquitecto:** del apartado 3 ("toda letra del sistema debe respetar --color-letras"), amarrar SOLO la línea de usuario de la ventana de IA.
+- **Hecho:** `.ventana-ia-linea-usuario` en `estilos.css` pasó de `color: rgba(255,255,255,0.95)` fijo a `color: var(--color-letras)` (ya obedece la Identidad Corporativa). Sin cambiar tamaño, fuente ni cursiva; balance de llaves intacto.
+- **NO se tocó (por decisión del Arquitecto):** cartelera (`#zona-cartelera`/`.mensaje-alerta`, ya respeta la identidad), barra de notificaciones (`#barra-notificaciones`, colores fijos por tipo de aviso), marca de agua `.watermark-stratos` (identidad de Stratos) y textos sobre fondos semánticos (si el usuario elige mal contraste, es su responsabilidad; el sistema no fuerza el color ahí).
+- **Pendiente (no ahora):** `.item-correo-previa`/`.item-correo-fecha` se amarrarán cuando se trabaje el módulo Correos. El Slogan tendrá su propio botón de color con la paleta del logo cuando se defina Identidad Corporativa a detalle.
+
+
 
 
 ### 12/10/2026 (tarde) — PUNTOS 1-3 (instrucciones.md): HALO VERDE + ICONOS GRANDES + REUNIONES
