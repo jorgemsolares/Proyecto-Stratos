@@ -397,6 +397,9 @@ function irAPantalla(id) {
     pantallaActual = id;
     // El botón de IA aparece en todas las pantallas excepto Login (PUNTO 7)
     mostrarBotonIA(id !== 'pantalla-acceso');
+    // PUNTO 1 instrucciones.md: el botón "Libro" sigue la misma regla que el botón IA (oculto en Login)
+    const botonTuercaGlobal = document.getElementById('boton-tuerca-global');
+    if (botonTuercaGlobal) botonTuercaGlobal.style.display = (id !== 'pantalla-acceso') ? 'flex' : 'none';
     // PUNTO 4: la cartelera solo aparece en pantallas internas (no en Login)
     const zonaSuperior = document.getElementById('zona-superior');
     if (zonaSuperior) zonaSuperior.style.display = (id === 'pantalla-acceso') ? 'none' : '';
@@ -895,6 +898,7 @@ function procesarRegistro() {
     const email = document.getElementById('reg-email').value.trim();
     const posicion = document.getElementById('reg-posicion').value.trim();
     const esEdicion = (typeof usuarioActivo !== 'undefined' && usuarioActivo && usuarioActivo.id);
+    const nombreAnteriorPerfil = (esEdicion && usuarioActivo) ? usuarioActivo.nombreCompleto : null;
     
     if (esEdicion) {
         if (!nombres || !idEmpleado || !posicion) {
@@ -928,6 +932,18 @@ function procesarRegistro() {
         if (idx !== -1) baseDatosUsuarios[idx] = {...usuarioActivo};
         guardarEnStorage(STORAGE_KEYS.USUARIO_ACTIVO, usuarioActivo);
         guardarEnStorage(STORAGE_KEYS.BASE_USUARIOS, baseDatosUsuarios);
+        // PUNTO 3 instrucciones.md: sincronizar autocompletado con el perfil editado (reemplaza, no agrega)
+        try {
+            guardarEnStorage(STORAGE_KEYS.RECORDAR_USUARIO, usuarioActivo.nombreCompleto);
+            let listaDispositivo = [];
+            try { listaDispositivo = JSON.parse(localStorage.getItem('usuarios_del_dispositivo')) || []; } catch (e) { listaDispositivo = []; }
+            if (!Array.isArray(listaDispositivo)) listaDispositivo = [];
+            if (nombreAnteriorPerfil && nombreAnteriorPerfil !== usuarioActivo.nombreCompleto) {
+                listaDispositivo = listaDispositivo.filter(n => n !== nombreAnteriorPerfil);
+            }
+            if (!listaDispositivo.includes(usuarioActivo.nombreCompleto)) listaDispositivo.push(usuarioActivo.nombreCompleto);
+            localStorage.setItem('usuarios_del_dispositivo', JSON.stringify(listaDispositivo));
+        } catch (e) { console.error("Error sincronizando autocompletado:", e); }
         mostrarAvisoInmediato("✓ Perfil actualizado", "exito");
         setTimeout(() => irAPantalla('pantalla-configuracion'), 1500);
         return;

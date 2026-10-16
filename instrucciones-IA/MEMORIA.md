@@ -133,6 +133,17 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 
 ## BITÁCORA (historial de lo realizado)
 
+### 16/10/2026 — instrucciones.md (PUNTOS 1, 2 y 3): LIBRO EN LOGIN + COLOR BOTONES + AUTOCOMPLETADO
+- **Punto 1 — hecho:** `irAPantalla()` en `logica.js` ahora oculta `boton-tuerca-global` en `pantalla-acceso` con la misma regla que el botón IA (`mostrarBotonIA`). Sin tocar tamaño, posición, icono, efecto ni función del Libro.
+- **Punto 2 — hecho:** `:root --color-botones` en `estilos.css` pasó de `#00ff88` a `#0b0f19`. Halo/contorno por función intactos (verde/naranja/rojo). `aplicarCambiosVisuales()` en `logica.js` verificado: sigue sobreescribiendo `--color-botones` con el color de Identidad Corporativa.
+- **Punto 3 — hecho:** rama edición de `procesarRegistro()` en `logica.js` ahora sincroniza `stratos_recordar` y `usuarios_del_dispositivo` con el nuevo `nombreCompleto` (reemplaza el viejo, no agrega). Sin tocar lógica de login ni otras claves.
+- **Verificación:** `_validar_js.py` con esprima: `logica.js` OK, `datos.js` OK, 0 problemas.
+
+### 14/10/2026 — PUNTO 1 (instrucciones.md): EFECTO UNIFICADO EN LOS 9 BOTONES DE COMUNICACIÓN
+- **Hecho:** los 8 `.btn-comunicacion` + `.btn-hexagono` ahora cumplen el PUNTO 1. Rectangulares: normal con borde transparente 2px + sombra suave verde; hover con borde iluminado + sombra intensificada + escala 1.08; active con halo intenso + inset (sin translateY, sin rotación). Hexágono Otras: misma regla con `filter: drop-shadow` (el clip-path recorta borde/sombra normales, así el halo se ve sin cambiar su forma); sin rotación (no es Libro/Vero).
+- **No se cambió** forma, tamaño, función ni iconos de los 9 botones (regla inviolable respetada).
+- **Pendiente:** verificación del Arquitecto en navegador (Ctrl+F5 en Comunicación) + Tarea 2) Sincronizar con GitHub.
+
 ### 12/10/2026 — PUNTO 1 (instrucciones.md): REGLA GENERAL DE BOTONES EN TODO EL SISTEMA
 - **Hecho:** todos los botones del sistema cumplen la regla. En `estilos.css`, las clases `.btn-principal` (verde `#00ff88`), `.btn-secundario` (naranja `#ff8c00`), `.btn-peligro` (rojo `#e53935`), `.btn-accion` (verde) y `.btn-cerrar` (rojo) usan fondo `--color-botones` y letras `--color-letras` definidos por el usuario; el halo/contorno va en el color de la FUNCIÓN y la animación (hover eleva+brilla / active presiona) aplica a todas.
 - **HTML (`index.html`):** en el modal de contacto, CANCELAR pasó de `.btn-secundario` a `.btn-peligro` (acción que descarta = rojo). En el modal de detalle, CERRAR pasó de `.btn-principal` a `.btn-peligro`; EDITAR = `.btn-secundario` (naranja), ELIMINAR = `.btn-peligro` (rojo). Títulos de modal con `--color-letras`.
