@@ -17,6 +17,7 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 - Los 4 archivos del sistema: `index.html`, `estilos.css`, `datos.js`, `logica.js`.
 - El repositorio del código en GitHub (`Proyecto-Stratos`).
 - El repositorio de las Minutas (`Comunicaci-n-IA-Internet`).
+- La carpeta de iconos: `Colores-y-Estetica/Iconos/`.
 
 **Reglas de trabajo del proyecto:**
 - Cuando en este documento se mencione "la IA" o "Vero", se refiere a la IA del sistema que se implementará después.
@@ -26,96 +27,108 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 
 ---
 
-## PUNTO 1: ACTUALIZAR LOS VALORES POR DEFECTO EN datos.js
+## PUNTO 1: BOTÓN "COLOR" PARA EL SLOGAN
 
-**Contexto:** El cambio de color base de botones se aplicó en `estilos.css` (`--color-botones: #0b0f19`), pero `datos.js` sigue teniendo los valores viejos en `#00ff88`. Como `aplicarCambiosVisuales()` sobreescribe la variable CSS con el valor de `configuracionEstetica.colorBotones`, al cargar la app todo vuelve al verde brillante. Hay que actualizar los valores por defecto en `datos.js`.
+**Contexto:** Hoy el bloque del Slogan en Identidad Corporativa tiene dos selectores: **Tipografía** y **Estilo**. Falta un tercer selector: **Color**. Debe funcionar igual que los otros dos y mostrar los mismos 8 colores de la paleta superior.
 
 **Qué cambiar:**
-- En `datos.js`, dentro del objeto `identidadCorporativa`, cambiar `colorBotones: "#00ff88"` por `colorBotones: "#0b0f19"`.
-- En `datos.js`, dentro del objeto `configuracionEstetica`, cambiar `colorBotones: "#00ff88"` por `colorBotones: "#0b0f19"`.
+- Agregar un tercer selector (lista desplegable) llamado **Color** junto a **Tipografía** y **Estilo**.
+- Debe mostrar los mismos 8 colores que ya tiene la paleta superior (`coloresExtraidos`).
+- Al elegir un color, el Slogan (el texto de vista previa y el de la cabecera) cambia a ese color.
+- El color se guarda con el resto de la identidad corporativa.
 
 **Dónde:**
-- `Motor-Logica-y-Acronimos/datos.js`, sección 2.1 (ESTADO DE IDENTIDAD CORPORATIVA) y sección 2.3 (CONFIGURACIÓN ESTÉTICA APLICADA).
-
-**Cómo debe quedar:**
-- `identidadCorporativa.colorBotones = "#0b0f19"`.
-- `configuracionEstetica.colorBotones = "#0b0f19"`.
-- Cuando el usuario no ha definido un color de Botones en Identidad Corporativa, el sistema usa `#0b0f19` (oscuro, igual al fondo).
+- `index.html`: agregar el tercer `<select>` en el bloque del Slogan, junto a `#sel-tipografia` y `#sel-estilo`.
+- `datos.js`: agregar el campo `colorSlogan` dentro de `identidadCorporativa` y `configuracionEstetica`.
+- `logica.js`: en `actualizarVistaPrevia()` y en `salvarIdentidad()`, aplicar y guardar el `colorSlogan`.
+- `estilos.css`: agregar el estilo del nuevo selector para que se vea igual que los otros dos (el tamaño y distribución se pueden ajustar para que quepan los tres).
 
 **Qué NO hacer:**
-- NO tocar `colorFondo` ni `colorTexto`.
-- NO tocar la paleta de colores (`coloresExtraidos`).
-- NO tocar `identidadCorporativa.completada` ni ningún otro campo.
+- NO cambiar la función de Tipografía y Estilo.
+- NO agregar más de un selector.
+- NO usar una paleta distinta a la de `coloresExtraidos`.
+- NO cambiar nada fuera del bloque del Slogan.
 
 ---
 
-## PUNTO 2: EL BOTÓN "LIBRO" DEBE USAR EL COLOR DE BOTONES
+## PUNTO 2: REGISTRO DE ACTIVIDAD EN IDENTIDAD CORPORATIVA
 
-**Contexto:** El botón "Libro" (`.tuerca-navegacion`) usa `var(--color-primario)` como fondo, por eso se ve verde brillante aunque el resto de botones ya usen el color de Botones del usuario. Debe usar `var(--color-botones)` como el resto.
+**Contexto:** Cada edición de Identidad Corporativa (misión, visión, valores, colores, logo, slogan, tipografía, estilo) es una actividad laboral real que debe quedar registrada.
 
 **Qué cambiar:**
-- En `estilos.css`, dentro de `.tuerca-navegacion`, cambiar `background: var(--color-primario);` por `background: var(--color-botones, var(--color-primario));`.
+- Registrar en el banco de datos del usuario que edita: quién, cuándo, y qué cambió (misión, visión, valores, colores, logo, slogan, tipografía, estilo).
 
 **Dónde:**
-- `Colores-y-Estetica/estilos.css`, sección 3.10 (TUERCA - MENÚ LATERAL).
-
-**Cómo debe quedar:**
-- `.tuerca-navegacion` usa `var(--color-botones, var(--color-primario))` como fondo.
-- El halo, la sombra y la animación (hover: rotación 90° + escala 1.08; active: rotación 90° + halo + inset) se mantienen iguales.
-- El icono (`<span>📋</span>`) se mantiene igual.
+- `logica.js`: en la función que guarda la Identidad Corporativa (`salvarIdentidad`), agregar el registro en `bancoDatos[usuarioId].actividad` usando la función `registrarActividadBancoDatos`.
 
 **Qué NO hacer:**
-- NO cambiar el tamaño, la posición ni la forma del botón.
-- NO cambiar la animación (rotación 90°, escala 1.08).
-- NO tocar el botón de la IA (`.boton-ia`), que tiene su propio tratamiento.
+- NO cambiar cómo se guarda la Identidad Corporativa hoy.
+- NO tocar el banco de datos de otros usuarios.
 
 ---
 
-## PUNTO 3: EL BOTÓN "LIBRO" NO DEBE APARECER ANTES DE ENTRAR
+## PUNTO 3: CAMBIO DE ICONOS ACTUALES (EMOJI → SVG)
 
-**Contexto:** En `validarEntrada`, antes del `setTimeout(..., 1500)` que lleva a la pantalla de Comunicación, hay una línea que fuerza el Libro a `display:flex` mientras el usuario todavía está en Login. Por eso aparece durante 1.5 segundos en la pantalla de Login antes de cambiar.
+**Contexto:** El sistema usa emojis en varios lugares. Deben ser reemplazados por los archivos SVG de la carpeta `Colores-y-Estetica/Iconos/`, usando el color verde brillante (`#00ff88`). Si falta un icono, la IA debe preguntar.
 
 **Qué cambiar:**
-- En `logica.js`, dentro de `validarEntrada`, quitar (o comentar) la línea que pone `botonTuerca.style.display = 'flex'` ANTES del `setTimeout`.
-- La visibilidad del Libro ya la maneja `irAPantalla` (que lo oculta en Login y lo muestra en el resto). No hace falta forzarla en `validarEntrada`.
+- Reemplazar los emojis por los iconos SVG correspondientes:
+
+| Emoji actual | Dónde está | SVG a usar |
+|---|---|---|
+| 👋 | Cartelera: saludo | `Saludos.svg` |
+| ⚠️ | Cartelera: aviso de identidad pendiente | `Advertencia.svg` |
+| 🔑 | Cartelera: solicitud de contraseña | `Contraseña.svg` |
+| 🔐 | Cartelera: sugerencia de cambio de contraseña | `Cambiar contraseña.svg` |
+| 📧 | Menú + Correos | `correos.svg` |
+| 💬 | Menú + Chats | `chats.svg` |
+| ✅ | Menú + Tareas | `tareas.svg` |
+| ⏰ | Menú + Alarmas | `alarmas.svg` |
+| 📅 | Menú + Calendario | `calendario.svg` |
+| 📁 | Menú + Hub | `hub.svg` |
+| 📱 | Menú + Enlace Móvil | `enlace movil.svg` |
+| 📹 | Menú + Reuniones | `Reuniones.svg` |
+| ⬡ | Menú + Otras Actividades | `otras actividades.svg` |
 
 **Dónde:**
-- `Motor-Logica-y-Acronimos/logica.js`, dentro de `validarEntrada`. La línea exacta a quitar es:
-  `const botonTuerca = document.getElementById('boton-tuerca-global');`
-  `if (botonTuerca) botonTuerca.style.display = 'flex';`
-- Esa línea está justo antes del `setTimeout` que lleva a `pantalla-identidad` o `pantalla-comunicacion`.
+- `logica.js`: en los textos de cartelera (`construirColaMensajes`, `mostrarSiguienteMensaje`), en el menú (`actualizarMenuTuerca`) y en los títulos dinámicos.
+- `index.html`: en el menú estático si aplica.
+- `estilos.css`: agregar una clase (ej. `.icono-inline`) para que los SVG dentro del texto tengan el tamaño, alineación y color verde (`#00ff88`) adecuados.
 
-**Cómo debe quedar:**
-- El Libro NO aparece mientras el usuario está en Login.
-- Aparece solo cuando `irAPantalla` cambia a Comunicación (después del `setTimeout`).
-- El resto del flujo de login se mantiene igual.
+**Regla para el futuro:**
+- Antes de poner un icono nuevo, revisar la carpeta `Iconos/`. Si no hay uno adecuado, NO inventar, NO usar emoji, NO usar otro icono. Debe preguntar al Arquitecto.
 
 **Qué NO hacer:**
-- NO cambiar el `setTimeout` de 1500 ms.
-- NO cambiar cómo se muestra u oculta el Libro en otras pantallas.
-- NO tocar el botón de la IA.
+- NO cambiar el texto de los mensajes.
+- NO usar iconos que no estén en la carpeta.
 
 ---
 
-## PUNTO 4: AL CERRAR SESIÓN, LIMPIAR LA VARIABLE DE COLOR DE BOTONES
+## PUNTO 4: BOTÓN "OTRAS ACTIVIDADES" (FORMA DE PÍLDORA)
 
-**Contexto:** Cuando `aplicarCambiosVisuales()` corre, setea `--color-botones` inline en el elemento `<html>` con el valor que el usuario tenga. Al cerrar sesión, esa variable NO se limpia, así que el botón ENTRAR de Login queda con el color del usuario anterior en lugar del `#0b0f19` por defecto del CSS.
+**Contexto:** El botón "Otras Actividades" usa `clip-path` para hacer forma de hexágono. Ese recorte corta el halo y el contorno, por lo que no se ve el efecto unificado que tienen los demás botones. Se cambiará su forma a una "píldora" (cápsula) para que el efecto se vea igual de bien.
 
 **Qué cambiar:**
-- En `logica.js`, dentro de `cerrarSesion`, agregar la limpieza de las variables CSS que `aplicarCambiosVisuales` dejó inline en `<html>`: `--color-fondo`, `--color-texto`, `--color-letras`, `--color-primario`, `--color-botones`.
+- Quitar el `clip-path` y la propiedad `filter: drop-shadow`.
+- Cambiar la forma a píldora usando `border-radius: 999px;` (o 60px).
+- Ajustar el ancho y alto si es necesario para que el texto y el icono queden bien dentro de la cápsula.
+- Aplicar los efectos de hover y active normales (borde iluminado, sombra, escala 1.08, halo e inset) que ya tienen los demás botones.
 
 **Dónde:**
-- `Motor-Logica-y-Acronimos/logica.js`, dentro de `cerrarSesion`, después de `usuarioActivo = null;` y antes de `irAPantalla('pantalla-acceso')`.
+- `estilos.css`: en la clase `.btn-hexagono` (se puede renombrar a `.btn-otras-actividades` si el Arquitecto lo aprueba, pero para no romper el HTML se mantiene el nombre de la clase).
 
 **Cómo debe quedar:**
-- Al cerrar sesión, el `<html>` queda sin las variables CSS inline.
-- Al volver a Login, el botón ENTRAR se ve con el `#0b0f19` por defecto del CSS.
-- Al entrar de nuevo, si el usuario tiene su propia identidad corporativa, `aplicarCambiosVisuales` vuelve a setear las variables.
+- El botón se ve como una cápsula alargada.
+- El fondo respeta `--color-botones`.
+- El texto respeta `--color-letras`.
+- En hover: borde verde (`#00ff88`), sombra verde, escala 1.08.
+- En active: halo verde intenso e inset.
+- El icono va a la izquierda del texto, centrado verticalmente.
 
 **Qué NO hacer:**
-- NO cambiar la lógica de cierre de sesión (confirmación, registro de hora de salida, limpieza de `sessionStorage`).
-- NO tocar el `usuarioActivo`.
-- NO tocar otras variables de sesión.
+- NO cambiar la función del botón (sigue llevando a Otras Actividades).
+- NO cambiar el texto "Otras Actividades".
+- NO cambiar el tamaño del botón de forma exagerada.
 
 ---
 

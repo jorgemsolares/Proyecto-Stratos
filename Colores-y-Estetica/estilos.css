@@ -1033,6 +1033,15 @@ textarea {
     font-size: 1.5rem;
 }
 
+/* PUNTO 3 instrucciones.md: SVG inline en cartelera y menú (tamaño, alineación y verde #00ff88) */
+.icono-inline {
+    width: 1.2em;
+    height: 1.2em;
+    display: inline-block;
+    vertical-align: -0.2em;
+    object-fit: contain;
+}
+
 .sidebar-menu {
     position: fixed;
     right: -350px;
@@ -1948,9 +1957,12 @@ No toca .btn-principal / .btn-secundario existentes.
     margin: 8px 0 4px 0;
 }
 .btn-hexagono {
-    width: 170px;
-    height: 120px;
-    border: none;
+    width: auto;
+    min-width: 220px;
+    height: auto;
+    min-height: 56px;
+    border: 2px solid transparent;
+    border-radius: 999px;
     cursor: pointer;
     font-size: 0.9rem;
     font-weight: bold;
@@ -1958,17 +1970,16 @@ No toca .btn-principal / .btn-secundario existentes.
     letter-spacing: 1px;
     color: var(--color-letras, #0b0f19);
     background: var(--color-botones, var(--color-primario));
-    clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
     transition: all var(--transicion-rapida);
-    /* PUNTO 1: el clip-path recorta borde/sombra del botón; la sombra suave en
-       normal vive en el contenedor para no cambiar la forma del hexágono. */
-    filter: drop-shadow(0 5px 10px rgba(0, 255, 136, 0.3));
+    /* PUNTO 4 instrucciones.md: forma de pildora (sin clip-path ni drop-shadow) */
+    box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
 }
 .btn-hexagono:hover {
-    filter: drop-shadow(0 0 12px rgba(0, 255, 136, 0.8));
+    border-color: #00ff88;
+    box-shadow: 0 12px 28px rgba(0, 255, 136, 0.5);
     transform: scale(1.08);
 }
-/* El hexágono es más angosto: su icono va más compacto y el contenido centrado. */
+/* El botón píldora es más angosto: su icono va más compacto y el contenido centrado. */
 .btn-hexagono {
     display: flex;
     flex-direction: column;
@@ -1980,7 +1991,7 @@ No toca .btn-principal / .btn-secundario existentes.
     padding: 10px 28px;
     font-size: 0.8rem;
 }
-/* Línea 1 del hexágono: icono + "Otras" juntos y centrados. Línea 2: "Actividades". */
+/* Línea 1 de la píldora: icono + "Otras" juntos y centrados. Línea 2: "Actividades". */
 .linea-hexagono {
     display: flex;
     align-items: center;
@@ -1992,7 +2003,7 @@ No toca .btn-principal / .btn-secundario existentes.
     height: 30px;
 }
 .btn-hexagono:active {
-    filter: drop-shadow(0 0 18px #00ff88);
+    box-shadow: 0 0 25px 8px #00ff88, inset 0 0 10px #00ff88;
 }
 @media (max-width: 768px) {
     .grid-comunicacion { grid-template-columns: 1fr; }

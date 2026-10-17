@@ -133,6 +133,13 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 
 ## BITÁCORA (historial de lo realizado)
 
+### 17/10/2026 (tarde) — instrucciones.md (PUNTOS 1-4): COLOR SLOGAN + ACTIVIDAD + SVG + PÍLDORA
+- **Punto 1 — hecho:** tercer selector Color del Slogan con los 8 de `coloresExtraidos`. `index.html` (`#sel-color-slogan`), `datos.js` (`colorSlogan` en identidad + estética), `logica.js` (`poblarSelectorColorSlogan`, `actualizarVistaPrevia` y `salvarIdentidad` lo aplican/guardan, `aplicarBrandingGlobal` lo muestra en cabecera).
+- **Punto 2 — hecho:** `salvarIdentidad()` registra en `bancoDatos[usuarioId].actividad` vía `registrarActividadBancoDatos`. Sin cambiar el guardado.
+- **Punto 3 — hecho:** 18 SVG recolorados a `#00ff88`. Cartelera (saludo, aviso identidad, solicitud y sugerencia clave) y cierre de sesión usan `<img class="icono-inline">`. `estadoPantallas` mapea a SVG y `actualizarMenuTuerca` renderiza `<img>` si termina en `.svg`. Clase `.icono-inline` agregada.
+- **Punto 4 — hecho:** `.btn-hexagono` a píldora (`border-radius:999px`, sin `clip-path`/`drop-shadow`, hover/active verdes normales, fondo `--color-botones`, texto `--color-letras`).
+- **Verificación:** llaves balanceadas en ambos JS; el validador esprima completo se atasca por tamaño (revisar en navegador con Ctrl+F5).
+
 ### 17/10/2026 — instrucciones.md (PUNTOS 1-4): DEFAULTS OSCUROS + LIBRO CORPORATIVO + LOGIN LIMPIO
 - **Punto 1 — hecho:** `datos.js` actualizado: `identidadCorporativa.colorBotones` y `configuracionEstetica.colorBotones` de `#00ff88` a `#0b0f19`. Sin tocar fondo/texto, paleta ni otros campos.
 - **Punto 2 — hecho:** `.tuerca-navegacion` en `estilos.css` ahora usa `background: var(--color-botones, var(--color-primario))`. Halo/sombra/animación e icono intactos. Botón IA sin tocar.

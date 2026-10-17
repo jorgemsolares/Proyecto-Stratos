@@ -209,7 +209,7 @@ function construirColaMensajes() {
             : [];
         solicitudes.forEach(s => {
             colaMensajes.push({
-                texto: `🔑 Solicitud de contraseña (prioridad ALTA): ${s.nombreUsuario}`,
+                texto: `<img src="../Colores-y-Estetica/Iconos/Contraseña.svg" alt="" class="icono-inline"> Solicitud de contraseña (prioridad ALTA): ${s.nombreUsuario}`,
                 tipo: 'mensaje',
                 prioridad: 'alta',
                 fechaInicio: new Date(),
@@ -218,7 +218,7 @@ function construirColaMensajes() {
         });
         if (typeof erroresUltimaSemana === 'function' && erroresUltimaSemana(usuarioActivo) > 6) {
             colaMensajes.push({
-                texto: `🔐 ${nombreAsistenteIA()} te sugiere cambiar tu contraseña (errores esta semana)`,
+                texto: `<img src="../Colores-y-Estetica/Iconos/Cambiar contraseña.svg" alt="" class="icono-inline"> ${nombreAsistenteIA()} te sugiere cambiar tu contraseña (errores esta semana)`,
                 tipo: 'mensaje',
                 prioridad: 'media',
                 fechaInicio: new Date(),
@@ -232,7 +232,7 @@ function construirColaMensajes() {
         if (localStorage.getItem(STORAGE_KEYS.ULTIMO_SALUDO) !== hoySaludo) {
             localStorage.setItem(STORAGE_KEYS.ULTIMO_SALUDO, hoySaludo);
             colaMensajes.push({
-                texto: `👋 Hola, ${usuarioActivo.nombre}`,
+                texto: `<img src="../Colores-y-Estetica/Iconos/Saludos.svg" alt="" class="icono-inline"> Hola, ${usuarioActivo.nombre}`,
                 tipo: 'saludo',
                 prioridad: 'baja',
                 fechaInicio: new Date(),
@@ -244,7 +244,7 @@ function construirColaMensajes() {
         const no1 = baseDatosUsuarios.find(u => u.esNo1);
         const nombreNo1 = no1 ? no1.nombre : "El administrador";
         colaMensajes.push({
-            texto: `⚠️ Aviso: ${nombreNo1} aún no ha definido toda la Identidad Corporativa.`,
+            texto: `<img src="../Colores-y-Estetica/Iconos/Advertencia.svg" alt="" class="icono-inline"> Aviso: ${nombreNo1} aún no ha definido toda la Identidad Corporativa.`,
             tipo: 'aviso',
             prioridad: 'baja',
             fechaInicio: new Date(),
@@ -1342,7 +1342,7 @@ function revisarSugerenciaContrasena(usuario) {
     const errores = erroresUltimaSemana(usuario);
     if (errores > 6) {
         // El aviso va a cartelera (aquí se muestra como aviso inmediato al iniciar sesión).
-        mostrarAvisoInmediato(`🔐 ${nombreAsistenteIA()} te sugiere cambiar tu contraseña (${errores} errores esta semana)`, "advertencia");
+        mostrarAvisoInmediato(`<img src="../Colores-y-Estetica/Iconos/Cambiar contraseña.svg" alt="" class="icono-inline"> ${nombreAsistenteIA()} te sugiere cambiar tu contraseña (${errores} errores esta semana)`, "advertencia");
     }
 }
 
@@ -1352,7 +1352,7 @@ function mostrarSolicitudesPendientesJefe(usuario) {
     const pendientes = solicitudesRecuperacion.filter(s => s.solicitadoA === usuario.id && s.estado === 'pendiente');
     if (pendientes.length === 0) return;
     const nombres = pendientes.map(s => s.nombreUsuario).join(', ');
-    mostrarAvisoInmediato(`🔑 Solicitud de contraseña (prioridad ALTA): ${nombres}`, "advertencia");
+    mostrarAvisoInmediato(`<img src="../Colores-y-Estetica/Iconos/Contraseña.svg" alt="" class="icono-inline"> Solicitud de contraseña (prioridad ALTA): ${nombres}`, "advertencia");
 }
 
 // ==========================================
@@ -1553,7 +1553,11 @@ function actualizarMenuTuerca() {
             const enlace = document.createElement('a');
             enlace.href = '#';
             const nombreTrad = traducirTexto('menu_' + id) || info.nombre;
-            enlace.innerHTML = `${info.icono} ${nombreTrad}`;
+            // PUNTO 3 instrucciones.md: icono SVG de la carpeta Iconos (si termina en .svg se renderiza como imagen)
+            const iconoHtml = (info.icono && info.icono.endsWith('.svg'))
+                ? `<img src="../Colores-y-Estetica/Iconos/${info.icono}" alt="" class="icono-inline">`
+                : info.icono;
+            enlace.innerHTML = `${iconoHtml} ${nombreTrad}`;
             enlace.onclick = (e) => { e.preventDefault(); irAPantalla(id); toggleMenuTuerca(); };
             if (pantallaActual === id) enlace.classList.add('activo');
             menuContainer.appendChild(enlace);
@@ -1565,7 +1569,7 @@ function actualizarMenuTuerca() {
     menuContainer.appendChild(separador);
     const cerrarSesionLink = document.createElement('a');
     cerrarSesionLink.href = '#';
-    cerrarSesionLink.innerHTML = `🚪 ${traducirTexto('menu_cerrar_sesion') || 'Cerrar Sesión'}`;
+    cerrarSesionLink.innerHTML = `<img src="../Colores-y-Estetica/Iconos/Salir.svg" alt="" class="icono-inline"> ${traducirTexto('menu_cerrar_sesion') || 'Cerrar Sesión'}`;
     cerrarSesionLink.onclick = (e) => { e.preventDefault(); cerrarSesion(); toggleMenuTuerca(); };
     menuContainer.appendChild(cerrarSesionLink);
 }
@@ -2144,7 +2148,14 @@ function salvarIdentidad() {
     identidadCorporativa.colorFondo = configuracionEstetica.colorFondo;
     identidadCorporativa.colorTexto = configuracionEstetica.colorTexto;
     identidadCorporativa.colorBotones = configuracionEstetica.colorBotones;
+    identidadCorporativa.colorSlogan = configuracionEstetica.colorSlogan || identidadCorporativa.colorSlogan || '#00ff88';
     guardarEnStorage(STORAGE_KEYS.IDENTIDAD, identidadCorporativa);
+    // PUNTO 2 instrucciones.md: registrar edicion de Identidad Corporativa en banco de datos
+    try {
+        if (typeof registrarActividadBancoDatos === 'function' && usuarioActivo && usuarioActivo.id) {
+            registrarActividadBancoDatos(usuarioActivo.id, 'identidad', 'Edito Identidad Corporativa (mision, vision, valores, colores, logo, slogan, tipografia, estilo, color slogan)');
+        }
+    } catch (e) {}
     aplicarCambiosVisuales();
     mostrarAvisoInmediato("✓ Identidad corporativa establecida con éxito", "exito");
     aplicarBrandingGlobal();
@@ -2186,6 +2197,7 @@ function aplicarBrandingGlobal() {
         const sloganHeader = document.getElementById('slogan-empresa-header');
         if (sloganHeader && identidadCorporativa.slogan) {
             sloganHeader.innerText = identidadCorporativa.slogan;
+            if (identidadCorporativa.colorSlogan) sloganHeader.style.color = identidadCorporativa.colorSlogan;
             sloganHeader.style.fontFamily = identidadCorporativa.tipografia || "'Segoe UI', sans-serif";
             const est = identidadCorporativa.estiloSlogan || "";
             sloganHeader.style.fontWeight = est.includes('bold') ? 'bold' : 'normal';
@@ -2906,20 +2918,38 @@ function asignarDestino(tipo, botonPresionado) {
     mostrarAvisoInmediato(`✓ Color aplicado al ${tipo}`, "exito");
 }
 
+function poblarSelectorColorSlogan() {
+    const sel = document.getElementById('sel-color-slogan');
+    if (!sel || sel.options.length > 0) return;
+    const paleta = (typeof coloresExtraidos !== 'undefined' && coloresExtraidos.length) ? coloresExtraidos : ['#00ff88'];
+    paleta.slice(0, 8).forEach(c => {
+        const op = document.createElement('option');
+        op.value = c; op.textContent = c;
+        sel.appendChild(op);
+    });
+    const actual = (typeof identidadCorporativa !== 'undefined' && identidadCorporativa.colorSlogan) || configuracionEstetica.colorSlogan || '#00ff88';
+    sel.value = actual;
+}
 function actualizarVistaPrevia() {
+    if (typeof poblarSelectorColorSlogan === 'function') poblarSelectorColorSlogan();
     const slogan = document.getElementById('id-slogan').value;
     const tipografia = document.getElementById('sel-tipografia').value;
     const estilo = document.getElementById('sel-estilo').value;
+    const selColor = document.getElementById('sel-color-slogan');
+    const colorSlogan = selColor && selColor.value ? selColor.value : (configuracionEstetica.colorSlogan || '#00ff88');
     const preview = document.getElementById('vista-previa-slogan');
     if (preview) {
         preview.innerText = slogan || 'Vista previa del slogan';
         preview.style.fontFamily = tipografia;
         preview.style.fontWeight = estilo.includes('bold') ? 'bold' : 'normal';
         preview.style.fontStyle = estilo.includes('italic') ? 'italic' : 'normal';
+        preview.style.color = colorSlogan;
         configuracionEstetica.familiaTipografica = tipografia;
         configuracionEstetica.variacionGlobal = estilo;
+        configuracionEstetica.colorSlogan = colorSlogan;
         identidadCorporativa.tipografia = tipografia;
         identidadCorporativa.estiloSlogan = estilo;
+        identidadCorporativa.colorSlogan = colorSlogan;
     }
 }
 

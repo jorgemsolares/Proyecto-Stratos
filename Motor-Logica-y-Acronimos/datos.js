@@ -86,7 +86,8 @@ let identidadCorporativa = {
     estiloSlogan: "normal", // normal, bold, italic, bold italic
     colorFondo: "#0b0f19",
     colorTexto: "#ffffff",
-    colorBotones: "#0b0f19"
+    colorBotones: "#0b0f19",
+    colorSlogan: "#00ff88"
 };
 
 // ==========================================
@@ -113,6 +114,7 @@ let configuracionEstetica = {
     colorFondo: "#0b0f19",
     colorTexto: "#ffffff",
     colorBotones: "#0b0f19",
+    colorSlogan: "#00ff88",
     logoBase64: "" // Para persistencia al navegar
 };
 
@@ -248,97 +250,97 @@ estadoPantallas = {
     "registro-invitacion": { 
         visitada: false, 
         nombre: "Mi Perfil",
-        icono: "👤",
+        icono: "Rango superior.svg",
         visiblePara: ["todos"]
     },
     "pantalla-acceso": { 
         visitada: false, 
         nombre: "Acceso",
-        icono: "🔐",
+        icono: "Contraseña.svg",
         visiblePara: ["ninguno"] // No se muestra en menú
     },
     "pantalla-identidad": { 
         visitada: false, 
         nombre: "Identidad Corporativa",
-        icono: "🏢",
+        icono: "Identidad Corporativa.svg",
         visiblePara: ["No.1", "PrimeraLinea"]
     },
     "pantalla-organigrama": { 
         visitada: false, 
         nombre: "Mi Organigrama",
-        icono: "📊",
+        icono: "Organigrama Personal.svg",
         visiblePara: ["No.1", "Colaborador"]
     },
     "pantalla-organigrama-general": { 
         visitada: false, 
         nombre: "Organigrama General",
-        icono: "🌐",
+        icono: "Organigrama General.svg",
         visiblePara: ["todos"]
     },
     "pantalla-comunicacion": { 
         visitada: false, 
         nombre: "Comunicación",
-        icono: "💬",
+        icono: "chats.svg",
         visiblePara: ["todos"]
     },
     "pantalla-correos": {
         visitada: false,
         nombre: "Correos",
-        icono: "📧",
+        icono: "correos.svg",
         visiblePara: ["todos"]
     },
     "pantalla-chats": {
         visitada: false,
         nombre: "Chats",
-        icono: "💬",
+        icono: "chats.svg",
         visiblePara: ["todos"]
     },
     "pantalla-tareas": {
         visitada: false,
         nombre: "Tareas",
-        icono: "✅",
+        icono: "tareas.svg",
         visiblePara: ["todos"]
     },
     "pantalla-alarmas": {
         visitada: false,
         nombre: "Alarmas",
-        icono: "⏰",
+        icono: "alarmas.svg",
         visiblePara: ["todos"]
     },
     "pantalla-calendario": {
         visitada: false,
         nombre: "Calendario",
-        icono: "📅",
+        icono: "calendario.svg",
         visiblePara: ["todos"]
     },
     "pantalla-hub": {
         visitada: false,
         nombre: "Hub de Archivos",
-        icono: "📁",
+        icono: "hub.svg",
         visiblePara: ["todos"]
     },
     "pantalla-enlace-movil": {
         visitada: false,
         nombre: "Enlace Móvil",
-        icono: "📱",
+        icono: "enlace movil.svg",
         visiblePara: ["todos"]
     },
     "pantalla-otras-actividades": {
         visitada: false,
         nombre: "Otras Actividades",
-        icono: "⬡",
+        icono: "otras actividades.svg",
         visiblePara: ["todos"]
     },
     "pantalla-reuniones": {
         visitada: false,
         nombre: "Reuniones",
-        icono: "📹",
+        icono: "Reuniones.svg",
         visiblePara: ["todos"]
     },
     "pantalla-configuracion": { 
         visitada: false, 
         nombre: "Configuración",
-        icono: "⚙️",
+        icono: "Configuración.svg",
         visiblePara: ["todos"]
     }
 };
