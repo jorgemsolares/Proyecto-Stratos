@@ -129,6 +129,14 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 
 *(Se irán agregando más notas aquí conforme el Arquitecto las comparta.)*
 
+### PROCESO ESTÁNDAR OBLIGATORIO — INSERCIÓN DE ICONOS (17/10/2026)
+- **Prohibido usar emojis genéricos** en código nuevo. Todo icono visible debe salir de `Colores-y-Estetica/Iconos/`.
+- **Paso 1 — buscar:** ante una acción que necesite icono, buscar en la carpeta `Iconos/` el más adecuado por significado (no por parecido visual).
+- **Paso 2 — convertir:** antes de usarlo, convertir sus colores al verde del sistema `#00ff88` (recolor de `fill` negro u otros tonos; se conservan los ya verdes).
+- **Paso 3 — colocar:** insertarlo donde corresponde con `<img src="../Colores-y-Estetica/Iconos/NOMBRE.svg" alt="" class="icono-inline">` (cartelera/menú) o la clase de icono que aplique en su módulo.
+- **Si no hay uno adecuado:** NO poner uno genérico, NO inventar, NO reutilizar otro icono "parecido". Avisar primero al Arquitecto para que autorice/inserte el SVG buscado, y solo después colocarlo.
+- **Aplica a futuro:** cada icono nuevo que se pida sigue estos 3 pasos + aviso previo si falta.
+
 ---
 
 ## BITÁCORA (historial de lo realizado)
