@@ -1005,7 +1005,7 @@ textarea {
     right: 20px;
     width: 50px;
     height: 50px;
-    background: var(--color-primario);
+    background: var(--color-botones, var(--color-primario));
     border-radius: 50%;
     display: flex;
     align-items: center;

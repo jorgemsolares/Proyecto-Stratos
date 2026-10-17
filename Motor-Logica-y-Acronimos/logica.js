@@ -1118,8 +1118,7 @@ function validarEntrada() {
     // muestran en la CARTELERA (se arma en construirColaMensajes al entrar a pantalla).
     if (typeof iniciarTemporizadorInactividad === 'function') iniciarTemporizadorInactividad();
     actualizarMenuTuerca();
-    const botonTuerca = document.getElementById('boton-tuerca-global');
-    if (botonTuerca) botonTuerca.style.display = 'flex';
+    // PUNTO 3 instrucciones.md 16/10/2026: no forzar Libro en Login, lo maneja irAPantalla
     setTimeout(() => {
         if (usuario.esNo1 && !identidadCorporativa.completada) irAPantalla('pantalla-identidad');
         else irAPantalla('pantalla-comunicacion');
@@ -2811,6 +2810,15 @@ function cerrarSesion() {
         if (usuarioActivo && usuarioActivo.id) registrarHoraSalida(usuarioActivo); // PUNTO 48: última salida del día
         sessionStorage.clear();
         usuarioActivo = null;
+        // PUNTO 4 instrucciones.md 16/10/2026: limpiar variables inline para que Login use #0b0f19
+        try {
+            const rootStyle = document.documentElement.style;
+            rootStyle.removeProperty('--color-fondo');
+            rootStyle.removeProperty('--color-texto');
+            rootStyle.removeProperty('--color-letras');
+            rootStyle.removeProperty('--color-primario');
+            rootStyle.removeProperty('--color-botones');
+        } catch (e) {}
         datosOrganigrama = null;
         sesionActiva = false;
         const btnTuerca = document.getElementById('boton-tuerca-global');

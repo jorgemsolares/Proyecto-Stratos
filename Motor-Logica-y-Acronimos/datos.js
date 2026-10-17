@@ -86,7 +86,7 @@ let identidadCorporativa = {
     estiloSlogan: "normal", // normal, bold, italic, bold italic
     colorFondo: "#0b0f19",
     colorTexto: "#ffffff",
-    colorBotones: "#00ff88"
+    colorBotones: "#0b0f19"
 };
 
 // ==========================================
@@ -112,7 +112,7 @@ let configuracionEstetica = {
     variacionGlobal: "normal", // Afecta slogan y nodos
     colorFondo: "#0b0f19",
     colorTexto: "#ffffff",
-    colorBotones: "#00ff88",
+    colorBotones: "#0b0f19",
     logoBase64: "" // Para persistencia al navegar
 };
 

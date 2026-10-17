@@ -133,6 +133,13 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 
 ## BITÁCORA (historial de lo realizado)
 
+### 17/10/2026 — instrucciones.md (PUNTOS 1-4): DEFAULTS OSCUROS + LIBRO CORPORATIVO + LOGIN LIMPIO
+- **Punto 1 — hecho:** `datos.js` actualizado: `identidadCorporativa.colorBotones` y `configuracionEstetica.colorBotones` de `#00ff88` a `#0b0f19`. Sin tocar fondo/texto, paleta ni otros campos.
+- **Punto 2 — hecho:** `.tuerca-navegacion` en `estilos.css` ahora usa `background: var(--color-botones, var(--color-primario))`. Halo/sombra/animación e icono intactos. Botón IA sin tocar.
+- **Punto 3 — hecho:** en `validarEntrada()` de `logica.js` se quitó el `display:flex` forzado del Libro antes del `setTimeout(1500)`. La visibilidad la maneja `irAPantalla`.
+- **Punto 4 — hecho:** en `cerrarSesion()` de `logica.js` se limpian las variables inline de `<html>` (`--color-fondo`, `--color-texto`, `--color-letras`, `--color-primario`, `--color-botones`) para que Login vuelva al `#0b0f19`. Sin tocar confirmación, hora de salida ni sessionStorage.
+- **Verificación:** `_validar_js.py` con esprima: `logica.js` OK, `datos.js` OK, 0 problemas.
+
 ### 16/10/2026 — instrucciones.md (PUNTOS 1, 2 y 3): LIBRO EN LOGIN + COLOR BOTONES + AUTOCOMPLETADO
 - **Punto 1 — hecho:** `irAPantalla()` en `logica.js` ahora oculta `boton-tuerca-global` en `pantalla-acceso` con la misma regla que el botón IA (`mostrarBotonIA`). Sin tocar tamaño, posición, icono, efecto ni función del Libro.
 - **Punto 2 — hecho:** `:root --color-botones` en `estilos.css` pasó de `#00ff88` a `#0b0f19`. Halo/contorno por función intactos (verde/naranja/rojo). `aplicarCambiosVisuales()` en `logica.js` verificado: sigue sobreescribiendo `--color-botones` con el color de Identidad Corporativa.
