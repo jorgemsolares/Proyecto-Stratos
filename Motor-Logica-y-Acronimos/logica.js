@@ -3765,6 +3765,85 @@ function marcarCorreoLeidoSinAbrir(id) {
 }
 
 // ==========================================
+// 32.2 REDACCIÓN DE CORREO (PUNTOS 1-2 instrucciones.md 18/10; simulado, sin SMTP)
+// ==========================================
+// Adjunto en memoria (solo nombre; no se persiste el archivo en este punto).
+let adjuntoCorreoActual = null; // { nombre: "" }
+
+// PUNTO 1: abre la pantalla de redacción desde el botón REDACTAR.
+function abrirRedaccionCorreo() {
+    const de = document.getElementById('redactar-de');
+    if (de) de.textContent = (usuarioActivo && usuarioActivo.email) ? usuarioActivo.email : '';
+    const para = document.getElementById('redactar-para');
+    if (para) para.value = '';
+    const asunto = document.getElementById('redactar-asunto');
+    if (asunto) asunto.value = '';
+    const mensaje = document.getElementById('redactar-mensaje');
+    if (mensaje) mensaje.value = '';
+    adjuntoCorreoActual = null;
+    const nomAdj = document.getElementById('nombre-adjunto-correo');
+    if (nomAdj) nomAdj.textContent = '';
+    const aviso = document.getElementById('aviso-destinatario-correo');
+    if (aviso) { aviso.innerText = ''; aviso.className = 'aviso-letrero'; aviso.style.maxHeight = '0'; }
+    poblarDestinatariosCorreo();
+    validarDestinatarioCorreo();
+    irAPantalla('pantalla-redactar-correo');
+}
+
+// Autocompletado del Para: emails de usuarios + contactos + correos previos.
+function poblarDestinatariosCorreo() {
+    const lista = document.getElementById('lista-destinatarios-correo');
+    if (!lista) return;
+    lista.innerHTML = '';
+    const vistos = {};
+    const agregar = (email) => {
+        email = (email || '').trim();
+        if (!email || vistos[email]) return;
+        vistos[email] = true;
+        const op = document.createElement('option');
+        op.value = email;
+        lista.appendChild(op);
+    };
+    try {
+        (baseDatosUsuarios || []).forEach(u => { if (u && u.email) agregar(u.email); });
+        const recorrer = (nodo) => {
+            if (!nodo) return;
+            if (nodo.email) agregar(nodo.email);
+            (nodo.hijos || []).forEach(recorrer);
+        };
+        recorrer(datosOrganigrama);
+        (contactosIndirectos || []).forEach(c => { if (c && c.email) agregar(c.email); });
+        (observadores || []).forEach(c => { if (c && c.email) agregar(c.email); });
+        (correosLocales || []).forEach(c => {
+            if (!c) return;
+            (c.destinatarios || []).forEach(agregar);
+            (c.copias || []).forEach(agregar);
+            if (c.remitente && String(c.remitente).indexOf('@') !== -1) agregar(c.remitente);
+        });
+    } catch (e) {}
+}
+
+// Validación visual del destinatario (formato email simple).
+function validarDestinatarioCorreo() {
+    const para = document.getElementById('redactar-para');
+    const aviso = document.getElementById('aviso-destinatario-correo');
+    if (!para || !aviso) return true;
+    const valor = (para.value || '').trim();
+    if (!valor) { aviso.innerText = ''; aviso.className = 'aviso-letrero'; aviso.style.maxHeight = '0'; return false; }
+    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor);
+    if (!ok) {
+        aviso.innerText = '✖ Correo electrónico inválido';
+        aviso.className = 'aviso-letrero texto-error';
+        aviso.style.maxHeight = '40px';
+        return false;
+    }
+    aviso.innerText = '✓ Formato correcto';
+    aviso.className = 'aviso-letrero texto-exito';
+    aviso.style.maxHeight = '40px';
+    return true;
+}
+
+// ==========================================
 // 33. ASISTENTE DE IA (BOTÓN FLOTANTE, VOZ Y VENTANA EMERGENTE — PUNTO 7)
 // ==========================================
 
