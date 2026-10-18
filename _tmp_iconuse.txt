@@ -1,0 +1,8 @@
+                texto: `<img src="../Colores-y-Estetica/Iconos/Contraseña.svg" alt="" class="icono-inline"> Solicitud de contraseña (prioridad ALTA): ${s.nombreUsuario}`,
+                texto: `<img src="../Colores-y-Estetica/Iconos/Cambiar contraseña.svg" alt="" class="icono-inline"> ${nombreAsistenteIA()} te sugiere cambiar tu contraseña (errores esta semana)`,
+                texto: `<img src="../Colores-y-Estetica/Iconos/Saludos.svg" alt="" class="icono-inline"> Hola, ${usuarioActivo.nombre}`,
+            texto: `<img src="../Colores-y-Estetica/Iconos/Advertencia.svg" alt="" class="icono-inline"> Aviso: ${nombreNo1} aún no ha definido toda la Identidad Corporativa.`,
+        mostrarAvisoInmediato(`<img src="../Colores-y-Estetica/Iconos/Cambiar contraseña.svg" alt="" class="icono-inline"> ${nombreAsistenteIA()} te sugiere cambiar tu contraseña (${errores} errores esta semana)`, "advertencia");
+    mostrarAvisoInmediato(`<img src="../Colores-y-Estetica/Iconos/Contraseña.svg" alt="" class="icono-inline"> Solicitud de contraseña (prioridad ALTA): ${nombres}`, "advertencia");
+                ? `<img src="../Colores-y-Estetica/Iconos/${info.icono}" alt="" class="icono-inline">`
+    cerrarSesionLink.innerHTML = `<img src="../Colores-y-Estetica/Iconos/Salir.svg" alt="" class="icono-inline"> ${traducirTexto('menu_cerrar_sesion') || 'Cerrar Sesión'}`;
