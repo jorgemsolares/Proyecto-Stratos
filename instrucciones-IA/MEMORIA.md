@@ -141,6 +141,13 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 
 ## BITÁCORA (historial de lo realizado)
 
+### 18/10/2026 (tarde) — instrucciones.md PUNTO 1 + PUNTO 2: CARTELERA HTML + EMOJIS A SVG
+- **Punto 1 — hecho:** `logica.js` líneas 37 y 343: `textoMensaje.innerText` → `innerHTML` solo en cartelera (`mostrarAvisoInmediato` y `mostrarSiguienteMensaje`). Inputs intactos.
+- **Punto 2 — hecho:** barrido total; quedan 0 emojis de color. `index.html` 28 `icono-inline`: títulos (Correos, IA, Idioma, Seguridad, Recuperación, Acciones), placeholders de 8 submódulos, botones (Enviar, Editar, Ver organigrama, Salvar, Editar/Eliminar detalle, Cambio obligatorio, Cargar logo, Pausa IA, tuerca). Banderas de país en `<option>` a solo texto (no admite `<img>`). `logica.js`: nodos Indirecto/Observador (personal + general) con SVG, avisos No.1/registro/inactividad/borrado con SVG. `datos.js`: 22 emojis quitados de TRADUCCIONES (el icono vive en el HTML; se envolvió texto en `<span data-i18n>` para no romper `aplicarIdioma`).
+- **Iconos nuevos del Arquitecto (7, recolorados a #00ff88):** IA, Lenguaje, Accion Rapida, Guardar, Cargar documento, Documento guardado, Pausa. Todos los SVG de la carpeta ya están en verde.
+- **No tocado (símbolos tipográficos, no emojis):** ✓✖⚠● en avisos/validaciones con `innerText`, ← → en Volver, ✕ ▶ ⏸ en controles, → en correos. Sin SVG asignado por el Arquitecto para esos; se dejan como están.
+- **Verificación:** `Pruebas/_validar_js.py` OK (0 problemas). **Pendiente:** Ctrl+F5 en navegador (cartelera muestra imagen, no código; iconos verdes).
+
 ### 18/10/2026 — instrucciones.md PUNTO 1: VIGÍA 100% INVISIBLE + PERMISOS ELEVADOS
 - **Punto 1 — hecho (código):** creado `lanzar_vigia_oculto.vbs` en raíz con el contenido exacto del instructivo (WScript.Shell + `powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden` + `objShell.Run comando, 0, False`).
 - **Punto 1 — hecho (código):** `instalar_arranque_vigia.ps1` modificado: la acción pasó de `powershell.exe` directo a `wscript.exe "lanzar_vigia_oculto.vbs"`; se agregó `New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType Interactive -RunLevel Highest` y se pasa `-Principal` al registrar (mantiene permisos elevados); validación de existencia del `.vbs`; sintaxis validada con PSParser (0 errores) y contenido del `.vbs` verificado línea por línea.
