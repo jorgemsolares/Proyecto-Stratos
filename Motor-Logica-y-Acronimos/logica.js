@@ -209,7 +209,7 @@ function construirColaMensajes() {
             : [];
         solicitudes.forEach(s => {
             colaMensajes.push({
-                texto: `<img src="../Colores-y-Estetica/Iconos/Contraseña.svg" alt="" class="icono-inline" onerror="this.style.display='none'"> Solicitud de contraseña (prioridad ALTA): ${s.nombreUsuario}`,
+                texto: `<img src="../Colores-y-Estetica/Iconos/Contraseña.svg" alt="" class="icono-inline" onerror="this.remove()"> Solicitud de contraseña (prioridad ALTA): ${s.nombreUsuario}`,
                 tipo: 'mensaje',
                 prioridad: 'alta',
                 fechaInicio: new Date(),
@@ -218,7 +218,7 @@ function construirColaMensajes() {
         });
         if (typeof erroresUltimaSemana === 'function' && erroresUltimaSemana(usuarioActivo) > 6) {
             colaMensajes.push({
-                texto: `<img src="../Colores-y-Estetica/Iconos/Cambiar contraseña.svg" alt="" class="icono-inline" onerror="this.style.display='none'"> ${nombreAsistenteIA()} te sugiere cambiar tu contraseña (errores esta semana)`,
+                texto: `<img src="../Colores-y-Estetica/Iconos/Cambiar contraseña.svg" alt="" class="icono-inline" onerror="this.remove()"> ${nombreAsistenteIA()} te sugiere cambiar tu contraseña (errores esta semana)`,
                 tipo: 'mensaje',
                 prioridad: 'media',
                 fechaInicio: new Date(),
@@ -232,7 +232,7 @@ function construirColaMensajes() {
         if (localStorage.getItem(STORAGE_KEYS.ULTIMO_SALUDO) !== hoySaludo) {
             localStorage.setItem(STORAGE_KEYS.ULTIMO_SALUDO, hoySaludo);
             colaMensajes.push({
-                texto: `<img src="../Colores-y-Estetica/Iconos/Saludos.svg" alt="" class="icono-inline" onerror="this.style.display='none'"> Hola, ${usuarioActivo.nombre}`,
+                texto: `<img src="../Colores-y-Estetica/Iconos/Saludos.svg" alt="" class="icono-inline" onerror="this.remove()"> Hola, ${usuarioActivo.nombre}`,
                 tipo: 'saludo',
                 prioridad: 'baja',
                 fechaInicio: new Date(),
@@ -244,7 +244,7 @@ function construirColaMensajes() {
         const no1 = baseDatosUsuarios.find(u => u.esNo1);
         const nombreNo1 = no1 ? no1.nombre : "El administrador";
         colaMensajes.push({
-            texto: `<img src="../Colores-y-Estetica/Iconos/Advertencia.svg" alt="" class="icono-inline" onerror="this.style.display='none'"> Aviso: ${nombreNo1} aún no ha definido toda la Identidad Corporativa.`,
+            texto: `<img src="../Colores-y-Estetica/Iconos/Advertencia.svg" alt="" class="icono-inline" onerror="this.remove()"> Aviso: ${nombreNo1} aún no ha definido toda la Identidad Corporativa.`,
             tipo: 'aviso',
             prioridad: 'baja',
             fechaInicio: new Date(),
@@ -473,7 +473,7 @@ window.onload = function() {
         if (invitacion && invitacion.estado === "pendiente") {
             datosInvitacionActual = { codigoInvitacion: codigoInvitacion, invitadoPor: invitacion.invitadoPor, tipoContacto: invitacion.tipoContacto };
             irAPantalla('registro-invitacion');
-            mostrarAvisoInmediato(`<img src="../Colores-y-Estetica/Iconos/Documento guardado.svg" alt="" class="icono-inline" onerror="this.style.display='none'"> Completa tus datos para registrarte`, "exito");
+            mostrarAvisoInmediato(`<img src="../Colores-y-Estetica/Iconos/Documento guardado.svg" alt="" class="icono-inline" onerror="this.remove()"> Completa tus datos para registrarte`, "exito");
         } else {
             mostrarAvisoInmediato("✖ El enlace de invitación no es válido o ya fue utilizado", "error");
             irAPantalla('pantalla-acceso');
@@ -1342,7 +1342,7 @@ function revisarSugerenciaContrasena(usuario) {
     const errores = erroresUltimaSemana(usuario);
     if (errores > 6) {
         // El aviso va a cartelera (aquí se muestra como aviso inmediato al iniciar sesión).
-        mostrarAvisoInmediato(`<img src="../Colores-y-Estetica/Iconos/Cambiar contraseña.svg" alt="" class="icono-inline" onerror="this.style.display='none'"> ${nombreAsistenteIA()} te sugiere cambiar tu contraseña (${errores} errores esta semana)`, "advertencia");
+        mostrarAvisoInmediato(`<img src="../Colores-y-Estetica/Iconos/Cambiar contraseña.svg" alt="" class="icono-inline" onerror="this.remove()"> ${nombreAsistenteIA()} te sugiere cambiar tu contraseña (${errores} errores esta semana)`, "advertencia");
     }
 }
 
@@ -1352,7 +1352,7 @@ function mostrarSolicitudesPendientesJefe(usuario) {
     const pendientes = solicitudesRecuperacion.filter(s => s.solicitadoA === usuario.id && s.estado === 'pendiente');
     if (pendientes.length === 0) return;
     const nombres = pendientes.map(s => s.nombreUsuario).join(', ');
-    mostrarAvisoInmediato(`<img src="../Colores-y-Estetica/Iconos/Contraseña.svg" alt="" class="icono-inline" onerror="this.style.display='none'"> Solicitud de contraseña (prioridad ALTA): ${nombres}`, "advertencia");
+    mostrarAvisoInmediato(`<img src="../Colores-y-Estetica/Iconos/Contraseña.svg" alt="" class="icono-inline" onerror="this.remove()"> Solicitud de contraseña (prioridad ALTA): ${nombres}`, "advertencia");
 }
 
 // ==========================================
@@ -1555,7 +1555,7 @@ function actualizarMenuTuerca() {
             const nombreTrad = traducirTexto('menu_' + id) || info.nombre;
             // PUNTO 3 instrucciones.md: icono SVG de la carpeta Iconos (si termina en .svg se renderiza como imagen)
             const iconoHtml = (info.icono && info.icono.endsWith('.svg'))
-                ? `<img src="../Colores-y-Estetica/Iconos/${info.icono}" alt="" class="icono-inline" onerror="this.style.display='none'">`
+                ? `<img src="../Colores-y-Estetica/Iconos/${info.icono}" alt="" class="icono-inline" onerror="this.remove()">`
                 : info.icono;
             enlace.innerHTML = `${iconoHtml} ${nombreTrad}`;
             enlace.onclick = (e) => { e.preventDefault(); irAPantalla(id); toggleMenuTuerca(); };
@@ -1569,7 +1569,7 @@ function actualizarMenuTuerca() {
     menuContainer.appendChild(separador);
     const cerrarSesionLink = document.createElement('a');
     cerrarSesionLink.href = '#';
-    cerrarSesionLink.innerHTML = `<img src="../Colores-y-Estetica/Iconos/Salir.svg" alt="" class="icono-inline" onerror="this.style.display='none'"> ${traducirTexto('menu_cerrar_sesion') || 'Cerrar Sesión'}`;
+    cerrarSesionLink.innerHTML = `<img src="../Colores-y-Estetica/Iconos/Salir.svg" alt="" class="icono-inline" onerror="this.remove()"> ${traducirTexto('menu_cerrar_sesion') || 'Cerrar Sesión'}`;
     cerrarSesionLink.onclick = (e) => { e.preventDefault(); cerrarSesion(); toggleMenuTuerca(); };
     menuContainer.appendChild(cerrarSesionLink);
 }
@@ -2581,7 +2581,7 @@ function renderizarOrganigrama() {
             nodoIndirecto.setAttribute('ondblclick', `verDetalleContacto('${contacto.id}')`);
             nodoIndirecto.innerHTML = `
                 <div class="nodo-content-personal">
-                    <div class="nombre-nodo-personal"><img src="../Colores-y-Estetica/Iconos/Indirecto.svg" alt="" class="icono-inline" onerror="this.style.display='none'"> ${contacto.nombre}</div>
+                    <div class="nombre-nodo-personal"><img src="../Colores-y-Estetica/Iconos/Indirecto.svg" alt="" class="icono-inline" onerror="this.remove()"> ${contacto.nombre}</div>
                     <div class="acronimo-nodo-personal">${contacto.acronimo || '---'}</div>
                 </div>
             `;
@@ -2605,7 +2605,7 @@ function renderizarOrganigrama() {
             nodoObservador.setAttribute('ondblclick', `verDetalleContacto('${contacto.id}')`);
             nodoObservador.innerHTML = `
                 <div class="nodo-content-personal">
-                    <div class="nombre-nodo-personal"><img src="../Colores-y-Estetica/Iconos/Observador.svg" alt="" class="icono-inline" onerror="this.style.display='none'"> ${contacto.nombre}</div>
+                    <div class="nombre-nodo-personal"><img src="../Colores-y-Estetica/Iconos/Observador.svg" alt="" class="icono-inline" onerror="this.remove()"> ${contacto.nombre}</div>
                     <div class="acronimo-nodo-personal">${contacto.acronimo || '---'}</div>
                 </div>
             `;
@@ -3111,7 +3111,7 @@ function aplicarCrecimientoOrganigramaGeneral(usuarioNuevo) {
 
     if (huboCambioDeNo1) {
         mostrarAvisoInmediato(
-            `<img src="../Colores-y-Estetica/Iconos/Rango superior.svg" alt="" class="icono-inline" onerror="this.style.display='none'"> ${usuarioNuevo.nombre} es ahora el No.1. ${anteriorNo1.nombre || anteriorNo1.nombreCompleto} queda como su subordinado.`,
+            `<img src="../Colores-y-Estetica/Iconos/Rango superior.svg" alt="" class="icono-inline" onerror="this.remove()"> ${usuarioNuevo.nombre} es ahora el No.1. ${anteriorNo1.nombre || anteriorNo1.nombreCompleto} queda como su subordinado.`,
             "exito"
         );
     }
@@ -3145,8 +3145,8 @@ function renderizarOrganigramaGeneral() {
         nodo.className = 'nodo nodo-general';
         nodo.style.cursor = 'pointer';
         nodo.onclick = () => verDetalleContactoGeneral(usuario.id);
-        const bandera = usuario.tipoActual === 'Observador' ? '<img src="../Colores-y-Estetica/Iconos/Observador.svg" alt="" class="icono-inline" onerror="this.style.display='none'"> '
-            : usuario.tipoActual === 'Indirecto' ? '<img src="../Colores-y-Estetica/Iconos/Indirecto.svg" alt="" class="icono-inline" onerror="this.style.display='none'"> '
+        const bandera = usuario.tipoActual === 'Observador' ? '<img src="../Colores-y-Estetica/Iconos/Observador.svg" alt="" class="icono-inline" onerror="this.remove()"> '
+            : usuario.tipoActual === 'Indirecto' ? '<img src="../Colores-y-Estetica/Iconos/Indirecto.svg" alt="" class="icono-inline" onerror="this.remove()"> '
             : '';
         nodo.innerHTML = `
             <div class="nodo-general-contenido">
@@ -3197,7 +3197,7 @@ function renderizarOrganigramaGeneral() {
 // 30. TEMPORIZADOR DE INACTIVIDAD (cierra la sesión automáticamente tras 30 minutos sin actividad)
 // ==========================================
 function reiniciarTemporizador() { if (temporizadorInactividad) clearTimeout(temporizadorInactividad); temporizadorInactividad = setTimeout(() => cerrarSesionPorInactividad(), TIEMPO_INACTIVIDAD); }
-function cerrarSesionPorInactividad() { if (sesionActiva && usuarioActivo && usuarioActivo.id) { mostrarAvisoInmediato("<img src="../Colores-y-Estetica/Iconos/alarmas.svg" alt="" class="icono-inline" onerror="this.style.display='none'"> Sesión cerrada por inactividad de 30 minutos`, "advertencia"); cerrarSesion(); } }
+function cerrarSesionPorInactividad() { if (sesionActiva && usuarioActivo && usuarioActivo.id) { mostrarAvisoInmediato("<img src="../Colores-y-Estetica/Iconos/alarmas.svg" alt="" class="icono-inline" onerror="this.remove()"> Sesión cerrada por inactividad de 30 minutos`, "advertencia"); cerrarSesion(); } }
 function iniciarTemporizadorInactividad() { if (temporizadorInactividad) clearTimeout(temporizadorInactividad); const eventos = ['click', 'mousemove', 'keypress', 'scroll', 'touchstart']; eventos.forEach(evento => document.removeEventListener(evento, reiniciarTemporizador)); eventos.forEach(evento => document.addEventListener(evento, reiniciarTemporizador)); reiniciarTemporizador(); }
 function detenerTemporizadorInactividad() { if (temporizadorInactividad) clearTimeout(temporizadorInactividad); const eventos = ['click', 'mousemove', 'keypress', 'scroll', 'touchstart']; eventos.forEach(evento => document.removeEventListener(evento, reiniciarTemporizador)); }
 
@@ -3701,7 +3701,7 @@ function accionCorreoActual(accion) {
             if (dias > 1) {
                 const prom = Object.values(porDia).reduce((a, b) => a + b, 0) / dias;
                 if ((porDia[hoy] || 0) > prom * 1.5 && typeof mostrarAvisoInmediato === 'function') {
-                    mostrarAvisoInmediato('<img src="../Colores-y-Estetica/Iconos/Advertencia.svg" alt="" class="icono-inline" onerror="this.style.display='none'"> Estás borrando más de lo habitual hoy.', 'advertencia');
+                    mostrarAvisoInmediato('<img src="../Colores-y-Estetica/Iconos/Advertencia.svg" alt="" class="icono-inline" onerror="this.remove()"> Estás borrando más de lo habitual hoy.', 'advertencia');
                 }
             }
         } catch (e) {}
