@@ -141,6 +141,12 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 
 ## BITÁCORA (historial de lo realizado)
 
+### 18/10/2026 (noche) — instrucciones.md PUNTO 1: REPARAR LA CARTELERA
+- **Punto 1 — hecho:** causa raíz = 2 líneas con comillas dobles rotas (`mostrarAvisoInmediato("<img src="...` en líneas 476 y 3200) que tumbaban TODO `logica.js` (nada del script corría: ni cartelera ni iconos ni texto). Se pasaron a backticks. Al agregar el respaldo salió una 3ª falla (línea 3148: `onerror="this.style.display='none'"` rompía comilla simple) → se cambió a `onerror="this.remove()"`.
+- **Respaldo agregado:** los 16 `<img>` de cartelera/menu/nodos llevan `onerror="this.remove()"`: si un SVG no carga, se quita solo el icono y el texto queda visible. Estructura HTML intacta (`#zona-cartelera > #mensaje-personalizado > #texto-mensaje-personalizado`); rotación y `innerHTML` sin cambios.
+- **Nota:** `Pruebas/_validar_js.py` sin argumentos solo valida `datos.js` (su `sys.argv` descarta el 1er archivo). Para validar ambos hay que pasarlos explícitos: `python Pruebas/_validar_js.py Motor-Logica-y-Acronimos/logica.js Motor-Logica-y-Acronimos/datos.js`.
+- **Verificación:** esprima OK en ambos (0 problemas). **Pendiente:** Ctrl+F5 (cartelera con texto + icono; si un icono falla, el texto se ve igual).
+
 ### 18/10/2026 (tarde) — instrucciones.md PUNTO 1 + PUNTO 2: CARTELERA HTML + EMOJIS A SVG
 - **Punto 1 — hecho:** `logica.js` líneas 37 y 343: `textoMensaje.innerText` → `innerHTML` solo en cartelera (`mostrarAvisoInmediato` y `mostrarSiguienteMensaje`). Inputs intactos.
 - **Punto 2 — hecho:** barrido total; quedan 0 emojis de color. `index.html` 28 `icono-inline`: títulos (Correos, IA, Idioma, Seguridad, Recuperación, Acciones), placeholders de 8 submódulos, botones (Enviar, Editar, Ver organigrama, Salvar, Editar/Eliminar detalle, Cambio obligatorio, Cargar logo, Pausa IA, tuerca). Banderas de país en `<option>` a solo texto (no admite `<img>`). `logica.js`: nodos Indirecto/Observador (personal + general) con SVG, avisos No.1/registro/inactividad/borrado con SVG. `datos.js`: 22 emojis quitados de TRADUCCIONES (el icono vive en el HTML; se envolvió texto en `<span data-i18n>` para no romper `aplicarIdioma`).
