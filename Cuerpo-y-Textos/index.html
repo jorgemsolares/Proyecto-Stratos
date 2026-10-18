@@ -370,6 +370,10 @@
         <section id="pantalla-correos" class="pantalla">
             <h2><img src="../Colores-y-Estetica/Iconos/correos.svg" alt="" class="icono-inline"> Correos</h2>
             <p class="descripcion-app">Bandeja local (sin sincronización real todavía)</p>
+            <!-- PUNTO 1 instrucciones.md (18/10): botón REDACTAR abre la pantalla de redacción -->
+            <div class="barra-redactar-correo">
+                <button type="button" class="btn-principal" onclick="abrirRedaccionCorreo()">REDACTAR</button>
+            </div>
             <div class="barra-vistas-correo">
                 <button type="button" class="btn-vista-correo activo" data-vista="recibidos" onclick="cambiarVistaCorreo('recibidos')">Recibidos</button>
                 <button type="button" class="btn-vista-correo" data-vista="enviados" onclick="cambiarVistaCorreo('enviados')">Enviados</button>
