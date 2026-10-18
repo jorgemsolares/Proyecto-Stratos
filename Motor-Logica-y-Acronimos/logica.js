@@ -3843,6 +3843,99 @@ function validarDestinatarioCorreo() {
     return true;
 }
 
+// Botón clip (PUNTO 2): por ahora pide el nombre del archivo (simulado, sin subir nada real).
+function adjuntarArchivoCorreo() {
+    const nombre = prompt('Nombre del archivo adjunto:');
+    if (nombre === null) return;
+    adjuntoCorreoActual = { nombre: (nombre || '').trim() };
+    const nomAdj = document.getElementById('nombre-adjunto-correo');
+    if (nomAdj) nomAdj.textContent = adjuntoCorreoActual.nombre ? ('Adjunto: ' + adjuntoCorreoActual.nombre) : '';
+}
+
+// Volver (cancela sin guardar; igual que DESCARTAR pero sin aviso).
+function volverDeRedaccionCorreo() {
+    irAPantalla('pantalla-correos');
+}
+
+// DESCARTAR: limpia y vuelve a la lista (sin guardar nada).
+function descartarRedaccionCorreo() {
+    const para = document.getElementById('redactar-para');
+    if (para) para.value = '';
+    const asunto = document.getElementById('redactar-asunto');
+    if (asunto) asunto.value = '';
+    const mensaje = document.getElementById('redactar-mensaje');
+    if (mensaje) mensaje.value = '';
+    adjuntoCorreoActual = null;
+    const nomAdj = document.getElementById('nombre-adjunto-correo');
+    if (nomAdj) nomAdj.textContent = '';
+    mostrarAvisoInmediato('Redacción descartada', 'advertencia');
+    irAPantalla('pantalla-correos');
+}
+
+// ENVIAR / ENVIAR + TAREA / ENVIAR + ALARMA (PUNTO 2: valida, guarda en Enviados, registra en bancoDatos).
+function enviarCorreoRedactado(modo) {
+    const paraEl = document.getElementById('redactar-para');
+    const asuntoEl = document.getElementById('redactar-asunto');
+    const mensajeEl = document.getElementById('redactar-mensaje');
+    const destinatario = ((paraEl && paraEl.value) || '').trim();
+    const asunto = ((asuntoEl && asuntoEl.value) || '').trim();
+    const cuerpo = ((mensajeEl && mensajeEl.value) || '').trim();
+    if (!destinatario || !asunto) {
+        mostrarAvisoInmediato('✖ Destinatario y asunto son obligatorios', 'error');
+        irAPantalla('pantalla-redactar-correo');
+        return;
+    }
+    if (!validarDestinatarioCorreo()) {
+        mostrarAvisoInmediato('✖ Revisa el correo del destinatario', 'error');
+        irAPantalla('pantalla-redactar-correo');
+        return;
+    }
+    const ahora = new Date();
+    const remitente = (usuarioActivo && usuarioActivo.email)
+        ? usuarioActivo.email
+        : ((usuarioActivo && (usuarioActivo.nombreCompleto || usuarioActivo.nombre)) || 'Yo');
+    const nuevo = {
+        id: 'c' + ahora.getTime(),
+        vista: 'enviados',
+        remitente: remitente,
+        destinatarios: [destinatario],
+        copias: [],
+        asunto: asunto,
+        previa: cuerpo ? cuerpo.slice(0, 80) : '(sin mensaje)',
+        cuerpo: cuerpo,
+        fecha: ahora.toISOString(),
+        pesoKb: 1,
+        soloCopia: false,
+        leido: true
+    };
+    nuevo.abiertoEn = null;
+    nuevo.cerradoEn = null;
+    nuevo.respondidoEn = null;
+    nuevo.carpeta = '';
+    nuevo.tipoSpam = '';
+    nuevo.esDesconocido = false;
+    nuevo.borradoEn = null;
+    nuevo.procesoActivado = '';
+    nuevo.adjunto = adjuntoCorreoActual ? adjuntoCorreoActual.nombre : '';
+    nuevo.accionGenerada = (modo === 'tarea') ? 'tarea' : (modo === 'alarma') ? 'alarma' : '';
+    correosLocales.push(nuevo);
+    guardarCorreosLocales();
+    // Trabajo invisible: hora exacta del envío en el banco de datos.
+    if (usuarioActivo && usuarioActivo.id && typeof registrarActividadBancoDatos === 'function') {
+        try { registrarActividadBancoDatos(usuarioActivo.id, 'correos', 'Envió correo a ' + destinatario + ' a las ' + _horaHM(ahora)); } catch (e) {}
+    }
+    mostrarAvisoInmediato('✓ Correo enviado a ' + destinatario, 'exito');
+    irAPantalla('pantalla-correos');
+    try { cambiarVistaCorreo('enviados'); } catch (e) {}
+    if (modo === 'tarea') {
+        if (document.getElementById('pantalla-tareas')) irAPantalla('pantalla-tareas');
+        else mostrarAvisoInmediato('Módulo de Tareas en preparación', 'advertencia');
+    } else if (modo === 'alarma') {
+        if (document.getElementById('pantalla-alarmas')) irAPantalla('pantalla-alarmas');
+        else mostrarAvisoInmediato('Módulo de Alarmas en preparación', 'advertencia');
+    }
+}
+
 // ==========================================
 // 33. ASISTENTE DE IA (BOTÓN FLOTANTE, VOZ Y VENTANA EMERGENTE — PUNTO 7)
 // ==========================================
