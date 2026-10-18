@@ -20,6 +20,8 @@ subir_automatico.ps1
 # Herramientas locales de sincronización segura (17/09/2026) - se quedan en el PC
 estado_git.ps1
 sincronizar_git.ps1
+# Lanzador invisible del vigía (18/10/2026) - local: contiene ruta absoluta del PC
+lanzar_vigia_oculto.vbs
 _subida_automatica.log
 
 # Reportes y archivos temporales de diagnóstico (no se suben)

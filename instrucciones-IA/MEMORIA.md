@@ -141,6 +141,13 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 
 ## BITÁCORA (historial de lo realizado)
 
+### 18/10/2026 — instrucciones.md PUNTO 1: VIGÍA 100% INVISIBLE + PERMISOS ELEVADOS
+- **Punto 1 — hecho (código):** creado `lanzar_vigia_oculto.vbs` en raíz con el contenido exacto del instructivo (WScript.Shell + `powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden` + `objShell.Run comando, 0, False`).
+- **Punto 1 — hecho (código):** `instalar_arranque_vigia.ps1` modificado: la acción pasó de `powershell.exe` directo a `wscript.exe "lanzar_vigia_oculto.vbs"`; se agregó `New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType Interactive -RunLevel Highest` y se pasa `-Principal` al registrar (mantiene permisos elevados); validación de existencia del `.vbs`; sintaxis validada con PSParser (0 errores) y contenido del `.vbs` verificado línea por línea.
+- **Punto 1 — pendiente de aplicar en Windows:** re-ejecutar `instalar_arranque_vigia.ps1` como Administrador para re-registrar la tarea `StratosVigiaRespaldo` (en esta sesión el registro agotó el tiempo de espera del entorno; el código quedó listo). Luego verificar con `Get-ScheduledTask -TaskName StratosVigiaRespaldo` y reiniciar para confirmar que ya no abre ventana negra.
+- **Extra:** `.gitignore` ampliado con `instalar_arranque_vigia.ps1` y `lanzar_vigia_oculto.vbs` (herramientas locales, no suben a GitHub, igual que el resto del kit de sincronización).
+- **Nota:** `instrucciones.md` del día viene truncado (termina a mitad del bloque vbscript, línea 40, sin detallar la modificación del instalador); la parte del instalador se infirió del "Qué cambiar / Dónde" (lanzador + nivel de ejecución más alto).
+
 ### 17/10/2026 (tarde) — instrucciones.md (PUNTOS 1-4): COLOR SLOGAN + ACTIVIDAD + SVG + PÍLDORA
 - **Punto 1 — hecho:** tercer selector Color del Slogan con los 8 de `coloresExtraidos`. `index.html` (`#sel-color-slogan`), `datos.js` (`colorSlogan` en identidad + estética), `logica.js` (`poblarSelectorColorSlogan`, `actualizarVistaPrevia` y `salvarIdentidad` lo aplican/guardan, `aplicarBrandingGlobal` lo muestra en cabecera).
 - **Punto 2 — hecho:** `salvarIdentidad()` registra en `bancoDatos[usuarioId].actividad` vía `registrarActividadBancoDatos`. Sin cambiar el guardado.

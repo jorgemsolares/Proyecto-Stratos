@@ -7,9 +7,9 @@
 #
 # CÓMO FUNCIONA:
 #   1. Este archivo se registra UNA VEZ en el Programador de
-#      Tareas de Windows.
-#   2. Windows lo ejecuta al iniciar sesión.
-#   3. Este archivo arranca el vigía (subir_automatico.ps1).
+#      Tareas de Windows (con nivel de ejecucion mas alto).
+#   2. Windows lo ejecuta al iniciar sesión (via wscript.exe + lanzar_vigia_oculto.vbs).
+#   3. El lanzador .vbs arranca el vigía (subir_automatico.ps1) 100% invisible.
 #   4. El vigía queda corriendo siempre.
 #
 # USO (UNA SOLA VEZ):
@@ -55,20 +55,32 @@ if (-not (Test-Path $RutaVigia)) {
     exit 1
 }
 
+$RutaLanzador = Join-Path $RutaProyecto "lanzar_vigia_oculto.vbs"
+if (-not (Test-Path $RutaLanzador)) {
+    Write-Host ""
+    Write-Host "  [!] No se encontro el lanzador invisible en: $RutaLanzador" -ForegroundColor Red
+    Write-Host "      Verifica que el archivo lanzar_vigia_oculto.vbs este en la carpeta del proyecto." -ForegroundColor Red
+    Write-Host ""
+    exit 1
+}
+
 Write-Host ""
 Write-Host "============================================================" -ForegroundColor Cyan
 Write-Host "  INSTALAR ARRANQUE AUTOMATICO DEL VIGIA - STRATOS" -ForegroundColor Cyan
 Write-Host "============================================================" -ForegroundColor Cyan
 Write-Host "  Proyecto : $RutaProyecto"
 Write-Host "  Vigia    : $RutaVigia"
+Write-Host "  Lanzador : $RutaLanzador"
 Write-Host "  Tarea    : $NombreTarea"
 Write-Host ""
 
 # ---------- CREAR LA ACCION ----------
-# La accion es: ejecutar PowerShell (sin perfil, sin restricciones) y correr el vigia.
+# La accion es: ejecutar el lanzador invisible (VBScript) con wscript.exe.
+# El .vbs arranca el vigia con powershell -WindowStyle Hidden y objShell.Run 0,False,
+# por lo que NO se ve ninguna ventana negra al iniciar sesion (PUNTO 1, 18/10/2026).
 $Accion = New-ScheduledTaskAction `
-    -Execute "powershell.exe" `
-    -Argument "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File `"$RutaVigia`"" `
+    -Execute "wscript.exe" `
+    -Argument "`"$RutaLanzador`"" `
     -WorkingDirectory $RutaProyecto
 
 # ---------- CREAR EL DISPARADOR ----------
@@ -87,6 +99,14 @@ $Configuracion = New-ScheduledTaskSettingsSet `
     -RestartInterval (New-TimeSpan -Minutes 1) `
     -ExecutionTimeLimit ([TimeSpan]::Zero)
 
+# ---------- NIVEL DE EJECUCION ----------
+# Mantiene los permisos elevados con los que fue instalado (PUNTO 1, 18/10/2026):
+# la tarea corre con el nivel mas alto disponible para el usuario actual.
+$Principal = New-ScheduledTaskPrincipal `
+    -UserId $env:USERNAME `
+    -LogonType Interactive `
+    -RunLevel Highest
+
 # ---------- REGISTRAR LA TAREA ----------
 try {
     # Si ya existe, la eliminamos primero (para evitar duplicados).
@@ -101,7 +121,8 @@ try {
         -Action $Accion `
         -Trigger $Disparador `
         -Settings $Configuracion `
-        -Description "Arranca el vigia de respaldo automatico a GitHub para Stratos al iniciar sesion." `
+        -Principal $Principal `
+        -Description "Arranca el vigia de respaldo automatico a GitHub para Stratos al iniciar sesion (invisible, con privilegios elevados)." `
         -Force | Out-Null
 
     Write-Host ""
