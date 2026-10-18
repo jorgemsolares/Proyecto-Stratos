@@ -489,13 +489,13 @@ const TRADUCCIONES = {
     "ia_escuchando": { es: "Escuchando...", en: "Listening..." },
     "ia_respondiendo": { es: "Respondiendo...", en: "Responding..." },
     "ia_pausa": { es: "Pausa — corrige manualmente", en: "Pause — correct manually" },
-    "ia_sin_micro": { es: "Sin micrófono — usa ✏️ para escribir", en: "No mic — use ✏️ to type" },
+    "ia_sin_micro": { es: "Sin micrófono — usa para escribir", en: "No mic — use to type" },
     "ia_escribe": { es: "Escribe aquí...", en: "Type here..." },
     "cfg_idioma": { es: "Idioma", en: "Language" },
     "cfg_seguridad": { es: "Seguridad", en: "Security" },
     "cfg_biometria": { es: "Habilitar autenticación biométrica", en: "Enable biometric authentication" },
     // BIOMETRÍA (PUNTOS 6 y 9-10-11) — inscripción en Perfil y entrada directa
-    "bio_enrol_titulo": { es: "🔐 Autenticación biométrica (este dispositivo)", en: "🔐 Biometric authentication (this device)" },
+    "bio_enrol_titulo": { es: "Autenticación biométrica (este dispositivo)", en: "Biometric authentication (this device)" },
     "bio_enrol_leyenda": { es: "Selecciona la opción biométrica a enrolar en este dispositivo.", en: "Select the biometric option to enroll on this device." },
     "bio_facial": { es: "Reconocimiento facial", en: "Face recognition" },
     "bio_patron": { es: "Patrón de desbloqueo", en: "Unlock pattern" },
@@ -530,8 +530,8 @@ const TRADUCCIONES = {
     "prio_alta": { es: "Alta", en: "High" },
     "prio_media": { es: "Media", en: "Medium" },
     "prio_baja": { es: "Baja", en: "Low" },
-    "cartelera_solicitud": { es: "🔑 Solicitud de contraseña (prioridad ALTA)", en: "🔑 Password request (HIGH priority)" },
-    "cartelera_sugerencia": { es: "🔐 Te sugerimos cambiar tu contraseña", en: "🔐 We suggest changing your password" },
+    "cartelera_solicitud": { es: "Solicitud de contraseña (prioridad ALTA)", en: "Password request (HIGH priority)" },
+    "cartelera_sugerencia": { es: "Te sugerimos cambiar tu contraseña", en: "We suggest changing your password" },
     // MENSAJES DE INVITACIÓN POR TIPO (PUNTO 33) — faltaba el inglés
     "inv_tipo_directo": { es: "colaborador directo", en: "direct collaborator" },
     "inv_tipo_indirecto": { es: "contacto indirecto", en: "indirect contact" },
@@ -572,7 +572,7 @@ const TRADUCCIONES = {
     "reg_leyenda_acronimo": { es: "El acrónimo se forma con las mayúsculas y números de tu posición", en: "The acronym is formed from the capitals and numbers of your position" },
     "reg_pass": { es: "Contraseña *", en: "Password *" },
     "reg_pass_conf": { es: "Confirmar Contraseña *", en: "Confirm Password *" },
-    "reg_cambiar_pass": { es: "🔐 Cambiar mi contraseña (opcional)", en: "🔐 Change my password (optional)" },
+    "reg_cambiar_pass": { es: "Cambiar mi contraseña (opcional)", en: "Change my password (optional)" },
     "reg_pass_actual": { es: "Contraseña Actual", en: "Current Password" },
     "reg_pass_nueva": { es: "Nueva Contraseña", en: "New Password" },
     "reg_pass_nueva_conf": { es: "Confirmar Nueva Contraseña", en: "Confirm New Password" },
@@ -591,7 +591,7 @@ const TRADUCCIONES = {
     "id_desc": { es: "Define la identidad visual de tu organización", en: "Define the visual identity of your organization" },
     "id_empresa": { es: "Nombre de la Empresa *", en: "Company Name *" },
     "id_acronimo": { es: "Acrónimo (opcional)", en: "Acronym (optional)" },
-    "id_cargar_logo": { es: "📤 Cargar Logo", en: "📤 Upload Logo" },
+    "id_cargar_logo": { es: "Cargar Logo", en: "Upload Logo" },
     "id_prev_logo": { es: "Vista previa del logo", en: "Logo preview" },
     "id_asignar": { es: "Asignar color seleccionado a:", en: "Assign selected color to:" },
     "id_fondo": { es: "Fondo", en: "Background" },
@@ -637,7 +637,7 @@ const TRADUCCIONES = {
     "mod_acronimo": { es: "Acrónimo:", en: "Acronym:" },
     "mod_tel": { es: "Teléfono", en: "Phone" },
     "mod_email": { es: "Email", en: "Email" },
-    "mod_salvar_inv": { es: "💾 SALVAR E INVITAR", en: "💾 SAVE AND INVITE" },
+    "mod_salvar_inv": { es: "SALVAR E INVITAR", en: "SAVE AND INVITE" },
     "mod_cancelar": { es: "CANCELAR", en: "CANCEL" },
     "mod_nuevo_col": { es: "Nuevo Colaborador", en: "New Collaborator" },
     "mod_nuevo_ind": { es: "Nuevo Indirecto", en: "New Indirect" },
@@ -645,14 +645,14 @@ const TRADUCCIONES = {
     "mod_editar": { es: "Editar Contacto", en: "Edit Contact" },
     // MODAL DETALLE CONTACTO
     "det_titulo": { es: "Detalles del Contacto", en: "Contact Details" },
-    "det_editar": { es: "✏️ EDITAR", en: "✏️ EDIT" },
-    "det_eliminar": { es: "🗑️ ELIMINAR", en: "🗑️ DELETE" },
+    "det_editar": { es: "EDITAR", en: "EDIT" },
+    "det_eliminar": { es: "ELIMINAR", en: "DELETE" },
     "det_cerrar": { es: "CERRAR", en: "CLOSE" },
     // MODAL CAMBIO OBLIGATORIO DE CONTRASEÑA
-    "cambio_titulo": { es: "⚠️ Cambio de Contraseña Obligatorio", en: "⚠️ Mandatory Password Change" },
+    "cambio_titulo": { es: "Cambio de Contraseña Obligatorio", en: "Mandatory Password Change" },
     "cambio_nueva": { es: "Nueva Contraseña *", en: "New Password *" },
     "cambio_conf": { es: "Confirmar Contraseña *", en: "Confirm Password *" },
-    "cambio_boton": { es: "🔒 CAMBIAR CONTRASEÑA Y CONTINUAR", en: "🔒 CHANGE PASSWORD AND CONTINUE" }
+    "cambio_boton": { es: "CAMBIAR CONTRASEÑA Y CONTINUAR", en: "CHANGE PASSWORD AND CONTINUE" }
 };
 
 // ==========================================

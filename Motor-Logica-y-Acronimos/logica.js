@@ -473,7 +473,7 @@ window.onload = function() {
         if (invitacion && invitacion.estado === "pendiente") {
             datosInvitacionActual = { codigoInvitacion: codigoInvitacion, invitadoPor: invitacion.invitadoPor, tipoContacto: invitacion.tipoContacto };
             irAPantalla('registro-invitacion');
-            mostrarAvisoInmediato("📝 Completa tus datos para registrarte", "exito");
+            mostrarAvisoInmediato("<img src="../Colores-y-Estetica/Iconos/Documento guardado.svg" alt="" class="icono-inline"> Completa tus datos para registrarte", "exito");
         } else {
             mostrarAvisoInmediato("✖ El enlace de invitación no es válido o ya fue utilizado", "error");
             irAPantalla('pantalla-acceso');
@@ -2581,7 +2581,7 @@ function renderizarOrganigrama() {
             nodoIndirecto.setAttribute('ondblclick', `verDetalleContacto('${contacto.id}')`);
             nodoIndirecto.innerHTML = `
                 <div class="nodo-content-personal">
-                    <div class="nombre-nodo-personal">🔗 ${contacto.nombre}</div>
+                    <div class="nombre-nodo-personal"><img src="../Colores-y-Estetica/Iconos/Indirecto.svg" alt="" class="icono-inline"> ${contacto.nombre}</div>
                     <div class="acronimo-nodo-personal">${contacto.acronimo || '---'}</div>
                 </div>
             `;
@@ -2605,7 +2605,7 @@ function renderizarOrganigrama() {
             nodoObservador.setAttribute('ondblclick', `verDetalleContacto('${contacto.id}')`);
             nodoObservador.innerHTML = `
                 <div class="nodo-content-personal">
-                    <div class="nombre-nodo-personal">👁️ ${contacto.nombre}</div>
+                    <div class="nombre-nodo-personal"><img src="../Colores-y-Estetica/Iconos/Observador.svg" alt="" class="icono-inline"> ${contacto.nombre}</div>
                     <div class="acronimo-nodo-personal">${contacto.acronimo || '---'}</div>
                 </div>
             `;
@@ -3111,7 +3111,7 @@ function aplicarCrecimientoOrganigramaGeneral(usuarioNuevo) {
 
     if (huboCambioDeNo1) {
         mostrarAvisoInmediato(
-            `👑 ${usuarioNuevo.nombre} es ahora el No.1. ${anteriorNo1.nombre || anteriorNo1.nombreCompleto} queda como su subordinado.`,
+            `<img src="../Colores-y-Estetica/Iconos/Rango superior.svg" alt="" class="icono-inline"> ${usuarioNuevo.nombre} es ahora el No.1. ${anteriorNo1.nombre || anteriorNo1.nombreCompleto} queda como su subordinado.`,
             "exito"
         );
     }
@@ -3145,8 +3145,8 @@ function renderizarOrganigramaGeneral() {
         nodo.className = 'nodo nodo-general';
         nodo.style.cursor = 'pointer';
         nodo.onclick = () => verDetalleContactoGeneral(usuario.id);
-        const bandera = usuario.tipoActual === 'Observador' ? '👁️ '
-            : usuario.tipoActual === 'Indirecto' ? '🔗 '
+        const bandera = usuario.tipoActual === 'Observador' ? '<img src="../Colores-y-Estetica/Iconos/Observador.svg" alt="" class="icono-inline"> '
+            : usuario.tipoActual === 'Indirecto' ? '<img src="../Colores-y-Estetica/Iconos/Indirecto.svg" alt="" class="icono-inline"> '
             : '';
         nodo.innerHTML = `
             <div class="nodo-general-contenido">
@@ -3197,7 +3197,7 @@ function renderizarOrganigramaGeneral() {
 // 30. TEMPORIZADOR DE INACTIVIDAD (cierra la sesión automáticamente tras 30 minutos sin actividad)
 // ==========================================
 function reiniciarTemporizador() { if (temporizadorInactividad) clearTimeout(temporizadorInactividad); temporizadorInactividad = setTimeout(() => cerrarSesionPorInactividad(), TIEMPO_INACTIVIDAD); }
-function cerrarSesionPorInactividad() { if (sesionActiva && usuarioActivo && usuarioActivo.id) { mostrarAvisoInmediato("⏰ Sesión cerrada por inactividad de 30 minutos", "advertencia"); cerrarSesion(); } }
+function cerrarSesionPorInactividad() { if (sesionActiva && usuarioActivo && usuarioActivo.id) { mostrarAvisoInmediato("<img src="../Colores-y-Estetica/Iconos/alarmas.svg" alt="" class="icono-inline"> Sesión cerrada por inactividad de 30 minutos", "advertencia"); cerrarSesion(); } }
 function iniciarTemporizadorInactividad() { if (temporizadorInactividad) clearTimeout(temporizadorInactividad); const eventos = ['click', 'mousemove', 'keypress', 'scroll', 'touchstart']; eventos.forEach(evento => document.removeEventListener(evento, reiniciarTemporizador)); eventos.forEach(evento => document.addEventListener(evento, reiniciarTemporizador)); reiniciarTemporizador(); }
 function detenerTemporizadorInactividad() { if (temporizadorInactividad) clearTimeout(temporizadorInactividad); const eventos = ['click', 'mousemove', 'keypress', 'scroll', 'touchstart']; eventos.forEach(evento => document.removeEventListener(evento, reiniciarTemporizador)); }
 
@@ -3701,7 +3701,7 @@ function accionCorreoActual(accion) {
             if (dias > 1) {
                 const prom = Object.values(porDia).reduce((a, b) => a + b, 0) / dias;
                 if ((porDia[hoy] || 0) > prom * 1.5 && typeof mostrarAvisoInmediato === 'function') {
-                    mostrarAvisoInmediato('⚠️ Estás borrando más de lo habitual hoy.', 'advertencia');
+                    mostrarAvisoInmediato('<img src="../Colores-y-Estetica/Iconos/Advertencia.svg" alt="" class="icono-inline"> Estás borrando más de lo habitual hoy.', 'advertencia');
                 }
             }
         } catch (e) {}
