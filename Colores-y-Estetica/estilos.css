@@ -2072,6 +2072,59 @@ No toca .btn-principal / .btn-secundario existentes.
 }
 
 /* ==========================================
+4.4 PANTALLA DE REDACCIÓN DE CORREO (PUNTO 2 instrucciones.md 18/10; estilo Gmail, simulado)
+========================================== */
+.barra-redactar-correo {
+    display: flex;
+    justify-content: flex-end;
+    margin: 4px 0 0 0;
+}
+.redaccion-correo { gap: 10px; }
+.fila-redaccion {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.etiqueta-redaccion {
+    min-width: 70px;
+    text-align: left;
+    font-weight: bold;
+    color: var(--color-primario);
+    font-size: 0.9rem;
+}
+.fila-redaccion .input-estilizado { flex: 1; }
+.redactar-de {
+    color: var(--color-texto);
+    font-size: 0.95rem;
+    word-break: break-all;
+    text-align: left;
+}
+.fila-mensaje { align-items: flex-start; }
+.fila-mensaje .input-estilizado {
+    min-height: 160px;
+    resize: vertical;
+}
+.fila-adjunto { justify-content: flex-start; }
+.btn-adjunto-correo {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radio-bordes);
+    padding: 8px 12px;
+    cursor: pointer;
+    line-height: 0;
+}
+.btn-adjunto-correo:hover { border-color: var(--color-primario); }
+.btn-adjunto-correo .icono-inline {
+    width: 1.6em;
+    height: 1.6em;
+}
+.barra-acciones-redaccion {
+    flex-wrap: wrap;
+    justify-content: center;
+}
+#aviso-destinatario-correo { margin: 0; min-height: 0; }
+
+/* ==========================================
 5.4 SCROLLBAR PERSONALIZADA (diseño a medida de la barra de desplazamiento lateral para que combine con los colores de la app)
 ========================================== */
 ::-webkit-scrollbar {
