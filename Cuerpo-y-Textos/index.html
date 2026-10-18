@@ -64,12 +64,12 @@
       
         <div class="fila-dinamica">
             <select id="reg-pais" class="selector-pais" style="flex: 1;">
-                <option value="+502">🇬🇹 +502</option>
-                <option value="+52">🇲🇽 +52</option>
-                <option value="+1">🇺🇸 +1</option>
-                <option value="+34">🇪🇸 +34</option>
-                <option value="+503">🇸🇻 +503</option>
-                <option value="+504">🇭🇳 +504</option>
+                <option value="+502">+502</option>
+                <option value="+52">+52</option>
+                <option value="+1">+1</option>
+                <option value="+34">+34</option>
+                <option value="+503">+503</option>
+                <option value="+504">+504</option>
             </select>
             <input type="tel" id="reg-tel" placeholder="Teléfono" data-i18n="reg_tel" oninput="validarContacto()" style="flex: 3;">
         </div>
@@ -91,8 +91,7 @@
       
         <div id="campos-cambio-contrasena" style="display:none;">
             <hr style="margin: 20px 0; border: 1px solid rgba(255,255,255,0.1);">
-            <p style="font-size: 0.9rem; color: var(--color-primario); margin-bottom: 10px; font-weight: 600;" data-i18n="reg_cambiar_pass">
-                🔐 Cambiar mi contraseña (opcional)
+            <p style="font-size: 0.9rem; color: var(--color-primario); margin-bottom: 10px; font-weight: 600;"><img src="../Colores-y-Estetica/Iconos/Cambiar contraseña.svg" alt="" class="icono-inline"> <span data-i18n="reg_cambiar_pass">Cambiar mi contraseña (opcional)</span>
             </p>
             <input type="password" id="edit-pass-actual" placeholder="Contraseña Actual" data-i18n="reg_pass_actual" oninput="manejarMascara(this)" autocomplete="current-password">
             <input type="password" id="edit-pass-nueva" placeholder="Nueva Contraseña" data-i18n="reg_pass_nueva" oninput="manejarMascara(this)" autocomplete="new-password">
@@ -102,7 +101,7 @@
 
         <!-- ENROLAMIENTO BIOMÉTRICO (el usuario inscribe rostro/patrón/huella en ESTE dispositivo — PUNTO 9-10-11) -->
         <div id="biometria-enrolamiento" class="biometria-enrolamiento">
-            <p class="titulo-biometria" data-i18n="bio_enrol_titulo">🔐 Autenticación biométrica (este dispositivo)</p>
+            <p class="titulo-biometria"><img src="../Colores-y-Estetica/Iconos/Cambiar contraseña.svg" alt="" class="icono-inline"> <span data-i18n="bio_enrol_titulo">Autenticación biométrica (este dispositivo)</span></p>
             <p class="leyenda-biometria" data-i18n="bio_enrol_leyenda">Selecciona la opción biométrica a enrolar en este dispositivo.</p>
             <div id="opciones-biometria-perfil" class="opciones-biometria">
                 <button type="button" class="btn-biometria" id="perfil-bio-facial" title="Inscribir rostro" data-i18n-title="bio_facial" onclick="enrolarBiometria('facial')">
@@ -180,7 +179,7 @@
                     <!-- 2.3.1 LOGO (cargar la imagen del logotipo de la empresa) -->
                     <div id="contenedor-logo-previsualizacion" class="logo-upload-box" onclick="document.getElementById('input-logo').click()">
                         <img id="vista-previa-logo" src="" style="display:none;" alt="Vista previa del logo" data-i18n="id_prev_logo">
-                        <span id="texto-placeholder-logo" data-i18n="id_cargar_logo">📤 Cargar Logo</span>
+                        <span id="texto-placeholder-logo"><img src="../Colores-y-Estetica/Iconos/Cargar documento.svg" alt="" class="icono-inline"> <span data-i18n="id_cargar_logo">Cargar Logo</span></span>
                         <input type="file" id="input-logo" accept="image/*" style="display:none;" onchange="procesarLogo(this)">
                     </div>
                     
@@ -320,56 +319,56 @@
         <section id="pantalla-reuniones" class="pantalla">
             <h2>Reuniones</h2>
             <p class="descripcion-app">Módulo en preparación</p>
-            <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;">📹</p></div>
+            <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;"><img src="../Colores-y-Estetica/Iconos/Reuniones.svg" alt="" class="icono-inline" style="width:3rem;height:3rem;"></p></div>
             <div style="text-align:center;"><button type="button" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')">← Volver</button></div>
         </section>
         <section id="pantalla-chats" class="pantalla">
             <h2>Chats</h2>
             <p class="descripcion-app">Módulo en preparación</p>
-            <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;">💬</p></div>
+            <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;"><img src="../Colores-y-Estetica/Iconos/chats.svg" alt="" class="icono-inline" style="width:3rem;height:3rem;"></p></div>
             <div style="text-align:center;"><button type="button" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')">← Volver</button></div>
         </section>
         <section id="pantalla-tareas" class="pantalla">
             <h2>Tareas</h2>
             <p class="descripcion-app">Módulo en preparación</p>
-            <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;">✅</p></div>
+            <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;"><img src="../Colores-y-Estetica/Iconos/tareas.svg" alt="" class="icono-inline" style="width:3rem;height:3rem;"></p></div>
             <div style="text-align:center;"><button type="button" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')">← Volver</button></div>
         </section>
         <section id="pantalla-alarmas" class="pantalla">
             <h2>Alarmas</h2>
             <p class="descripcion-app">Módulo en preparación</p>
-            <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;">⏰</p></div>
+            <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;"><img src="../Colores-y-Estetica/Iconos/alarmas.svg" alt="" class="icono-inline" style="width:3rem;height:3rem;"></p></div>
             <div style="text-align:center;"><button type="button" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')">← Volver</button></div>
         </section>
         <section id="pantalla-calendario" class="pantalla">
             <h2>Calendario</h2>
             <p class="descripcion-app">Módulo en preparación</p>
-            <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;">📅</p></div>
+            <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;"><img src="../Colores-y-Estetica/Iconos/calendario.svg" alt="" class="icono-inline" style="width:3rem;height:3rem;"></p></div>
             <div style="text-align:center;"><button type="button" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')">← Volver</button></div>
         </section>
         <section id="pantalla-hub" class="pantalla">
             <h2>Hub de Archivos</h2>
             <p class="descripcion-app">Módulo en preparación</p>
-            <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;">📁</p></div>
+            <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;"><img src="../Colores-y-Estetica/Iconos/hub.svg" alt="" class="icono-inline" style="width:3rem;height:3rem;"></p></div>
             <div style="text-align:center;"><button type="button" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')">← Volver</button></div>
         </section>
         <section id="pantalla-enlace-movil" class="pantalla">
             <h2>Enlace Móvil</h2>
             <p class="descripcion-app">Módulo en preparación</p>
-            <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;">📱</p></div>
+            <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;"><img src="../Colores-y-Estetica/Iconos/enlace movil.svg" alt="" class="icono-inline" style="width:3rem;height:3rem;"></p></div>
             <div style="text-align:center;"><button type="button" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')">← Volver</button></div>
         </section>
         <section id="pantalla-otras-actividades" class="pantalla">
             <h2>Otras Actividades</h2>
             <p class="descripcion-app">Módulo en preparación</p>
-            <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;">⬡</p></div>
+            <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;"><img src="../Colores-y-Estetica/Iconos/otras actividades.svg" alt="" class="icono-inline" style="width:3rem;height:3rem;"></p></div>
             <div style="text-align:center;"><button type="button" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')">← Volver</button></div>
         </section>
         <!-- ============================================ -->
         <!-- 2.5.2 PANTALLA DE CORREOS (6 vistas — PUNTO 3; sin sincronización real ni IA) -->
         <!-- ============================================ -->
         <section id="pantalla-correos" class="pantalla">
-            <h2>📧 Correos</h2>
+            <h2><img src="../Colores-y-Estetica/Iconos/correos.svg" alt="" class="icono-inline"> Correos</h2>
             <p class="descripcion-app">Bandeja local (sin sincronización real todavía)</p>
             <div class="barra-vistas-correo">
                 <button type="button" class="btn-vista-correo activo" data-vista="recibidos" onclick="cambiarVistaCorreo('recibidos')">Recibidos</button>
@@ -406,7 +405,7 @@
             
             <div class="configuracion-container">
                 <div class="config-section">
-                    <h3 data-i18n="cfg_ia">🤖 Configuración de IA</h3>
+                    <h3><img src="../Colores-y-Estetica/Iconos/IA.svg" alt="" class="icono-inline"> <span data-i18n="cfg_ia">Configuración de IA</span></h3>
                     <p class="descripcion-app" data-i18n="cfg_ia_desc">Personaliza a tu asistente de Stratos.</p>
                     <!-- PUNTO 6: sin campo de nombre; la IA lo pide en su primera interacción -->
                     <!-- Botón de IA (diseño de esfera; la lógica de la IA se conecta en el PUNTO 7) -->
@@ -417,7 +416,7 @@
                 </div>
                 
                 <div class="config-section">
-                    <h3 data-i18n="cfg_idioma">🌐 Idioma</h3>
+                    <h3><img src="../Colores-y-Estetica/Iconos/Lenguaje.svg" alt="" class="icono-inline"> <span data-i18n="cfg_idioma">Idioma</span></h3>
                     <select id="config-idioma" class="input-estilizado">
                         <option value="es" selected>Español</option>
                         <option value="en">English</option>
@@ -425,12 +424,12 @@
                 </div>
                 
                 <div class="config-section">
-                    <h3 data-i18n="cfg_seguridad">🔒 Seguridad</h3>
+                    <h3><img src="../Colores-y-Estetica/Iconos/Cambiar contraseña.svg" alt="" class="icono-inline"> <span data-i18n="cfg_seguridad">Seguridad</span></h3>
                     <p class="descripcion-app">La biometría se inscribe desde tu Perfil.</p>
                 </div>
                 
                 <div class="config-section">
-                    <h3 data-i18n="cfg_rec">🔑 Recuperación de Contraseñas</h3>
+                    <h3><img src="../Colores-y-Estetica/Iconos/Contraseña.svg" alt="" class="icono-inline"> <span data-i18n="cfg_rec">Recuperación de Contraseñas</span></h3>
                     <p class="descripcion-app">
                         <span data-i18n="cfg_rec_desc">Ayuda a cualquier usuario a recuperar su contraseña.</span> 
                         <span style="color: var(--color-advertencia);" data-i18n="cfg_rec_traz">La solicitud quedará registrada con fines de trazabilidad.</span>
@@ -444,17 +443,17 @@
                     </div>
                     
                     <button class="btn-principal" onclick="enviarContrasenaAUsuario()" data-i18n="cfg_rec_enviar">
-                        📧 ENVIAR CONTRASEÑA
+                        <img src="../Colores-y-Estetica/Iconos/correos.svg" alt="" class="icono-inline"> <span data-i18n="cfg_rec_enviar">ENVIAR CONTRASEÑA</span>
                     </button>
                 </div>
                 
                 <div class="config-section">
-                    <h3 data-i18n="cfg_acciones">👤 Acciones Rápidas</h3>
+                    <h3><img src="../Colores-y-Estetica/Iconos/Accion Rapida.svg" alt="" class="icono-inline"> <span data-i18n="cfg_acciones">Acciones Rápidas</span></h3>
                     <button class="btn-principal" onclick="editarPerfil()" style="margin-bottom: 10px;" data-i18n="cfg_editar">
-                        ✏️ Editar Mi Perfil
+                        <img src="../Colores-y-Estetica/Iconos/Editar.svg" alt="" class="icono-inline"> <span data-i18n="cfg_editar">Editar Mi Perfil</span>
                     </button>
                     <button class="btn-secundario" onclick="irAPantalla('pantalla-organigrama-general')" data-i18n="cfg_verorg">
-                        🌐 Ver Organigrama General
+                        <img src="../Colores-y-Estetica/Iconos/Organigrama General.svg" alt="" class="icono-inline"> <span data-i18n="cfg_verorg">Ver Organigrama General</span>
                     </button>
                 </div>
             </div>
@@ -500,7 +499,7 @@
 
         <!-- 3.2 BOTÓN TUERCA (el botón flotante de navegación dentro del contenedor) -->
         <div id="boton-tuerca-global" class="tuerca-navegacion" onclick="toggleMenuTuerca()" style="display:none;">
-            <span>📋</span>
+            <span><img src="../Colores-y-Estetica/Iconos/Configuración.svg" alt="" class="icono-inline"></span>
         </div>
 
         <!-- 3.3 BOTÓN DE IA FLOTANTE (esfera del asistente; presente en todas las pantallas excepto Login — PUNTO 7) -->
@@ -512,8 +511,8 @@
         <div id="ventana-ia" class="ventana-ia" style="display:none;">
             <div class="ventana-ia-cabecera">
                 <span id="ventana-ia-estado" class="ventana-ia-estado">Escuchando...</span>
-                <button type="button" class="ventana-ia-btn" id="btn-ia-pausa" onclick="alternarPausaIA()" title="Pausa">⏸</button>
-                <button type="button" class="ventana-ia-btn" id="btn-ia-editar" onclick="editarTextoIA()" title="Editar">✏️</button>
+                <button type="button" class="ventana-ia-btn" id="btn-ia-pausa" onclick="alternarPausaIA()" title="Pausa"><img src="../Colores-y-Estetica/Iconos/Pausa.svg" alt="" class="icono-inline"></button>
+                <button type="button" class="ventana-ia-btn" id="btn-ia-editar" onclick="editarTextoIA()" title="Editar"><img src="../Colores-y-Estetica/Iconos/Editar.svg" alt="" class="icono-inline"></button>
                 <button type="button" class="ventana-ia-btn" onclick="cerrarVentanaIA()" title="Cerrar">✕</button>
             </div>
             <div class="ventana-ia-cuerpo">
@@ -558,9 +557,9 @@
                 </div>
                 <div class="fila-dinamica">
                     <select id="modal-pais" class="selector-pais" style="flex: 1;">
-                        <option value="+502">🇬🇹 +502</option>
-                        <option value="+52">🇲🇽 +52</option>
-                        <option value="+1">🇺🇸 +1</option>
+                        <option value="+502">+502</option>
+                        <option value="+52">+52</option>
+                        <option value="+1">+1</option>
                     </select>
                     <input type="tel" id="modal-tel" placeholder="Teléfono" data-i18n="mod_tel" style="flex: 3;">
                 </div>
@@ -569,7 +568,7 @@
                 <p class="descripcion-tipo" id="descripcion-tipo-contacto"></p>
             </div>
             <div class="modal-footer">
-                <button class="btn-principal" onclick="guardarContacto()" data-i18n="mod_salvar_inv">💾 SALVAR E INVITAR</button>
+                <button class="btn-principal" onclick="guardarContacto()"><img src="../Colores-y-Estetica/Iconos/Guardar.svg" alt="" class="icono-inline"> <span data-i18n="mod_salvar_inv">SALVAR E INVITAR</span></button>
                 <button class="btn-peligro" onclick="cerrarModalContacto()" data-i18n="mod_cancelar">CANCELAR</button>
             </div>
         </div>
@@ -608,8 +607,8 @@
             <!-- Se llena dinámicamente por Logica.js -->
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn-secundario" onclick="editarContactoDesdeDetalle()" data-i18n="det_editar">✏️ EDITAR</button>
-            <button type="button" class="btn-peligro" onclick="eliminarContacto()" data-i18n="det_eliminar">🗑️ ELIMINAR</button>
+            <button type="button" class="btn-secundario" onclick="editarContactoDesdeDetalle()"><img src="../Colores-y-Estetica/Iconos/Editar.svg" alt="" class="icono-inline"> <span data-i18n="det_editar">EDITAR</span></button>
+            <button type="button" class="btn-peligro" onclick="eliminarContacto()"><img src="../Colores-y-Estetica/Iconos/Eliminar.svg" alt="" class="icono-inline"> <span data-i18n="det_eliminar">ELIMINAR</span></button>
             <button type="button" class="btn-peligro" onclick="cerrarModalDetalle()" data-i18n="det_cerrar">CERRAR</button>
         </div>
     </div>
@@ -621,7 +620,7 @@
     <div id="modal-cambio-obligatorio" class="modal" style="display:none;">
         <div class="modal-content">
             <div class="modal-header" style="border-bottom: 3px solid var(--color-advertencia);">
-                <h3 data-i18n="cambio_titulo">⚠️ Cambio de Contraseña Obligatorio</h3>
+                <h3><img src="../Colores-y-Estetica/Iconos/Advertencia.svg" alt="" class="icono-inline"> <span data-i18n="cambio_titulo">Cambio de Contraseña Obligatorio</span></h3>
             </div>
             <div class="modal-body">
                 <p style="color: rgba(255,255,255,0.9); margin-bottom: 20px; padding: 15px; background: rgba(255,165,0,0.1); border-left: 4px solid var(--color-advertencia); border-radius: 8px;">
@@ -635,8 +634,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn-principal" onclick="cambiarContrasenaObligatoria()" data-i18n="cambio_boton">
-                    🔒 CAMBIAR CONTRASEÑA Y CONTINUAR
+                <button class="btn-principal" onclick="cambiarContrasenaObligatoria()">
+                    <img src="../Colores-y-Estetica/Iconos/Cambiar contraseña.svg" alt="" class="icono-inline"> <span data-i18n="cambio_boton">CAMBIAR CONTRASEÑA Y CONTINUAR</span>
                 </button>
             </div>
         </div>
