@@ -141,6 +141,13 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 
 ## BITÁCORA (historial de lo realizado)
 
+### 18/10/2026 (noche 2) — instrucciones.md PUNTO 1 + PUNTO 2: REDACTAR + REDACCIÓN DE CORREOS
+- **Punto 1 — hecho:** botón verde `REDACTAR` (`btn-principal`, alineado a la derecha) en `pantalla-correos`, debajo del título. Llama a `abrirRedaccionCorreo()` que limpia los campos, pone el `De:` con el email del usuario y abre `pantalla-redactar-correo`.
+- **Punto 2 — hecho:** nueva `section#pantalla-redactar-correo` (dentro de `#app-container`; respeta logo, cartelera, sello, Vero y Libro): botón Volver arriba-izquierda; `De:` fijo; `Para:` con autocompletado (`datalist` de usuarios/contactos/correos previos) + validación visual ✓/✖; `Asunto:`; `Mensaje:` expansible; clip con `Cargar documento.svg` (autorizado por el Arquitecto; simulado, pide nombre por `prompt`).
+- **Botones:** `ENVIAR` (verde) valida destinatario+asunto, guarda en `correosLocales` vista `enviados`, registra en bancoDatos `Envió correo a [dest] a las [HH:MM]`, avisa éxito y vuelve a Enviados. `ENVIAR + TAREA` / `ENVIAR + ALARMA` (naranja = `btn-secundario`) envían igual y redirigen a `pantalla-tareas` / `pantalla-alarmas` (existen como placeholder; `irAPantalla` las abre; si no existieran avisa "en preparación"). `DESCARTAR` (rojo) limpia sin guardar.
+- **No tocado:** bandeja actual intacta; sin SMTP; la redacción NO entra al menú (no está en `estadoPantallas`, igual que `pantalla-acceso`).
+- **Verificación:** esprima OK en ambos JS (0 problemas). **Pendiente:** Ctrl+F5 (REDACTAR abre redacción; enviar deja el correo en Enviados).
+
 ### 18/10/2026 (noche) — instrucciones.md PUNTO 1: REPARAR LA CARTELERA
 - **Punto 1 — hecho:** causa raíz = 2 líneas con comillas dobles rotas (`mostrarAvisoInmediato("<img src="...` en líneas 476 y 3200) que tumbaban TODO `logica.js` (nada del script corría: ni cartelera ni iconos ni texto). Se pasaron a backticks. Al agregar el respaldo salió una 3ª falla (línea 3148: `onerror="this.style.display='none'"` rompía comilla simple) → se cambió a `onerror="this.remove()"`.
 - **Respaldo agregado:** los 16 `<img>` de cartelera/menu/nodos llevan `onerror="this.remove()"`: si un SVG no carga, se quita solo el icono y el texto queda visible. Estructura HTML intacta (`#zona-cartelera > #mensaje-personalizado > #texto-mensaje-personalizado`); rotación y `innerHTML` sin cambios.
