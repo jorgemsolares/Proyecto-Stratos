@@ -489,7 +489,7 @@ const TRADUCCIONES = {
     "ia_escuchando": { es: "Escuchando...", en: "Listening..." },
     "ia_respondiendo": { es: "Respondiendo...", en: "Responding..." },
     "ia_pausa": { es: "Pausa — corrige manualmente", en: "Pause — correct manually" },
-    "ia_sin_micro": { es: "Sin micrófono — usa para escribir", en: "No mic — use to type" },
+    "ia_sin_micro": { es: "Sin micrófono — escribe abajo", en: "No mic — type below" },
     "ia_escribe": { es: "Escribe aquí...", en: "Type here..." },
     "cfg_idioma": { es: "Idioma", en: "Language" },
     "cfg_seguridad": { es: "Seguridad", en: "Security" },
