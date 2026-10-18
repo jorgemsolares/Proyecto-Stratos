@@ -34,7 +34,7 @@ function mostrarAvisoInmediato(texto, tipo) {
         if (tipo === 'exito') mensajeDiv.classList.add('exito');
         else if (tipo === 'error') mensajeDiv.classList.add('error');
         else if (tipo === 'advertencia') mensajeDiv.classList.add('advertencia');
-        textoMensaje.innerText = texto;
+        textoMensaje.innerHTML = texto;
         mensajeDiv.style.display = 'flex';
     }
     temporizadorAviso = setTimeout(() => {
@@ -340,7 +340,7 @@ function mostrarSiguienteMensaje() {
             mensajeDiv.classList.add('advertencia');
         }
         mensajeDiv.dataset.prioridad = mensaje.prioridad || 'media'; // PUNTO 2
-        textoMensaje.innerText = mensaje.texto;
+        textoMensaje.innerHTML = mensaje.texto;
         mensajeDiv.style.display = 'flex';
     }
 }
