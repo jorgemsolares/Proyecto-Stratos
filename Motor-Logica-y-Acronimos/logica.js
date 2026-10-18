@@ -3197,7 +3197,7 @@ function renderizarOrganigramaGeneral() {
 // 30. TEMPORIZADOR DE INACTIVIDAD (cierra la sesión automáticamente tras 30 minutos sin actividad)
 // ==========================================
 function reiniciarTemporizador() { if (temporizadorInactividad) clearTimeout(temporizadorInactividad); temporizadorInactividad = setTimeout(() => cerrarSesionPorInactividad(), TIEMPO_INACTIVIDAD); }
-function cerrarSesionPorInactividad() { if (sesionActiva && usuarioActivo && usuarioActivo.id) { mostrarAvisoInmediato("<img src="../Colores-y-Estetica/Iconos/alarmas.svg" alt="" class="icono-inline" onerror="this.remove()"> Sesión cerrada por inactividad de 30 minutos`, "advertencia"); cerrarSesion(); } }
+function cerrarSesionPorInactividad() { if (sesionActiva && usuarioActivo && usuarioActivo.id) { mostrarAvisoInmediato(`<img src="../Colores-y-Estetica/Iconos/alarmas.svg" alt="" class="icono-inline" onerror="this.remove()"> Sesión cerrada por inactividad de 30 minutos`, "advertencia"); cerrarSesion(); } }
 function iniciarTemporizadorInactividad() { if (temporizadorInactividad) clearTimeout(temporizadorInactividad); const eventos = ['click', 'mousemove', 'keypress', 'scroll', 'touchstart']; eventos.forEach(evento => document.removeEventListener(evento, reiniciarTemporizador)); eventos.forEach(evento => document.addEventListener(evento, reiniciarTemporizador)); reiniciarTemporizador(); }
 function detenerTemporizadorInactividad() { if (temporizadorInactividad) clearTimeout(temporizadorInactividad); const eventos = ['click', 'mousemove', 'keypress', 'scroll', 'touchstart']; eventos.forEach(evento => document.removeEventListener(evento, reiniciarTemporizador)); }
 
