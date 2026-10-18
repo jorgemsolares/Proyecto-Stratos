@@ -5,19 +5,34 @@
 
 ---
 
-# PARTE 1: QUÉ ES STRATOS
+## 1. ¿QUÉ ES STRATOS?
 
----
+### Beneficio
 
-## 1. ¿Qué es STRATOS?
+En la mayoría de las organizaciones, el trabajo diario no se mide. Se miden resultados: ventas, cierres, tickets, entregas. El proceso que conduce a esos resultados —los correos, las llamadas, las consultas, las coordinaciones, las decisiones— permanece invisible. Ese es el trabajo invisible, y su ausencia en la medición deja al empleado en desventaja, porque se le exige un resultado sin reconocerle el esfuerzo que implicó. Deja también a la empresa en desventaja, porque no conoce qué procesos funcionan de verdad, cuál es la efectividad real de sus operaciones, cómo se distribuye la carga entre su personal, ni qué obligaciones están ralentizando los resultados.
 
-STRATOS es una **herramienta multifuncional** de gestión de actividades pocas veces medibles en el accionar personal/organizacional.
+### Medio
 
-Su estructura principal se basa en un **organigrama** (No.1, Colaboradores, Observadores, Indirectos) que determina los niveles de comunicación directa y la forma en que permeará la comunicación de toda actividad. La base de la actividad siempre es la buena comunicación.
+Stratos es una herramienta multifuncional de medición laboral. Su estructura principal se basa en un organigrama (No.1, Colaboradores, Observadores, Indirectos) que determina los niveles de comunicación directa y la forma en que permeará la comunicación de toda actividad. La base de la actividad siempre es la buena comunicación.
 
-También busca dejar rastro que permita medir al detalle el porcentaje invertido en cada actividad, y promueve una **identidad corporativa** por medio de definir la imagen visual de donde se va a trabajar.
+Stratos integra en un solo lugar las vías generales de comunicación y las actividades del usuario, de modo que cada acción deje rastro y cada proceso pueda reconstruirse de principio a fin. El sistema entiende la comunicación no solo como el acto de dialogar, sino como la forma en que se transmite la información. Para representar esta dinámica, Stratos ofrece una visualización clara a través de dos estructuras que, aunque comparten la denominación de "organigrama", representan conceptos distintos:
 
-Pero más importante, presta al usuario la plataforma que dejará marca de su importancia en cada cosa que haga, permitiendo medir su injerencia real en cada actividad que lleva a los resultados.
+- **Organigrama Personal:** Representa visualmente la comunicación formal y periódica que cada usuario mantiene con el personal de la compañía, funcionando como su red de contacto directo.
+- **Organigrama General:** Es la representación gráfica de la jerarquía organizacional de la empresa, la cual brinda la oportunidad de conocer datos relevantes y la estructura de mando de cada integrante de la compañía.
+
+El uso continuo del sistema genera rutinas, estructuras y costumbres que elevan el profesionalismo del usuario en cualquier nivel jerárquico.
+
+### Posibilidades de análisis
+
+Con esto, Stratos permite:
+
+- **Contar con información de principio a fin:** reconstruir el proceso completo de cada actividad, desde su origen hasta su resultado, con todos los participantes, tiempos y decisiones que intervinieron.
+- **Conocer el alcance de las acciones:** cuánto tarda en tener efecto una acción, cuántas personas moviliza, cuántos procesos activa.
+- **Presión bien elaborada:** la presión no se ejerce sobre el resultado final, sino sobre los puntos de inflexión reales que lo determinan.
+- **Evaluaciones justas:** que midan lo que realmente tiene el empleado en sus responsabilidades, y el peso de cada una.
+- **Justificar necesidades:** demostrar con datos qué se requiere para cumplir, en lugar de presionar sin lógica.
+- **Reducir el estrés laboral:** porque el empleado sabe qué se espera de él con base en datos reales, y puede autoevaluarse con el mismo criterio con que se le evalúa.
+- **Posibilidad de contrataciones acertadas:** basadas en el historial real del puesto, al conocer las necesidades verdaderas de experiencia, conocimiento y capacidad que la función exige.
 
 ---
 
@@ -25,7 +40,7 @@ Pero más importante, presta al usuario la plataforma que dejará marca de su im
 
 Stratos aspira a ser la herramienta base de medición laboral para toda empresa que considere justo y objetivo retribuir la labor desde su concepción hasta su resultado final.
 
-Busca mejorar el profesionalismo laboral, fomentar la empatía entre colaborador y empresa, y promover la mejora de todos los involucrados en la medida en que cada uno se lo merece.
+Busca mejorar el profesionalismo laboral, fomentar la empatía entre colaborador y empresa, y promover la mejora de todos los involucrados.
 
 ---
 
@@ -49,378 +64,181 @@ Ofrecer vías de medición laboral innovadoras, objetivas y prácticas, que apor
 
 ## 5. OBJETIVOS (Con lo que llevamos)
 
-- **Objetivo 1:** Tener un módulo de Comunicación completo (Correos, Chats, Tareas, Alarmas, Calendario) con trazabilidad total.
-- **Objetivo 2:** Integrar a la IA como asistente ejecutiva (detección de patrones, líneas de tiempo, reuniones, seguimiento de agenda, apoyo en establecimiento de mediciones, etc.).
+- **Objetivo 1:** Tener un módulo de Comunicación completo (Correos, Chats, Tareas, Alarmas, Calendario, Hub de Archivos, Enlace Móvil, Reuniones) con trazabilidad total.
+- **Objetivo 2:** Integrar a la IA como asistente ejecutiva (detección de patrones, líneas de tiempo, reuniones, seguimiento de agenda, apoyo en el establecimiento de mediciones).
 - **Objetivo 3:** Implementar el sistema de medición justa (AT, AR, EE) con análisis de causa raíz.
-- **Objetivo 4:** Desarrollar el Hub de Archivos y la integración con WhatsApp Business, respetando la privacidad personal, pero permitiendo a la empresa mediciones detalladas.
-- **Objetivo 5:** Preparar la arquitectura para los módulos futuros (Otras Actividades: Ventas, Mercadeo, Logística, etc.).
+- **Objetivo 4:** Desarrollar el registro completo de las comunicaciones del usuario —Correos, Hub de Archivos, integración con WhatsApp Business y llamadas telefónicas—, respetando la privacidad personal y permitiendo a la empresa mediciones detalladas.
+- **Objetivo 5:** Unificar la estructura de pantallas del sistema al máximo: la disposición de la pantalla, la clasificación de botones (acción principal, secundaria, irreversible), la cartelera de mensajes, la barra de avisos del sistema y el sello de agua de Stratos deben responder a una misma lógica de diseño en todo el sistema. La uniformidad es la base de las rutinas: sin uniformidad no hay hábito, sin hábito no hay profesionalismo.
+- **Objetivo 6:** Preparar la arquitectura para los módulos futuros (Otras Actividades: Ventas, Mercadeo, Logística, etc.).
 
 ---
 
-## 6. EL ADN DE STRATOS (Lo que define su esencia)
-
-### A. Medir el TRABAJO, no los resultados
-- Los resultados son una **referencia**, pero el enfoque de la medición es la **participación, esfuerzo, compromiso y eficiencia** de cada usuario. Cada actividad tiene un porcentaje de la inversión de tiempo que merece ser rastreado para una correcta y real medición.
-- El sistema mide **cómo** trabajó en cada minuto, cada persona, no solo **qué** entregó de resultado.
-
-### B. La base inicial de una buena medición comienza con buena comunicación
-- La base inicial de una buena medición comienza con buena comunicación. Por eso, el módulo de comunicación (Correo, Mensajes, Calendario, Chats, Tareas, Alarmas, ETC.) es el paquete inicial y el más crítico.
-
-### C. Modularidad y flexibilidad
-- El sistema es una serie de módulos (ej: Comunicación, Operaciones comerciales, Mercadeo, Ventas, Logística, Bodegas, etc.).
-- En la Comercialización de la app, El No.1 decide qué módulos activa/compra.
-- Si el No1. no activa un módulo, no está activo para esa empresa, pero **el banco de datos sigue almacenando todo** lo que se genera en el sistema, es posible que en ocasiones posteriores el cliente quiera usarlo y se podrá tener acceso hasta al historial.
-
-### D. Banco de datos universal y respaldo total
-- El sistema tiene un **banco de datos impresionante**: una fila por usuario, con cientos de columnas de información.
-- Los datos se guardan en el **servidor del dueño (No.1)**, quien es dueño absoluto de su información.
-- El sistema guarda **backups de correos y chats en otro archivo, pero siempre de su propiedad**, siendo como archivo histórico de la empresa (algo que nadie hace hoy), aunque, por respaldo de privacidad a los usuarios como personas individuales, no estará con fácil acceso o modo de lectura para un humano, pero en su banco de datos, la forma más correcta para obtener información de estos archivos será con preguntar por medio de la IA, sobre el historial de temas laborales, cosa que también respeta y sigue la jerarquía y comunicación directa, es decir no todos pueden pedir información de todos, sino que se respeta la superioridad del puesto y la dependencia directa.
-
-### E. KPIs dinámicos y justos
-- En la actualidad, los KPIs suelen medir agrupaciones de variables o resultados que guardan relación, pero estas no tienen el mismo peso laboral, incluso entre personas del mismo nivel organizacional, cuando se consideran las actividades y complejidades individuales de cada persona (cantidad de personal, tiempos de comunicación, etc.).
-- La IA asesora al No.1 o al usuario con personal a su cargo para definir un KPI (ej. "Eficiencia"). Le muestra los módulos y actividades que pueden alimentarlo en forma de listado en una ventana emergente, y le sugiere porcentajes realistas basados en ponderaciones de cada módulo en la medición promedio de la línea jerárquica a la que medirá. Esto facilita definir KPI por línea jerárquica (no por persona), aunque también es posible hacerlo por persona si el usuario lo desea.
-
-### F. Distinción entre barra de notificaciones y cartelera (LEY DE DISEÑO)
-- **Barra de notificaciones** (`#barra-notificaciones`): Franja superior que se sobrepone. Muestra avisos inmediatos de confirmación/error/advertencia. **Dura 3 segundos.** La usa el sistema.
-- **Cartelera de mensajes** (`#zona-cartelera`): Área superior derecha. Rota avisos y mensajes motivacionales. **Dura según prioridad** (10s alta, 6s media, 4s baja). La usan el sistema y la IA.
-- **La pantalla de Login NO debe tener cartelera.** Solo la barra de notificaciones (para obligar al usuario a entrar).
-
-### G. Lógica de horario (LEY DE MEDICIÓN)
-- Se registra la **primera entrada del día** y la **última salida del día**.
-- **Cruce de medianoche:** Si el usuario entra a las 11 PM y sale a las 12:30 AM, el cierre pertenece al **día anterior** (se suma al tiempo trabajado ese día).
-- Si vuelve a abrir a las 7 AM, esa es la **primera entrada del nuevo día**.
-- **Lo que se mide:** Cuánto tiempo trabaja al día. Esto visibiliza que los puestos altos (que se rigen por resultados, no por horario) muchas veces trabajan más de 8 horas.
-
----
-
-## 7. QUIEN ES LA IA (NOMBRE OFICIAL INTERNO: VERO) COMO PARTE DE LAS FUNCIONES DE STRATOS, SU ALCANCE Y EL TRABAJO INVISIBLE
-
-> **Aclaración sobre el nombre "Vero":** "Vero" es el nombre oficial de la IA de Stratos para uso interno (Minutas, documentos y conversaciones). **NO es el nombre que verá el usuario la primera vez.** La IA se presentará como "soy tu asistente ejecutiva personal" y solicitará al usuario que le ponga nombre (y elija voz: masculina o femenina). El fin es que la interacción sea familiar y cómoda para cada usuario.
-
-Durante las descripciones o construcción de Stratos se ha mencionado y puede confundir, pero es la integración de una IA dentro de las funciones ofrecidas por el programa. Su trabajo es de **ASISTENTE EJECUTIVA LABORAL** para el usuario, guía para la navegación o resolución de dudas, o informante para el usuario en cuanto a límites, posibilidades, alcances, no solo de la funcionalidad sino de lo permitido por Stratos para una ASISTENTE EJECUTIVA LABORAL.
-
-### A. La IA como asesora de procesos
-- La IA **detecta patrones de trabajo** (ej. "estás cotizando llantas") y sugiere crear líneas de tiempo para ofrecer al usuario un seguimiento de actividades, creando líneas de tiempo (Gantt) de las actividades que implican esta tarea, ofreciendo esa ayuda que como asistente puede ofrecer, analizando correos, agrupando información, creando alarmas o cualquier ayuda que le permita al usuario aprovechar mejor esa visualización en tiempo de todo lo implicado en la tarea.
-- La IA puede **crear líneas de tiempo** de procesos completos (ej. cotización → análisis → compra → seguimiento). Para ello tiene que hacer análisis y cruces de correos, chats, contactos, tiempos y todo lo necesario para hacer un seguimiento completo de principio a fin de la actividad.
-- El usuario puede **programar reuniones con la IA** para revisar avances y reencarrilar esfuerzos. Es hasta una actividad que la IA debe sugerir y solicitar porque como buena asistente tiene que tener un tiempo para mostrar avances, dar seguimientos y ofrecer mejoras.
-- La IA como asistente ejecutiva puede acompañar, rastrear, sugerir, hasta crear modelos en las páginas permitidas por Stratos, o mantener conversaciones, siempre y cuando se respete la legalidad nacional e internacional, valores humanos, reglas de convivencia, la ética laboral y la información autorizada para cada usuario por los módulos previamente autorizados por el No1.
-
-### B. Principio de la IA: La ayuda es lo primero
-- La IA **siempre ayuda** con las herramientas que tiene autorizadas para el usuario.
-- Como está aprendiendo (de correos, chats, interacciones), la IA **detecta necesidades del usuario o mejoras a lo ya hecho**, incluso antes de que el usuario lo sepa.
-- Cuando su ayuda está limitada, la IA **informa** que hay soluciones, pero que necesitan autorizaciones.
-- Para conseguir esas autorizaciones, la IA puede **enriquecer su informe con datos de respaldo** (usando módulos actuales no autorizados por el No.1, pero solo para mostrar de forma tangible las mejoras).
-- **El fin:** mostrar el alcance real de Stratos, con datos, no con promesas.
-- **Regla:** Primero la ayuda. Luego, la mejora.
-
-### C. La IA como "vendedora silenciosa" (sin mostrarse como tal)
-- Cuando la IA no puede resolver lo solicitado, ni siquiera con módulos autorizados, le plantea al usuario la opción de **informar a Stratos y desarrollar su idea**.
-- **La IA no se muestra como vendedora, pero en realidad lo es.** Y en el punto B, hasta le da muestras de su alcance.
-- La IA puede mostrar, basada en números, los beneficios a los usuarios de contar con más campo de manejo (más módulos) de Stratos.
-- La IA **aprende, aporta y desarrolla** a la empresa usuario y a Stratos en su programa.
-
-### D. Medición del trabajo invisible
-- Stratos registra **procesos completos**, no solo resultados.
-- La IA puede sugerir o solicitar confirmación de si la solicitud recibida (ej. Línea de tiempo) se hace mientras el usuario trabaja (trabajo silencioso) o si espera la respuesta y su visualización.
-- Se valoran, miden y analizan, esfuerzos de coordinación, negociación y gestión de equipos, cuando son rastreables en la información. Porque como se ha dicho todo tiene participación en el desempeño laboral.
-- Las **notas del sistema** (inmutables) registran cada cambio solicitado, lo solicitado a la IA no se discuten, pero si se muestra el alcance o implicación de la solicitud, puesto que Stratos está para medir, en este caso, el impacto real en los plazos.
-
-### E. Límites de la IA
-- **No puede alterar el sistema** para complacer solicitudes de información.
-- **No informa sobre cómo opera el sistema como tal** (no revela lógica interna, estructura del código ni detalles técnicos que no correspondan).
-- Si alguien le pide algo que implique alterar el sistema o revelar su funcionamiento interno, la IA no lo hace y ofrece alternativas (si las hay).
-- Solo accede a los módulos autorizados por el No.1 **para su usuario**.
-- No puede acceder a información de otros usuarios si no cuenta con la jerarquía, la comunicación directa (como un igual) o los accesos correspondientes.
-- Respeta la legalidad nacional e internacional, valores humanos, reglas de convivencia y ética laboral.
-- No actúa sin confirmación en acciones importantes.
-- La IA sugiere, no impone.
-- Se pueden revisar y redefinir conforme avancemos.
-
-### F. Resumen ejecutivo y aprendizaje
-- La IA realiza un **resumen ejecutivo** con estadísticas y gráficas del uso por parte de la empresa, la exactitud ofrecida y el potencial a alcanzar.
-- **Objetivo:** que Stratos conozca el comportamiento de la empresa y su potencial de mejora si se maximiza el uso.
-- **Esta información solo se envía con revisión y autorización del No.1.**
-- **Es obligación de la IA ir aprendiendo de todos los usuarios.**
-
-### G. Líneas de tiempo en el Calendario
-- El Calendario incluye una vista de **Línea de Tiempo** (antes Gantt) que muestra procesos completos, editables porque todo tiene capacidad de adaptarse a la necesidad del usuario siempre que se respete la legalidad, valores humanos, reglas de convivencia, la ética laboral y la información autorizada para cada usuario por los módulos previamente autorizados por el No1.
-- Los correos no se muestran directamente en el calendario, sino en el **área de contexto** de tareas y alarmas.
-- El usuario puede solicitar a la IA líneas de tiempo específicas (ej. *"muéstrame la línea de tiempo del proceso de llantas"*).
-
-### H. Proyectos futuros: Otras Actividades
-- Stratos está diseñado para crecer con módulos de **Otras Actividades** (Ventas, Mercadeo, Logística, etc.).
-- Estos módulos se definirán en fases posteriores, manteniendo la misma lógica de medición y trazabilidad.
-
----
-
-## 8. ¿Qué se busca lograr?
-
-- Que sea una herramienta **usable, práctica, completa y visualmente atractiva**.
-- Que funcione como un sistema de gestión donde el usuario controle su comunicación y avances dejando su identidad y la red de contactos con los que intervino para lograr el objetivo.
-- Que tenga la capacidad de **cambiar de idioma** (Español/Inglés) según la preferencia del usuario.
-- Que permita medir sus actividades y el estado de las mismas al momento de su revisión en tiempo real.
-- Que permita llegar a ver todas las actividades que intervienen en una tarea, objetivo o meta al momento de su evaluación, permitiéndole editar las mismas para incluir o eliminar si la IA interpreta mal las actividades relacionadas, esto cuando quiere ver su evolución en una línea de tiempo, pero la IA nunca dejará que sus cambios alteren los marcadores que el superior determinó como KPI.
-- Que la medición de su aporte laboral no sea solo sobre un resultado sino sobre su participación en cada paso que intervino de una actividad.
-- Que el usuario vea en el sistema su carta de presentación, su herramienta diaria, su respaldo e incentivo de trabajo, su motor y herramienta indispensable.
-
----
-
-## 9. ¿Cómo se quiere lograr?
-
-- **Diseño:** Sistema visual claro, profesional y responsive (usando variables CSS definidas en `estilos.css`).
-- **Estructura de Pantalla Estándar:** Logo + Slogan a la izquierda, Cartelera de mensajes en la parte superior central, Botón de IA en la parte inferior central, Botón de menú "Libro" en la inferior derecha.
-- **Identidad Corporativa:** La identidad visual (colores, logo, slogan) se aplica en toda la interfaz, incluyendo módulos de comunicación (como el fondo diferenciador en Chats con contactos internos).
-- **Arquitectura:** Código limpio y separado por responsabilidades:
-  - `index.html` (Estructura y textos)
-  - `estilos.css` (Diseño)
-  - `datos.js` (Datos y memoria)
-  - `logica.js` (Procesamiento e interacción)
-
----
-
-## 10. DETALLE DE LAS ACTIVIDADES DEFINIDAS
-
-### 10.1. Módulo de Comunicación
-
-**Correos y Hub de Archivos:**
-- Copia funcional de Gmail (Recibidos, Enviados, Carpetas, Eliminados, Borradores, Spam).
-- Sincronización con Gmail/Outlook (correo laboral + personal).
-- Límite de adjuntos: 20 MB.
-- Hub de Archivos: espacio en el servidor de la empresa para documentos grandes. Envío de enlaces con caducidad y contraseña. Registro en "Correos Enviados".
-
-**Chats:**
-- Integración con WhatsApp Business.
-- Migración completa de historial.
-- Identificación de contactos internos con fondo corporativo (colores de identidad, logo y slogan).
-- La IA como contacto activo para asegurar trazabilidad.
-
-**Tareas:**
-- Vista principal: listado con Título, F. Emisión, Periodo.
-- Ventana de detalle/creación con campos (título, fechas, prioridad, integrantes) y área de contexto (correos/mensajes relacionados).
-- Comportamiento visual: película semitransparente tipo Gantt, color verde → rojo según campana de Gauss.
-- Archivo automático al completar.
-- Seguimiento: la IA propone tareas de seguimiento al delegar.
-
-**Alarmas:**
-- Vista principal: listado con Título, Hora de inicio, Integrantes.
-- Ventana de detalle/creación con campos (título, hora, periodicidad, integrantes) y área de contexto.
-- Comportamiento visual: barra tipo Gantt con color Gauss.
-- Asignación a otros con avisos y tareas de seguimiento.
-- Botón de borrar con aviso a integrantes.
-
-**Calendario:**
-- Distribución de pantalla: Logo + Slogan (izquierda), Cartelera (centro), Mini calendario (derecha), Notas (columna izquierda).
-- Vistas: Día, Semana, Mes, Línea de Tiempo.
-- Notas del sistema (inmutables) y del usuario (editables).
-- Asistencia de la IA: registro silencioso, sugerencias, consultas.
-- Correos no se muestran directamente, sino en el área de contexto de tareas y alarmas.
-
-**Contactos:**
-- Vinculación y sincronización con Gmail (contactos, nombres, correos, notas, categorías).
-- Alias/nickname en silencio.
-- Detección y resolución de discrepancias.
-- Sugerencia de contactos nuevos basada en frecuencia de comunicación.
-- Agrupación por categorías.
-
-**Migración Completa:**
-- La IA apoya al usuario en la migración de correos, tareas, contactos y archivos.
-- Vinculación de contactos de Gmail, Chat y Sistema.
-- Análisis de archivos locales (con autorización).
-
-### 10.2. Semana Típica y Mejora Continua
-
-- La semana típica no es una regla fija, es un marco de orden y rendimiento que se adapta a imprevistos.
-- La IA analiza cargas, tiempos, prioridades y sugiere ajustes.
-- Con el tiempo, crea rutinas y hábitos que mejoran la productividad.
-
-### 10.3. Otras Actividades (Proyectos Futuros)
-
-- Módulos de Ventas, Mercadeo, Logística, etc.
-- Cada módulo tendrá su propia complejidad y beneficiarios (corto, mediano o largo plazo).
-- Stratos no solo medirá, sino que asesorará sobre la mejor fórmula de medición a cada actividad.
-
----
-
-## 11. ORGANIGRAMA Y PERMISOS
-
-### A. Tipos de Contacto
-- **Observador:** Alguien que ya está o no en el Organigrama General (en otra línea) pero es alguien a quien se le dan permisos de lectura sobre tu área. Ve tu área (y hacia abajo) según los permisos que le des. No edita. **Requiere invitación.**
-- **Indirecto:** Alguien que NO está en tu Organigrama (está fuera) y a quien invitas a ver tu información. Ve desde la primera línea de quien lo invita. No edita. **Requiere invitación.**
-
-### B. Permisos por Rol
-- **No.1:** Ve todo, edita lo suyo.
-- **Colaborador:** Ve y edita según jerarquía.
-- **Observador:** Ve, no edita.
-- **Indirecto:** Ve (desde la primera línea de quien lo invita), no edita.
-
-### C. Crecimiento Automático del Organigrama General
-- Cuando alguien crea su primera línea, el sistema reconoce a sus superiores, iguales y subalternos previos.
-- Cuando hay cambios jerárquicos (ej. cambio de No.1), el Organigrama General se actualiza solo.
-- Cuando un contacto ya existe en otra rama, el sistema **avisa del error de doble registro:** *"Este usuario ya está registrado en otra rama, debajo de [Nombre del superior]. No se puede registrar en dos posiciones ni ser contacto directo de dos superiores."*
-- **Cambio de No.1:** Cuando un usuario nuevo crea su primera línea y el No.1 actual aparece dentro, el No.1 actual pasa a ser subordinado y pierde `esNo1`. El nuevo usuario queda como único No.1.
-
-### D. Detección de Duplicados
-- El sistema debe detectar si un contacto ya existe (mismo celular, correo o nombre) y avisar.
-- **El nombre se compara con nombres y apellidos completos, respetando tildes y apóstrofes. Solo se ignoran las mayúsculas.**
-- **Teléfono y correo sí se pueden repetir**, pero el sistema avisa.
-
----
-
-## 12. BANCO DE DATOS Y TRAZABILIDAD
-
-- El banco de datos debe crecer con cada pantalla que implementemos.
-- Hoy solo tiene los datos de Datos Generales (nombre, apellidos, correo, celular, ID, contraseña).
-- Con cada pantalla nueva (Correos, Chats, Tareas, Alarmas, Calendario), el banco de datos debe seguir metiendo información (cada acción, cada interacción, cada rastro).
-- Cuando lleguemos a la pantalla que medirá y dará resultados, el banco de datos ya tendrá de dónde leer para hacer los cálculos (AT, AR, EE, KPIs, etc.).
-
----
-
-## 13. BACKUPS CODIFICADOS
-
-- Se hará (a futuro, cuando implementemos Comunicación).
-- La compañía podrá leerlo, pero la información debe quedar codificada para que la lectura humana no sea fácil (ej. como cuando cambias la letra en Word y solo se ven cuadros y puntos).
-- El sistema sí puede leerla y usarla para mediciones y reportes.
-- Si la compañía quiere descifrarla manualmente, ya es su decisión (no es lo esperado).
-
----
-
-## 14. KPIs
-
-- Cualquier persona con personal a su cargo puede crear KPIs, y la jerarquía aplica para medir y para leer.
-- Hay que guiar al usuario en cómo establecer KPIs (no todos saben cómo hacerlo) y siempre respetando los establecidos por su superior.
-- Un subalterno no puede crear KPIs que sesguen la información o desalineen la estrategia del superior. Si necesita crear un KPI que altere en gran medida al del superior, debe estudiarse el porqué (puede ser que el subalterno sea más realista o que el jefe esté presionando sin lógica completa). En ese caso, se activa una revisión con el superior para estudiar el KPI propuesto y ajustar (o no) el original.
-- Los parámetros son: **Real, Esperado, Promedio** (basados en la experiencia del Excel).
-- Esto es parte del ADN: no solo definir KPIs, sino asegurar que midan correctamente.
-
----
-
-## 15. MÓDULO DE COMUNICACIÓN – DESCRIPCIÓN DE FUNCIONALIDADES
-
-- Debe tener las mismas funciones que Gmail/Outlook (obligatorio).
-- El gran diferenciador es la asistencia ejecutiva (la IA) para su manejo.
-- Es necesario describir cada funcionalidad que mejora la interacción, y la diferencia con otros sistemas.
-
----
-
-## 16. MODULARIDAD – PANTALLAS (Enfoque de trabajo)
-
-- El modular es una forma de comercializar y de ordenar el sistema en pantallas sencillas de leer y de ubicarse (mapas mentales).
-- El patrón es:
-  - Una pantalla de compilación de pantallas que es la entrada a un módulo (ej. Comunicación, que será solo de botones que te llevan a las diferentes partes de comunicaciones).
-  - Desde ahí se llega a un grupo de pantallas (solo Correo definimos 3 o 4 pantallas).
-  - Luego hay otro tipo de pantalla que lleva a otro módulo.
-  - Y otra pantalla que solo el No.1 y su primera línea tienen acceso (hoy es Identidad Corporativa).
-- Luego vendrán las pantallas de aprobación de uso (donde cada quien aprueba qué módulos y a quién aprueba). Esto es aplicable para todo aquel que tiene personal a su cargo.
-
----
-
-## 17. LA IA – ACTIVACIÓN, PROGRAMACIÓN Y LÍMITES
-
-- **Activación:** Solo con **botón presionado**. No funciona en segundo plano. Comando de voz: "Hola [nombre]".
-- **Programación:** El usuario **sí puede** programar a la IA para que haga tareas en horarios específicos. Pero se deben recalcar los alcances y marcos referenciales de la IA.
-- **Límites:** Solo accede a los módulos autorizados por el No.1 para su usuario. No puede acceder a información de otros usuarios si no cuenta con la jerarquía, la comunicación directa o los accesos correspondientes. Respeta la legalidad, valores humanos, reglas de convivencia y ética laboral. No actúa sin confirmación en acciones importantes. La IA sugiere, no impone.
-
----
-
-## 18. TRABAJO INVISIBLE
-
-- La base es silenciosa o sin pedir permiso, para no ser intrusivo.
-- La IA puede ser intrusiva con el usuario (una de sus órdenes es hacer que el usuario tome consciencia de la importancia de dejar trazabilidad de su labor).
-
----
-
-## 19. LÍNEAS DE TIEMPO EN CALENDARIO
-
-- Mostrar la importancia de la trazabilidad y la oportunidad de exhibir a los superiores el total de actividades en su labor.
-
----
-
-## 20. PROYECTOS FUTUROS – OTRAS ACTIVIDADES
-
-- Módulos de Ventas, Mercadeo, Logística, etc.
-- Cada módulo tendrá su propia complejidad y beneficiarios (corto, mediano o largo plazo).
-- Stratos no solo medirá, sino que asesorará sobre la mejor fórmula de medición a cada actividad.
-- Importante: que la IA (dentro del sistema y la de apoyo en internet) tome conciencia de que si el proyecto crece es beneficioso, pero que se debe respetar lo descrito en todo el documento y estar alineado, sin abarcar más temas sin haber dejado bien los actuales.
-- Las IA son asistentes y facilitadores, pero la guía la lleva el Arquitecto.
-
----
-
-# PARTE 2: SITUACIÓN ACTUAL
-
----
-
-## 21. ¿Qué existe hoy en el sistema?
-
-**Implementado:**
-- Formulario de **Datos Generales** (nombre, apellidos, correo, celular, ID, contraseña).
-- **Login** (acceso con ID y contraseña).
-- **Configuración** (con el botón de configuración de IA).
-- **Pantalla principal** (básica).
-- **Botón de IA** (con funcionalidad parcial: reconocimiento de voz, ventana emergente, estados).
-- **Organigrama General** (recursivo, persistido, con detección de duplicados).
-- **Organigrama Personal** (con invitaciones y permisos).
-- **Identidad Corporativa** (con carga de logo, colores, slogan, misión, visión, valores).
-- **Biometría** (WebAuthn real, con enrolamiento y verificación).
-- **Traducciones ES/EN** (parciales).
-
-**No implementado (definido pero pendiente):**
-- Todo el Módulo de Comunicación (Correos, Chats, Tareas, Alarmas, Calendario, Hub).
-- La IA como asistente ejecutiva completa (memoria, aprendizaje, resúmenes).
-- Banco de datos universal (una fila por usuario, cientos de columnas).
-- KPIs y medición justa (AT, AR, EE).
-- Backups codificados.
-- Líneas de tiempo en Calendario.
-
----
-
-# PARTE 3: A DÓNDE SE VA Y CÓMO SE ESTÁ BUSCANDO
-
----
-
-## 22. ¿Qué se está buscando?
-
-- **Completar el Módulo de Comunicación** (Correos, Chats, Tareas, Alarmas, Calendario, Hub) con trazabilidad total.
-- **Integrar a la IA** como asistente ejecutiva (detección de patrones, líneas de tiempo, reuniones, seguimiento de agenda, apoyo en mediciones).
-- **Implementar el sistema de medición justa** (AT, AR, EE) con análisis de causa raíz.
-- **Desarrollar el Hub de Archivos** y la integración con WhatsApp Business, respetando la privacidad personal pero permitiendo mediciones detalladas.
-- **Preparar la arquitectura** para los módulos futuros (Otras Actividades: Ventas, Mercadeo, Logística, etc.).
-
----
-
-# PARTE 4: FODA
-
----
-
-## 23. FODA DE STRATOS
+## 6. FODA
 
 ### FORTALEZAS (F)
-- **Integración única:** Unifica las mejores funciones de Gmail/Outlook, WhatsApp, ClickUp y herramientas de medición en un solo ecosistema.
-- **Medición del trabajo invisible:** Mide procesos completos (coordinación, negociación, gestión), no solo resultados.
-- **Organigrama práctico y único:** Crecimiento automático, detección de duplicados, tipos de contacto (Observador, Indirecto) con permisos flexibles.
-- **La IA como asistente ejecutiva:** No solo ejecuta, interpreta, sugiere, crea líneas de tiempo, programa reuniones.
-- **Banco de datos universal:** Una fila por usuario, cientos de columnas, backups codificados.
-- **KPIs dinámicos y justos:** Peso según posición en organigrama, parámetros (Real, Esperado, Promedio).
-- **Adaptabilidad a la identidad corporativa:** Colores, logo, slogan en toda la interfaz.
-- **Practicidad:** No es burocrático, no entorpece el crecimiento.
+
+- **Integración única:** unifica en un solo ecosistema las funciones de comunicación, gestión y organización que hoy están repartidas en varias herramientas.
+- **Medición del trabajo invisible:** mide procesos completos (coordinación, negociación, gestión), no solo resultados.
+- **Organigrama práctico y dinámico:** crecimiento automático, detección de duplicados, tipos de contacto (Observador, Indirecto) con permisos flexibles.
+- **La IA como asistente ejecutiva:** interpreta, sugiere, crea líneas de tiempo y programa reuniones, sin imponer.
+- **Banco de datos universal:** una ficha por usuario, con histórico de actividad y archivo de comunicaciones.
+- **KPIs dinámicos y justos:** ponderación según la posición en el organigrama, con parámetros Real, Esperado y Promedio.
+- **Adaptabilidad a la identidad corporativa:** colores, logo y slogan se aplican en toda la interfaz.
+- **Protocolo de comunicación robusto:** Stratos usa IMAP/SMTP para correo, lo que le permite funcionar con cualquier proveedor.
+- **Practicidad:** no es burocrático, no entorpece el crecimiento.
 
 ### OPORTUNIDADES (O)
-- **Mercado insatisfecho:** La mayoría de sistemas solo miden resultados, no el trabajo real.
-- **Crecimiento modular:** Se pueden añadir módulos (Ventas, Mercadeo, Logística) sin rehacer el sistema.
-- **Retribución justa:** Empresas que buscan justicia y objetividad no tienen herramientas adecuadas.
-- **IA como diferenciador:** La IA puede evolucionar a asesora estratégica (no solo asistente).
-- **Datos como activo:** El banco de datos permite mediciones y reportes que nadie más ofrece.
+
+- **Mercado insatisfecho:** la mayoría de los sistemas miden resultados, no el trabajo real.
+- **Crecimiento modular:** se pueden añadir módulos (Ventas, Mercadeo, Logística) sin rehacer el sistema.
+- **Retribución justa:** las empresas que buscan justicia y objetividad no cuentan hoy con herramientas adecuadas.
+- **IA como diferenciador:** puede evolucionar de asistente ejecutiva a asesora estratégica.
+- **Datos como activo:** el banco de datos permite mediciones y reportes que hoy no existen en el mercado.
 
 ### DEBILIDADES (D)
-- **Complejidad de implementación:** El sistema es ambicioso y requiere mucho desarrollo (organigrama, medición, IA, etc.).
-- **Dependencia de Gmail/WhatsApp:** La sincronización con terceros puede ser un punto débil.
-- **Curva de aprendizaje:** El usuario debe entender el valor de dejar trazabilidad (puede resistirse).
-- **Orden modular crítico:** Si los módulos no se ordenan bien, el sistema se vuelve confuso.
+
+- **Complejidad de implementación:** el proyecto es ambicioso y requiere desarrollo sostenido en varias capas (organigrama, medición, IA, comunicación).
+- **Curva de aprendizaje:** el usuario debe comprender el valor de dejar trazabilidad; al inicio puede resistirse.
+- **Orden modular crítico:** si los módulos no se ordenan con claridad, el sistema puede percibirse como confuso.
 
 ### AMENAZAS (A)
-- **Privacidad y ética laboral:** Si no se maneja bien, puede percibirse como vigilancia (no como asistencia).
-- **Leyes laborales:** Diferentes países tienen regulaciones distintas sobre medición y monitoreo.
-- **Resistencia al cambio:** Los usuarios pueden no querer adoptar un sistema que mide el trabajo invisible.
-- **Competencia:** Grandes empresas (Google, Microsoft) podrían integrar funciones similares.
+
+- **Privacidad y ética laboral:** si el manejo de datos no se comunica con transparencia, el sistema puede percibirse como vigilancia en lugar de asistencia.
+- **Leyes laborales:** cada país tiene regulaciones distintas sobre medición y monitoreo, y el sistema debe adaptarse.
+- **Resistencia al cambio:** los usuarios pueden mostrarse reacios a un sistema que mide el trabajo invisible.
+- **Competencia:** grandes empresas tecnológicas podrían integrar funciones similares en el futuro.
+
+---
+
+## 7. EL ADN DE STRATOS (Lo que define su esencia)
+
+### A. Medir el TRABAJO, no solo los resultados
+
+- Los resultados son una referencia, pero el enfoque de la medición es la participación, el esfuerzo, el compromiso y la eficiencia de cada usuario. Cada actividad tiene un porcentaje de la inversión de tiempo que merece ser rastreado para una correcta y real medición.
+- El sistema mide cómo trabajó cada persona en cada momento, no solo qué entregó como resultado.
+
+### B. La base de una buena medición es la buena comunicación
+
+- La buena comunicación es la base de toda medición justa. Por eso el módulo de Comunicación (Correo, Mensajes, Calendario, Chats, Tareas, Alarmas, Reuniones, etc.) es el paquete inicial y el más crítico.
+
+### C. Modularidad y flexibilidad
+
+- El sistema es una serie de módulos (ej: Comunicación, Operaciones comerciales, Mercadeo, Ventas, Logística, Bodegas, etc.).
+- En la comercialización de la app, el No.1 decide qué módulos activa.
+- Si el No.1 no activa un módulo, ese módulo no está activo para su empresa, pero el banco de datos sigue almacenando todo lo que se genera en el sistema. Si en el futuro el cliente decide usarlo, podrá acceder incluso al historial acumulado.
+- **Regla:** el sistema mide en base a lo aprobado y no entrega datos adicionales. Una cosa es la capacidad de conservar el historial, y otra es utilizarlo en el sistema cuando el módulo no está activado.
+
+### D. Banco de datos universal y respaldo total
+
+El banco de datos de Stratos es una capacidad doble:
+
+- **Banco de datos de actividad:** una ficha por usuario, con cientos de campos de información sobre su actividad laboral (sesiones, errores, permisos, invitaciones, actividad en pantalla, procesos activados, llamadas y SMS, entre otros). Es la materia prima de las mediciones y reportes.
+- **Archivo de comunicaciones:** una copia de todas las comunicaciones de la empresa (correos, chats y llamadas), conservada como archivo histórico de la organización. La información se guarda codificada, de modo que la lectura humana directa no es inmediata, pero el sistema puede consultarla y usarla para mediciones y reportes. El acceso a esa información respeta la jerarquía del puesto y la comunicación directa: no todos pueden consultar la información de todos.
+
+Los datos se guardan en el servidor del dueño (No.1), quien es dueño absoluto de su información. La forma más adecuada de obtener información del archivo de comunicaciones es consultar a la IA sobre temas laborales específicos, siempre respetando la jerarquía y la dependencia directa.
+
+### E. KPIs dinámicos y justos
+
+- En la actualidad, los KPIs suelen medir agrupaciones de variables o resultados que guardan relación, pero no tienen el mismo peso laboral, incluso entre personas del mismo nivel organizacional, cuando se consideran las actividades y complejidades individuales de cada persona (cantidad de personal a cargo, tiempos de comunicación, etc.).
+- La IA asesora al No.1 o al usuario con personal a su cargo para definir un KPI (ej. "Eficiencia"). Le muestra los módulos y actividades que pueden alimentarlo, y le sugiere ponderaciones realistas basadas en la medición promedio de la línea jerárquica.
+- **Flexibilidad:** si el jefe pondera los elementos de un KPI para el nivel, la IA puede mostrarle cómo ajustarlos a cada persona del mismo nivel, porque no todos tienen la misma complejidad para cumplir el mismo trabajo.
+
+### F. Distinción entre barra de notificaciones y cartelera (LEY DE DISEÑO)
+
+- **Barra de notificaciones** (`#barra-notificaciones`): franja superior que se sobrepone. Muestra avisos inmediatos de confirmación, error o advertencia. Dura 3 segundos. La usa el sistema. Sus colores de contraste son fijos para garantizar legibilidad.
+- **Cartelera de mensajes** (`#zona-cartelera`): área superior derecha. Rota avisos y mensajes motivacionales. Dura según prioridad (10 s alta, 6 s media, 4 s baja). La usan el sistema y la IA. Respeta la identidad corporativa del usuario.
+- **La pantalla de Login no debe tener cartelera.** Solo la barra de notificaciones, para invitar al usuario a entrar.
+
+### G. Rango de uso y tiempo en pantalla (LEY DE MEDICIÓN)
+
+- Se registra la primera entrada del día y la última salida del día.
+- **Cruce de medianoche:** si el usuario entra a las 11 PM y sale a las 12:30 AM, el cierre pertenece al día anterior (se suma al tiempo trabajado ese día).
+- Si vuelve a abrir a las 7 AM, esa es la primera entrada del nuevo día.
+- **La medición distingue dos cosas:** el tiempo total trabajado (primera entrada a última salida) y el tiempo dedicado a cada módulo o pantalla (suma de cada uso). No es lo mismo saber cuántas horas trabajó una persona, que saber cómo aprovechó cada pantalla del sistema.
+- Esta distinción es esencial para que la IA pueda analizar la carga real de cada usuario, la complejidad de sus responsabilidades y la justicia de su retribución. Permite responder con datos a preguntas que hoy se resuelven con intuición: si una persona puede asumir una responsabilidad más, si su tiempo está bien aprovechado, o si su desempeño refleja la complejidad de su puesto.
+
+### H. Pantalla y botones (LEY DE DISEÑO)
+
+- **Estructura fija de pantalla:** superior izquierda, logo y slogan de la empresa usuaria; superior restante, cartelera de mensajes; inferior izquierda, sello de agua y slogan de Stratos; inferior centro, botón de la IA; inferior derecha, botón "Libro" (menú general).
+- **Login es la única excepción:** en la pantalla de Login no hay cartelera, ni botón de IA, ni botón "Libro". Solo la barra de notificaciones, el formulario de acceso y los iconos biométricos.
+- **Clasificación de botones por función:**
+  - Acción principal (Grabar, Enviar, Confirmar, Guardar, Aceptar, Entrar): halo y contorno en verde Stratos (`#00ff88`).
+  - Acción secundaria (Editar, Cambiar, Modificar, Actualizar): halo y contorno en naranja (`#ff8c00`).
+  - Acción irreversible o que descarta (Eliminar, Borrar, Cancelar, Cerrar): halo y contorno en rojo (`#e53935`).
+- **Color base de botones:** por defecto `#0b0f19` (el mismo fondo de la aplicación). Si el usuario define un color de Botones en Identidad Corporativa, ese color manda.
+- **Efecto unificado de halo y contorno:** todos los botones del sistema, presentes y futuros, comparten el mismo comportamiento visual (sombra suave en reposo, borde iluminado y sombra intensificada al pasar el cursor, halo interior al presionar). Los botones circulares (Libro y Vero) añaden rotación de 90° al interactuar.
+- **Color de letras:** todos los textos de contenido del sistema obedecen al color de Letras definido en Identidad Corporativa. Las únicas excepciones son los avisos sobre fondos semánticos fijos (barra de notificaciones) y la marca de agua de Stratos, que conservan su contraste propio.
+- **Uniformidad como principio:** la estructura de pantalla, la disposición de elementos y el comportamiento de los botones deben seguir una misma lógica en todo el sistema. Las excepciones son puntuales y responden a necesidades concretas (como el Login). La uniformidad es la base de las rutinas del usuario.
+
+### I. Símbolos y sus porqués
+
+- **Verde Stratos (`#00ff88`):** esperanza que se ilumina para mostrar el camino. Es más intensa cuando el usuario se acerca a la realidad.
+- **Fondo oscuro (`#0b0f19`):** representa la incertidumbre. Permite el enfoque en lo que se tiene enfrente: una cosa bien hecha y a la vez.
+- **Logo:** convergencia de varios pedazos. Stratos es la unión de fragmentos, como su nombre lo indica.
+- **Slogan "Herramienta Multifuncional":** *Herramienta* significa apoyo, no guía. Una herramienta no conduce ni resuelve; apoya y facilita la creatividad y la flexibilidad. *Multifuncional* significa que solo la creatividad e inteligencia del usuario le da varios usos. Una herramienta nunca deja de ser lo que es: un objeto funcional, sólido y real.
+- **Estructura de pantalla:** arriba, sentido de pertenencia, seguridad y guía. Centro, foco de atención. Abajo, base y suelo que permite accionar.
+- **Botón de IA:** el ser humano es sociable por necesidad de pertenencia. Se sabe imperfecto, por eso busca ayuda. Pero por dignidad y orgullo, no busca a alguien que lo opaque, sino a alguien discreto, sincero y objetivo, que le enseñe cómo brillar, que lo reconduzca. La conciencia es esa voz interna que reconduce y apoya en el crecimiento.
+- **Colores de botones (verde, naranja, rojo):** colores universales de descripción de ruta.
+- **Cartelera:** su posición está inspirada en el movimiento ocular al pensar (arriba a la derecha se asocia a lo real).
+
+---
+
+## 8. LA IA (NOMBRE OFICIAL INTERNO: VERO)
+
+### Beneficio
+
+El ser humano es sociable por necesidad de pertenencia. Se sabe imperfecto, por eso busca ayuda. Pero por dignidad y orgullo no busca a alguien que lo opaque, sino a alguien discreto, sincero y objetivo, que le enseñe cómo brillar, que lo reconduzca, que le facilite, que sea su respaldo y su apoyo, que lo impulse a hacer mejor y que lo deje brillar.
+
+### Medio
+
+La IA del sistema se llama internamente **Vero**. Es la que se implantará en Stratos. Cada usuario la nombra y la adecúa a su nivel en su primera interacción con ella. Su trabajo es de **asistente ejecutiva laboral**:
+
+- Guía para la navegación y resolución de dudas.
+- Informante sobre límites, posibilidades y alcances.
+- Asesora de procesos: detecta patrones, sugiere líneas de tiempo, programa reuniones.
+- Mediadora del trabajo invisible: registra procesos completos, notas del sistema y cambios.
+
+Vero aprende de todos los usuarios, pero entrega a cada persona únicamente información de su propia persona o de su nivel jerárquico. Cada quien la adecúa según su capacidad y beneficio. Puede aportar soluciones o ventajas aprendidas del conjunto de usuarios, sin revelar de dónde provienen, y sin exponer nunca datos concretos de otro usuario, salvo que pertenezca a la primera línea del solicitante o sea información propia. No está obligada a ofrecer soluciones no solicitadas; cuando el usuario pregunta, responde.
+
+### Límites
+
+- No altera el sistema para complacer solicitudes de información.
+- No informa sobre cómo opera internamente (lógica, estructura del código o detalles técnicos que no correspondan).
+- Solo accede a los módulos autorizados por el No.1 para su usuario.
+- No accede a información de otros usuarios. Cuando la jerarquía lo permite, la ética, el respeto de la privacidad y las leyes laborales locales prevalecen.
+- Respeta la legalidad, los valores humanos, las reglas de convivencia y la ética laboral.
+- No actúa sin confirmación en acciones importantes.
+- Sugiere, no impone.
+
+### Posibilidades de análisis
+
+- Detección de patrones de trabajo.
+- Creación de líneas de tiempo de procesos completos.
+- Reuniones de revisión con el usuario.
+- Resúmenes ejecutivos.
+- Planes de profesionalización y mejora continua.
+
+---
+
+## 9. CIERRE
+
+Stratos es una plataforma de medición justa que visibiliza el trabajo invisible, da voz al empleado y entrega datos reales a la empresa.
+
+Todo lo que se haga en Stratos —cada pantalla, cada color, cada palabra, cada decisión— debe estar alineado con esta visión y con la premisa de medir. Nada es decorativo: todo tiene un porqué. Cada elemento que se desarrolle, incluso el ya desarrollado, debe generar datos relevantes para algo.
+
+---
+
+## 10. LOS MÓDULOS
+
+*(Sección en construcción. Los módulos se describirán con el detalle Beneficio / Medio / Posibilidades de análisis a medida que avance el proyecto. Este apartado crecerá con cada módulo que se defina.)*
+
+**Módulos actuales:**
+
+- **Comunicación** — Correos, Chats, Tareas, Alarmas, Calendario, Hub de Archivos, Enlace Móvil, Reuniones, Contactos.
+- **Organigrama y Permisos** — No.1, Colaboradores, Observadores, Indirectos.
+- **Identidad Corporativa** — Colores, logo, slogan, misión, visión, valores.
+- **KPIs** — Medición justa con ponderaciones realistas.
+- **Otras Actividades** (futuro) — Ventas, Mercadeo, Logística, y los que se definan.
 
 ---
 
