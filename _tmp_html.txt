@@ -1,0 +1,60 @@
+67: <option value="+502">🇬🇹 +502</option>
+68: <option value="+52">🇲🇽 +52</option>
+69: <option value="+1">🇺🇸 +1</option>
+70: <option value="+34">🇪🇸 +34</option>
+71: <option value="+503">🇸🇻 +503</option>
+72: <option value="+504">🇭🇳 +504</option>
+95: 🔐 Cambiar mi contraseña (opcional)
+103: <!-- ENROLAMIENTO BIOMÉTRICO (el usuario inscribe rostro/patrón/huella en ESTE dispositivo — PUNTO 9-10-11) -->
+105: <p class="titulo-biometria" data-i18n="bio_enrol_titulo">🔐 Autenticación biométrica (este dispositivo)</p>
+151: <!-- OPCIONES DE AUTENTICACIÓN BIOMÉTRICA (facial/patrón/huella; se habilitan según el dispositivo — PUNTO 6) -->
+183: <span id="texto-placeholder-logo" data-i18n="id_cargar_logo">📤 Cargar Logo</span>
+300: <!-- 2.5 PANTALLA 5 - COMUNICACIÓN (8 submódulos — PUNTO 2) -->
+323: <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;">📹</p></div>
+324: <div style="text-align:center;"><button type="button" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')">← Volver</button></div>
+329: <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;">💬</p></div>
+330: <div style="text-align:center;"><button type="button" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')">← Volver</button></div>
+335: <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;">✅</p></div>
+336: <div style="text-align:center;"><button type="button" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')">← Volver</button></div>
+341: <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;">⏰</p></div>
+342: <div style="text-align:center;"><button type="button" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')">← Volver</button></div>
+347: <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;">📅</p></div>
+348: <div style="text-align:center;"><button type="button" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')">← Volver</button></div>
+353: <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;">📁</p></div>
+354: <div style="text-align:center;"><button type="button" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')">← Volver</button></div>
+359: <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;">📱</p></div>
+360: <div style="text-align:center;"><button type="button" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')">← Volver</button></div>
+365: <div style="text-align:center;padding:40px 20px;"><p style="font-size:3rem;">⬡</p></div>
+366: <div style="text-align:center;"><button type="button" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')">← Volver</button></div>
+369: <!-- 2.5.2 PANTALLA DE CORREOS (6 vistas — PUNTO 3; sin sincronización real ni IA) -->
+372: <h2>📧 Correos</h2>
+387: <button type="button" class="btn-secundario" onclick="cerrarDetalleCorreo()">← Volver al listado</button>
+397: <div style="text-align:center;margin-top:16px;"><button type="button" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')">← Volver a Comunicación</button></div>
+409: <h3 data-i18n="cfg_ia">🤖 Configuración de IA</h3>
+420: <h3 data-i18n="cfg_idioma">🌐 Idioma</h3>
+428: <h3 data-i18n="cfg_seguridad">🔒 Seguridad</h3>
+433: <h3 data-i18n="cfg_rec">🔑 Recuperación de Contraseñas</h3>
+447: 📧 ENVIAR CONTRASEÑA
+452: <h3 data-i18n="cfg_acciones">👤 Acciones Rápidas</h3>
+454: ✏️ Editar Mi Perfil
+457: 🌐 Ver Organigrama General
+485: ← Regresar a Mi Organigrama
+503: <span>📋</span>
+506: <!-- 3.3 BOTÓN DE IA FLOTANTE (esfera del asistente; presente en todas las pantallas excepto Login — PUNTO 7) -->
+511: <!-- 3.4 VENTANA EMERGENTE DE IA (muestra lo que dice el usuario y lo que responde la IA; abajo-centro, compacta — PUNTO 7) -->
+515: <button type="button" class="ventana-ia-btn" id="btn-ia-pausa" onclick="alternarPausaIA()" title="Pausa">⏸</button>
+516: <button type="button" class="ventana-ia-btn" id="btn-ia-editar" onclick="editarTextoIA()" title="Editar">✏️</button>
+517: <button type="button" class="ventana-ia-btn" onclick="cerrarVentanaIA()" title="Cerrar">✕</button>
+531: <button onclick="toggleMenuTuerca()" class="btn-cerrar">✕</button>
+549: <button onclick="cerrarModalContacto()" class="btn-cerrar">✕</button>
+561: <option value="+502">🇬🇹 +502</option>
+562: <option value="+52">🇲🇽 +52</option>
+563: <option value="+1">🇺🇸 +1</option>
+572: <button class="btn-principal" onclick="guardarContacto()" data-i18n="mod_salvar_inv">💾 SALVAR E INVITAR</button>
+579: <!-- 4.1.1 VENTANA DE AVISO DEL CONTACTO (PUNTO 33) — mismos colores y diseño del modal de arriba -->
+586: <button type="button" onclick="cerrarVentanaAviso()" class="btn-cerrar">✕</button>
+605: <button type="button" onclick="cerrarModalDetalle()" class="btn-cerrar">✕</button>
+611: <button type="button" class="btn-secundario" onclick="editarContactoDesdeDetalle()" data-i18n="det_editar">✏️ EDITAR</button>
+612: <button type="button" class="btn-peligro" onclick="eliminarContacto()" data-i18n="det_eliminar">🗑️ ELIMINAR</button>
+624: <h3 data-i18n="cambio_titulo">⚠️ Cambio de Contraseña Obligatorio</h3>
+639: 🔒 CAMBIAR CONTRASEÑA Y CONTINUAR

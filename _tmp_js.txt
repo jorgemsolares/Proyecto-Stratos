@@ -1,0 +1,77 @@
+75: if (/^[\s\-–—_.·•*]+$/.test(t)) return false;               // solo guiones/signos
+76: if (/^[\d\s.,;:\-–—%$#°]+$/.test(t)) return false;          // solo números/símbolos
+118: pendiente = t; // punto / punto y coma → al SIGUIENTE
+176: // Atención inmediata (acción en menos de 1 hora, correo prioritario) → alta
+229: // Saludo en la cartelera: solo la PRIMERA VEZ del día (estadística de horario de trabajo — PUNTO 6)
+476: mostrarAvisoInmediato("📝 Completa tus datos para registrarte", "exito");
+478: mostrarAvisoInmediato("✖ El enlace de invitación no es válido o ya fue utilizado", "error");
+590: mostrarAvisoInmediato('✖ Seleccione un archivo de imagen', 'error');
+598: mostrarAvisoInmediato('✖ El archivo debe ser JPG, JPEG o PNG', 'error');
+619: mostrarAvisoInmediato('✖ No se pudo cargar el logo. Intente con otro archivo.', 'error');
+644: if (nuevoChar !== '●') memoriaActual += nuevoChar;
+648: input.value = "●".repeat(memoriaActual.length - 1) + memoriaActual.slice(-1);
+649: timerOcultarCaracter = setTimeout(() => { if (input.value.length === memoriaActual.length) input.value = "●".repeat(memoriaActual.length); }, 800);
+829: aviso.innerText = "✖ Correo electrónico inválido";
+834: aviso.innerText = "✖ Teléfono inválido (8 dígitos)";
+839: aviso.innerText = "✓ Formato correcto";
+866: aviso.innerText = '⚠ Mínimo 6 caracteres';
+873: aviso.innerText = '✖ No coinciden';
+878: aviso.innerText = '✓ Coinciden';
+905: mostrarAvisoInmediato("✖ Campos obligatorios incompletos", "error");
+921: mostrarAvisoInmediato("✖ Contraseña actual incorrecta", "error");
+925: mostrarAvisoInmediato("✖ Error en nueva contraseña", "error");
+947: mostrarAvisoInmediato("✓ Perfil actualizado", "exito");
+954: mostrarAvisoInmediato("✖ Datos incompletos", "error");
+958: mostrarAvisoInmediato("✖ Las contraseñas no son válidas o no coinciden", "error");
+979: mostrarAvisoInmediato(`✓ Bienvenido de nuevo. Ahora eres parte del equipo de ${invitador.nombre}`, "exito");
+986: mostrarAvisoInmediato("✖ Este usuario ya está registrado", "error");
+1028: mostrarAvisoInmediato("✓ Registro exitoso", "exito");
+1043: if (aviso) { aviso.innerText = "✖ Complete todos los campos"; aviso.className = "aviso-letrero texto-error"; aviso.style.maxHeight = "40px"; }
+1051: if (aviso) { aviso.innerText = "✖ Usuario no encontrado"; aviso.className = "aviso-letrero texto-error"; aviso.style.maxHeight = "40px"; }
+1062: if (aviso) { aviso.innerText = "✖ Contraseña incorrecta"; aviso.className = "aviso-letrero texto-error"; aviso.style.maxHeight = "40px"; }
+1106: // PUNTO 34: banco de datos — permisos del usuario y actividad de la sesión
+1116: mostrarAvisoInmediato(`✓ Hola, ${usuario.nombre}`, "exito");
+1135: elemento.innerText = `⚠ Intentos restantes: ${intentosRestantes}`;
+1523: // PUNTO 6A — Agrega `primeraEntradaDelDia`, `ultimaSalidaDelDia` y
+1648: // 20.2 AUTENTICACIÓN BIOMÉTRICA (LOGIN Y ENROLAMIENTO — PUNTOS 6 y 9-10-11)
+1812: // Enrolamiento biométrico guardado en ESTE dispositivo: { [usuarioId]: {…} }.
+1827: mostrarAvisoInmediato("✖ Inicia sesión para inscribir tu biometría", "advertencia");
+1844: mostrarAvisoInmediato("✖ " + aviso, "advertencia");
+1899: mostrarAvisoInmediato(`✓ Biometría de ${NOMBRE_METODO_BIOMETRICO[metodo] || metodo} inscrita en este dispositivo`, "exito");
+1990: mostrarAvisoInmediato("✖ " + texto, "advertencia");
+2061: mostrarAvisoInmediato("⚠ Debes cambiar tu contraseña temporal antes de entrar", "advertencia");
+2116: mostrarAvisoInmediato(`✓ ${_bioTexto('bio_bienvenida', 'Hola')}, ${usuario.nombre}`, "exito");
+2137: mostrarAvisoInmediato("✖ Complete todos los campos, incluyendo el Logo", "error");
+2160: mostrarAvisoInmediato("✓ Identidad corporativa establecida con éxito", "exito");
+2170: mostrarAvisoInmediato("⚠ Accediendo con branding genérico temporal", "advertencia");
+2261: mensaje.innerText = '✖ La contraseña debe tener al menos 6 caracteres';
+2269: mensaje.innerText = '✖ Las contraseñas no coinciden';
+2284: mensaje.innerText = '✓ Contraseña actualizada';
+2296: mostrarAvisoInmediato('✓ Contraseña actualizada correctamente', 'exito');
+2443: mostrarAvisoInmediato("✓ Paleta sugerida con colores de contraste (luminosidad)", "exito");
+2584: <div class="nombre-nodo-personal">🔗 ${contacto.nombre}</div>
+2608: <div class="nombre-nodo-personal">👁️ ${contacto.nombre}</div>
+2712: mostrarAvisoInmediato("✓ Configuración guardada", "exito");
+2815: mostrarAvisoInmediato(`✓ ${contactoEnEdicion.nombre} ha sido eliminado`, "exito");
+2848: mostrarAvisoInmediato("✓ Sesión finalizada correctamente", "exito");
+2904: mostrarAvisoInmediato("✖ Selecciona un color de la paleta", "error");
+2918: mostrarAvisoInmediato(`✓ Color aplicado al ${tipo}`, "exito");
+3114: `👑 ${usuarioNuevo.nombre} es ahora el No.1. ${anteriorNo1.nombre || anteriorNo1.nombreCompleto} queda como su subordinado.`,
+3148: const bandera = usuario.tipoActual === 'Observador' ? '👁️ '
+3149: : usuario.tipoActual === 'Indirecto' ? '🔗 '
+3200: function cerrarSesionPorInactividad() { if (sesionActiva && usuarioActivo && usuarioActivo.id) { mostrarAvisoInmediato("⏰ Sesión cerrada por inactividad de 30 minutos", "advertencia"); cerrarSesion(); } }
+3255: mostrarAvisoInmediato("✖ Complete el nombre y el puesto", "error");
+3259: // 2.6 — Teléfono y email son opcionales, pero AL MENOS UNO es obligatorio.
+3289: mostrarAvisoInmediato("✓ Contacto actualizado correctamente", "exito");
+3369: // PUNTO 34: banco de datos — invitación enviada y actividad
+3377: mostrarAvisoInmediato(`✓ Contacto ${nombre} guardado`, "exito");
+3532: // 32.1 MÓDULO DE CORREOS (6 vistas — PUNTO 3; bandeja local, sin sincronización real ni IA)
+3534: // contactos únicos (principal, no copias), solo-copia, tiempos abrir→cerrar y
+3535: // abrir→responder, carpetas/eliminados (tiempo/cantidad/peso), borradores y spam.
+3638: if (m) m.textContent = (c.remitente || '') + ' → ' + ((c.destinatarios || []).join(', ') || '');
+3704: mostrarAvisoInmediato('⚠️ Estás borrando más de lo habitual hoy.', 'advertencia');
+3768: // 33. ASISTENTE DE IA (BOTÓN FLOTANTE, VOZ Y VENTANA EMERGENTE — PUNTO 7)
+3859: if (btnPausa) btnPausa.innerText = '▶';
+3862: if (btnPausa) btnPausa.innerText = '⏸';
+3872: // Editar (✏️): corrige el texto enviado manualmente
+3888: // Cerrar (✕) o auto-cierre
