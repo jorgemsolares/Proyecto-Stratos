@@ -147,6 +147,10 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 
 ## BITÁCORA (historial de lo realizado)
 
+### 19/10/2026 (tarde 2) — LEY F DE DISEÑO INTEGRADA AL PROTOCOLO DE ICONOS
+- **Hecho:** cambio del Arquitecto en `A_DONDE_VA_STRATOS.md` (F. Distinción barra vs cartelera) integrado al `PROCESO ESTÁNDAR — INSERCIÓN DE ICONOS` de MEMORIA: barra = icono por tipo (verde/naranja/rojo), cartelera = icono por jerarquía/urgencia (naranja superior, rojo urgente, verde normal), Login sin cartelera, futuros módulos con regla jerárquica. Rige de ahora en adelante, sin tocar código.
+- **Verificación:** sin cambios de código; solo documentación. Pendiente: sincronizar a GitHub.
+
 ### 19/10/2026 (tarde) — instrucciones.md PUNTO 1: REGLAS DE ICONOS SVG (TAMAÑO Y COLOR)
 - **Punto 1 — hecho:** `.icono-inline` a 30×30px fuera de botones; dentro de botones se revierte a 1.2em (botones intactos). Placeholders "en preparación" (8, antes 3rem) pasan a `.icono-placeholder` 30px. Creados `Advertencia-naranja.svg` (#ff8c00), `Error-rojo.svg` (#e53935) y `Exito-verde.svg` (autorizados por el Arquitecto; copias recoloreadas de los verdes).
 - **Color por alerta:** `mostrarAvisoInmediato()` antepone el SVG según tipo (éxito→verde, advertencia→naranja, error→rojo) cuando el texto no trae `<img>`, quitando ✓/✖/⚠ inicial. Cola de identidad y aviso de borrado excesivo usan naranja; modal de cambio obligatorio usa naranja en HTML.
