@@ -141,6 +141,12 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 
 ## BITÁCORA (historial de lo realizado)
 
+### 19/10/2026 — instrucciones.md PUNTO 1: REDACCIÓN DE CORREO A MODAL FLOTANTE
+- **Punto 1 — hecho:** la redacción dejó de ser `section#pantalla-redactar-correo` (pantalla completa) y ahora es `div#modal-redactar-correo.modal` en GRUPO 4 (flotante estilo Gmail, con fondo oscuro; encabezado "Nuevo Correo" + X; campos De/Para/Asunto/Mensaje + clip; footer ENVIAR verde, ENVIAR+TAREA/ALARMA naranja, DESCARTAR rojo). Sin header/footer de app (ya visibles en la bandeja de fondo).
+- **Lógica:** `abrirRedaccionCorreo()` limpia y muestra el modal (`display:flex`); `cerrarModalRedaccionCorreo()` lo oculta; `volverDeRedaccionCorreo()` y `descartarRedaccionCorreo()` cierran sin navegar; `enviarCorreoRedactado()` valida, guarda en Enviados, registra en bancoDatos y cierra el modal (luego va a Tareas/Alarmas si aplica).
+- **Estilos:** `.modal-redactar` (94% ancho, máx 560px, mensaje 180px). Clases de redacción reutilizadas dentro del modal.
+- **Verificación:** esprima OK en ambos JS (0 problemas, pasando archivos explícitos). **Pendiente:** Ctrl+F5 (REDACTAR abre el modal sobre la bandeja; enviar/descartar lo cierra y deja Enviados).
+
 ### 18/10/2026 (noche 2) — instrucciones.md PUNTO 1 + PUNTO 2: REDACTAR + REDACCIÓN DE CORREOS
 - **Punto 1 — hecho:** botón verde `REDACTAR` (`btn-principal`, alineado a la derecha) en `pantalla-correos`, debajo del título. Llama a `abrirRedaccionCorreo()` que limpia los campos, pone el `De:` con el email del usuario y abre `pantalla-redactar-correo`.
 - **Punto 2 — hecho:** nueva `section#pantalla-redactar-correo` (dentro de `#app-container`; respeta logo, cartelera, sello, Vero y Libro): botón Volver arriba-izquierda; `De:` fijo; `Para:` con autocompletado (`datalist` de usuarios/contactos/correos previos) + validación visual ✓/✖; `Asunto:`; `Mensaje:` expansible; clip con `Cargar documento.svg` (autorizado por el Arquitecto; simulado, pide nombre por `prompt`).
