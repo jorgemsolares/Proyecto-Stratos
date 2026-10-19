@@ -147,6 +147,13 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 
 ## BITÁCORA (historial de lo realizado)
 
+### 19/10/2026 (noche) — instrucciones.md PUNTOS 1-4: REDISEÑO CORREOS GMAIL
+- **Punto 1 — hecho:** `pantalla-correos` a 2 columnas (menú 170px + contenido flexible; apilado en celular). Encabezado con flecha `flecha izquierda.svg` (recoloreada negro→verde por protocolo) + título centrado. REDACTAR arriba del menú; vistas en lista vertical; búsqueda + lista a la derecha.
+- **Punto 2 — hecho:** `.btn-vista-correo` sin borde fijo (transparente en reposo; verde+sombra en hover; halo en active; activa con fondo claro + texto verde).
+- **Punto 3 — hecho:** 4 correos demo en Recibidos si la bandeja está vacía; filas Gmail (remitente+fecha / asunto / previa 3 líneas con elipsis, 14-15px).
+- **Punto 4 — hecho:** clip con `<input type=file>` real (`cambioAdjuntoCorreo` muestra "Archivo adjunto: nombre"); sin subir a internet; se limpia al abrir/descartar.
+- **Verificación:** esprima OK ambos JS + 58/58 pruebas en verde. **Pendiente:** Ctrl+F5 (columnas, menú, filas, adjunto).
+
 ### 19/10/2026 (tarde 2) — LEY F DE DISEÑO INTEGRADA AL PROTOCOLO DE ICONOS
 - **Hecho:** cambio del Arquitecto en `A_DONDE_VA_STRATOS.md` (F. Distinción barra vs cartelera) integrado al `PROCESO ESTÁNDAR — INSERCIÓN DE ICONOS` de MEMORIA: barra = icono por tipo (verde/naranja/rojo), cartelera = icono por jerarquía/urgencia (naranja superior, rojo urgente, verde normal), Login sin cartelera, futuros módulos con regla jerárquica. Rige de ahora en adelante, sin tocar código.
 - **Verificación:** sin cambios de código; solo documentación. Pendiente: sincronizar a GitHub.
