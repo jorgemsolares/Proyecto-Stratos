@@ -2073,6 +2073,7 @@ No toca .btn-principal / .btn-secundario existentes.
 
 /* ==========================================
 4.4 PANTALLA DE REDACCIÓN DE CORREO (PUNTO 2 instrucciones.md 18/10; estilo Gmail, simulado)
+4.4.1 MODAL REDACTAR CORREO (PUNTO 1 instrucciones.md 19/10: flotante sobre la bandeja)
 ========================================== */
 .barra-redactar-correo {
     display: flex;
@@ -2123,6 +2124,9 @@ No toca .btn-principal / .btn-secundario existentes.
     justify-content: center;
 }
 #aviso-destinatario-correo { margin: 0; min-height: 0; }
+.modal-redactar { max-width: 560px; width: 94%; }
+.modal-redactar .modal-body { gap: 10px; }
+.modal-redactar .fila-mensaje .input-estilizado { min-height: 180px; }
 
 /* ==========================================
 5.4 SCROLLBAR PERSONALIZADA (diseño a medida de la barra de desplazamiento lateral para que combine con los colores de la app)

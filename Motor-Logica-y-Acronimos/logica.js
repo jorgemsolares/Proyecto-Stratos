@@ -3859,12 +3859,12 @@ function adjuntarArchivoCorreo() {
     if (nomAdj) nomAdj.textContent = adjuntoCorreoActual.nombre ? ('Adjunto: ' + adjuntoCorreoActual.nombre) : '';
 }
 
-// Volver (cancela sin guardar; igual que DESCARTAR pero sin aviso).
+// Volver (compatibilidad: ahora solo cierra el modal, sin navegar pantallas).
 function volverDeRedaccionCorreo() {
-    irAPantalla('pantalla-correos');
+    cerrarModalRedaccionCorreo();
 }
 
-// DESCARTAR: limpia y vuelve a la lista (sin guardar nada).
+// DESCARTAR: limpia y cierra el modal (sin guardar nada; el fondo sigue en la bandeja).
 function descartarRedaccionCorreo() {
     const para = document.getElementById('redactar-para');
     if (para) para.value = '';
@@ -3876,7 +3876,7 @@ function descartarRedaccionCorreo() {
     const nomAdj = document.getElementById('nombre-adjunto-correo');
     if (nomAdj) nomAdj.textContent = '';
     mostrarAvisoInmediato('Redacción descartada', 'advertencia');
-    irAPantalla('pantalla-correos');
+    cerrarModalRedaccionCorreo();
 }
 
 // ENVIAR / ENVIAR + TAREA / ENVIAR + ALARMA (PUNTO 2: valida, guarda en Enviados, registra en bancoDatos).
@@ -3889,12 +3889,10 @@ function enviarCorreoRedactado(modo) {
     const cuerpo = ((mensajeEl && mensajeEl.value) || '').trim();
     if (!destinatario || !asunto) {
         mostrarAvisoInmediato('✖ Destinatario y asunto son obligatorios', 'error');
-        irAPantalla('pantalla-redactar-correo');
         return;
     }
     if (!validarDestinatarioCorreo()) {
         mostrarAvisoInmediato('✖ Revisa el correo del destinatario', 'error');
-        irAPantalla('pantalla-redactar-correo');
         return;
     }
     const ahora = new Date();
@@ -3932,7 +3930,7 @@ function enviarCorreoRedactado(modo) {
         try { registrarActividadBancoDatos(usuarioActivo.id, 'correos', 'Envió correo a ' + destinatario + ' a las ' + _horaHM(ahora)); } catch (e) {}
     }
     mostrarAvisoInmediato('✓ Correo enviado a ' + destinatario, 'exito');
-    irAPantalla('pantalla-correos');
+    cerrarModalRedaccionCorreo();
     try { cambiarVistaCorreo('enviados'); } catch (e) {}
     if (modo === 'tarea') {
         if (document.getElementById('pantalla-tareas')) irAPantalla('pantalla-tareas');
