@@ -148,6 +148,11 @@ Los datos se guardan en el servidor del dueño (No.1), quien es dueño absoluto 
 - **Barra de notificaciones** (`#barra-notificaciones`): franja superior que se sobrepone. Muestra avisos inmediatos de confirmación, error o advertencia. Dura 3 segundos. La usa el sistema. Sus colores de contraste son fijos para garantizar legibilidad.
 - **Cartelera de mensajes** (`#zona-cartelera`): área superior derecha. Rota avisos y mensajes motivacionales. Dura según prioridad (10 s alta, 6 s media, 4 s baja). La usan el sistema y la IA. Respeta la identidad corporativa del usuario.
 - **La pantalla de Login no debe tener cartelera.** Solo la barra de notificaciones, para invitar al usuario a entrar.
+- **Color de iconos según jerarquía y urgencia.** Para que la jerarquía sea visualmente inconfundible, los iconos de los mensajes en la cartelera (y en futuros módulos como correos, tareas o chats) cambiarán de color según su origen:
+- Naranja (#ff8c00): Mensajes provenientes de un superior (directo o indirecto).
+- Rojo (#e53935): Mensajes marcados como urgentes o de atención inmediata.
+- Verde Stratos (#00ff88): Mensajes normales (colegas, subalternos, sistema o motivacionales).
+Esta clasificación visual está ligada a la duración del mensaje: los mensajes con icono naranja o rojo se consideran de prioridad alta y permanecen en pantalla por 10 segundos.
 
 ### G. Rango de uso y tiempo en pantalla (LEY DE MEDICIÓN)
 
