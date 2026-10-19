@@ -27,6 +27,19 @@ function mostrarAvisoInmediato(texto, tipo) {
     if (temporizadorAviso) {
         clearTimeout(temporizadorAviso);
     }
+    // PUNTO 1 (19/10): icono SVG por tipo de alerta (verde/naranja/rojo).
+    // Si el texto ya trae un <img>, se respeta; si no, se antepone el que toca
+    // y se quita el caracter inicial ✓/✖/⚠ para no duplicar el aviso.
+    if (typeof texto === 'string' && texto.indexOf('<img') === -1) {
+        let iconoAlerta = '';
+        if (tipo === 'exito') iconoAlerta = 'Exito-verde.svg';
+        else if (tipo === 'advertencia') iconoAlerta = 'Advertencia-naranja.svg';
+        else if (tipo === 'error') iconoAlerta = 'Error-rojo.svg';
+        if (iconoAlerta) {
+            texto = texto.replace(/^[\s✓✖⚠✕]+/, '');
+            texto = '<img src="../Colores-y-Estetica/Iconos/' + iconoAlerta + '" alt="" class="icono-inline" onerror="this.remove()"> ' + texto;
+        }
+    }
     const mensajeDiv = document.getElementById('mensaje-personalizado');
     const textoMensaje = document.getElementById('texto-mensaje-personalizado');
     if (mensajeDiv && textoMensaje) {
