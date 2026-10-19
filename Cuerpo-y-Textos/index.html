@@ -401,44 +401,9 @@
         </section>
 
         <!-- ============================================ -->
-        <!-- 2.5.3 PANTALLA DE REDACCIÓN DE CORREO (PUNTO 2 instrucciones.md 18/10; estilo Gmail, simulado) -->
+        <!-- 2.5.3 REDACCIÓN DE CORREO: ahora es MODAL flotante (PUNTO 1 instrucciones.md 19/10) -->
+        <!-- Ver GRUPO 4: #modal-redactar-correo (se abre sobre la bandeja, sin header/footer de app). -->
         <!-- ============================================ -->
-        <section id="pantalla-redactar-correo" class="pantalla">
-            <div style="text-align:left;"><button type="button" class="btn-secundario" onclick="volverDeRedaccionCorreo()">← Volver</button></div>
-            <h2><img src="../Colores-y-Estetica/Iconos/correos.svg" alt="" class="icono-inline"> Redactar correo</h2>
-            <div class="formulario redaccion-correo">
-                <div class="fila-redaccion">
-                    <label class="etiqueta-redaccion">De:</label>
-                    <span id="redactar-de" class="redactar-de"></span>
-                </div>
-                <div class="fila-redaccion">
-                    <label class="etiqueta-redaccion" for="redactar-para">Para:</label>
-                    <input type="text" id="redactar-para" class="input-estilizado" placeholder="destinatario@correo.com" list="lista-destinatarios-correo" oninput="validarDestinatarioCorreo()" autocomplete="off">
-                    <datalist id="lista-destinatarios-correo"></datalist>
-                </div>
-                <p id="aviso-destinatario-correo" class="aviso-letrero"></p>
-                <div class="fila-redaccion">
-                    <label class="etiqueta-redaccion" for="redactar-asunto">Asunto:</label>
-                    <input type="text" id="redactar-asunto" class="input-estilizado" placeholder="Asunto del correo">
-                </div>
-                <div class="fila-redaccion fila-mensaje">
-                    <label class="etiqueta-redaccion" for="redactar-mensaje">Mensaje:</label>
-                    <textarea id="redactar-mensaje" class="input-estilizado" placeholder="Escribe tu mensaje..."></textarea>
-                </div>
-                <div class="fila-redaccion fila-adjunto">
-                    <button type="button" class="btn-adjunto-correo" onclick="adjuntarArchivoCorreo()" title="Adjuntar archivo">
-                        <img src="../Colores-y-Estetica/Iconos/Cargar documento.svg" alt="Adjuntar" class="icono-inline">
-                    </button>
-                    <span id="nombre-adjunto-correo" class="descripcion-app"></span>
-                </div>
-            </div>
-            <div class="fila-botones-final barra-acciones-redaccion">
-                <button type="button" class="btn-principal" onclick="enviarCorreoRedactado('solo')">ENVIAR</button>
-                <button type="button" class="btn-secundario" onclick="enviarCorreoRedactado('tarea')">ENVIAR + TAREA</button>
-                <button type="button" class="btn-secundario" onclick="enviarCorreoRedactado('alarma')">ENVIAR + ALARMA</button>
-                <button type="button" class="btn-peligro" onclick="descartarRedaccionCorreo()">DESCARTAR</button>
-            </div>
-        </section>
 
         <!-- ============================================ -->
         <!-- 2.6 PANTALLA 6 - CONFIGURACIÓN PERSONAL (notificaciones, idioma, seguridad, recuperación y acciones rápidas) -->
