@@ -18,69 +18,34 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 
 ---
 
-## PUNTO 1: AGREGAR EL BOTÓN "REDACTAR" EN LA PANTALLA DE CORREOS
+## PUNTO 1: CAMBIAR LA PANTALLA DE REDACCIÓN POR UNA VENTANA EMERGENTE (MODAL)
 
-**Contexto:** La pantalla de Correos actual (en `index.html`) no tiene un botón para crear un correo nuevo. Se necesita agregar uno para dar acceso a la pantalla de redacción.
-
-**Qué cambiar:**
-- Agregar un botón en la interfaz de la pantalla de Correos.
-- Al presionarlo, debe abrir la nueva pantalla de redacción (que se creará en el Punto 2).
-
-**Dónde:**
-- `index.html`: dentro de `<section id="pantalla-correos" class="pantalla">`, justo debajo del título `<h2>📧 Correos</h2>` (o junto a la barra de búsqueda).
-- `logica.js`: crear la función que maneja el clic y llama a la nueva pantalla.
-
-**Cómo debe quedar:**
-- Un botón verde (`btn-principal`) que diga "REDACTAR".
-- Ubicado visualmente de forma que resalte (por ejemplo, alineado a la derecha antes de la barra de búsqueda, o como primer botón de la barra de vistas).
-- Al hacer clic, se debe ocultar la lista de correos y mostrar la pantalla de redacción.
-
----
-
-## PUNTO 2: PANTALLA DE REDACCIÓN DE CORREOS
-
-**Contexto:** Se necesita crear la vista para redactar un correo nuevo. Se basará en la simplicidad visual de Gmail, ocupando la pantalla completa pero respetando el encabezado (logo + cartelera) y el pie (sello de agua, botón Vero y botón Libro).
+**Contexto:** La pantalla de redacción de correos a pantalla completa no se ve bien en el diseño angosto de la app. Se cambiará a una ventana emergente flotante (estilo Gmail) que se abre sobre la bandeja de entrada.
 
 **Qué cambiar:**
-- Crear el HTML de la pantalla de redacción (nueva `<section class="pantalla">`).
-- Agregar los estilos en `estilos.css`.
-- Agregar la lógica en `logica.js` para mostrar la pantalla, capturar los datos y manejar los botones.
+- Modificar la estructura HTML de la redacción para que sea un `<div>` con la clase `modal` (o una estructura similar a las ventanas emergentes existentes en el sistema).
+- Ajustar los estilos para que flote en el centro de la pantalla.
+- Modificar la lógica para que el botón "REDACTAR" abra esta ventana, y que el botón de cerrar o "Descartar" la oculte.
 
 **Cómo debe quedar (Estructura visual):**
-- **Pantalla completa:** Debe ocupar el espacio central (`#app-container`), respetando los márgenes y la estructura de las demás pantallas.
-- **Botón "Volver":** En la parte superior izquierda para cancelar y regresar a la bandeja.
+- **Tipo:** Ventana flotante (modal) con fondo oscuro semitransparente detrás, igual que el modal de contacto o el de detalles.
+- **Encabezado del modal:** Un título simple que diga "Nuevo Correo" y el botón de cerrar (X).
 - **Campos (estilo Gmail):**
   - `De:` (Fijo, mostrando el email del `usuarioActivo`).
-  - `Para:` (Input con autocompletado y validación visual).
+  - `Para:` (Input).
   - `Asunto:` (Input de texto).
-  - `Mensaje:` (Textarea grande y expansible).
-- **Barra de acciones (abajo):**
+  - `Mensaje:` (Textarea grande).
+- **Barra de acciones (abajo del modal):**
   - Botón principal: `ENVIAR` (verde).
   - Botón secundario: `ENVIAR + TAREA` (naranja).
   - Botón secundario: `ENVIAR + ALARMA` (naranja).
   - Botón de peligro/descartar: `DESCARTAR` (rojo).
-- **Botón de adjuntar:** Un ícono de clip (revisar carpeta `Iconos/`, si no existe, preguntar al Arquitecto).
+- **Nota:** Al ser una ventana flotante, **NO debe incluir** el encabezado de la app (logo y cartelera), ni el pie de página (sello de agua, botón de Vero, botón Libro), porque esos ya están visibles en la pantalla de fondo.
 
-**Lógica de los botones (Trabajo Invisible):**
-- Al presionar **ENVIAR**:
-  1. Validar que el destinatario y el asunto no estén vacíos.
-  2. Guardar el correo en la vista "Enviados" (`correosLocales`).
-  3. Registrar en el `bancoDatos` la actividad: "Envió correo a [destinatario]" con fecha y hora.
-  4. Mostrar aviso de éxito y volver a la lista de correos.
-- Al presionar **ENVIAR + TAREA**:
-  1. Hacer el envío del correo (pasos anteriores).
-  2. Redirigir al usuario a la pantalla de creación de Tareas (si no existe, avisar "Módulo en preparación").
-- Al presionar **ENVIAR + ALARMA**:
-  1. Hacer el envío del correo.
-  2. Redirigir al usuario a la pantalla de creación de Alarmas (si no existe, avisar "Módulo en preparación").
-
-**Nota sobre el "Tiempo de espera" (Vero):**
-- No se debe implementar lógica compleja de tiempos en este punto. Solo registrar la hora exacta en que se envía el correo en el banco de datos.
-
-**Qué NO hacer:**
-- NO intentar conectar a servidores SMTP reales en este punto (sigue siendo simulado).
-- NO salirse del diseño base (mantener logo, cartelera, sello, Vero y Libro).
-- NO cambiar la forma en que se muestran los correos en la bandeja de entrada actual.
+**Lógica:**
+- Al hacer clic en "REDACTAR" (en la pantalla de correos), el modal aparece en pantalla.
+- Al enviar o descartar, el modal se cierra y el usuario vuelve a ver la lista de correos.
+- Mantener el registro en el `bancoDatos` al enviar.
 
 ---
 
