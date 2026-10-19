@@ -3807,6 +3807,8 @@ function abrirRedaccionCorreo() {
     adjuntoCorreoActual = null;
     const nomAdj = document.getElementById('nombre-adjunto-correo');
     if (nomAdj) nomAdj.textContent = '';
+    const inputAdj = document.getElementById('input-adjunto-correo');
+    if (inputAdj) inputAdj.value = '';
     const aviso = document.getElementById('aviso-destinatario-correo');
     if (aviso) { aviso.innerText = ''; aviso.className = 'aviso-letrero'; aviso.style.maxHeight = '0'; }
     poblarDestinatariosCorreo();
@@ -3905,6 +3907,8 @@ function descartarRedaccionCorreo() {
     adjuntoCorreoActual = null;
     const nomAdj = document.getElementById('nombre-adjunto-correo');
     if (nomAdj) nomAdj.textContent = '';
+    const inputAdj2 = document.getElementById('input-adjunto-correo');
+    if (inputAdj2) inputAdj2.value = '';
     mostrarAvisoInmediato('Redacción descartada', 'advertencia');
     cerrarModalRedaccionCorreo();
 }
