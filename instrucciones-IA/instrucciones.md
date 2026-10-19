@@ -14,38 +14,71 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 - `MEMORIA.md`.
 - `A_DONDE_VA_STRATOS.md`.
 - Los 4 archivos del sistema: `index.html`, `estilos.css`, `datos.js`, `logica.js`.
-- La carpeta de iconos: `Colores-y-Estetica/Iconos/`.
+- La carpeta de iconos: `Colores-y-Estetica/Iconos/` (verificar los nuevos: `flecha izquierda.svg`, `Error-rojo.svg`, `Advertencia-naranja.svg`).
 
 ---
 
-## PUNTO 1: REGLAS PARA EL USO DE ICONOS SVG (TAMAÑO Y COLOR)
+## PUNTO 1: REDISEÑO ESTRUCTURAL DE LA PANTALLA DE CORREOS (ESTILO GMAIL)
 
-**Contexto:** Se establece una regla unificada para el uso de los iconos SVG en todo el sistema, diferenciando su tamaño según estén dentro o fuera de un botón, y su color según el nivel de alerta del mensaje.
+**Contexto:** La pantalla de correos actual apila los botones, no se ve bien y no emula a un gestor de correos. Se cambiará a un diseño de dos columnas.
 
 **Qué cambiar:**
-1. **Tamaño:**
-   - **Iconos dentro de botones:** Mantener el tamaño actual (grande, para llamar la atención).
-   - **Iconos fuera de botones** (en títulos, cartelera, menús, alertas de texto): Ajustar su tamaño a **~30px** (ej. `width: 30px; height: 30px;` o `font-size: 30px` según la implementación).
-2. **Color según la alerta:**
-   - **Normal/Informativo:** Verde Stratos (`#00ff88`). (Los SVG actuales ya tienen este color internamente).
-   - **Advertencia:** Naranja (`#ff8c00`).
-   - **Error:** Rojo (`#e53935`).
-   - Para lograr esto, como los SVG se cargan como imágenes y su color está dentro del archivo, Cline debe crear (o generar) versiones de los iconos con el color naranja y rojo, y el código debe llamar al archivo correcto según el tipo de mensaje.
+- Modificar la estructura de `<section id="pantalla-correos">` en `index.html`.
+- Usar flexbox o grid en `estilos.css` para crear el layout de dos columnas.
 
-**Dónde:**
-- `estilos.css`: ajustar el tamaño de las clases de iconos inline (que no estén en botones).
-- `logica.js`: en las funciones de la cartelera y avisos (`construirColaMensajes`, `mostrarAvisoInmediato`), asegurar que se llame al archivo SVG correcto (verde, naranja o rojo) según la prioridad o tipo de mensaje.
-- `Cuerpo-y-Textos/index.html`: en los títulos estáticos que usan iconos, ajustar el tamaño y verificar el color.
-
-**Cómo debe quedar:**
-- Los iconos fuera de los botones se ven proporcionados (~30px) y legibles.
-- Los iconos dentro de los botones mantienen su tamaño original.
-- Los avisos en cartelera usan iconos verdes si son normales, naranjas si son advertencias y rojos si son errores.
+**Cómo debe quedar (Estructura visual):**
+- **Encabezado (Arriba):** 
+  - Izquierda: Botón con el icono `flecha izquierda.svg` (sin texto) que lleva a "Volver a Comunicación".
+  - Centro: Título "Correos".
+- **Columnas:**
+  - **Izquierda (Menú):** Botón `REDACTAR` arriba. Debajo, lista vertical de vistas (Recibidos, Enviados, Carpetas, Eliminados, Borradores, Spam).
+  - **Derecha (Contenido):** Barra de búsqueda arriba. Debajo, lista de correos.
 
 **Qué NO hacer:**
-- NO cambiar el tamaño de los iconos que están dentro de los botones.
-- NO usar emojis como reemplazo.
-- Si falta la versión de un icono en naranja o rojo, NO inventarlo; preguntar al Arquitecto (según la regla ya establecida).
+- NO romper la vista responsiva (en celular, las columnas deben apilarse).
+
+---
+
+## PUNTO 2: CORREGIR EL EFECTO DE LOS BOTONES DEL MENÚ LATERAL
+
+**Contexto:** Los botones del menú lateral (Recibidos, Enviados, etc.) tienen el borde iluminado permanentemente. Incumplen la regla general de botones.
+
+**Qué cambiar:**
+- En `estilos.css`, quitar el borde iluminado fijo de los botones del menú lateral.
+- Aplicar la regla general: borde transparente en estado normal, borde verde y sombra intensificada solo en `:hover`, halo intenso en `:active`.
+- La vista activa (la carpeta en la que está el usuario) debe distinguirse (ej. fondo más claro y texto verde), pero sin el borde iluminado permanente.
+
+**Qué NO hacer:**
+- NO cambiar la estructura de la lista, solo el CSS.
+
+---
+
+## PUNTO 3: DISEÑO DE LA LISTA DE CORREOS (FILAS) Y DATOS DE PRUEBA
+
+**Contexto:** No hay correos para probar el diseño. Se deben inyectar datos falsos y estructurar cada fila.
+
+**Qué cambiar:**
+- En `logica.js`, en la función `cargarCorreosLocales()` (o al inicializar), inyectar 3 o 4 correos de prueba en `correosLocales` (vista "recibidos") si la lista está vacía.
+- En `logica.js`, en `renderizarListaCorreos()`, ajustar la estructura de cada fila.
+
+**Cómo debe quedar cada fila:**
+- **Línea 1:** Remitente en negrita y a la derecha la Fecha (letra más pequeña, gris).
+- **Línea 2:** Asunto en negrita.
+- **Línea 3:** Vista previa del texto, máximo 3 líneas (con elipsis si es más largo).
+- **Tamaño de letra:** Adecuado (14px o 15px) para leer sin zoom.
+
+---
+
+## PUNTO 4: FUNCIÓN DE ADJUNTAR EN LA VENTANA DE REDACTAR
+
+**Contexto:** El botón de adjuntar documento en la ventana de redactar no funciona.
+
+**Qué cambiar:**
+- En `index.html` (dentro del modal de redactar), el botón de clip debe ser un `<input type="file" style="display:none;">` activado por el botón visual.
+- En `logica.js`, agregar la lógica para capturar el archivo seleccionado y mostrar un aviso o texto (ej. "Archivo adjunto: documento.pdf") dentro de la ventana.
+
+**Qué NO hacer:**
+- NO intentar subir el archivo a internet (no hay servidor todavía). Solo capturar y mostrar el nombre.
 
 ---
 
