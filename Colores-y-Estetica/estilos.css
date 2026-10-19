@@ -1033,13 +1033,25 @@ textarea {
     font-size: 1.5rem;
 }
 
-/* PUNTO 3 instrucciones.md: SVG inline en cartelera y menú (tamaño, alineación y verde #00ff88) */
+/* PUNTO 1 instrucciones.md (19/10): REGLA DE ICONOS — fuera de botones van a ~30px.
+   Dentro de botones (icono-comunicacion, icono-hexagono, modal-footer, btn-*) NO se tocan. */
 .icono-inline {
-    width: 1.2em;
-    height: 1.2em;
+    width: 30px;
+    height: 30px;
     display: inline-block;
     vertical-align: -0.2em;
     object-fit: contain;
+}
+/* Los botones mantienen su tamaño grande original: se revierte la regla solo ahí. */
+button .icono-inline,
+.btn-principal .icono-inline,
+.btn-secundario .icono-inline,
+.btn-peligro .icono-inline,
+.modal-footer .icono-inline,
+.ventana-ia-btn .icono-inline,
+.btn-biometria .icono-inline {
+    width: 1.2em;
+    height: 1.2em;
 }
 
 .sidebar-menu {
