@@ -3874,13 +3874,19 @@ function validarDestinatarioCorreo() {
     return true;
 }
 
-// Botón clip (PUNTO 2): por ahora pide el nombre del archivo (simulado, sin subir nada real).
+// Botón clip (PUNTO 4, 19/10 tarde): captura el archivo real del input file (sin subir a internet; solo nombre en memoria).
 function adjuntarArchivoCorreo() {
-    const nombre = prompt('Nombre del archivo adjunto:');
-    if (nombre === null) return;
-    adjuntoCorreoActual = { nombre: (nombre || '').trim() };
+    const input = document.getElementById('input-adjunto-correo');
+    if (input) input.click();
+}
+
+// Se llama al elegir archivo: guarda el nombre y lo muestra dentro de la ventana.
+function cambioAdjuntoCorreo(input) {
+    const archivo = input && input.files && input.files[0];
+    if (!archivo) return;
+    adjuntoCorreoActual = { nombre: archivo.name };
     const nomAdj = document.getElementById('nombre-adjunto-correo');
-    if (nomAdj) nomAdj.textContent = adjuntoCorreoActual.nombre ? ('Adjunto: ' + adjuntoCorreoActual.nombre) : '';
+    if (nomAdj) nomAdj.textContent = 'Archivo adjunto: ' + archivo.name;
 }
 
 // Volver (compatibilidad: ahora solo cierra el modal, sin navegar pantallas).
