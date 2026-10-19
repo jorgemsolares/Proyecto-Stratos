@@ -2030,12 +2030,65 @@ No toca .btn-principal / .btn-secundario existentes.
 /* ==========================================
 4.3 PANTALLA DE CORREOS (6 vistas — PUNTO 3; listado + detalle, sin sincronización real)
 ========================================== */
+/* PUNTO 1 (19/10 tarde): REDISEÑO CORREOS estilo Gmail — encabezado + 2 columnas (responsive: apilado en celular) */
+.cabecera-correos {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+.btn-volver-correos {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 6px 8px;
+    cursor: pointer;
+    line-height: 0;
+    flex-shrink: 0;
+}
+.btn-volver-correos:hover {
+    border-color: var(--color-primario);
+    box-shadow: 0 8px 20px rgba(0, 255, 136, 0.35);
+}
+.titulo-correos {
+    flex: 1;
+    text-align: center;
+    margin: 0;
+}
+.espaciador-cabecera-correos {
+    width: 46px;
+    flex-shrink: 0;
+}
+.layout-correos {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+.menu-correos {
+    flex: 0 0 170px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.btn-redactar-correos {
+    width: 100%;
+}
+.contenido-correos {
+    flex: 1;
+    min-width: 0;
+}
+@media (max-width: 768px) {
+    .layout-correos { flex-direction: column; }
+    .menu-correos { flex: none; width: 100%; }
+}
 .barra-vistas-correo {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 8px;
-    margin: 12px 0;
+    margin: 0;
 }
+/* PUNTO 2 (19/10 tarde): regla general de botones — borde transparente en reposo,
+   verde + sombra solo en hover, halo en active. La vista activa: fondo claro + texto verde. */
 .btn-vista-correo {
     padding: 8px 12px;
     font-size: 0.85rem;
@@ -2043,24 +2096,25 @@ No toca .btn-principal / .btn-secundario existentes.
     text-transform: uppercase;
     letter-spacing: 1px;
     border-radius: 8px;
-    border: 1px solid #00ff88;
-    background: var(--color-botones, rgba(0, 255, 136, 0.06));
-    color: var(--color-letras, var(--color-primario));
+    border: 1px solid transparent;
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--color-texto);
     cursor: pointer;
+    text-align: left;
+    width: 100%;
 }
 .btn-vista-correo:hover {
+    border-color: #00ff88;
     box-shadow: 0 12px 28px rgba(0, 255, 136, 0.4);
-    transform: translateY(-4px) scale(1.03);
 }
 .btn-vista-correo:active {
     box-shadow: 0 0 25px 8px #00ff88, inset 0 0 10px #00ff88;
-    transform: translateY(0) scale(0.98);
 }
 .btn-vista-correo.activo {
-    background: var(--color-botones, var(--color-primario));
-    color: var(--color-letras, #0b0f19);
-    border-color: #00ff88;
-    box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+    background: rgba(0, 255, 136, 0.12);
+    color: var(--color-primario);
+    border-color: transparent;
+    box-shadow: none;
 }
 .barra-busqueda-correo { margin: 8px 0 12px 0; }
 .lista-correos {
@@ -2069,18 +2123,26 @@ No toca .btn-principal / .btn-secundario existentes.
     gap: 8px;
     margin-bottom: 12px;
 }
+/* PUNTO 3 (19/10 tarde): filas estilo Gmail — remitente+fecha / asunto / previa 3 líneas con elipsis, 14-15px */
 .item-correo {
     padding: 10px 12px;
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.15);
     background: rgba(255, 255, 255, 0.03);
     cursor: pointer;
+    font-size: 15px;
 }
 .item-correo:hover { border-color: rgba(0, 255, 136, 0.5); }
-.item-correo-remitente { font-weight: bold; color: var(--color-texto); }
-.item-correo-asunto { color: var(--color-primario); font-size: 0.9rem; }
-.item-correo-previa { color: rgba(255, 255, 255, 0.7); font-size: 0.85rem; }
-.item-correo-fecha { color: rgba(255, 255, 255, 0.5); font-size: 0.75rem; text-align: right; }
+.fila-correo-superior {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+}
+.item-correo-remitente { font-weight: bold; color: var(--color-texto); font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item-correo-asunto { font-weight: bold; color: var(--color-texto); font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item-correo-previa { color: rgba(255, 255, 255, 0.7); font-size: 14px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.item-correo-fecha { color: rgba(255, 255, 255, 0.5); font-size: 12px; text-align: right; white-space: nowrap; flex-shrink: 0; }
 .detalle-correo {
     padding: 12px;
     border-radius: var(--radio-bordes);

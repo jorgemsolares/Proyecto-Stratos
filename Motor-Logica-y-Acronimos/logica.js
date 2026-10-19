@@ -3563,6 +3563,16 @@ function cargarCorreosLocales() {
             if (g && g.metricas) metricasCorreos = Object.assign(metricasCorreos, g.metricas);
         }
     } catch (e) {}
+    // PUNTO 3 (19/10 tarde): datos de prueba si la bandeja está vacía (solo Recibidos, no se guardan métricas falsas).
+    if (!Array.isArray(correosLocales) || correosLocales.length === 0) {
+        const ahora = Date.now();
+        correosLocales = [
+            { id: 'demo1', vista: 'recibidos', remitente: 'maria.gerencia@empresa.com', destinatarios: [], copias: [], asunto: 'Reunión de planificación semanal', previa: 'Hola, te confirmo la reunión de planificación de este viernes a las 9:00 en la sala principal. Trae el reporte de avances y la lista de pendientes para revisarlos con el equipo completo antes del cierre del mes.', cuerpo: 'Hola, te confirmo la reunión de planificación de este viernes a las 9:00 en la sala principal. Trae el reporte de avances y la lista de pendientes para revisarlos con el equipo completo antes del cierre del mes.', fecha: new Date(ahora - 36e5).toISOString(), pesoKb: 2, soloCopia: false, leido: false, abiertoEn: null, cerradoEn: null, respondidoEn: null, carpeta: '', tipoSpam: '', esDesconocido: false, borradoEn: null, procesoActivado: '', adjunto: '', accionGenerada: '' },
+            { id: 'demo2', vista: 'recibidos', remitente: 'soporte@stratos.app', destinatarios: [], copias: [], asunto: 'Bienvenido a tu bandeja Stratos', previa: 'Esta es tu bandeja local de correos. Aquí verás los mensajes recibidos y enviados. Usa el botón REDACTAR para crear un correo nuevo y las vistas del menú lateral para organizarte por carpetas.', cuerpo: 'Esta es tu bandeja local de correos. Aquí verás los mensajes recibidos y enviados. Usa el botón REDACTAR para crear un correo nuevo y las vistas del menú lateral para organizarte por carpetas.', fecha: new Date(ahora - 72e5).toISOString(), pesoKb: 1, soloCopia: false, leido: true, abiertoEn: null, cerradoEn: null, respondidoEn: null, carpeta: '', tipoSpam: '', esDesconocido: false, borradoEn: null, procesoActivado: '', adjunto: '', accionGenerada: '' },
+            { id: 'demo3', vista: 'recibidos', remitente: 'carlos.ventas@empresa.com', destinatarios: [], copias: [], asunto: 'Cotización aprobada por el cliente', previa: 'Buenas noticias: el cliente aprobó la cotización número 245. Necesito que prepares la orden de trabajo y la envíes a logística hoy mismo para que el despacho salga mañana a primera hora sin retrasos.', cuerpo: 'Buenas noticias: el cliente aprobó la cotización número 245. Necesito que prepares la orden de trabajo y la envíes a logística hoy mismo para que el despacho salga mañana a primera hora sin retrasos.', fecha: new Date(ahora - 864e5).toISOString(), pesoKb: 2, soloCopia: false, leido: false, abiertoEn: null, cerradoEn: null, respondidoEn: null, carpeta: '', tipoSpam: '', esDesconocido: false, borradoEn: null, procesoActivado: '', adjunto: '', accionGenerada: '' },
+            { id: 'demo4', vista: 'recibidos', remitente: 'ana.recursos@empresa.com', destinatarios: [], copias: [], asunto: 'Recordatorio: actualización de datos', previa: 'Te recordamos mantener actualizados tus datos de contacto en el sistema. Ingresa a tu perfil y verifica que tu teléfono y correo estén correctos para no perder avisos importantes del equipo.', cuerpo: 'Te recordamos mantener actualizados tus datos de contacto en el sistema. Ingresa a tu perfil y verifica que tu teléfono y correo estén correctos para no perder avisos importantes del equipo.', fecha: new Date(ahora - 1728e5).toISOString(), pesoKb: 1, soloCopia: false, leido: true, abiertoEn: null, cerradoEn: null, respondidoEn: null, carpeta: '', tipoSpam: '', esDesconocido: false, borradoEn: null, procesoActivado: '', adjunto: '', accionGenerada: '' }
+        ];
+    }
 }
 
 function nombreCorreoVista(v) { return { recibidos: 'Recibidos', enviados: 'Enviados', carpetas: 'Carpetas', eliminados: 'Eliminados', borradores: 'Borradores', spam: 'Spam' }[v] || v; }
@@ -3623,7 +3633,8 @@ function renderizarListaCorreos() {
         d.className = 'item-correo';
         const fecha = c.fecha ? new Date(c.fecha) : null;
         const f = fecha ? (fecha.toLocaleDateString('es') + ' ' + fecha.toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' })) : '';
-        d.innerHTML = '<div class="item-correo-remitente"></div><div class="item-correo-asunto"></div><div class="item-correo-previa"></div><div class="item-correo-fecha"></div>';
+        // PUNTO 3 (19/10 tarde): fila Gmail — línea 1 remitente + fecha; línea 2 asunto; línea 3 previa (3 líneas máx).
+        d.innerHTML = '<div class="fila-correo-superior"><span class="item-correo-remitente"></span><span class="item-correo-fecha"></span></div><div class="item-correo-asunto"></div><div class="item-correo-previa"></div>';
         d.querySelector('.item-correo-remitente').textContent = c.remitente || '';
         d.querySelector('.item-correo-asunto').textContent = c.asunto || '';
         d.querySelector('.item-correo-previa').textContent = c.previa || '';

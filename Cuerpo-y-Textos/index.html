@@ -368,36 +368,46 @@
         <!-- 2.5.2 PANTALLA DE CORREOS (6 vistas — PUNTO 3; sin sincronización real ni IA) -->
         <!-- ============================================ -->
         <section id="pantalla-correos" class="pantalla">
-            <h2><img src="../Colores-y-Estetica/Iconos/correos.svg" alt="" class="icono-inline"> Correos</h2>
+            <!-- PUNTO 1 (19/10 tarde): encabezado Gmail — flecha volver + título centrado -->
+            <div class="cabecera-correos">
+                <button type="button" class="btn-volver-correos" onclick="irAPantalla('pantalla-comunicacion')" title="Volver a Comunicación">
+                    <img src="../Colores-y-Estetica/Iconos/flecha izquierda.svg" alt="Volver" class="icono-inline">
+                </button>
+                <h2 class="titulo-correos"><img src="../Colores-y-Estetica/Iconos/correos.svg" alt="" class="icono-inline"> Correos</h2>
+                <span class="espaciador-cabecera-correos"></span>
+            </div>
             <p class="descripcion-app">Bandeja local (sin sincronización real todavía)</p>
-            <!-- PUNTO 1 instrucciones.md (18/10): botón REDACTAR abre la pantalla de redacción -->
-            <div class="barra-redactar-correo">
-                <button type="button" class="btn-principal" onclick="abrirRedaccionCorreo()">REDACTAR</button>
-            </div>
-            <div class="barra-vistas-correo">
-                <button type="button" class="btn-vista-correo activo" data-vista="recibidos" onclick="cambiarVistaCorreo('recibidos')">Recibidos</button>
-                <button type="button" class="btn-vista-correo" data-vista="enviados" onclick="cambiarVistaCorreo('enviados')">Enviados</button>
-                <button type="button" class="btn-vista-correo" data-vista="carpetas" onclick="cambiarVistaCorreo('carpetas')">Carpetas</button>
-                <button type="button" class="btn-vista-correo" data-vista="eliminados" onclick="cambiarVistaCorreo('eliminados')">Eliminados</button>
-                <button type="button" class="btn-vista-correo" data-vista="borradores" onclick="cambiarVistaCorreo('borradores')">Borradores</button>
-                <button type="button" class="btn-vista-correo" data-vista="spam" onclick="cambiarVistaCorreo('spam')">Spam</button>
-            </div>
-            <div class="barra-busqueda-correo">
-                <input type="text" id="busqueda-correo" class="input-estilizado" placeholder="Buscar..." oninput="buscarEnCorreoVista()">
-            </div>
-            <div id="lista-correos" class="lista-correos"></div>
-            <div id="detalle-correo" class="detalle-correo" style="display:none;">
-                <button type="button" class="btn-secundario" onclick="cerrarDetalleCorreo()">← Volver al listado</button>
-                <h3 id="detalle-correo-asunto"></h3>
-                <p id="detalle-correo-meta" class="descripcion-app"></p>
-                <p id="detalle-correo-cuerpo"></p>
-                <div class="fila-botones-final">
-                    <button type="button" class="btn-principal" onclick="accionCorreoActual('responder')">Responder</button>
-                    <button type="button" class="btn-secundario" onclick="accionCorreoActual('archivar')">Archivar</button>
-                    <button type="button" class="btn-peligro" onclick="accionCorreoActual('eliminar')">Eliminar</button>
+            <!-- PUNTO 1 (19/10 tarde): layout dos columnas — menú izquierda, contenido derecha -->
+            <div class="layout-correos">
+                <div class="menu-correos">
+                    <button type="button" class="btn-principal btn-redactar-correos" onclick="abrirRedaccionCorreo()">REDACTAR</button>
+                    <div class="barra-vistas-correo">
+                        <button type="button" class="btn-vista-correo activo" data-vista="recibidos" onclick="cambiarVistaCorreo('recibidos')">Recibidos</button>
+                        <button type="button" class="btn-vista-correo" data-vista="enviados" onclick="cambiarVistaCorreo('enviados')">Enviados</button>
+                        <button type="button" class="btn-vista-correo" data-vista="carpetas" onclick="cambiarVistaCorreo('carpetas')">Carpetas</button>
+                        <button type="button" class="btn-vista-correo" data-vista="eliminados" onclick="cambiarVistaCorreo('eliminados')">Eliminados</button>
+                        <button type="button" class="btn-vista-correo" data-vista="borradores" onclick="cambiarVistaCorreo('borradores')">Borradores</button>
+                        <button type="button" class="btn-vista-correo" data-vista="spam" onclick="cambiarVistaCorreo('spam')">Spam</button>
+                    </div>
+                </div>
+                <div class="contenido-correos">
+                    <div class="barra-busqueda-correo">
+                        <input type="text" id="busqueda-correo" class="input-estilizado" placeholder="Buscar..." oninput="buscarEnCorreoVista()">
+                    </div>
+                    <div id="lista-correos" class="lista-correos"></div>
+                    <div id="detalle-correo" class="detalle-correo" style="display:none;">
+                        <button type="button" class="btn-secundario" onclick="cerrarDetalleCorreo()">← Volver al listado</button>
+                        <h3 id="detalle-correo-asunto"></h3>
+                        <p id="detalle-correo-meta" class="descripcion-app"></p>
+                        <p id="detalle-correo-cuerpo"></p>
+                        <div class="fila-botones-final">
+                            <button type="button" class="btn-principal" onclick="accionCorreoActual('responder')">Responder</button>
+                            <button type="button" class="btn-secundario" onclick="accionCorreoActual('archivar')">Archivar</button>
+                            <button type="button" class="btn-peligro" onclick="accionCorreoActual('eliminar')">Eliminar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div style="text-align:center;margin-top:16px;"><button type="button" class="btn-principal" onclick="irAPantalla('pantalla-comunicacion')">← Volver a Comunicación</button></div>
         </section>
 
         <!-- ============================================ -->
@@ -680,7 +690,8 @@
                     <textarea id="redactar-mensaje" class="input-estilizado" placeholder="Escribe tu mensaje..."></textarea>
                 </div>
                 <div class="fila-redaccion fila-adjunto">
-                    <button type="button" class="btn-adjunto-correo" onclick="adjuntarArchivoCorreo()" title="Adjuntar archivo">
+                    <input type="file" id="input-adjunto-correo" style="display:none;" onchange="cambioAdjuntoCorreo(this)">
+                    <button type="button" class="btn-adjunto-correo" onclick="document.getElementById('input-adjunto-correo').click()" title="Adjuntar archivo">
                         <img src="../Colores-y-Estetica/Iconos/Cargar documento.svg" alt="Adjuntar" class="icono-inline">
                     </button>
                     <span id="nombre-adjunto-correo" class="descripcion-app"></span>
