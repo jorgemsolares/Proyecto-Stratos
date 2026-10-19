@@ -1053,6 +1053,11 @@ button .icono-inline,
     width: 1.2em;
     height: 1.2em;
 }
+/* Placeholders de submódulos "en preparación": icono decorativo centrado a ~30px (PUNTO 1, 19/10). */
+.icono-placeholder {
+    width: 30px;
+    height: 30px;
+}
 
 .sidebar-menu {
     position: fixed;

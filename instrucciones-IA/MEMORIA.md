@@ -141,6 +141,11 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 
 ## BITÁCORA (historial de lo realizado)
 
+### 19/10/2026 (tarde) — instrucciones.md PUNTO 1: REGLAS DE ICONOS SVG (TAMAÑO Y COLOR)
+- **Punto 1 — hecho:** `.icono-inline` a 30×30px fuera de botones; dentro de botones se revierte a 1.2em (botones intactos). Placeholders "en preparación" (8, antes 3rem) pasan a `.icono-placeholder` 30px. Creados `Advertencia-naranja.svg` (#ff8c00), `Error-rojo.svg` (#e53935) y `Exito-verde.svg` (autorizados por el Arquitecto; copias recoloreadas de los verdes).
+- **Color por alerta:** `mostrarAvisoInmediato()` antepone el SVG según tipo (éxito→verde, advertencia→naranja, error→rojo) cuando el texto no trae `<img>`, quitando ✓/✖/⚠ inicial. Cola de identidad y aviso de borrado excesivo usan naranja; modal de cambio obligatorio usa naranja en HTML.
+- **Verificación:** esprima OK ambos JS + 58/58 pruebas en verde. **Pendiente:** Ctrl+F5 (iconos ~30px fuera de botones; cartelera con verde/naranja/rojo según tipo).
+
 ### 19/10/2026 — instrucciones.md PUNTO 1: REDACCIÓN DE CORREO A MODAL FLOTANTE
 - **Punto 1 — hecho:** la redacción dejó de ser `section#pantalla-redactar-correo` (pantalla completa) y ahora es `div#modal-redactar-correo.modal` en GRUPO 4 (flotante estilo Gmail, con fondo oscuro; encabezado "Nuevo Correo" + X; campos De/Para/Asunto/Mensaje + clip; footer ENVIAR verde, ENVIAR+TAREA/ALARMA naranja, DESCARTAR rojo). Sin header/footer de app (ya visibles en la bandeja de fondo).
 - **Lógica:** `abrirRedaccionCorreo()` limpia y muestra el modal (`display:flex`); `cerrarModalRedaccionCorreo()` lo oculta; `volverDeRedaccionCorreo()` y `descartarRedaccionCorreo()` cierran sin navegar; `enviarCorreoRedactado()` valida, guarda en Enviados, registra en bancoDatos y cierra el modal (luego va a Tareas/Alarmas si aplica).
