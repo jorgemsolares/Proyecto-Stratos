@@ -3770,7 +3770,7 @@ function marcarCorreoLeidoSinAbrir(id) {
 // Adjunto en memoria (solo nombre; no se persiste el archivo en este punto).
 let adjuntoCorreoActual = null; // { nombre: "" }
 
-// PUNTO 1: abre la pantalla de redacción desde el botón REDACTAR.
+// PUNTO 1 (19/10): abre la redacción como MODAL flotante sobre la bandeja (ya no es pantalla).
 function abrirRedaccionCorreo() {
     const de = document.getElementById('redactar-de');
     if (de) de.textContent = (usuarioActivo && usuarioActivo.email) ? usuarioActivo.email : '';
@@ -3787,7 +3787,14 @@ function abrirRedaccionCorreo() {
     if (aviso) { aviso.innerText = ''; aviso.className = 'aviso-letrero'; aviso.style.maxHeight = '0'; }
     poblarDestinatariosCorreo();
     validarDestinatarioCorreo();
-    irAPantalla('pantalla-redactar-correo');
+    const modal = document.getElementById('modal-redactar-correo');
+    if (modal) modal.style.display = 'flex';
+}
+
+// Cierra el modal de redacción (el fondo ya muestra la bandeja; no navega pantallas).
+function cerrarModalRedaccionCorreo() {
+    const modal = document.getElementById('modal-redactar-correo');
+    if (modal) modal.style.display = 'none';
 }
 
 // Autocompletado del Para: emails de usuarios + contactos + correos previos.

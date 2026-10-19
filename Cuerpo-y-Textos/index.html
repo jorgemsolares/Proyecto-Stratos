@@ -651,6 +651,51 @@
     </div>
 
     <!-- ============================================ -->
+    <!-- 4.4 MODAL REDACTAR CORREO (PUNTO 1 instrucciones.md 19/10; flotante estilo Gmail, simulado) -->
+    <!-- Se abre sobre la bandeja (pantalla-correos). Sin header/footer de app: solo título + X. -->
+    <!-- ============================================ -->
+    <div id="modal-redactar-correo" class="modal" style="display:none;">
+        <div class="modal-content modal-redactar">
+            <div class="modal-header">
+                <h3><img src="../Colores-y-Estetica/Iconos/correos.svg" alt="" class="icono-inline"> Nuevo Correo</h3>
+                <button type="button" onclick="descartarRedaccionCorreo()" class="btn-cerrar">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="fila-redaccion">
+                    <label class="etiqueta-redaccion">De:</label>
+                    <span id="redactar-de" class="redactar-de"></span>
+                </div>
+                <div class="fila-redaccion">
+                    <label class="etiqueta-redaccion" for="redactar-para">Para:</label>
+                    <input type="text" id="redactar-para" class="input-estilizado" placeholder="destinatario@correo.com" list="lista-destinatarios-correo" oninput="validarDestinatarioCorreo()" autocomplete="off">
+                    <datalist id="lista-destinatarios-correo"></datalist>
+                </div>
+                <p id="aviso-destinatario-correo" class="aviso-letrero"></p>
+                <div class="fila-redaccion">
+                    <label class="etiqueta-redaccion" for="redactar-asunto">Asunto:</label>
+                    <input type="text" id="redactar-asunto" class="input-estilizado" placeholder="Asunto del correo">
+                </div>
+                <div class="fila-redaccion fila-mensaje">
+                    <label class="etiqueta-redaccion" for="redactar-mensaje">Mensaje:</label>
+                    <textarea id="redactar-mensaje" class="input-estilizado" placeholder="Escribe tu mensaje..."></textarea>
+                </div>
+                <div class="fila-redaccion fila-adjunto">
+                    <button type="button" class="btn-adjunto-correo" onclick="adjuntarArchivoCorreo()" title="Adjuntar archivo">
+                        <img src="../Colores-y-Estetica/Iconos/Cargar documento.svg" alt="Adjuntar" class="icono-inline">
+                    </button>
+                    <span id="nombre-adjunto-correo" class="descripcion-app"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-principal" onclick="enviarCorreoRedactado('solo')">ENVIAR</button>
+                <button type="button" class="btn-secundario" onclick="enviarCorreoRedactado('tarea')">ENVIAR + TAREA</button>
+                <button type="button" class="btn-secundario" onclick="enviarCorreoRedactado('alarma')">ENVIAR + ALARMA</button>
+                <button type="button" class="btn-peligro" onclick="descartarRedaccionCorreo()">DESCARTAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
     <!-- GRUPO 5: SCRIPTS -->
     <!-- 5.1 SCRIPTS (carga los archivos de datos y lógica de la app) -->
     <!-- ============================================ -->
