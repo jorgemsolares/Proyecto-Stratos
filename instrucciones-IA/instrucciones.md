@@ -18,34 +18,34 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 
 ---
 
-## PUNTO 1: CAMBIAR LA PANTALLA DE REDACCIÓN POR UNA VENTANA EMERGENTE (MODAL)
+## PUNTO 1: REGLAS PARA EL USO DE ICONOS SVG (TAMAÑO Y COLOR)
 
-**Contexto:** La pantalla de redacción de correos a pantalla completa no se ve bien en el diseño angosto de la app. Se cambiará a una ventana emergente flotante (estilo Gmail) que se abre sobre la bandeja de entrada.
+**Contexto:** Se establece una regla unificada para el uso de los iconos SVG en todo el sistema, diferenciando su tamaño según estén dentro o fuera de un botón, y su color según el nivel de alerta del mensaje.
 
 **Qué cambiar:**
-- Modificar la estructura HTML de la redacción para que sea un `<div>` con la clase `modal` (o una estructura similar a las ventanas emergentes existentes en el sistema).
-- Ajustar los estilos para que flote en el centro de la pantalla.
-- Modificar la lógica para que el botón "REDACTAR" abra esta ventana, y que el botón de cerrar o "Descartar" la oculte.
+1. **Tamaño:**
+   - **Iconos dentro de botones:** Mantener el tamaño actual (grande, para llamar la atención).
+   - **Iconos fuera de botones** (en títulos, cartelera, menús, alertas de texto): Ajustar su tamaño a **~30px** (ej. `width: 30px; height: 30px;` o `font-size: 30px` según la implementación).
+2. **Color según la alerta:**
+   - **Normal/Informativo:** Verde Stratos (`#00ff88`). (Los SVG actuales ya tienen este color internamente).
+   - **Advertencia:** Naranja (`#ff8c00`).
+   - **Error:** Rojo (`#e53935`).
+   - Para lograr esto, como los SVG se cargan como imágenes y su color está dentro del archivo, Cline debe crear (o generar) versiones de los iconos con el color naranja y rojo, y el código debe llamar al archivo correcto según el tipo de mensaje.
 
-**Cómo debe quedar (Estructura visual):**
-- **Tipo:** Ventana flotante (modal) con fondo oscuro semitransparente detrás, igual que el modal de contacto o el de detalles.
-- **Encabezado del modal:** Un título simple que diga "Nuevo Correo" y el botón de cerrar (X).
-- **Campos (estilo Gmail):**
-  - `De:` (Fijo, mostrando el email del `usuarioActivo`).
-  - `Para:` (Input).
-  - `Asunto:` (Input de texto).
-  - `Mensaje:` (Textarea grande).
-- **Barra de acciones (abajo del modal):**
-  - Botón principal: `ENVIAR` (verde).
-  - Botón secundario: `ENVIAR + TAREA` (naranja).
-  - Botón secundario: `ENVIAR + ALARMA` (naranja).
-  - Botón de peligro/descartar: `DESCARTAR` (rojo).
-- **Nota:** Al ser una ventana flotante, **NO debe incluir** el encabezado de la app (logo y cartelera), ni el pie de página (sello de agua, botón de Vero, botón Libro), porque esos ya están visibles en la pantalla de fondo.
+**Dónde:**
+- `estilos.css`: ajustar el tamaño de las clases de iconos inline (que no estén en botones).
+- `logica.js`: en las funciones de la cartelera y avisos (`construirColaMensajes`, `mostrarAvisoInmediato`), asegurar que se llame al archivo SVG correcto (verde, naranja o rojo) según la prioridad o tipo de mensaje.
+- `Cuerpo-y-Textos/index.html`: en los títulos estáticos que usan iconos, ajustar el tamaño y verificar el color.
 
-**Lógica:**
-- Al hacer clic en "REDACTAR" (en la pantalla de correos), el modal aparece en pantalla.
-- Al enviar o descartar, el modal se cierra y el usuario vuelve a ver la lista de correos.
-- Mantener el registro en el `bancoDatos` al enviar.
+**Cómo debe quedar:**
+- Los iconos fuera de los botones se ven proporcionados (~30px) y legibles.
+- Los iconos dentro de los botones mantienen su tamaño original.
+- Los avisos en cartelera usan iconos verdes si son normales, naranjas si son advertencias y rojos si son errores.
+
+**Qué NO hacer:**
+- NO cambiar el tamaño de los iconos que están dentro de los botones.
+- NO usar emojis como reemplazo.
+- Si falta la versión de un icono en naranja o rojo, NO inventarlo; preguntar al Arquitecto (según la regla ya establecida).
 
 ---
 
