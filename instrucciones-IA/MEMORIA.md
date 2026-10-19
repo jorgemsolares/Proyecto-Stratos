@@ -147,6 +147,10 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 
 ## BITÁCORA (historial de lo realizado)
 
+### 19/10/2026 (noche 2) — COLOR DEL SLOGAN A RECUADROS (detalle pendiente del 17/10)
+- **Hecho:** el selector `#sel-color-slogan` mostraba códigos hex como texto; ahora es `#paleta-color-slogan` con recuadros de 34px (paleta del logo, sin números; el elegido con borde blanco). `poblarSelectorColorSlogan()` genera los recuadros, `elegirColorSlogan()` marca y previsualiza, `actualizarVistaPrevia()` lee el recuadro. Guardado intacto (identidad + estética).
+- **Verificación:** esprima OK ambos JS. **Pendiente:** Ctrl+F5 (elegir color por recuadro en Identidad Corporativa).
+
 ### 19/10/2026 (noche) — instrucciones.md PUNTOS 1-4: REDISEÑO CORREOS GMAIL
 - **Punto 1 — hecho:** `pantalla-correos` a 2 columnas (menú 170px + contenido flexible; apilado en celular). Encabezado con flecha `flecha izquierda.svg` (recoloreada negro→verde por protocolo) + título centrado. REDACTAR arriba del menú; vistas en lista vertical; búsqueda + lista a la derecha.
 - **Punto 2 — hecho:** `.btn-vista-correo` sin borde fijo (transparente en reposo; verde+sombra en hover; halo en active; activa con fondo claro + texto verde).

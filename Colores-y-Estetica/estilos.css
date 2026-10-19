@@ -949,6 +949,31 @@ textarea {
     font-family: var(--familia-tipografica);
 }
 
+/* Recuadros de color del Slogan (paleta del logo; sin números, solo el color) */
+.paleta-slogan {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+.recuadro-slogan {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    cursor: pointer;
+    padding: 0;
+    transition: all var(--transicion-rapida);
+}
+.recuadro-slogan:hover {
+    transform: scale(1.12);
+}
+.recuadro-slogan.seleccionado {
+    border-color: #ffffff;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.55);
+    transform: scale(1.12);
+}
+
 /* ==========================================
 3.9 CONFIGURACIÓN PERSONAL (estilos para la pantalla donde el usuario ajusta su idioma, notificaciones y preferencias de cuenta)
 ========================================== */
