@@ -257,7 +257,7 @@ function construirColaMensajes() {
         const no1 = baseDatosUsuarios.find(u => u.esNo1);
         const nombreNo1 = no1 ? no1.nombre : "El administrador";
         colaMensajes.push({
-            texto: `<img src="../Colores-y-Estetica/Iconos/Advertencia.svg" alt="" class="icono-inline" onerror="this.remove()"> Aviso: ${nombreNo1} aún no ha definido toda la Identidad Corporativa.`,
+            texto: `<img src="../Colores-y-Estetica/Iconos/Advertencia-naranja.svg" alt="" class="icono-inline" onerror="this.remove()"> Aviso: ${nombreNo1} aún no ha definido toda la Identidad Corporativa.`,
             tipo: 'aviso',
             prioridad: 'baja',
             fechaInicio: new Date(),
@@ -3714,7 +3714,7 @@ function accionCorreoActual(accion) {
             if (dias > 1) {
                 const prom = Object.values(porDia).reduce((a, b) => a + b, 0) / dias;
                 if ((porDia[hoy] || 0) > prom * 1.5 && typeof mostrarAvisoInmediato === 'function') {
-                    mostrarAvisoInmediato('<img src="../Colores-y-Estetica/Iconos/Advertencia.svg" alt="" class="icono-inline" onerror="this.remove()"> Estás borrando más de lo habitual hoy.', 'advertencia');
+                    mostrarAvisoInmediato('<img src="../Colores-y-Estetica/Iconos/Advertencia-naranja.svg" alt="" class="icono-inline" onerror="this.remove()"> Estás borrando más de lo habitual hoy.', 'advertencia');
                 }
             }
         } catch (e) {}
