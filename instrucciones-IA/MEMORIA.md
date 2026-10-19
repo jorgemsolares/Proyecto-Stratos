@@ -129,13 +129,19 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 
 *(Se irán agregando más notas aquí conforme el Arquitecto las comparta.)*
 
-### PROCESO ESTÁNDAR OBLIGATORIO — INSERCIÓN DE ICONOS (17/10/2026)
+### PROCESO ESTÁNDAR OBLIGATORIO — INSERCIÓN DE ICONOS (17/10/2026, ampliado 19/10/2026 con LEY F de A_DONDE_VA_STRATOS.md)
 - **Prohibido usar emojis genéricos** en código nuevo. Todo icono visible debe salir de `Colores-y-Estetica/Iconos/`.
 - **Paso 1 — buscar:** ante una acción que necesite icono, buscar en la carpeta `Iconos/` el más adecuado por significado (no por parecido visual).
-- **Paso 2 — convertir:** antes de usarlo, convertir sus colores al verde del sistema `#00ff88` (recolor de `fill` negro u otros tonos; se conservan los ya verdes).
+- **Paso 2 — convertir:** base verde Stratos `#00ff88` (recolor de `fill` negro u otros tonos; se conservan los ya verdes). Variantes por alerta ya autorizadas: `Advertencia-naranja.svg` (`#ff8c00`), `Error-rojo.svg` (`#e53935`), `Exito-verde.svg`.
 - **Paso 3 — colocar:** insertarlo donde corresponde con `<img src="../Colores-y-Estetica/Iconos/NOMBRE.svg" alt="" class="icono-inline">` (cartelera/menú) o la clase de icono que aplique en su módulo.
+- **Tamaño (PUNTO 1 del 19/10):** fuera de botones ~30px (`.icono-inline` 30×30, `.icono-placeholder` 30px); dentro de botones intacto (1.2em; `icono-comunicacion`/`icono-hexagono` no se tocan).
+- **LEY F — barra vs cartelera (diseño obligatorio de ahora en adelante):**
+  - **Barra de notificaciones** (`#barra-notificaciones`): avisos inmediatos del sistema (confirmación/error/advertencia), 3 segundos, colores de contraste fijos. Icono por tipo: éxito→verde, advertencia→naranja, error→rojo.
+  - **Cartelera** (`#zona-cartelera`): rota avisos + motivacionales (10 s alta, 6 s media, 4 s baja); respeta identidad corporativa. Icono por jerarquía/urgencia, NO por tipo genérico: naranja = mensaje de un superior (directo o indirecto); rojo = urgente/atención inmediata; verde = normal (colegas, subalternos, sistema, motivacionales). Naranja/rojo = prioridad alta (10 s en pantalla).
+  - **Login sin cartelera:** solo barra de notificaciones + formulario + biometría.
+  - **Futuros módulos** (correos, tareas, chats): aplican la misma regla jerárquica de la cartelera.
 - **Si no hay uno adecuado:** NO poner uno genérico, NO inventar, NO reutilizar otro icono "parecido". Avisar primero al Arquitecto para que autorice/inserte el SVG buscado, y solo después colocarlo.
-- **Aplica a futuro:** cada icono nuevo que se pida sigue estos 3 pasos + aviso previo si falta.
+- **Aplica a futuro:** cada icono nuevo que se pida sigue estos pasos + LEY F + aviso previo si falta.
 
 ---
 
