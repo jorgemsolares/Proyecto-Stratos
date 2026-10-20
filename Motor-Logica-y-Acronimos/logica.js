@@ -3756,19 +3756,26 @@ function accionCorreoActual(accion) {
     const c = correosLocales.find(x => x && x.id === correoAbiertoId);
     if (!c) return;
     const ahora = new Date();
-    if (accion === 'responder') {
-        c.respondidoEn = ahora.toISOString();
-        metricasCorreos.enviados.respondidos++;
-        // Personas involucradas: destinatario principal (no copias).
-        (c.destinatarios || []).forEach(d => { if (d) metricasCorreos.enviados.personas[d] = (metricasCorreos.enviados.personas[d] || 0) + 1; });
-        // Acciones generadas (tarea/alarma/llamada/reunión) y procesos (compra/pago/cotización).
-        if (c.accionGenerada) metricasCorreos.enviados.acciones++;
-        if (c.procesoActivado) metricasCorreos.enviados.procesos++;
+    if (accion === 'responder' || accion === 'reenviar') {
+        if (accion === 'responder') {
+            c.respondidoEn = ahora.toISOString();
+            metricasCorreos.enviados.respondidos++;
+            // Personas involucradas: destinatario principal (no copias).
+            (c.destinatarios || []).forEach(d => { if (d) metricasCorreos.enviados.personas[d] = (metricasCorreos.enviados.personas[d] || 0) + 1; });
+            // Acciones generadas y procesos.
+            if (c.accionGenerada) metricasCorreos.enviados.acciones++;
+            if (c.procesoActivado) metricasCorreos.enviados.procesos++;
+        }
+        cerrarDetalleCorreo();
+        prepararRedaccionResponderReenviar(c, accion);
+        guardarCorreosLocales();
+        return;
     } else if (accion === 'archivar') {
-        c.vista = 'carpetas';
-        c.carpeta = c.carpeta || 'Archivo';
-        metricasCorreos.carpetas.movimientos.push({ fecha: ahora.toISOString(), desde: vistaCorreoActual });
-        metricasCorreos.carpetas.pesoTotal += (c.pesoKb || 0);
+        correoAPendienteArchivar = c.id;
+        const modalArch = document.getElementById('modal-archivar-correo');
+        if (modalArch) modalArch.style.display = 'flex';
+        cerrarDetalleCorreo();
+        return;
     } else if (accion === 'eliminar') {
         c.vista = 'eliminados';
         c.borradoEn = ahora.toISOString();
