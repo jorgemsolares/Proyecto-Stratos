@@ -2275,6 +2275,53 @@ No toca .btn-principal / .btn-secundario existentes.
 .modal-redactar .modal-body { gap: 10px; }
 .modal-redactar .fila-mensaje .input-estilizado { min-height: 180px; }
 
+/* PUNTO 3 instrucciones.md: barra de herramientas de texto en el modal de redacción (estilo Gmail) */
+.barra-formato-texto {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin: 4px 0 8px 0;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: var(--radio-bordes);
+    padding: 6px;
+}
+.btn-formato {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: var(--color-letras);
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-formato:hover {
+    border-color: var(--color-primario);
+    background: rgba(0, 255, 136, 0.15);
+}
+.mensaje-contenteditable {
+    min-height: 160px;
+    max-height: 300px;
+    overflow-y: auto;
+    outline: none;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radio-bordes);
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.2);
+    color: var(--color-letras);
+}
+.mensaje-contenteditable:empty:before {
+    content: attr(data-placeholder);
+    color: rgba(255, 255, 255, 0.5);
+    display: block;
+}
+
 /* ==========================================
 5.4 SCROLLBAR PERSONALIZADA (diseño a medida de la barra de desplazamiento lateral para que combine con los colores de la app)
 ========================================== */
