@@ -149,6 +149,7 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 
 ### 19/10/2026 (noche 2) — COLOR DEL SLOGAN A RECUADROS (detalle pendiente del 17/10)
 - **Hecho:** el selector `#sel-color-slogan` mostraba códigos hex como texto; ahora es `#paleta-color-slogan` con recuadros de 34px (paleta del logo, sin números; el elegido con borde blanco). `poblarSelectorColorSlogan()` genera los recuadros, `elegirColorSlogan()` marca y previsualiza, `actualizarVistaPrevia()` lee el recuadro. Guardado intacto (identidad + estética).
+- **Corrección (misma noche):** a pedido del Arquitecto, NO recuadros fijos sino botón desplegable `#btn-color-slogan` con muestra + `▾`, que despliega `#lista-color-slogan` con la MISMA paleta de arriba (`coloresExtraidos`, reconstruida siempre para reflejar cambios del logo). Solo se aplica al slogan. Cierra al elegir o al clic fuera.
 - **Verificación:** esprima OK ambos JS. **Pendiente:** Ctrl+F5 (elegir color por recuadro en Identidad Corporativa).
 
 ### 19/10/2026 (noche) — instrucciones.md PUNTOS 1-4: REDISEÑO CORREOS GMAIL

@@ -240,10 +240,16 @@
                                 </select>
                             </label>
                             
-                            <label>
+                            <label class="selector-color-slogan">
                                 <span data-i18n="id_color">Color:</span>
-                                <!-- Recuadros de color del Slogan (paleta del logo; el elegido se marca con borde) -->
-                                <div id="paleta-color-slogan" class="paleta-slogan"></div>
+                                <!-- Botón desplegable del color del Slogan: muestra la misma paleta de arriba, aplicada solo al slogan -->
+                                <div class="desplegable-color-slogan">
+                                    <button type="button" id="btn-color-slogan" class="input-estilizado-mejorado btn-desplegable-slogan" onclick="alternarDesplegableSlogan(event)">
+                                        <span id="muestra-color-slogan" class="muestra-color-slogan"></span>
+                                        <span class="flecha-desplegable">▾</span>
+                                    </button>
+                                    <div id="lista-color-slogan" class="lista-color-slogan" style="display:none;"></div>
+                                </div>
                             </label>
                         </div>
                         

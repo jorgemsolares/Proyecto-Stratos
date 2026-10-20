@@ -949,26 +949,61 @@ textarea {
     font-family: var(--familia-tipografica);
 }
 
-/* Recuadros de color del Slogan (paleta del logo; sin números, solo el color) */
-.paleta-slogan {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-top: 4px;
+/* Color del Slogan: botón desplegable con la misma paleta de arriba (solo recuadros, sin números) */
+.selector-color-slogan {
+    position: relative;
 }
-.recuadro-slogan {
-    width: 34px;
-    height: 34px;
+.desplegable-color-slogan {
+    position: relative;
+    width: 100%;
+}
+.btn-desplegable-slogan {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+}
+.muestra-color-slogan {
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    background: #00ff88;
+    flex-shrink: 0;
+}
+.flecha-desplegable {
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+.lista-color-slogan {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px;
+    background: #1a1a2e;
+    border: 1px solid var(--color-primario);
+    border-radius: var(--radio-bordes);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    z-index: 50;
+}
+.opcion-color-slogan {
+    width: 30px;
+    height: 30px;
     border-radius: 8px;
     border: 2px solid rgba(255, 255, 255, 0.25);
     cursor: pointer;
     padding: 0;
     transition: all var(--transicion-rapida);
 }
-.recuadro-slogan:hover {
+.opcion-color-slogan:hover {
     transform: scale(1.12);
 }
-.recuadro-slogan.seleccionado {
+.opcion-color-slogan.seleccionado {
     border-color: #ffffff;
     box-shadow: 0 0 12px rgba(255, 255, 255, 0.55);
     transform: scale(1.12);

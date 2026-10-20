@@ -2931,7 +2931,8 @@ function asignarDestino(tipo, botonPresionado) {
     mostrarAvisoInmediato(`✓ Color aplicado al ${tipo}`, "exito");
 }
 
-// Color del Slogan elegido con los recuadros (se guarda igual que antes en identidad + estética).
+// Color del Slogan: botón desplegable con la MISMA paleta de arriba (coloresExtraidos).
+// Si la paleta cambia (nuevo logo), el listado muestra esos cambios; solo se aplica al slogan.
 let colorSloganElegido = null;
 
 function obtenerColorSloganActual() {
@@ -2943,35 +2944,56 @@ function obtenerColorSloganActual() {
     return '#00ff88';
 }
 
-function elegirColorSlogan(color, recuadro) {
+function alternarDesplegableSlogan(ev) {
+    if (ev) ev.stopPropagation();
+    const lista = document.getElementById('lista-color-slogan');
+    if (!lista) return;
+    if (typeof poblarSelectorColorSlogan === 'function') poblarSelectorColorSlogan();
+    lista.style.display = (lista.style.display === 'none' || !lista.style.display) ? 'flex' : 'none';
+}
+
+function elegirColorSlogan(color) {
     colorSloganElegido = color;
-    const paleta = document.getElementById('paleta-color-slogan');
-    if (paleta) paleta.querySelectorAll('.recuadro-slogan').forEach(r => r.classList.toggle('seleccionado', r === recuadro));
+    const muestra = document.getElementById('muestra-color-slogan');
+    if (muestra) muestra.style.background = color;
+    const lista = document.getElementById('lista-color-slogan');
+    if (lista) {
+        lista.style.display = 'none';
+        lista.querySelectorAll('.opcion-color-slogan').forEach(o => o.classList.toggle('seleccionado', o.getAttribute('data-color') === color));
+    }
     if (typeof actualizarVistaPrevia === 'function') actualizarVistaPrevia();
 }
 
 function poblarSelectorColorSlogan() {
-    const paleta = document.getElementById('paleta-color-slogan');
-    if (!paleta) return;
-    if (paleta.querySelectorAll('.recuadro-slogan').length > 0) {
-        // Marca el actual sin duplicar recuadros.
-        const actual = obtenerColorSloganActual();
-        paleta.querySelectorAll('.recuadro-slogan').forEach(r => r.classList.toggle('seleccionado', r.getAttribute('data-color') === actual));
-        return;
-    }
-    const colores = (typeof coloresExtraidos !== 'undefined' && coloresExtraidos.length) ? coloresExtraidos.slice(0, 8) : ['#00ff88'];
+    const lista = document.getElementById('lista-color-slogan');
+    const muestra = document.getElementById('muestra-color-slogan');
     const actual = obtenerColorSloganActual();
+    if (muestra && !muestra.style.background) muestra.style.background = actual;
+    if (!lista) return;
+    // Se reconstruye SIEMPRE: así refleja la paleta actual de arriba (coloresExtraidos).
+    lista.innerHTML = '';
+    const colores = (typeof coloresExtraidos !== 'undefined' && coloresExtraidos.length) ? coloresExtraidos.slice(0, 8) : ['#00ff88'];
     colores.forEach(c => {
-        const r = document.createElement('button');
-        r.type = 'button';
-        r.className = 'recuadro-slogan' + (c === actual ? ' seleccionado' : '');
-        r.setAttribute('data-color', c);
-        r.title = c;
-        r.style.background = c;
-        r.onclick = () => elegirColorSlogan(c, r);
-        paleta.appendChild(r);
+        const o = document.createElement('button');
+        o.type = 'button';
+        o.className = 'opcion-color-slogan' + (c === actual ? ' seleccionado' : '');
+        o.setAttribute('data-color', c);
+        o.title = c;
+        o.style.background = c;
+        o.onclick = (ev) => { if (ev) ev.stopPropagation(); elegirColorSlogan(c); };
+        lista.appendChild(o);
     });
     if (!colorSloganElegido) colorSloganElegido = actual;
+    if (muestra) muestra.style.background = colorSloganElegido;
+}
+
+// Cierra el desplegable al hacer clic fuera (se registra una sola vez).
+if (typeof document !== 'undefined' && !document._cierreDesplegableSlogan) {
+    document._cierreDesplegableSlogan = true;
+    document.addEventListener('click', () => {
+        const lista = document.getElementById('lista-color-slogan');
+        if (lista) lista.style.display = 'none';
+    });
 }
 function actualizarVistaPrevia() {
     if (typeof poblarSelectorColorSlogan === 'function') poblarSelectorColorSlogan();
