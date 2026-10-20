@@ -429,6 +429,34 @@
         </div>
 
         <!-- ============================================ -->
+        <!-- 5.1 MODAL ARCHIVAR CORREO (PUNTO 5 instrucciones.md) -->
+        <!-- ============================================ -->
+        <div id="modal-archivar-correo" class="modal" style="display:none;">
+            <div class="modal-content modal-redactar">
+                <div class="modal-header">
+                    <h3>Archivar correo</h3>
+                    <button type="button" onclick="cerrarModalArchivarCorreo()" class="btn-cerrar">✕</button>
+                </div>
+                <div class="modal-body">
+                    <p class="descripcion-app">Asigna una carpeta para organizar este correo.</p>
+                    <div class="barra-carpetas-archivo" style="display:flex; gap:8px; flex-wrap:wrap; margin:8px 0;">
+                        <button type="button" class="btn-carpeta-archivo" onclick="confirmarArchivarCorreo('Proveedores')">Proveedores</button>
+                        <button type="button" class="btn-formato" onclick="confirmarArchivarCorreo('Cotizaciones')">Cotizaciones</button>
+                        <button type="button" class="btn-formato" onclick="confirmarArchivarCorreo('Archivo')">Archivo</button>
+                        <button type="button" class="btn-formato" onclick="pedirCarpetaPersonalizadaCorreo()">Otra carpeta...</button>
+                    </div>
+                    <div class="fila-carpeta-personalizada" id="fila-carpeta-personalizada" style="display:none; margin-top:10px;">
+                        <input type="text" id="carpeta-personalizada-correo" class="input-estilizado" placeholder="Nombre de la carpeta">
+                        <button type="button" class="btn-principal" onclick="confirmarArchivarCorreo(document.getElementById('carpeta-personalizada-correo').value)">Guardar</button>
+                    </div>
+                    <p id="aviso-archivar-correo" class="aviso-letrero"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-peligro" onclick="cerrarModalArchivarCorreo()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================ -->
         <!-- 2.5.3 REDACCIÓN DE CORREO: ahora es MODAL flotante (PUNTO 1 instrucciones.md 19/10) -->
         <!-- Ver GRUPO 4: #modal-redactar-correo (se abre sobre la bandeja, sin header/footer de app). -->
         <!-- ============================================ -->
