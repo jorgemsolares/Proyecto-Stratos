@@ -1113,6 +1113,11 @@ button .icono-inline,
     width: 1.2em;
     height: 1.2em;
 }
+/* PUNTO 2 instrucciones.md: el botón Volver (flecha izquierda) de correos mantiene su icono a 30px. */
+.btn-volver-correos .icono-inline {
+    width: 30px;
+    height: 30px;
+}
 /* Placeholders de submódulos "en preparación": icono decorativo centrado a ~30px (PUNTO 1, 19/10). */
 .icono-placeholder {
     width: 30px;
@@ -2153,7 +2158,7 @@ No toca .btn-principal / .btn-secundario existentes.
    activo = mismo botón + texto/borde verde + resplandor. Estructura idéntica en ambos. */
 .btn-vista-correo {
     padding: 8px 12px;
-    font-size: 0.85rem;
+    font-size: 0.78rem;
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -2164,6 +2169,7 @@ No toca .btn-principal / .btn-secundario existentes.
     cursor: pointer;
     text-align: left;
     width: 100%;
+    white-space: nowrap;
     box-shadow: none;
 }
 .btn-vista-correo:hover {
@@ -2191,7 +2197,7 @@ No toca .btn-principal / .btn-secundario existentes.
     padding: 10px 12px;
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.15);
-    background: rgba(255, 255, 255, 0.03);
+    background: transparent;
     cursor: pointer;
     font-size: 15px;
 }
@@ -2207,10 +2213,10 @@ No toca .btn-principal / .btn-secundario existentes.
     align-items: baseline;
     gap: 10px;
 }
-.item-correo-remitente { font-weight: bold; color: var(--color-texto); font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.item-correo-asunto { font-weight: bold; color: var(--color-texto); font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.item-correo-previa { color: rgba(255, 255, 255, 0.7); font-size: 14px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.item-correo-fecha { color: rgba(255, 255, 255, 0.5); font-size: 12px; text-align: right; white-space: nowrap; flex-shrink: 0; }
+.item-correo-remitente { font-weight: bold; color: var(--color-letras); font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item-correo-asunto { font-weight: bold; color: var(--color-letras); font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item-correo-previa { color: var(--color-letras); font-size: 14px; opacity: 0.85; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.item-correo-fecha { color: var(--color-letras); font-size: 12px; opacity: 0.65; text-align: right; white-space: nowrap; flex-shrink: 0; }
 
 /* ==========================================
 4.4 PANTALLA DE REDACCIÓN DE CORREO (PUNTO 2 instrucciones.md 18/10; estilo Gmail, simulado)
