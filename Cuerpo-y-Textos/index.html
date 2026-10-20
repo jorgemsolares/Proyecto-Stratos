@@ -401,20 +401,31 @@
                         <input type="text" id="busqueda-correo" class="input-estilizado" placeholder="Buscar..." oninput="buscarEnCorreoVista()">
                     </div>
                     <div id="lista-correos" class="lista-correos"></div>
-                    <div id="detalle-correo" class="detalle-correo" style="display:none;">
-                        <button type="button" class="btn-secundario" onclick="cerrarDetalleCorreo()">← Volver al listado</button>
-                        <h3 id="detalle-correo-asunto"></h3>
-                        <p id="detalle-correo-meta" class="descripcion-app"></p>
-                        <p id="detalle-correo-cuerpo"></p>
-                        <div class="fila-botones-final">
-                            <button type="button" class="btn-principal" onclick="accionCorreoActual('responder')">Responder</button>
-                            <button type="button" class="btn-secundario" onclick="accionCorreoActual('archivar')">Archivar</button>
-                            <button type="button" class="btn-peligro" onclick="accionCorreoActual('eliminar')">Eliminar</button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
+
+        <!-- ============================================ -->
+        <!-- 2.5.2.1 MODAL DETALLE DE CORREO (PUNTO 3, 19/10 noche 3: doble clic abre ventana, como Redactar) -->
+        <!-- ============================================ -->
+        <div id="modal-detalle-correo" class="modal" style="display:none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><img src="../Colores-y-Estetica/Iconos/correos.svg" alt="" class="icono-inline"> Detalle del correo</h3>
+                    <button type="button" onclick="cerrarDetalleCorreo()" class="btn-cerrar">✕</button>
+                </div>
+                <div class="modal-body">
+                    <h3 id="detalle-correo-asunto" style="margin:0;"></h3>
+                    <p id="detalle-correo-meta" class="descripcion-app" style="margin:0;"></p>
+                    <p id="detalle-correo-cuerpo" style="margin:0; line-height:1.5;"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-principal" onclick="accionCorreoActual('responder')">Responder</button>
+                    <button type="button" class="btn-secundario" onclick="accionCorreoActual('archivar')">Archivar</button>
+                    <button type="button" class="btn-peligro" onclick="accionCorreoActual('eliminar')">Eliminar</button>
+                </div>
+            </div>
+        </div>
 
         <!-- ============================================ -->
         <!-- 2.5.3 REDACCIÓN DE CORREO: ahora es MODAL flotante (PUNTO 1 instrucciones.md 19/10) -->

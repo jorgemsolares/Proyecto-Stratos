@@ -147,6 +147,12 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 
 ## BITÁCORA (historial de lo realizado)
 
+### 19/10/2026 (noche 3) — instrucciones.md PUNTOS 1-3: PROPORCIÓN + BOTONES + DETALLE MODAL
+- **Punto 1 — hecho:** `.menu-correos` a 200px fijos con máx 33%; la lista conserva los 2/3 restantes.
+- **Punto 2 — hecho:** `.btn-vista-correo` normal con fondo `--color-botones` + borde visible, sin sombra; activo con mismo fondo + texto/borde verde + resplandor. Estructura idéntica.
+- **Punto 3 — hecho:** detalle inline eliminado; nuevo `#modal-detalle-correo` (X + Responder/Archivar/Eliminar). Doble clic abre el modal, un clic marca la fila con `.viendo` (borde iluminado). Métricas intactas.
+- **Verificación:** esprima OK ambos JS + 58/58 pruebas en verde. **Pendiente:** Ctrl+F5 (proporción, botones, doble clic a modal).
+
 ### 19/10/2026 (noche 2) — COLOR DEL SLOGAN A RECUADROS (detalle pendiente del 17/10)
 - **Hecho:** el selector `#sel-color-slogan` mostraba códigos hex como texto; ahora es `#paleta-color-slogan` con recuadros de 34px (paleta del logo, sin números; el elegido con borde blanco). `poblarSelectorColorSlogan()` genera los recuadros, `elegirColorSlogan()` marca y previsualiza, `actualizarVistaPrevia()` lee el recuadro. Guardado intacto (identidad + estética).
 - **Corrección (misma noche):** a pedido del Arquitecto, NO recuadros fijos sino botón desplegable `#btn-color-slogan` con muestra + `▾`, que despliega `#lista-color-slogan` con la MISMA paleta de arriba (`coloresExtraidos`, reconstruida siempre para reflejar cambios del logo). Solo se aplica al slogan. Cierra al elegir o al clic fuera.

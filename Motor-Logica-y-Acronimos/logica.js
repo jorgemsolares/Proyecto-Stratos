@@ -3690,12 +3690,21 @@ function renderizarListaCorreos() {
         d.querySelector('.item-correo-asunto').textContent = c.asunto || '';
         d.querySelector('.item-correo-previa').textContent = c.previa || '';
         d.querySelector('.item-correo-fecha').textContent = f;
-        d.onclick = () => abrirDetalleCorreo(c.id);
+        // PUNTO 3 (19/10 noche 3): doble clic abre el modal (un clic solo marca la fila).
+        d.setAttribute('data-correo-id', c.id);
+        d.onclick = () => marcarFilaCorreo(c.id);
+        d.ondblclick = () => abrirDetalleCorreo(c.id);
         lista.appendChild(d);
     });
 }
 
 function buscarEnCorreoVista() { renderizarListaCorreos(); }
+
+function marcarFilaCorreo(id) {
+    document.querySelectorAll('#lista-correos .item-correo').forEach(el => {
+        el.classList.toggle('viendo', el.getAttribute('data-correo-id') === id);
+    });
+}
 
 function abrirDetalleCorreo(id) {
     const c = correosLocales.find(x => x && x.id === id);
@@ -3704,8 +3713,9 @@ function abrirDetalleCorreo(id) {
     correoAbiertoEn = new Date();
     c.abiertoEn = correoAbiertoEn.toISOString();
     correoMetricasPendiente = { id, soloCopia: !!c.soloCopia, abiertoEn: correoAbiertoEn };
-    const det = document.getElementById('detalle-correo');
-    if (det) det.style.display = 'block';
+    marcarFilaCorreo(id);
+    const modal = document.getElementById('modal-detalle-correo');
+    if (modal) modal.style.display = 'flex';
     const a = document.getElementById('detalle-correo-asunto');
     const m = document.getElementById('detalle-correo-meta');
     const b = document.getElementById('detalle-correo-cuerpo');
@@ -3737,8 +3747,9 @@ function cerrarDetalleCorreo(silencioso) {
     correoAbiertoId = null;
     correoAbiertoEn = null;
     correoMetricasPendiente = null;
-    const det = document.getElementById('detalle-correo');
-    if (det) det.style.display = 'none';
+    const modal = document.getElementById('modal-detalle-correo');
+    if (modal) modal.style.display = 'none';
+    marcarFilaCorreo(null);
 }
 
 function accionCorreoActual(accion) {
