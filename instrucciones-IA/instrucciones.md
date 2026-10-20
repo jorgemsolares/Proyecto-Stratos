@@ -17,36 +17,68 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 
 ---
 
-## PUNTO 1: AJUSTE DE PROPORCIONES EN LA PANTALLA DE CORREOS
+## PUNTO 1: PROPORCIÓN 1/4 Y 3/4 EN LA PANTALLA DE CORREOS
 
-**Contexto:** El menú lateral de correos ocupa la mitad del ancho, dejando muy poco espacio para la lista de correos. Se debe ajustar la proporción para emular a Gmail.
+**Contexto:** El menú lateral ocupa mucho espacio. Se ajustará a 1/4 del ancho, y la lista de correos a 3/4.
 
 **Qué cambiar:**
-- En `estilos.css`, modificar el contenedor del menú lateral de correos para que ocupe como máximo 1/3 del ancho (o un ancho fijo de ~200px), dejando los 2/3 restantes para la lista de correos.
+- En `estilos.css`, ajustar el contenedor de dos columnas de la pantalla de correos. El menú lateral debe tener `flex: 0 0 25%` (o similar) y la lista de correos `flex: 1`.
+- Reducir el `font-size` de los botones del menú lateral para que el texto quepa en una sola línea. Evitar que palabras como "BORRADORES" o "ELIMINADOS" se rompan en dos líneas o se corten.
 
 ---
 
-## PUNTO 2: CORREGIR EL ESTADO NORMAL Y ACTIVO DE LOS BOTONES DEL MENÚ LATERAL
+## PUNTO 2: CORRECCIÓN DE COLORES Y EFECTOS EN LOS BOTONES
 
-**Contexto:** El botón "Recibidos" se ve como texto plano (no tiene el diseño de botón), mientras que los demás tienen una sombra verde permanente ("pantallita") que no es uniforme al resto del sistema.
+**Contexto:** Los botones laterales y los correos en la lista no están respetando el color de letras definido en Identidad Corporativa, lo que los hace ver como cuadros negros.
 
 **Qué cambiar:**
-- En `estilos.css`, en la clase `.btn-vista-correo`:
-  - **Estado Normal:** Quitar el `box-shadow` (la pantallita). Debe tener el fondo oscuro del color de botones, borde y forma de botón igual que los demás (como se ve "Recibidos" en la foto 1, pero con el fondo del botón).
-  - **Estado Activo (presionado):** Debe ser idéntico al botón "Enviados" de la foto 2. Fondo oscuro, texto verde (`--color-primario`), borde verde y el resplandor (`box-shadow`) que lo rodea.
-- Asegurar que todos los botones (Recibidos, Enviados, Carpetas, etc.) tengan exactamente la misma estructura visual, variando solo si están en estado normal o activo.
+- En `estilos.css`, asegurar que los botones del menú (Recibidos, Enviados, etc.) y el texto de los correos usen la variable `var(--color-letras)` para el color del texto.
+- El botón presionado (estado activo) debe tener el fondo con la "cubierta" correspondiente (resaltado), y los correos en la lista deben tener el borde iluminado solo al hacer hover o al estar seleccionados.
+- El botón de "Volver" (flecha izquierda) debe tener un tamaño de 30px.
 
 ---
 
-## PUNTO 3: DETALLE DEL CORREO EN VENTANA EMERGENTE (MODAL)
+## PUNTO 3: REDISEÑO DEL MODAL DE REDACCIÓN (ESTILO GMAIL)
 
-**Contexto:** Actualmente, al hacer doble clic en un correo, el detalle se expande hacia abajo en la misma lista. Eso no es práctico si hay muchos correos, y el usuario se pierde.
+**Contexto:** La ventana de redactar correos debe emular las funciones de Gmail.
 
 **Qué cambiar:**
-- En `index.html` y `logica.js`, mover el bloque de `detalle-correo` para que funcione como una ventana emergente (modal), similar al de "Redactar".
-- Al hacer doble clic en un correo, se debe abrir el modal con los datos del correo.
-- El modal debe tener un botón de cerrar (X) y los botones de acción (Responder, Archivar, Eliminar).
-- Mantener el efecto de borde iluminado en la fila del correo que se está visualizando.
+- En `index.html` y `logica.js`:
+  - El campo **De:** debe estar bloqueado y mostrar solo el correo del perfil.
+  - Agregar una **barra de herramientas de texto** sobre el área del mensaje (Negrita, Cursiva, Subrayado, Color, Listas, etc.).
+  - Agregar la **firma automática**: si el usuario configuró una firma en su perfil, debe aparecer al final del mensaje.
+  - El botón de adjuntar debe abrir el explorador de archivos.
+  - Los botones de acción (Enviar, Enviar + Tarea, etc.) deben respetar el diseño unificado.
+
+---
+
+## PUNTO 4: COMPORTAMIENTO DE "RESPONDER" Y "REENVIAR"
+
+**Contexto:** Al responder o reenviar, el sistema debe citar el correo original.
+
+**Qué cambiar:**
+- En `logica.js`, al presionar "Responder" o "Reenviar", abrir el modal de redacción.
+- Incluir en el cuerpo del mensaje el texto del correo original citado, con el formato de Gmail (ej. "El [Fecha] a las [Hora], [Remitente] escribió:").
+- Incluir el botón de "Reenviar" en el modal de detalle del correo.
+
+---
+
+## PUNTO 5: FUNCIÓN DE ARCHIVAR Y LÓGICA DE VERO
+
+**Contexto:** Archivar no debe ser un botón que simplemente oculte el correo. Debe permitir organizarlo, y si no se hace, Vero interviene.
+
+**Qué cambiar:**
+- En `logica.js`, al presionar "Archivar", abrir una ventana pequeña o menú para asignar una carpeta (ej. "Proveedores", "Cotizaciones").
+- **Lógica de Vero:** Si el correo no se archiva manualmente, después de un tiempo prudencial (a definir), Vero lo archivará automáticamente para mantener el historial.
+
+---
+
+## PUNTO 6: CORRECCIÓN DEL TEXTO EN LA LISTA DE CORREOS
+
+**Contexto:** El texto de la lista de correos (remitente, asunto, vista previa) no está respetando la tipografía ni el color de letras definidos en Identidad Corporativa.
+
+**Qué cambiar:**
+- En `estilos.css`, asegurar que los textos de la lista de correos (`.item-correo-remitente`, `.item-correo-asunto`, `.item-correo-previa`, `.item-correo-fecha`) usen `var(--color-letras)` o la tipografía correspondiente. Quitar cualquier fondo gris que no corresponda.
 
 ---
 
