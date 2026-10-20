@@ -3872,7 +3872,7 @@ function abrirRedaccionCorreo() {
     const asunto = document.getElementById('redactar-asunto');
     if (asunto) asunto.value = '';
     const mensaje = document.getElementById('redactar-mensaje');
-    if (mensaje) mensaje.value = '';
+    if (mensaje) mensaje.textContent = '';
     adjuntoCorreoActual = null;
     const nomAdj = document.getElementById('nombre-adjunto-correo');
     if (nomAdj) nomAdj.textContent = '';
@@ -3882,6 +3882,10 @@ function abrirRedaccionCorreo() {
     if (aviso) { aviso.innerText = ''; aviso.className = 'aviso-letrero'; aviso.style.maxHeight = '0'; }
     poblarDestinatariosCorreo();
     validarDestinatarioCorreo();
+    const firma = (configuracionPersonal && configuracionPersonal.firma) || (usuarioActivo && usuarioActivo.firma) || '';
+    if (firma && mensaje) {
+        mensaje.textContent = (mensaje.textContent || '') + (mensaje.textContent ? '\n\n-- \n' : '') + firma;
+    }
     const modal = document.getElementById('modal-redactar-correo');
     if (modal) modal.style.display = 'flex';
 }
@@ -3972,7 +3976,7 @@ function descartarRedaccionCorreo() {
     const asunto = document.getElementById('redactar-asunto');
     if (asunto) asunto.value = '';
     const mensaje = document.getElementById('redactar-mensaje');
-    if (mensaje) mensaje.value = '';
+    if (mensaje) mensaje.textContent = '';
     adjuntoCorreoActual = null;
     const nomAdj = document.getElementById('nombre-adjunto-correo');
     if (nomAdj) nomAdj.textContent = '';
@@ -3989,7 +3993,7 @@ function enviarCorreoRedactado(modo) {
     const mensajeEl = document.getElementById('redactar-mensaje');
     const destinatario = ((paraEl && paraEl.value) || '').trim();
     const asunto = ((asuntoEl && asuntoEl.value) || '').trim();
-    const cuerpo = ((mensajeEl && mensajeEl.value) || '').trim();
+    const cuerpo = ((mensajeEl && (mensajeEl.textContent || mensajeEl.innerText || '')) || '').trim();
     if (!destinatario || !asunto) {
         mostrarAvisoInmediato('✖ Destinatario y asunto son obligatorios', 'error');
         return;
