@@ -3815,11 +3815,111 @@ function accionCorreoActual(accion) {
     renderizarListaCorreos();
 }
 
+// ==========================================
+// PUNTO 4 y PUNTO 5 instrucciones.md: responder/reenviar con cita, archivar con carpeta y auto-archivo de Vero
+// ==========================================
+let correoAPendienteArchivar = null;
+let temporizadorVero = null;
+// Tiempo prudencial tras el cual Vero archiva automáticamente un correo recibido no gestionado.
+// (Valor a definir por el Arquitecto; 30 s para que sea verificable en demostración.)
+const TIEMPO_ARCHIVO_VERO_MS = 30 * 1000;
+
+function prepararRedaccionResponderReenviar(c, tipo) {
+    abrirRedaccionCorreo();
+    const para = document.getElementById('redactar-para');
+    const asunto = document.getElementById('redactar-asunto');
+    const mensaje = document.getElementById('redactar-mensaje');
+    const ahora = new Date();
+    const f = ahora.toLocaleDateString('es') + ' a las ' + ahora.toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' });
+    const cita = 'El ' + f + ', ' + (c.remitente || '') + ' escribió:\n\n' + (c.cuerpo || c.previa || '') + '\n\n';
+    if (para) para.value = (c.remitente || '').indexOf('@') !== -1 ? c.remitente : '';
+    if (asunto) asunto.value = (tipo === 'reenviar' ? 'Reenviar: ' : 'Re: ') + (c.asunto || '');
+    if (mensaje) mensaje.textContent = cita;
+    const modal = document.getElementById('modal-redactar-correo');
+    if (modal) modal.style.display = 'flex';
+}
+
+function formatoTextoMensaje(comando, valor) {
+    const mensaje = document.getElementById('redactar-mensaje');
+    if (!mensaje) return;
+    mensaje.focus();
+    try {
+        if (valor === undefined) document.execCommand(comando, false, null);
+        else document.execCommand(comando, false, valor);
+    } catch (e) { /* navegador no soporta el comando; se ignora */ }
+}
+
+function cerrarModalArchivarCorreo() {
+    const m = document.getElementById('modal-archivar-correo');
+    if (m) m.style.display = 'none';
+    correoAPendienteArchivar = null;
+    const f = document.getElementById('fila-carpeta-personalizada');
+    if (f) f.style.display = 'none';
+    const inp = document.getElementById('carpeta-personalizada-correo');
+    if (inp) inp.value = '';
+}
+
+function pedirCarpetaPersonalizadaCorreo() {
+    const f = document.getElementById('fila-carpeta-personalizada');
+    if (f) f.style.display = 'block';
+}
+
+function confirmarArchivarCorreo(carpeta) {
+    if (!correoAPendienteArchivar) { cerrarModalArchivarCorreo(); return; }
+    carpeta = (carpeta || '').trim();
+    if (!carpeta) {
+        const a = document.getElementById('aviso-archivar-correo');
+        if (a) { a.textContent = '✖ Escribe un nombre de carpeta'; a.style.maxHeight = '40px'; }
+        return;
+    }
+    const c = correosLocales.find(x => x && x.id === correoAPendienteArchivar);
+    if (!c) { cerrarModalArchivarCorreo(); return; }
+    c.vista = 'carpetas';
+    c.carpeta = carpeta || 'Archivo';
+    c.archivadoEn = new Date().toISOString();
+    metricasCorreos.carpetas.movimientos.push({ fecha: c.archivadoEn, desde: vistaCorreoActual, carpeta: carpeta });
+    if (usuarioActivo && usuarioActivo.id && typeof registrarActividadBancoDatos === 'function') {
+        try { registrarActividadBancoDatos(usuarioActivo.id, 'correos', 'Archivó correo en carpeta ' + carpeta); } catch (e) { }
+    }
+    guardarCorreosLocales();
+    renderizarListaCorreos();
+    cerrarModalArchivarCorreo();
+    mostrarAvisoInmediato('✓ Correo archivado en ' + carpeta, 'exito');
+}
+
+function iniciarVeroArchivoAutomatico() {
+    if (temporizadorVero) clearTimeout(temporizadorVero);
+    temporizadorVero = setTimeout(archivoAutomaticoVero, TIEMPO_ARCHIVO_VERO_MS);
+}
+
+function archivoAutomaticoVero() {
+    const ahora = new Date();
+    let count = 0;
+    (correosLocales || []).forEach(function (c) {
+        if (!c || c.vista !== 'recibidos') return;
+        if (c.archivadoEn || c.respondidoEn) return;
+        const fecha = c.fecha ? new Date(c.fecha) : ahora;
+        if (ahora - fecha >= TIEMPO_ARCHIVO_VERO_MS) {
+            c.vista = 'carpetas';
+            c.carpeta = 'Archivo (Vero)';
+            c.archivadoEn = ahora.toISOString();
+            metricasCorreos.carpetas.movimientos.push({ fecha: c.archivadoEn, desde: 'recibidos', carpeta: 'Archivo (Vero)', vero: true });
+            count++;
+        }
+    });
+    if (count > 0) {
+        guardarCorreosLocales();
+        renderizarListaCorreos();
+        mostrarAvisoInmediato('Vero archivó ' + count + ' correo(s) automáticamente', 'exito');
+    }
+}
+
 function registrarEntradaCorreosInicial() {
     try { cargarCorreosLocales(); } catch (e) {}
     try { actualizarConteosCorreo(); } catch (e) {}
     try { registrarIngresoVistaCorreo('recibidos'); } catch (e) {}
     try { renderizarListaCorreos(); } catch (e) {}
+    try { iniciarVeroArchivoAutomatico(); } catch (e) {}
 }
 
 // Recalcula conteos por vista (recibidos del día, borradores, spam/tipos, etc.)
