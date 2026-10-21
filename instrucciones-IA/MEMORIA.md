@@ -155,10 +155,14 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 - **Punto 6 — hecho:** textos de la lista de correos (remitente/asunto/previa/fecha) usan `var(--color-letras)`; fondo gris de fila quitado (`transparent`).
 - **Verificación:** esprima OK en logica.js y datos.js (analisis sintactico real, 0 fallos). Pendiente: Ctrl+F5 del Arquitecto + sincronizar a GitHub.
 
-### 20/10/2026 (ajustes pedidos por el Arquitecto)
-- **Todos los botones con `--color-letras`:** `.btn-principal`, `.btn-secundario`, `.btn-peligro`, `.btn-vista-correo` y los textos de la lista de correos usan `var(--color-letras)` (ya aplicado en puntos anteriores; se confirma cumplido en toda la pantalla de correos).
-- **Barra de formato debajo del texto:** en `#modal-redactar-correo`, los botones de edición de letra (N C S A * 1) se movieron de arriba del área de redacción a **debajo** de ella (entre el texto y los botones ENVIAR/DESCARTAR), sin ocupar el área de escritura.
-- **Tamaño de lectura de correos +75%:** fuentes de la lista de correos aumentadas — remitente 15→26px, asunto 14→25px, previa 14→25px, fecha 12→21px; padding de fila 10→14px y font-size base 15→26px.
+### 21/10/2026 — instrucciones.md (4 puntos nuevos + Reglas de Oro)
+- **Reglas de Oro:** todo texto/botón/título usa `var(--color-letras)`; todo fondo de botón `var(--color-botones)`; modales informativos (máx 500px) vs de trabajo (máx 875px).
+- **Punto 1 — hecho:** `ajustarLayoutAdaptativo()` incluye `pantalla-correos` en pantallas anchas (875px); `.modal-redactar` a `max-width: 875px` (modal de trabajo); modales informativos (`modal-detalle-correo`, `ventana-aviso-contacto`) se mantienen en 500px.
+- **Punto 2 — hecho:** `.btn-cerrar`, `.item-correo-*` y `#detalle-correo-cuerpo` (`text-align: left`) usan `var(--color-letras)`; `aplicarCambiosVisuales()` incluye `.btn-cerrar` en los botones dinámicos.
+- **Punto 3 — hecho:** `.btn-vista-correo` normal fondo `--color-botones` + texto `--color-letras` + sin sombra + 0.78rem + no-wrap; activo/hover con texto y borde `--color-primario` + halo.
+- **Punto 4 — hecho:** barra de formato **arriba** del área de texto (debajo del asunto); área ancho completo; cita (Responder/Reenviar) debajo con cursor al inicio para escribir arriba; uniforme en Redactar/Responder/Reenviar.
+- **Lista de correos:** tamaño devuelto a normal (remitente 15px, asunto/previa 14px, fecha 12px) para que no se vea gigante al ocupar el 75% de ancho.
+- **Verificación:** esprima OK logica.js (0 fallos). Pendiente: Ctrl+F5 del Arquitecto + sincronizar a GitHub.
 
 
 ### 19/10/2026 (noche 3) — instrucciones.md PUNTOS 1-3: PROPORCIÓN + BOTONES + DETALLE MODAL
