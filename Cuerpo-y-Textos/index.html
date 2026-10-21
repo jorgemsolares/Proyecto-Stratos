@@ -733,6 +733,7 @@
                 </div>
                 <div class="fila-redaccion fila-mensaje">
                     <label class="etiqueta-redaccion">Mensaje:</label>
+                    <div id="redactar-mensaje" class="mensaje-contenteditable" contenteditable="true" data-placeholder="Escribe tu mensaje..."></div>
                     <div class="barra-formato-texto" aria-label="Barra de formato de texto">
                         <button type="button" class="btn-formato" onclick="formatoTextoMensaje('bold')" title="Negrita">N</button>
                         <button type="button" class="btn-formato" onclick="formatoTextoMensaje('italic')" title="Cursiva">C</button>
@@ -741,7 +742,6 @@
                         <button type="button" class="btn-formato" onclick="formatoTextoMensaje('insertUnorderedList')" title="Lista con vi�etas">*</button>
                         <button type="button" class="btn-formato" onclick="formatoTextoMensaje('insertOrderedList')" title="Lista numerada">1.</button>
                     </div>
-                    <div id="redactar-mensaje" class="mensaje-contenteditable" contenteditable="true" data-placeholder="Escribe tu mensaje..."></div>
                 </div>
                 <div class="fila-redaccion fila-adjunto">
                     <input type="file" id="input-adjunto-correo" style="display:none;" onchange="cambioAdjuntoCorreo(this)">
