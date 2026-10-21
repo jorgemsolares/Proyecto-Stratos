@@ -437,7 +437,7 @@ function irAPantalla(id) {
 function ajustarLayoutAdaptativo() {
     const container = document.getElementById('app-container');
     if (!container) return;
-    const esPantallaAncha = ['pantalla-identidad', 'pantalla-organigrama', 'pantalla-organigrama-general'].includes(pantallaActual);
+    const esPantallaAncha = ['pantalla-identidad', 'pantalla-organigrama', 'pantalla-organigrama-general', 'pantalla-correos'].includes(pantallaActual);
     if (window.innerWidth > 768) {
         container.style.maxWidth = esPantallaAncha ? "950px" : "480px";
         container.classList.toggle('pantalla-ancha', esPantallaAncha);
@@ -2887,7 +2887,7 @@ function aplicarCambiosVisuales() {
     const textos = document.querySelectorAll('#app-container input, #app-container textarea, #app-container p, #app-container span, #app-container h2, #app-container h3, #app-container label, #app-container .descripcion-app');
     textos.forEach(el => el.style.color = configuracionEstetica.colorTexto);
     // PUNTO 2: TODOS los botones usan color de botones + color de letras del usuario (incluye Comunicación y Correos).
-    const botones = document.querySelectorAll('#app-container .btn-principal, #app-container .btn-secundario, #app-container .btn-opcion, #app-container .btn-accion, #app-container .btn-comunicacion, #app-container .btn-hexagono, #app-container .btn-vista-correo.activo');
+    const botones = document.querySelectorAll('#app-container .btn-principal, #app-container .btn-secundario, #app-container .btn-opcion, #app-container .btn-accion, #app-container .btn-comunicacion, #app-container .btn-hexagono, #app-container .btn-vista-correo.activo, #app-container .btn-cerrar');
     botones.forEach(btn => {
         btn.style.backgroundColor = configuracionEstetica.colorBotones;
         btn.style.color = configuracionEstetica.colorTexto;

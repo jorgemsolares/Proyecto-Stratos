@@ -1250,6 +1250,7 @@ button .icono-inline,
     font-size: 1.2rem;
     color: var(--color-letras, var(--color-texto));
 }
+#detalle-correo-cuerpo { text-align: left; }
 
 .modal-body {
     padding: 20px;
@@ -2173,7 +2174,8 @@ No toca .btn-principal / .btn-secundario existentes.
     box-shadow: none;
 }
 .btn-vista-correo:hover {
-    border-color: #00ff88;
+    border-color: var(--color-primario);
+    color: var(--color-primario);
     box-shadow: 0 12px 28px rgba(0, 255, 136, 0.4);
 }
 .btn-vista-correo:active {
@@ -2194,12 +2196,12 @@ No toca .btn-principal / .btn-secundario existentes.
 }
 /* PUNTO 3 (19/10 tarde): filas estilo Gmail — remitente+fecha / asunto / previa 3 líneas con elipsis, 14-15px */
 .item-correo {
-    padding: 14px 16px;
+    padding: 10px 12px;
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.15);
     background: transparent;
     cursor: pointer;
-    font-size: 26px;
+    font-size: 15px;
 }
 .item-correo:hover { border-color: rgba(0, 255, 136, 0.5); }
 /* PUNTO 3 (19/10 noche 3): fila en visualización — borde iluminado permanente */
@@ -2213,10 +2215,10 @@ No toca .btn-principal / .btn-secundario existentes.
     align-items: baseline;
     gap: 10px;
 }
-.item-correo-remitente { font-weight: bold; color: var(--color-letras); font-size: 26px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.item-correo-asunto { font-weight: bold; color: var(--color-letras); font-size: 25px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.item-correo-previa { color: var(--color-letras); font-size: 25px; opacity: 0.85; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.item-correo-fecha { color: var(--color-letras); font-size: 21px; opacity: 0.65; text-align: right; white-space: nowrap; flex-shrink: 0; }
+.item-correo-remitente { font-weight: bold; color: var(--color-letras); font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item-correo-asunto { font-weight: bold; color: var(--color-letras); font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item-correo-previa { color: var(--color-letras); font-size: 14px; opacity: 0.85; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.item-correo-fecha { color: var(--color-letras); font-size: 12px; opacity: 0.65; text-align: right; white-space: nowrap; flex-shrink: 0; }
 /* PUNTO 5 instrucciones.md: botones de carpeta en el modal de archivar */
 .btn-carpeta-archivo {
     flex: 1;
@@ -2288,7 +2290,7 @@ No toca .btn-principal / .btn-secundario existentes.
     justify-content: center;
 }
 #aviso-destinatario-correo { margin: 0; min-height: 0; }
-.modal-redactar { max-width: 560px; width: 94%; }
+.modal-redactar { max-width: 875px; width: 94%; }
 .modal-redactar .modal-body { gap: 10px; }
 .modal-redactar .fila-mensaje .input-estilizado { min-height: 180px; }
 
