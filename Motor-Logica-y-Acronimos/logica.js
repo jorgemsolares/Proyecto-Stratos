@@ -3834,7 +3834,19 @@ function prepararRedaccionResponderReenviar(c, tipo) {
     const cita = 'El ' + f + ', ' + (c.remitente || '') + ' escribió:\n\n' + (c.cuerpo || c.previa || '') + '\n\n';
     if (para) para.value = (c.remitente || '').indexOf('@') !== -1 ? c.remitente : '';
     if (asunto) asunto.value = (tipo === 'reenviar' ? 'Reenviar: ' : 'Re: ') + (c.asunto || '');
-    if (mensaje) mensaje.textContent = cita;
+    if (mensaje) {
+        mensaje.textContent = cita;
+        // PUNTO 4: la cita queda debajo del área de escritura; el usuario escribe arriba.
+        try {
+            const sel = window.getSelection();
+            const range = document.createRange();
+            range.setStart(mensaje, 0);
+            range.collapse(true);
+            sel.removeAllRanges();
+            sel.addRange(range);
+        } catch (e) {}
+        mensaje.focus();
+    }
     const modal = document.getElementById('modal-redactar-correo');
     if (modal) modal.style.display = 'flex';
 }
