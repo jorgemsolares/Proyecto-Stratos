@@ -2194,12 +2194,12 @@ No toca .btn-principal / .btn-secundario existentes.
 }
 /* PUNTO 3 (19/10 tarde): filas estilo Gmail — remitente+fecha / asunto / previa 3 líneas con elipsis, 14-15px */
 .item-correo {
-    padding: 10px 12px;
+    padding: 14px 16px;
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.15);
     background: transparent;
     cursor: pointer;
-    font-size: 15px;
+    font-size: 26px;
 }
 .item-correo:hover { border-color: rgba(0, 255, 136, 0.5); }
 /* PUNTO 3 (19/10 noche 3): fila en visualización — borde iluminado permanente */

@@ -155,6 +155,11 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 - **Punto 6 — hecho:** textos de la lista de correos (remitente/asunto/previa/fecha) usan `var(--color-letras)`; fondo gris de fila quitado (`transparent`).
 - **Verificación:** esprima OK en logica.js y datos.js (analisis sintactico real, 0 fallos). Pendiente: Ctrl+F5 del Arquitecto + sincronizar a GitHub.
 
+### 20/10/2026 (ajustes pedidos por el Arquitecto)
+- **Todos los botones con `--color-letras`:** `.btn-principal`, `.btn-secundario`, `.btn-peligro`, `.btn-vista-correo` y los textos de la lista de correos usan `var(--color-letras)` (ya aplicado en puntos anteriores; se confirma cumplido en toda la pantalla de correos).
+- **Barra de formato debajo del texto:** en `#modal-redactar-correo`, los botones de edición de letra (N C S A * 1) se movieron de arriba del área de redacción a **debajo** de ella (entre el texto y los botones ENVIAR/DESCARTAR), sin ocupar el área de escritura.
+- **Tamaño de lectura de correos +75%:** fuentes de la lista de correos aumentadas — remitente 15→26px, asunto 14→25px, previa 14→25px, fecha 12→21px; padding de fila 10→14px y font-size base 15→26px.
+
 
 ### 19/10/2026 (noche 3) — instrucciones.md PUNTOS 1-3: PROPORCIÓN + BOTONES + DETALLE MODAL
 - **Punto 1 — hecho:** `.menu-correos` a 200px fijos con máx 33%; la lista conserva los 2/3 restantes.
