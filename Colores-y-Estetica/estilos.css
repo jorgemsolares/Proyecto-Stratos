@@ -2213,10 +2213,10 @@ No toca .btn-principal / .btn-secundario existentes.
     align-items: baseline;
     gap: 10px;
 }
-.item-correo-remitente { font-weight: bold; color: var(--color-letras); font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.item-correo-asunto { font-weight: bold; color: var(--color-letras); font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.item-correo-previa { color: var(--color-letras); font-size: 14px; opacity: 0.85; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.item-correo-fecha { color: var(--color-letras); font-size: 12px; opacity: 0.65; text-align: right; white-space: nowrap; flex-shrink: 0; }
+.item-correo-remitente { font-weight: bold; color: var(--color-letras); font-size: 26px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item-correo-asunto { font-weight: bold; color: var(--color-letras); font-size: 25px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item-correo-previa { color: var(--color-letras); font-size: 25px; opacity: 0.85; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.item-correo-fecha { color: var(--color-letras); font-size: 21px; opacity: 0.65; text-align: right; white-space: nowrap; flex-shrink: 0; }
 /* PUNTO 5 instrucciones.md: botones de carpeta en el modal de archivar */
 .btn-carpeta-archivo {
     flex: 1;
