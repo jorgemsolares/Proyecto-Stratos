@@ -146,6 +146,15 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 ---
 
 ## BITÁCORA (historial de lo realizado)
+### 20/10/2026 — instrucciones.md PUNTOS 1-6: PANTALLA DE CORREOS (reajuste estilo Gmail)
+- **Punto 1 — hecho:** `.menu-correos` al 25% del ancho y `.contenido-correos` al 75% (`flex: 1`); `.btn-vista-correo` a 0.78rem con `white-space: nowrap` para que "BORRADORES"/"ELIMINADOS" quepan en una línea.
+- **Punto 2 — hecho:** textos de botones de vista y de la lista de correos usan `var(--color-letras)`; botón activo con fondo de cubierta resaltado; borde iluminado de fila solo en hover/selección; botón Volver (flecha izquierda) a 30px (`.btn-volver-correos .icono-inline`).
+- **Punto 3 — hecho:** modal de redacción con barra de herramientas de texto (Negrita/Cursiva/Subrayado/Color/Lista viñetas/Lista numerada) sobre área contenteditable; `De:` bloqueado con correo del perfil; firma automática al final si está configurada; adjuntar abre explorador; botones ENVIAR/ENVIAR+TAREA/ENVIAR+ALARMA/DESCARTAR con diseño unificado.
+- **Punto 4 — hecho:** "Responder" y "Reenviar" abren el modal de redacción citando el original ("El [Fecha] a las [Hora], [Remitente] escribió:"); botón "Reenviar" añadido al modal de detalle.
+- **Punto 5 — hecho:** "Archivar" abre modal para asignar carpeta (Proveedores/Cotizaciones/Archivo/Otra); auto-archivo de Vero tras tiempo prudencial (temporizador, valor a definir por el Arquitecto).
+- **Punto 6 — hecho:** textos de la lista de correos (remitente/asunto/previa/fecha) usan `var(--color-letras)`; fondo gris de fila quitado (`transparent`).
+- **Verificación:** esprima OK en logica.js y datos.js (analisis sintactico real, 0 fallos). Pendiente: Ctrl+F5 del Arquitecto + sincronizar a GitHub.
+
 
 ### 19/10/2026 (noche 3) — instrucciones.md PUNTOS 1-3: PROPORCIÓN + BOTONES + DETALLE MODAL
 - **Punto 1 — hecho:** `.menu-correos` a 200px fijos con máx 33%; la lista conserva los 2/3 restantes.
