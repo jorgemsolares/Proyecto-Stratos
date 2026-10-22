@@ -2256,12 +2256,12 @@ No toca .btn-principal / .btn-secundario existentes.
     min-width: 70px;
     text-align: left;
     font-weight: bold;
-    color: var(--color-primario);
+    color: var(--color-letras);
     font-size: 0.9rem;
 }
 .fila-redaccion .input-estilizado { flex: 1; }
 .redactar-de {
-    color: var(--color-texto);
+    color: var(--color-letras);
     font-size: 0.95rem;
     word-break: break-all;
     text-align: left;
@@ -2273,17 +2273,19 @@ No toca .btn-principal / .btn-secundario existentes.
 }
 .fila-adjunto { justify-content: flex-start; }
 .btn-adjunto-correo {
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: var(--color-botones, #0b0f19);
+    border: 1px solid var(--color-botones, #0b0f19);
     border-radius: var(--radio-bordes);
     padding: 8px 12px;
     cursor: pointer;
     line-height: 0;
+    color: var(--color-letras);
 }
-.btn-adjunto-correo:hover { border-color: var(--color-primario); }
+.btn-adjunto-correo:hover { border-color: var(--color-primario); box-shadow: 0 12px 28px rgba(0, 255, 136, 0.4); }
 .btn-adjunto-correo .icono-inline {
     width: 1.6em;
     height: 1.6em;
+    color: var(--color-letras);
 }
 .barra-acciones-redaccion {
     flex-wrap: wrap;
@@ -2306,8 +2308,8 @@ No toca .btn-principal / .btn-secundario existentes.
     padding: 6px;
 }
 .btn-formato {
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: var(--color-botones, #0b0f19);
+    border: 1px solid var(--color-botones, #0b0f19);
     color: var(--color-letras);
     width: 30px;
     height: 30px;
@@ -2320,7 +2322,8 @@ No toca .btn-principal / .btn-secundario existentes.
 }
 .btn-formato:hover {
     border-color: var(--color-primario);
-    background: rgba(0, 255, 136, 0.15);
+    background: var(--color-botones, #0b0f19);
+    box-shadow: 0 12px 28px rgba(0, 255, 136, 0.4);
 }
 .mensaje-contenteditable {
     min-height: 160px;
