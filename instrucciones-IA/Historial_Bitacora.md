@@ -1,8 +1,468 @@
-# 📜 HISTORIAL BITÁCORA — STRATOS
+﻿
 
-Este archivo contiene el historial de bitácora antiguo de `MEMORIA.md` (entradas de **19/10/2026 hacia atrás**, es decir, todo lo que tiene más de 2 meses de antigüedad o ya está 100% hecho y cerrado).
+### 19/10/2026 (noche 3) — instrucciones.md PUNTOS 1-3: PROPORCIÓN + BOTONES + DETALLE MODAL
+- **Punto 1 — hecho:** `.menu-correos` a 200px fijos con máx 33%; la lista conserva los 2/3 restantes.
+- **Punto 2 — hecho:** `.btn-vista-correo` normal con fondo `--color-botones` + borde visible, sin sombra; activo con mismo fondo + texto/borde verde + resplandor. Estructura idéntica.
+- **Punto 3 — hecho:** detalle inline eliminado; nuevo `#modal-detalle-correo` (X + Responder/Archivar/Eliminar). Doble clic abre el modal, un clic marca la fila con `.viendo` (borde iluminado). Métricas intactas.
+- **Verificación:** esprima OK ambos JS + 58/58 pruebas en verde. **Pendiente:** Ctrl+F5 (proporción, botones, doble clic a modal).
 
-Se movió aquí para que `MEMORIA.md` quede ligero y solo contenga lo vigente (últimas sesiones de octubre 2026) y la estructura del proyecto.
+### 19/10/2026 (noche 2) — COLOR DEL SLOGAN A RECUADROS (detalle pendiente del 17/10)
+- **Hecho:** el selector `#sel-color-slogan` mostraba códigos hex como texto; ahora es `#paleta-color-slogan` con recuadros de 34px (paleta del logo, sin números; el elegido con borde blanco). `poblarSelectorColorSlogan()` genera los recuadros, `elegirColorSlogan()` marca y previsualiza, `actualizarVistaPrevia()` lee el recuadro. Guardado intacto (identidad + estética).
+- **Corrección (misma noche):** a pedido del Arquitecto, NO recuadros fijos sino botón desplegable `#btn-color-slogan` con muestra + `▾`, que despliega `#lista-color-slogan` con la MISMA paleta de arriba (`coloresExtraidos`, reconstruida siempre para reflejar cambios del logo). Solo se aplica al slogan. Cierra al elegir o al clic fuera.
+- **Verificación:** esprima OK ambos JS. **Pendiente:** Ctrl+F5 (elegir color por recuadro en Identidad Corporativa).
+
+### 19/10/2026 (noche) — instrucciones.md PUNTOS 1-4: REDISEÑO CORREOS GMAIL
+- **Punto 1 — hecho:** `pantalla-correos` a 2 columnas (menú 170px + contenido flexible; apilado en celular). Encabezado con flecha `flecha izquierda.svg` (recoloreada negro→verde por protocolo) + título centrado. REDACTAR arriba del menú; vistas en lista vertical; búsqueda + lista a la derecha.
+- **Punto 2 — hecho:** `.btn-vista-correo` sin borde fijo (transparente en reposo; verde+sombra en hover; halo en active; activa con fondo claro + texto verde).
+- **Punto 3 — hecho:** 4 correos demo en Recibidos si la bandeja está vacía; filas Gmail (remitente+fecha / asunto / previa 3 líneas con elipsis, 14-15px).
+- **Punto 4 — hecho:** clip con `<input type=file>` real (`cambioAdjuntoCorreo` muestra "Archivo adjunto: nombre"); sin subir a internet; se limpia al abrir/descartar.
+- **Verificación:** esprima OK ambos JS + 58/58 pruebas en verde. **Pendiente:** Ctrl+F5 (columnas, menú, filas, adjunto).
+
+### 19/10/2026 (tarde 2) — LEY F DE DISEÑO INTEGRADA AL PROTOCOLO DE ICONOS
+- **Hecho:** cambio del Arquitecto en `A_DONDE_VA_STRATOS.md` (F. Distinción barra vs cartelera) integrado al `PROCESO ESTÁNDAR — INSERCIÓN DE ICONOS` de MEMORIA: barra = icono por tipo (verde/naranja/rojo), cartelera = icono por jerarquía/urgencia (naranja superior, rojo urgente, verde normal), Login sin cartelera, futuros módulos con regla jerárquica. Rige de ahora en adelante, sin tocar código.
+- **Verificación:** sin cambios de código; solo documentación. Pendiente: sincronizar a GitHub.
+
+### 19/10/2026 (tarde) — instrucciones.md PUNTO 1: REGLAS DE ICONOS SVG (TAMAÑO Y COLOR)
+- **Punto 1 — hecho:** `.icono-inline` a 30×30px fuera de botones; dentro de botones se revierte a 1.2em (botones intactos). Placeholders "en preparación" (8, antes 3rem) pasan a `.icono-placeholder` 30px. Creados `Advertencia-naranja.svg` (#ff8c00), `Error-rojo.svg` (#e53935) y `Exito-verde.svg` (autorizados por el Arquitecto; copias recoloreadas de los verdes).
+- **Color por alerta:** `mostrarAvisoInmediato()` antepone el SVG según tipo (éxito→verde, advertencia→naranja, error→rojo) cuando el texto no trae `<img>`, quitando ✓/✖/⚠ inicial. Cola de identidad y aviso de borrado excesivo usan naranja; modal de cambio obligatorio usa naranja en HTML.
+- **Verificación:** esprima OK ambos JS + 58/58 pruebas en verde. **Pendiente:** Ctrl+F5 (iconos ~30px fuera de botones; cartelera con verde/naranja/rojo según tipo).
+
+### 19/10/2026 — instrucciones.md PUNTO 1: REDACCIÓN DE CORREO A MODAL FLOTANTE
+- **Punto 1 — hecho:** la redacción dejó de ser `section#pantalla-redactar-correo` (pantalla completa) y ahora es `div#modal-redactar-correo.modal` en GRUPO 4 (flotante estilo Gmail, con fondo oscuro; encabezado "Nuevo Correo" + X; campos De/Para/Asunto/Mensaje + clip; footer ENVIAR verde, ENVIAR+TAREA/ALARMA naranja, DESCARTAR rojo). Sin header/footer de app (ya visibles en la bandeja de fondo).
+- **Lógica:** `abrirRedaccionCorreo()` limpia y muestra el modal (`display:flex`); `cerrarModalRedaccionCorreo()` lo oculta; `volverDeRedaccionCorreo()` y `descartarRedaccionCorreo()` cierran sin navegar; `enviarCorreoRedactado()` valida, guarda en Enviados, registra en bancoDatos y cierra el modal (luego va a Tareas/Alarmas si aplica).
+- **Estilos:** `.modal-redactar` (94% ancho, máx 560px, mensaje 180px). Clases de redacción reutilizadas dentro del modal.
+- **Verificación:** esprima OK en ambos JS (0 problemas, pasando archivos explícitos). **Pendiente:** Ctrl+F5 (REDACTAR abre el modal sobre la bandeja; enviar/descartar lo cierra y deja Enviados).
+
+### 18/10/2026 (noche 2) — instrucciones.md PUNTO 1 + PUNTO 2: REDACTAR + REDACCIÓN DE CORREOS
+- **Punto 1 — hecho:** botón verde `REDACTAR` (`btn-principal`, alineado a la derecha) en `pantalla-correos`, debajo del título. Llama a `abrirRedaccionCorreo()` que limpia los campos, pone el `De:` con el email del usuario y abre `pantalla-redactar-correo`.
+- **Punto 2 — hecho:** nueva `section#pantalla-redactar-correo` (dentro de `#app-container`; respeta logo, cartelera, sello, Vero y Libro): botón Volver arriba-izquierda; `De:` fijo; `Para:` con autocompletado (`datalist` de usuarios/contactos/correos previos) + validación visual ✓/✖; `Asunto:`; `Mensaje:` expansible; clip con `Cargar documento.svg` (autorizado por el Arquitecto; simulado, pide nombre por `prompt`).
+- **Botones:** `ENVIAR` (verde) valida destinatario+asunto, guarda en `correosLocales` vista `enviados`, registra en bancoDatos `Envió correo a [dest] a las [HH:MM]`, avisa éxito y vuelve a Enviados. `ENVIAR + TAREA` / `ENVIAR + ALARMA` (naranja = `btn-secundario`) envían igual y redirigen a `pantalla-tareas` / `pantalla-alarmas` (existen como placeholder; `irAPantalla` las abre; si no existieran avisa "en preparación"). `DESCARTAR` (rojo) limpia sin guardar.
+- **No tocado:** bandeja actual intacta; sin SMTP; la redacción NO entra al menú (no está en `estadoPantallas`, igual que `pantalla-acceso`).
+- **Verificación:** esprima OK en ambos JS (0 problemas). **Pendiente:** Ctrl+F5 (REDACTAR abre redacción; enviar deja el correo en Enviados).
+
+### 18/10/2026 (noche) — instrucciones.md PUNTO 1: REPARAR LA CARTELERA
+- **Punto 1 — hecho:** causa raíz = 2 líneas con comillas dobles rotas (`mostrarAvisoInmediato("<img src="...` en líneas 476 y 3200) que tumbaban TODO `logica.js` (nada del script corría: ni cartelera ni iconos ni texto). Se pasaron a backticks. Al agregar el respaldo salió una 3ª falla (línea 3148: `onerror="this.style.display='none'"` rompía comilla simple) → se cambió a `onerror="this.remove()"`.
+- **Respaldo agregado:** los 16 `<img>` de cartelera/menu/nodos llevan `onerror="this.remove()"`: si un SVG no carga, se quita solo el icono y el texto queda visible. Estructura HTML intacta (`#zona-cartelera > #mensaje-personalizado > #texto-mensaje-personalizado`); rotación y `innerHTML` sin cambios.
+- **Nota:** `Pruebas/_validar_js.py` sin argumentos solo valida `datos.js` (su `sys.argv` descarta el 1er archivo). Para validar ambos hay que pasarlos explícitos: `python Pruebas/_validar_js.py Motor-Logica-y-Acronimos/logica.js Motor-Logica-y-Acronimos/datos.js`.
+- **Verificación:** esprima OK en ambos (0 problemas). **Pendiente:** Ctrl+F5 (cartelera con texto + icono; si un icono falla, el texto se ve igual).
+
+### 18/10/2026 (tarde) — instrucciones.md PUNTO 1 + PUNTO 2: CARTELERA HTML + EMOJIS A SVG
+- **Punto 1 — hecho:** `logica.js` líneas 37 y 343: `textoMensaje.innerText` → `innerHTML` solo en cartelera (`mostrarAvisoInmediato` y `mostrarSiguienteMensaje`). Inputs intactos.
+- **Punto 2 — hecho:** barrido total; quedan 0 emojis de color. `index.html` 28 `icono-inline`: títulos (Correos, IA, Idioma, Seguridad, Recuperación, Acciones), placeholders de 8 submódulos, botones (Enviar, Editar, Ver organigrama, Salvar, Editar/Eliminar detalle, Cambio obligatorio, Cargar logo, Pausa IA, tuerca). Banderas de país en `<option>` a solo texto (no admite `<img>`). `logica.js`: nodos Indirecto/Observador (personal + general) con SVG, avisos No.1/registro/inactividad/borrado con SVG. `datos.js`: 22 emojis quitados de TRADUCCIONES (el icono vive en el HTML; se envolvió texto en `<span data-i18n>` para no romper `aplicarIdioma`).
+- **Iconos nuevos del Arquitecto (7, recolorados a #00ff88):** IA, Lenguaje, Accion Rapida, Guardar, Cargar documento, Documento guardado, Pausa. Todos los SVG de la carpeta ya están en verde.
+- **No tocado (símbolos tipográficos, no emojis):** ✓✖⚠● en avisos/validaciones con `innerText`, ← → en Volver, ✕ ▶ ⏸ en controles, → en correos. Sin SVG asignado por el Arquitecto para esos; se dejan como están.
+- **Verificación:** `Pruebas/_validar_js.py` OK (0 problemas). **Pendiente:** Ctrl+F5 en navegador (cartelera muestra imagen, no código; iconos verdes).
+
+### 18/10/2026 — instrucciones.md PUNTO 1: VIGÍA 100% INVISIBLE + PERMISOS ELEVADOS
+- **Punto 1 — hecho (código):** creado `lanzar_vigia_oculto.vbs` en raíz con el contenido exacto del instructivo (WScript.Shell + `powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden` + `objShell.Run comando, 0, False`).
+- **Punto 1 — hecho (código):** `instalar_arranque_vigia.ps1` modificado: la acción pasó de `powershell.exe` directo a `wscript.exe "lanzar_vigia_oculto.vbs"`; se agregó `New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType Interactive -RunLevel Highest` y se pasa `-Principal` al registrar (mantiene permisos elevados); validación de existencia del `.vbs`; sintaxis validada con PSParser (0 errores) y contenido del `.vbs` verificado línea por línea.
+- **Punto 1 — pendiente de aplicar en Windows:** re-ejecutar `instalar_arranque_vigia.ps1` como Administrador para re-registrar la tarea `StratosVigiaRespaldo` (en esta sesión el registro agotó el tiempo de espera del entorno; el código quedó listo). Luego verificar con `Get-ScheduledTask -TaskName StratosVigiaRespaldo` y reiniciar para confirmar que ya no abre ventana negra.
+- **Extra:** `.gitignore` ampliado con `instalar_arranque_vigia.ps1` y `lanzar_vigia_oculto.vbs` (herramientas locales, no suben a GitHub, igual que el resto del kit de sincronización).
+- **Nota:** `instrucciones.md` del día viene truncado (termina a mitad del bloque vbscript, línea 40, sin detallar la modificación del instalador); la parte del instalador se infirió del "Qué cambiar / Dónde" (lanzador + nivel de ejecución más alto).
+
+### 17/10/2026 (tarde) — instrucciones.md (PUNTOS 1-4): COLOR SLOGAN + ACTIVIDAD + SVG + PÍLDORA
+- **Punto 1 — hecho:** tercer selector Color del Slogan con los 8 de `coloresExtraidos`. `index.html` (`#sel-color-slogan`), `datos.js` (`colorSlogan` en identidad + estética), `logica.js` (`poblarSelectorColorSlogan`, `actualizarVistaPrevia` y `salvarIdentidad` lo aplican/guardan, `aplicarBrandingGlobal` lo muestra en cabecera).
+- **Punto 2 — hecho:** `salvarIdentidad()` registra en `bancoDatos[usuarioId].actividad` vía `registrarActividadBancoDatos`. Sin cambiar el guardado.
+- **Punto 3 — hecho:** 18 SVG recolorados a `#00ff88`. Cartelera (saludo, aviso identidad, solicitud y sugerencia clave) y cierre de sesión usan `<img class="icono-inline">`. `estadoPantallas` mapea a SVG y `actualizarMenuTuerca` renderiza `<img>` si termina en `.svg`. Clase `.icono-inline` agregada.
+- **Punto 4 — hecho:** `.btn-hexagono` a píldora (`border-radius:999px`, sin `clip-path`/`drop-shadow`, hover/active verdes normales, fondo `--color-botones`, texto `--color-letras`).
+- **Verificación:** llaves balanceadas en ambos JS; el validador esprima completo se atasca por tamaño (revisar en navegador con Ctrl+F5).
+
+### 17/10/2026 — instrucciones.md (PUNTOS 1-4): DEFAULTS OSCUROS + LIBRO CORPORATIVO + LOGIN LIMPIO
+- **Punto 1 — hecho:** `datos.js` actualizado: `identidadCorporativa.colorBotones` y `configuracionEstetica.colorBotones` de `#00ff88` a `#0b0f19`. Sin tocar fondo/texto, paleta ni otros campos.
+- **Punto 2 — hecho:** `.tuerca-navegacion` en `estilos.css` ahora usa `background: var(--color-botones, var(--color-primario))`. Halo/sombra/animación e icono intactos. Botón IA sin tocar.
+- **Punto 3 — hecho:** en `validarEntrada()` de `logica.js` se quitó el `display:flex` forzado del Libro antes del `setTimeout(1500)`. La visibilidad la maneja `irAPantalla`.
+- **Punto 4 — hecho:** en `cerrarSesion()` de `logica.js` se limpian las variables inline de `<html>` (`--color-fondo`, `--color-texto`, `--color-letras`, `--color-primario`, `--color-botones`) para que Login vuelva al `#0b0f19`. Sin tocar confirmación, hora de salida ni sessionStorage.
+- **Verificación:** `_validar_js.py` con esprima: `logica.js` OK, `datos.js` OK, 0 problemas.
+
+### 16/10/2026 — instrucciones.md (PUNTOS 1, 2 y 3): LIBRO EN LOGIN + COLOR BOTONES + AUTOCOMPLETADO
+- **Punto 1 — hecho:** `irAPantalla()` en `logica.js` ahora oculta `boton-tuerca-global` en `pantalla-acceso` con la misma regla que el botón IA (`mostrarBotonIA`). Sin tocar tamaño, posición, icono, efecto ni función del Libro.
+- **Punto 2 — hecho:** `:root --color-botones` en `estilos.css` pasó de `#00ff88` a `#0b0f19`. Halo/contorno por función intactos (verde/naranja/rojo). `aplicarCambiosVisuales()` en `logica.js` verificado: sigue sobreescribiendo `--color-botones` con el color de Identidad Corporativa.
+- **Punto 3 — hecho:** rama edición de `procesarRegistro()` en `logica.js` ahora sincroniza `stratos_recordar` y `usuarios_del_dispositivo` con el nuevo `nombreCompleto` (reemplaza el viejo, no agrega). Sin tocar lógica de login ni otras claves.
+- **Verificación:** `_validar_js.py` con esprima: `logica.js` OK, `datos.js` OK, 0 problemas.
+
+### 14/10/2026 — PUNTO 1 (instrucciones.md): EFECTO UNIFICADO EN LOS 9 BOTONES DE COMUNICACIÓN
+- **Hecho:** los 8 `.btn-comunicacion` + `.btn-hexagono` ahora cumplen el PUNTO 1. Rectangulares: normal con borde transparente 2px + sombra suave verde; hover con borde iluminado + sombra intensificada + escala 1.08; active con halo intenso + inset (sin translateY, sin rotación). Hexágono Otras: misma regla con `filter: drop-shadow` (el clip-path recorta borde/sombra normales, así el halo se ve sin cambiar su forma); sin rotación (no es Libro/Vero).
+- **No se cambió** forma, tamaño, función ni iconos de los 9 botones (regla inviolable respetada).
+- **Pendiente:** verificación del Arquitecto en navegador (Ctrl+F5 en Comunicación) + Tarea 2) Sincronizar con GitHub.
+
+### 12/10/2026 — PUNTO 1 (instrucciones.md): REGLA GENERAL DE BOTONES EN TODO EL SISTEMA
+- **Hecho:** todos los botones del sistema cumplen la regla. En `estilos.css`, las clases `.btn-principal` (verde `#00ff88`), `.btn-secundario` (naranja `#ff8c00`), `.btn-peligro` (rojo `#e53935`), `.btn-accion` (verde) y `.btn-cerrar` (rojo) usan fondo `--color-botones` y letras `--color-letras` definidos por el usuario; el halo/contorno va en el color de la FUNCIÓN y la animación (hover eleva+brilla / active presiona) aplica a todas.
+- **HTML (`index.html`):** en el modal de contacto, CANCELAR pasó de `.btn-secundario` a `.btn-peligro` (acción que descarta = rojo). En el modal de detalle, CERRAR pasó de `.btn-principal` a `.btn-peligro`; EDITAR = `.btn-secundario` (naranja), ELIMINAR = `.btn-peligro` (rojo). Títulos de modal con `--color-letras`.
+- **`logica.js`:** `aplicarBrandingGlobal()` ahora setea además `--color-letras` y `--color-botones` (antes solo `--color-texto`/`--color-primario`); los títulos dinámicos "Contactos Indirectos" y "Observadores" pasaron de `#00ff88` fijo a `var(--color-letras)`. `.controles-nodo button` ya usa `--color-botones`/`--color-letras`.
+- **No se cambió** función, tamaño, cantidad de botones ni estructura de modales/pantallas (regla inviolable respetada).
+- **Pendiente:** verificación del Arquitecto en navegador (Ctrl+F5) + Tarea 2) Sincronizar con GitHub.
+### 12/10/2026 (noche) — PUNTO 1, APARTADO 3 (color de letras): CIERRE ACOTADO
+- **Decisión del Arquitecto:** del apartado 3 ("toda letra del sistema debe respetar --color-letras"), amarrar SOLO la línea de usuario de la ventana de IA.
+- **Hecho:** `.ventana-ia-linea-usuario` en `estilos.css` pasó de `color: rgba(255,255,255,0.95)` fijo a `color: var(--color-letras)` (ya obedece la Identidad Corporativa). Sin cambiar tamaño, fuente ni cursiva; balance de llaves intacto.
+- **NO se tocó (por decisión del Arquitecto):** cartelera (`#zona-cartelera`/`.mensaje-alerta`, ya respeta la identidad), barra de notificaciones (`#barra-notificaciones`, colores fijos por tipo de aviso), marca de agua `.watermark-stratos` (identidad de Stratos) y textos sobre fondos semánticos (si el usuario elige mal contraste, es su responsabilidad; el sistema no fuerza el color ahí).
+- **Pendiente (no ahora):** `.item-correo-previa`/`.item-correo-fecha` se amarrarán cuando se trabaje el módulo Correos. El Slogan tendrá su propio botón de color con la paleta del logo cuando se defina Identidad Corporativa a detalle.
+
+
+
+
+### 12/10/2026 (tarde) — PUNTOS 1-3 (instrucciones.md): HALO VERDE + ICONOS GRANDES + REUNIONES
+- **Punto 1 — hecho:** halo de `.btn-comunicacion` y `.btn-hexagono` (hover/active) a verde Stratos fijo `#00ff88`/`rgba(0,255,136,...)`. Fondo/borde/texto corporativos intactos. Sin quitar halo, sin cambiar efecto.
+- **Punto 2 — hecho:** `.icono-comunicacion` de 26px a 48px (círculo con aro oscuro, texto intacto). Sin cambiar tamaño del botón.
+- **Punto 3 — hecho:** botón Reuniones rectangular junto a los demás (icono `reuniones.svg` recoloreado a `#00ff88`) → `#pantalla-reuniones` placeholder con Volver. `irAModuloComunicacion()` ya lo lleva y registra en banco. `estadoPantallas` + `menu_pantalla-reuniones` agregados. Sin tocar otros botones, sin más botones.
+- **Icono Otras Actividades — hecho:** hexágono con `otras actividades.svg` (recoloreado a `#00ff88`). Dos líneas centradas: línea 1 icono + "Otras", línea 2 "Actividades" (icono 30px, padding lateral para que no lo corte el hexágono). Sin tocar tamaño del hexágono.
+- **Pendiente:** Ctrl+F5 en Comunicación + Tarea 2) Sincronizar con GitHub (aquí la terminal no devuelve salida).
+
+### 12/10/2026 — PUNTOS 1-2 (instrucciones.md): ICONOS VERDES + COLORES CORPORATIVOS
+- **Punto 1 — hecho:** 7 botones `.btn-comunicacion` con `<img class="icono-comunicacion">` a la izquierda (26px, `enlace%20movil.svg` con `%20`). 7 SVG recoloreados `fill #000000→#00ff88` (correos/chats/tareas/alarmas/calendario/hub/enlace movil). `llamar.svg` existe pero NO se usó: no hay botón Llamar (prohibido agregar). Sin icono en hexágono Otras (no está en la lista). Sin cambio de diseño/estructura.
+- **Punto 2 — hecho:** botones usan `--color-botones` (fondo/borde/halo) + `--color-letras` (texto). `:root` gana `--color-botones:#00ff88`; `aplicarCambiosVisuales()` la setea desde `configuracionEstetica.colorBotones` (+`--color-letras` desde `colorTexto`) y su selector ahora incluye `.btn-comunicacion/.btn-hexagono/.btn-vista-correo.activo`. Halo Stratos igual al existente (hover eleva+brilla, active presiona). Sin colores fijos nuevos (fallbacks solo si no hay identidad).
+- **Pendiente:** Ctrl+F5 en Comunicación + Tarea 2) Sincronizar con GitHub (aquí la terminal no devuelve salida).
+
+### 11/10/2026 (continuación) — PUNTO 1 CORREGIDO: CENTRADO REAL DEL NO.1
+- **Diagnóstico:** el nodo No.1 lleva las dos clases `org-general-rama org-general-rama-nivel-0` (misma especificidad), y en `estilos.css` la regla `.org-general-rama{align-items:flex-start}` venía DESPUÉS de `.org-general-rama-nivel-0{align-items:center}` → ganaba `flex-start` y el nodo quedaba a la izquierda. Además el `<link>` del CSS no tenía `?v=` y el navegador seguía usando el CSS viejo en caché.
+- **Corrección:** movida `.org-general-rama-nivel-0` para que quede DESPUÉS de `.org-general-rama` (así su `center` gana en cascada). Agregado `?v=3` al `<link>` del CSS en `index.html` (igual que los `.js`). Sin cambiar tamaño, sin mover otros nodos, sin agregar elementos.
+- **Punto 1: hecho.** Verificar en navegador con Ctrl+F5 en Organigrama General.
+- **Pendiente GitHub:** correr `sincronizar_git.ps1` (aquí la terminal no devuelve salida observable).
+
+### 11/10/2026 — PUNTOS 1-3 (instrucciones.md): CENTRAR NO.1 + COMUNICACIÓN + CORREOS
+- **Punto 1 — hecho (verificado, sin tocar código):** el nodo No.1 ya estaba centrado: `logica.js` pone clase `org-general-rama-nivel-0` + `marginLeft 0` al nivel 0, y `estilos.css` tiene `.organigrama-general-arbol{align-items:center}` + `.org-general-rama-nivel-0{align-items:center;margin-left:0;width:100%}`. No se cambió tamaño ni otros nodos ni se agregó nada.
+- **Punto 2 — hecho:** `#pantalla-comunicacion` ahora tiene los 8 botones (7 rectangulares `.btn-comunicacion` + hexágono invertido `.btn-hexagono` abajo-derecha). Cada uno va a su `#pantalla-*` vía `irAModuloComunicacion()` (registra `modulo/Entró a ...` en banco de datos). Placeholders mínimos para chats/tareas/alarmas/calendario/hub/enlace/otras (Correos es real, PUNTO 3). `estadoPantallas` + traducciones `menu_pantalla-*` agregados. No se tocó `.btn-principal/.btn-secundario`.
+- **Punto 3 — hecho:** `#pantalla-correos` con 6 vistas (Recibidos/Enviados/Carpetas/Eliminados/Borradores/Spam), cada una con búsqueda + listado (remitente/asunto/previa/fecha) + acciones (responder/archivar/eliminar). Click abre detalle. Métricas locales en `metricasCorreos` + banco (`correos/Ingresó/Salió/Acción`): ingreso/salida por vista con hora+min, recibidos del día, contactos únicos (principal, no copias), solo-copia (conteo/tiempos/marcar-sin-abrir), enviados (respondidos/tiempos/personas/acciones/procesos/sin-correlación), carpetas (frecuencia/peso), eliminados (tiempo/cantidad/peso/aviso si borra +50% del promedio), borradores y spam (conteo/tipos/desconocidos). Sin Gmail/Outlook real, sin IA. Clave `STORAGE_KEYS.CORREOS`.
+- **Pendiente:** verificación del Arquitecto en navegador (Ctrl+F5) + correr `python Pruebas/_validar_js.py` en su PC (aquí la terminal no devuelve salida observable) + Tarea 2) Sincronizar con GitHub.
+
+### 07/10/2026 (tarde) — INSTRUCCIONES NUEVAS PUNTOS 1-11: CENTRADO + SALUDO POR CAMPO NOMBRE
+- **Punto 1 — hecho:** `.organigrama-general-arbol` a `align-items: center`; rama raíz (nivel 0) con clase `org-general-rama-nivel-0` centrada y `marginLeft 0`. Sin cambiar tamaño ni otros nodos.
+- **Punto 2 — verificado:** `DURACION_PRIORIDAD_CARTELERA` 10/6/4 + clasificación por remitente intactos.
+- **Punto 3 — hecho:** `actualizarSaludoLogin()` ahora busca el usuario por `nombreCompleto` y muestra su campo `Nombre` ("Jorge Mario"); si no hay coincidencia usa primera palabra; ajuste de letra en una línea intacto.
+- **Punto 4 — verificado:** `irAPantalla()` oculta `#zona-superior` en Login.
+- **Punto 5 — verificado:** saludo 1ª vez con `ULTIMO_SALUDO` intacto.
+- **Punto 6 — verificado:** sin `#config-nombre-asistente` en código.
+- **Punto 7 — verificado:** sin `#config-biometria` en código.
+- **Punto 8 — verificado:** motivacional con prioridad media (6 s) intacto.
+- **Punto 9 — verificado:** filtro 51-200/máx 250, coma ≥50, punto/`;` siempre, sin guiones/números solos.
+- **Punto 10 — verificado:** `bancoDatos` + `migrarBancoDatos()` con respaldo previo intactos.
+- **Punto 11 — verificado:** hora entrada/salida, errores por usuario, aviso al jefe a los 7 intentos, temporal con cambio obligatorio, sugerencia IA >6 errores/semana, nombre IA configurable, sello "Escribe aquí...".
+- **Pendiente:** verificación del Arquitecto en navegador (Ctrl+F5).
+- **07/10/2026 (sincronización TODO, pedida por el Arquitecto):** `git status --porcelain` mostró M en `estilos.css`, `index.html`, `datos.js`, `logica.js`, `A_DONDE_VA_STRATOS.md`, `MEMORIA.md`, `instrucciones.md` + `?? Colores-y-Estetica/Iconos/`. `git add -A`, `status`, `log`, `branch` y `sincronizar_git.ps1` fallan con exit 1 sin salida observable en este entorno, así que NO se forzó `commit/push` (protocolo: nunca adivinar ni dejar rebase a medias). El último reporte local `_estado_git.txt` es del 04/10 (AL DÍA, HEAD 196cca0) y el vigilante no registra subidas desde el 06/10 (solo "iniciado"). Queda TODO pendiente de subir: corre en tu PC la Tarea 2) Sincronizar con GitHub (hace add -A, commit, pull --rebase y push con verificación).
+
+### 07/10/2026 — PUNTOS 1-10 (instrucciones.md): ICONOS SIN SATURAR + LETRERO + ACRÓNIMO + SIN CORONA/ROL + COMA CON 50
+- **Punto 1 — hecho:** los SVG tenían fondo blanco + forma negra y el filtro CSS los volvía bloques verdes. Forma a `#00ff88` + fondo a `none` en `rostro.svg`, `patron.svg`, `huella.svg`; quitado el `filter` saturador de `.btn-biometria img` (44px, halo intacto, sin mover de lugar).
+- **Punto 2 — hecho:** letrero de Perfil a "Selecciona la opción biométrica a enrolar en este dispositivo." (HTML + `bio_enrol_leyenda` ES/EN). Iconos ya sin saturar por Punto 1.
+- **Punto 3 — hecho (sesión anterior, verificado):** `actualizarSaludoLogin()` muestra campo Nombre completo + reduce letra en una línea.
+- **Punto 4 — verificado:** `irAPantalla()` oculta `#zona-superior` en Login; sin rotación ahí.
+- **Punto 5 — verificado:** saludo 1ª vez con `ULTIMO_SALUDO` intacto.
+- **Punto 6 — verificado:** sin `#config-nombre-asistente` en código (solo mención histórica en MEMORIA).
+- **Punto 7 — verificado:** sin `#config-biometria` en código (solo mención histórica en MEMORIA).
+- **Punto 8 — hecho:** coma = delimitador solo si el fragmento tiene al menos 50 caracteres; punto y punto y coma siempre delimitan.
+- **Punto 9 — hecho:** `.badge-visor` y `#modal-acronimo-preview` a `var(--color-letras)` (antes `#0b0f19` oscuro).
+- **Punto 10 — hecho:** quitada corona `👑` del nodo No.1 y campo `Rol:` del detalle general. La corona restante es solo el aviso de cambio de No.1 (no el nodo). Nodo sin descentrado (árbol en columna flexible, no se tocó CSS).
+- **Pendiente:** verificación del Arquitecto en navegador (Ctrl+F5).
+- **07/10/2026 (sincronización):** intentada con `git status/log` — la terminal devolvió error sin salida observable, así que NO se confirmó ni se forzó `push` (protocolo: nunca adivinar ni dejar rebase a medias). El vigilante automático (`subir_automatico.ps1`, arranca solo al encender el PC) subirá los cambios (MEMORIA + 10 puntos) en cuanto corra; verificar con Tarea 1) Estado Git → AL DÍA y Tarea 2) Sincronizar si hace falta.
+
+### 04/10/2026 (noche) — PUNTO 6 PARTE A: PRIMERA ENTRADA / ÚLTIMA SALIDA DEL DÍA
+El PUNTO 6 tenía dos partes (A: saludo + marcas del día; B: iconos). La B quedó hecha el 16/09, pero **la Parte A estaba incompleta**: el saludo en vivo y el saludo en cartelera existían, y el PUNTO 48 había creado el histórico de asistencia, pero **nunca se escribieron los 3 campos que pide el punto 6 sobre el usuario**. Quedó cerrado ahora.
+- **`datos.js`:** `usuarioActivo` y la estructura de `baseDatosUsuarios` ganan `primeraEntradaDelDia` ("YYYY-MM-DD HH:MM"), `ultimaSalidaDelDia` (igual, `null` si sigue abierto) y `tiempoTotalDelDia` (minutos).
+- **`logica.js` — nueva sección 16.1.1:** `minutosHastaAhora()`, `obtenerMarcasDelDia()`, `actualizarMarcasDelDia()` y `completarMarcasDelDia()`.
+- **Cómo se evita duplicar información:** `registrosAsistencia` (PUNTO 48) sigue siendo el **histórico de 5 años**; los 3 campos del punto 6 son la **foto del día de hoy** y se calculan a partir de ese histórico. No hay dos verdades ni dos juegos de reglas.
+- **Se actualizan al ENTRAR y al SALIR** (`registrarHoraEntrada` y `registrarHoraSalida` los invocan), así que también funcionan cuando la entrada es por **biometría**.
+- **Mientras el día está abierto**, `tiempoTotalDelDia` va contando los minutos desde la primera entrada (por eso se escribió `minutosHastaAhora()` en vez de reutilizar `calcularMinutosTrabajados()`, que da 0 mientras no hay salida).
+- **Cruce de medianoche respetado:** si se entra a las 11 PM y se sale a las 12:30 AM, las tres marcas pertenecen al día de la ENTRADA.
+- **Migración sin perder nada:** `completarMarcasDelDia()` se llama dentro de `migrarBancoDatos()` y rellena los 3 campos de los usuarios que ya existían, tomándolos de su registro de hoy. Los que no tengan registro de hoy quedan vacíos (no se inventa nada).
+- **Verificación:** `logica.js` y `datos.js` con parser real → 0 errores. Nueva prueba `_probar_marcas.py` → **10/10 OK**, cubriendo día abierto (el tiempo suma solo), día cerrado, cruce de medianoche, usuario sin registro y que un segundo ingreso NO pise la primera entrada. Total del día: **58 pruebas automáticas en verde** (26 biometría + 22 organigrama/duplicados + 10 marcas del día).
+
+### 04/10/2026 (tarde) — PUNTOS 33 Y 31: TERMINADOS + RESUBIDA A GITHUB
+Orden pedido por el Arquitecto en `explicacion.txt`: subir primero, luego 33, luego 31, luego traducciones.
+
+**1) RESUBIDA A GITHUB (commit `336f79b`):** se subió TODO lo que había pendiente de las sesiones anteriores (PUNTOS 48, 34 y la biometría del día). Verificado por el propio script: *"CONFIRMADO: local y GitHub están en el mismo commit"*.
+
+**2) PUNTO 33 — CRUCE DE INFORMACIÓN AL CREAR PRIMERA LÍNEA (terminado):**
+- **`logica.js` — nueva sección 32.1:** `_tr()` (texto traducido con valor por defecto), `normalizarParaComparar()`, `recorrerContactos()` (baja por **todos** los niveles del organigrama), `buscarContactoDuplicado()`, `mostrarVentanaAviso()`, `cerrarVentanaAviso()`, `responderVentanaAviso()` y `hablarTextoIA()`.
+- **2.1 Cruce completo:** ahora se cruza **nombre + puesto + teléfono + email** contra (a) `baseDatosUsuarios`, (b) **todos** los niveles del organigrama personal y (c) indirectos + observadores. Coincide si: el teléfono coincide, **o** el email coincide, **o** nombre y puesto coinciden juntos.
+- **2.1bis Tildes y apóstrofos respetados:** `normalizarParaComparar()` solo baja a minúsculas y junta espacios de sobra. **NO** quita tildes ni apóstrofos, porque `"O'Brien"` y `"Obrien"` son personas distintas (decisión del Arquitecto).
+- **2.2 Ventana de aviso (NO es un modal nuevo):** se agregó `#ventana-aviso-contacto` en `index.html` reutilizando las clases `.modal`, `.modal-content`, `.modal-header`, `.modal-body`, `.modal-footer`, con **botón verde (Sí)** y **botón rojo (No)** — exactamente los colores del modal de contacto. `hablarTextoIA()` hace que **la IA hable el mismo texto que se muestra**.
+- **2.3 Duplicado:** ventana "¿Continuar con la invitación?" con las frases exactas pedidas. **Sí** → sigue; **No** → se queda en el modal para editar.
+- **2.4 Sin teléfono ni email:** ventana informativa con el texto exacto; el botón verde dice "Entendido".
+- **2.5 Campo `#modal-contacto-id` ELIMINADO** (pedido explícito). Para no romper "Editar contacto" (el bug del 27/08), el modo edición ahora usa las variables que **ya existían** en `datos.js` 3.7: `contactoEnEdicion` y `tipoContactoActual`. Se quitó su uso de `mostrarFormularioContacto()` y `editarContactoDesdeDetalle()`.
+- **2.6 Regla:** teléfono y email opcionales, pero **al menos uno obligatorio**.
+- **Cuidado con el orden:** `guardarContacto()` ya no llama `cerrarModalContacto()` por su cuenta; ahora el cierre ocurre DENTRO de `continuarCreacionContacto()`, justo después de crear el contacto.
+
+**3) PUNTO 31 — ORGANIGRAMA GENERAL (terminado):**
+- **`datos.js`:** nueva clave `STORAGE_KEYS.ORGANIGRAMA_GENERAL` y `organigramaGeneral` documentado con su estructura real (`raices`, `nodos`, `generadoEn`, `totalUsuarios`).
+- **`logica.js` — nueva sección 29.1:** `normalizarUnicoNo1()` (3.3), `construirOrganigramaGeneral()` (3.1), `guardarOrganigramaGeneral()` y `cargarOrganigramaGeneral()` (3.2), `enlazarSubordinadosPrevios()` (3.4), `aplicarCrecimientoOrganigramaGeneral()` (3.4 y 3.6) y `renderizarOrganigramaGeneral()` reescrito para dibujar **todos** los niveles.
+- **3.5 Aviso de doble registro:** si el contacto ya existe **como usuario registrado y con otro jefe**, `guardarContacto()` muestra la ventana con el texto exacto ("…debajo de [Nombre del superior]. No se puede registrar en dos posiciones ni ser contacto directo de dos superiores.") y **no** manda la invitación. Si solo hay datos iguales, aplica la ventana de Sí/No del PUNTO 33.
+- **3.6 Cambio de No.1:** entra un No.1 nuevo → el anterior pierde `esNo1` y pasa a ser su subordinado; se avisa por pantalla.
+- **Extras de seguridad:** detecta **ciclos** (A→B→A) y **jefe inexistente** sin colgarse; nadie puede ser su propio jefe; cada usuario se dibuja una sola vez aunque tenga muchas ramas.
+- **`estilos.css` — secciones 3.16 y 3.17:** el árbol del organigrama general (`.organigrama-general-arbol`, `.org-general-rama`, `.org-general-conector`) y el ancho de la ventana de aviso. **Las clases antigas `.organigrama-general-grid` / `-subgrupo` que usaba el render NO existían en el CSS** (por eso el organigrama general salía sin forma); se sustituyeron por clases nuevas que sí están definidas.
+- **Enganche:** `aplicarCrecimientoOrganigramaGeneral()` se llama en los DOS caminos de `procesarRegistro` (usuario nuevo y usuario que vuelve a registrarse).
+
+**4) TRADUCCIONES (punto 4 de `explicacion.txt`):** añadidas con ES/EN: los 4 textos de la ventana de aviso, **prioridades** (alta/media/baja), los 2 mensajes de la cartelera que las usan, **tipos de invitación** (directo/indirecto/observador) y el mensaje de organigrama vacío. Total: 18 claves de biometría (turno anterior) + 17 nuevas hoy.
+
+**5) VERIFICACIÓN:** `logica.js` y `datos.js` parseados con un **parser real de JavaScript** → 0 errores. Se escribieron dos suites de prueba sin instalar nada: `_probar_biometria.py` (**26/26 OK**, antes) y `_probar_organigrama.py` (**22/22 OK**, hoy) que cubren árbol de 4 niveles, ciclos, No.1 duplicado, detección de duplicados en las 4 listas, contactos 2 niveles abajo, y que tildes/apóstrofos se respeten.
+- **Lo que NO se pudo verificar:** el navegador. La IA no puede abrirlo; el Arquitecto tiene que probar con **Ctrl+F5** en `http://127.0.0.1:5500/Cuerpo-y-Textos/index.html` (requisito del punto 5 de `explicacion.txt`, incluido el alta con biometría en ese contexto, que es el único local donde WebAuthn funciona).
+
+### 04/10/2026 — PUNTOS 9-10-11 + 6: BIOMETRÍA TERMINADA (estaba a medias)
+- **Contexto:** la sesión anterior había dejado la biometría a medias (HTML, CSS y parte de `logica.js` escritos, pero con dos funciones que se llamaban y **no existían**: `intentarBiometria()` y `actualizarEstadoEnrolamiento()` → `ReferenceError`; la segunda incluso rompía `irAPantalla('registro-invitacion')`, o sea entrar al Perfil). Además no había WebAuthn real: la "inscripción" solo escribía un registro en localStorage y **no había entrada con biometría**. Se terminó todo el PUNTO.
+- **Diagnóstico (sin tocar código) que guió el trabajo:** quedan `intentarBiometria()` y `actualizarEstadoEnrolamiento()` sin definir; la clase CSS `.enrolado` nunca se aplicaba; faltan las traducciones `bio_enrol_titulo`/`bio_enrol_leyenda`; el bloque de Perfil no se atenuaba; la casilla `#config-biometria` no se leía ni se restauraba.
+- **`logica.js` — sección 20.2 reescrita por completo:**
+  - **Utilidades WebAuthn:** `_bioConcatenarBytes`, `_bioBufferABase64Url`, `_bioBase64UrlABuffer`, `_bioDesafioAleatorio`, `_bioDecodificarCose` (decodificador CBOR), `_bioDer`, `_bioSecuenciaDer`, `_bioCoseASpki` (COSE → SPKI para EC2/P-256 y RSA) y `_bioVerificarAsercion`.
+  - **`enrolarBiometria(metodo)`** ahora hace **`navigator.credentials.create()`** de verdad (desafío aleatorio, RP *Stratos*, `userVerification: 'required'`, autenticador de plataforma) y guarda solo la **clave pública + id de credencial** de ESTE dispositivo. El secreto nunca sale del equipo. Al inscribir, se habilita sola la casilla de Configuración.
+  - **`actualizarEstadoEnrolamiento()`** (la que faltaba): resalta con `.enrolado` el método inscrito, atenúa `#opciones-biometria-perfil` si el dispositivo no tiene autenticador y escribe en `#mensaje-biometria-perfil` qué falta o qué hay inscrito.
+  - **`actualizarEstadoBiometriaLogin()` + `inicializarBiometria()`**: mismo estado visual en el Login (resalta el método inscrito, atenúa si no hay dispositivo o si la casilla está apagada).
+  - **`biometriaParaLogin()`**: decide con qué credencial entrar (la del nombre escrito en el campo, o la del último usuario del dispositivo).
+  - **`intentarBiometria(metodo)`** (la que faltaba): **`navigator.credentials.get()`** + verificación criptográfica real (origen, desafío, bit UP de usuario verificado y firma). Si falla, avisa el motivo en el Login y lo registra como incidente. Reemplaza por completo nombre + ID + contraseña.
+  - **`iniciarSesionBiometrica(usuario)`**: abre la sesión por el mismo camino que `validarEntrada` (registra hora de entrada, incidente `biometria`, banco de datos, menú, inactivity timer y pantalla de destino). Si el usuario tiene **contraseña temporal pendiente**, la biometría NO omite el cambio obligatorio.
+  - Se eliminó `biometriaEnroladaDispositivo()`, que quedó sin uso al aparecer `biometriaParaLogin()`.
+- **`datos.js`:** 18 claves de traducción nuevas de biometría (`bio_enrol_titulo`, `bio_enrol_leyenda`, `bio_facial/patron/huella`, avisos, etc.) con ES/EN; y en `DOMContentLoaded` se restaura el estado de la casilla `#config-biometria` (antes se perdía al reabrir la app).
+- **`index.html`:** los 6 botones biométricos (3 del Perfil + 3 del Login) llevan `data-i18n-title` para que el texto emergente también se traduzca.
+- **`logica.js` — `aplicarIdioma()`:** ahora procesa también `[data-i18n-title]`. **`guardarConfiguracion()`** refresca el estado de los botones al guardar.
+- **Limitaciones honestas (importantes):**
+  1. **WebAuthn NO permite elegir el método.** El dispositivo decide si el paso es cara, huella o PIN. Los tres botones dirigen al mismo autenticador de plataforma y el sistema **avisa** si ese método no es el que está inscrito. Para rostro/patrón/huella *reales* hay que incrustar la cámara o leer el sensor: eso requiere SDK nativo o un servicio; hoy no es posible solo con navegador.
+  2. Solo funciona en **contexto seguro**: con **Live Server (127.0.0.1)** ✅ o en **https** cuando esté en hosting. Abierto como `file://` no funciona, y el sistema lo avisa con un mensaje claro.
+  3. La credencial queda amarrada al **origen**: si la app se publica en un dominio, la inscripción hay que hacerla **en ese mismo dominio y en ese equipo**.
+- **Verificación hecha por la IA antes de entregar:** `logica.js` y `datos.js` parseados con un **parser real de JavaScript** → sintaxis correcta. Y `_probar_biometria.py` (puerto 1:1 de las funciones criptográficas, sin instalar nada) → **26/26 pruebas OK**: CBOR lee bien la clave COSE, el SPKI de P-256 es **byte a byte idéntico** a la plantilla del estándar, el SPKI de RSA tiene la estructura correcta, y la verificación ECDSA acepta la firma buena y rechaza la ajena.
+- **Esa prueba encontró 2 bugs REALES en el código nuevo (ya corregidos):** (1) al construir el INTEGER de DER del módulo RSA **faltaba la etiqueta `0x02`**; (2) **faltaba el byte `0x00` de signo** cuando el bit alto del módulo está activo (pasa siempre con claves de 2048 bits). Sin esas correcciones, una credencial RSA habría sido imposible de verificar.
+- **Pendiente:** el Arquitecto debe probarlo en el navegador (Ctrl+F5) en un equipo con Windows Hello/PIN: inscribir en Perfil → cerrar sesión → entrar con el icono. En un equipo **sin** autenticador, los 3 botones deben verse atenuados y explicar por qué.
+
+### 03/10/2026 — PUNTO 34: MEJORAR EL BANCO DE DATOS
+- **Aplicado el PUNTO 34 de `instrucciones.md`** (segundo en orden descendente: 48 → **34** → 33 → 31 → 9-10-11 → 6 → 3 → 2). Ficha **`bancoDatos`** por usuario, con migración al cargar y respaldo previo.
+- **`datos.js`:** nueva **sección 1.5** con `let bancoDatos = {}` (clave = `usuarioId`) y su estructura documentada (`diasSesiones`, `errores`, `permisos`, `invitaciones`, `actividad`, `camposLibres`). Nuevas claves `STORAGE_KEYS.BANCO_DATOS` y `STORAGE_KEYS.RESPALDO_MIGRACION`; se cargan en `DOMContentLoaded`.
+- **`logica.js`:** nueva **sección 16.2** con `fichaBancoDatosPorDefecto`, `fichaBancoDatos`, `guardarBancoDatos`, `completarFichaBancoDatos` (rellena sin borrar), `calcularMinutosTrabajados`, `registrarDiaSesionBancoDatos`, `actualizarErroresBancoDatos`, `actualizarPermisosBancoDatos`, `registrarInvitacionBancoDatos`, `registrarActividadBancoDatos`, `respaldarDatosNavegador` y `migrarBancoDatos`.
+- **Migración al cargar:** `migrarBancoDatos()` hace un **respaldo previo** de TODOS los datos del navegador (guardado en `stratos_respaldo_migracion`) y luego **rellena** cada ficha con valores por defecto **sin borrar nada**; siembra días/sesiones y errores ya existentes con criterio **idempotente** (los errores se recalculan desde `incidentesLogin`).
+- **Enganches:** entrada/salida → `diasSesiones` (con minutos trabajados); errores de login → bloque `errores`; inicio de sesión → `permisos` + `actividad`; "Salvar e Invitar" → `invitaciones.invitoA` + `actividad`.
+- **Histórico 5 años:** `depurarHistoricos()` ahora también poda `diasSesiones` y `actividad` del banco (conserva la ficha). Se guarda **hora y minutos**.
+- **Pendiente / Notas:** (1) el bloque **actividad** queda listo para el futuro módulo de Comunicación (correos/chats/tareas). (2) Falta la **verificación del Arquitecto** en el navegador (Ctrl+F5).
+
+### 03/10/2026 — PUNTO 48: LOGIN (REGISTRAR HORA, ERRORES, AVISOS AL JEFE)
+- **Aplicado el PUNTO 48 de `instrucciones.md`** (una sola área: Login). Se trabaja en **orden descendente** de los puntos pendientes; este fue el primero (48 → 34 → 33 → 31 → 9-10-11 → 6 → 3 → 2).
+- **`datos.js`:**
+  - `usuarioActivo` y la ficha de `baseDatosUsuarios` ganan `intentosLoginFallidos` (**por usuario**, no global) y `ultimaContrasenaTemporal`.
+  - Nueva **sección 1.4**: estructuras `registrosAsistencia` (entradas/salidas, con `salidaTrasMedianoche`) e `incidentesLogin` (tipo/resultado por intento).
+  - `STORAGE_KEYS` nuevas: `REGISTROS_ASISTENCIA` y `INCIDENTES_LOGIN`; se cargan en `DOMContentLoaded` y se depura el histórico.
+  - Traducción `ia_escribe` → ES "Escribe aquí..." / EN "Type here...".
+- **`logica.js`:**
+  - Nueva **sección 16.1**: `registrarHoraEntrada` (primera entrada del día), `registrarHoraSalida` (última salida; si cruza la medianoche queda en el día de la entrada abierta), `registrarIncidenteLogin`, `registrarErrorLogin` (por usuario), `notificarJefeBloqueo` (crea `solicitudesRecuperacion` con `solicitadoA = superiorId`), `erroresUltimaSemana`, `revisarSugerenciaContrasena` (>6 errores en la semana) y `mostrarSolicitudesPendientesJefe`; histórico de 5 años con `depurarHistoricos`.
+  - `validarEntrada`: registra errores (nombre/contraseña), reinicia el contador del usuario al entrar bien, graba la hora de entrada y el intento exitoso; si entra con contraseña temporal registra el incidente y muestra el cambio obligatorio; al jefe se le muestran sus solicitudes pendientes (prioridad ALTA).
+  - `cerrarSesion`: graba la hora de salida antes de limpiar la sesión.
+- **`index.html`:** campo de la IA con sello de agua "Escribe aquí...".
+- **Pendiente / Notas:** (1) la alerta al jefe se **guarda** en `solicitudesRecuperacion` y se le muestra al iniciar sesión; su integración plena en **cartelera con duración por prioridad** llegará con el **PUNTO 2**. (2) La generación/entrega de la contraseña temporal (correo + SMS) depende del flujo de recuperación (aún en desarrollo). (3) Falta la **verificación del Arquitecto** en el navegador (Ctrl+F5). (4) No hay Node en el equipo: la sintaxis se verificó manualmente (no con `node --check`).
+
+
+### 17/09/2026 (sesión 2) — BLINDAJE DE LA SINCRONIZACIÓN CON GITHUB (sin tocar la app)
+- **Motivo:** el Arquitecto manifestó preocupación por el tiempo que costó la sincronización de la sesión anterior y pidió revisar si se podía mejorar ANTES de seguir con el sistema. Se hizo el diagnóstico del proceso y se corrigió la causa raíz.
+- **Causa raíz encontrada (por qué pasó lo del 16/09):**
+  1. El script `subir_automatico.ps1` hacía `git push` **sin integrar antes** lo que hubiera en GitHub → push rechazado y estado descolocado.
+  2. Un `rebase` podía quedar **a medias** sin que nada lo avisara ni lo rescatara.
+  3. Había trabajo **solo en el disco** sin commitear (37 líneas de Vero) → a un paso de perderse.
+  4. **Bug real detectado:** `subir_automatico.ps1` estaba guardado en UTF-8 **sin BOM**, y PowerShell 5.1 lo leía como ANSI → los commits automáticos quedaban con la "á" corrupta en el historial (`Auto: bit├ícora actualizada`). Corregido.
+- **Lo que se creó (herramientas LOCALES, no se suben a GitHub):**
+  - `estado_git.ps1` — diagnóstico en UN paso: rama, rebase/merge a medias, archivos sin commitear, preparados, solo-en-disco, conflictos, commits sin subir y GITHUB vs local. Da **VEREDICTO** (AL DÍA / CON AVISOS / REVISAR) y guarda el reporte en `_estado_git.txt` para pegárselo a la IA.
+  - `sincronizar_git.ps1` — subida segura en 6 pasos: (1) rescata rebase/merge a medias dejando respaldo en `respaldo-antes-de-rebase`, (2) avisa y **se detiene** si hay conflictos, (3) prepara todo, (4) commitea con el mensaje que se le dé, (5) integra lo de GitHub (rebase+autostash, sin adivinar ante conflicto) y sube con reintento, (6) **verifica contra GitHub** que el commit llegó.
+  - `subir_automatico.ps1` **endurecido**: ya no vigila solo `MEMORIA.md`, vigila **todo el proyecto** (revisa el repositorio cada 10 s); no toca nada si hay rebase/merge a medias; integra antes de subir; aborta el rebase si no puede integrar (deja el commit a salvo); verifica después contra GitHub; escribe registro en `_subida_automatica.log`; y tiene tope de 1 subida por minuto (menos ruido en GitHub).
+  - `.vscode\tasks.json` — 4 tareas: **0)** vigía de respaldo (ya arranca solo; la tarea solo sirve si se apagó), **1)** Estado Git (diagnóstico), **2)** Sincronizar con GitHub (pide el mensaje), **3)** Ver registro del vigía.
+  - `instrucciones-IA/PROTOCOLO_GITHUB.md` — el protocolo escrito (se sube a GitHub para que la IA del internet lo lea): rutina diaria, qué hacer ante rebase/conflicto/rechazo/sin internet y el rescate manual con las reglas de oro.
+- **Limpieza:** `.gitignore` ampliado (herramientas locales, `_subida_automatica.log`, `_estado_git.txt`, `_f2.txt`) para que ningún temporal ni reporte ensucie GitHub.
+- **Pruebas hechas (con evidencia):** los 3 scripts se validaron (0 errores de sintaxis y con BOM UTF-8), `tasks.json` es JSON válido y **se probaron en vivo**: el vigilante creó y subió solo el commit `268ece7` (19:00:38 → 19:00:51 "Subido a GitHub y VERIFICADO"), la tarea 2 creó y subió `9e280d4` con verificación contra GitHub, y el diagnóstico reportó correctamente.
+- **Tres bugs reales encontrados y corregidos en las pruebas:**
+  1. `subir_automatico.ps1` estaba en UTF-8 **sin BOM** → PowerShell 5.1 leía mal los acentos en los mensajes de commit (por eso los commits del historial dicen `bit├ícora`). Corregido a UTF-8 con BOM.
+  2. El vigilante basado en **eventos de Windows** (FileSystemWatcher) **no disparaba**: las acciones de evento corren en otro ámbito y no ven las funciones del script. Se rehízo con **sondeo** (revisa el repo cada 10 s) → probado y funcionando.
+  3. `sincronizar_git.ps1` usaba `Test-Path (...) -or Test-Path (...)`; PowerShell interpreta `-or` como parámetro de `Test-Path` y la comprobación fallaba (por eso el PASO 1 no veía el rebase). Corregido con paréntesis.
+  *(Nota de honestidad: la prueba en vivo dejó dos commits con nombre "Auto: respaldo y subida…" y uno llamado "prueba_vigia_temporal.txt" (ya borrado en el commit siguiente). Solo eran pruebas; no afectan a la app.)*
+- **Arranque automático (prioridad "con menos hacer más"):** el vigilante **se inicia solo al encender el PC** (acceso directo `.vbs` en la carpeta de Inicio de Windows, oculto y sin ventanas) y un **candado (mutex)** impide que corran dos a la vez: si se lanza una segunda copia, se cierra sola. Ya no hay que acordarse de arrancarlo. **Costo: $0 en tokens y $0 en tiempo.**
+- **Sin cambios de código:** NO se tocó nada de la app (ni `index.html`, ni `estilos.css`, ni `datos.js`, ni `logica.js`).
+
+### 17/09/2026 — SINCRONIZACIÓN CON GITHUB (rebase pendiente del 16/09) — RESUELTO
+- **Problema encontrado:** el repositorio quedó ayer a mitad de un `git rebase` de `main` sobre `origin/main` (HEAD desacoplado, "no branch, rebasing main"). GitHub tenía un commit hecho aparte (`1af4d2b` "Update A_DONDE_VA_STRATOS.md") y el commit local del 16/09 (`a09bc27`: PUNTOS 1, 4, 6 y 7 + bitácora) **seguía SIN SUBIR**. Resultado: la app corría bien en disco, pero el trabajo del 16/09 no estaba respaldado en GitHub.
+- **Riesgo detectado y evitado:** `instrucciones-IA/A_DONDE_VA_STRATOS.md` tenía **37 líneas nuevas** de contenido (secciones B–H de Vero: "Principio de Vero: la ayuda es lo primero", "vendedora silenciosa", Límites de Vero, Resumen ejecutivo y aprendizaje, etc.) que existían **solo en el disco**: no estaban ni en `1af4d2b` ni en `a09bc27`. Se incorporaron al commit antes de continuar, para no perderlas.
+- **Acción:** (1) respaldo de retroceso `git branch respaldo-16-09 a09bc27`; (2) conflicto de `A_DONDE_VA_STRATOS.md` resuelto uniendo ambas partes (las dos versiones solo diferían en un salto de línea final); (3) `git rebase --continue`; (4) `git push origin main`.
+- **Resultado:** `main` = `c74d162` (8 archivos, 889 inserciones / 455 borrados) **subido a GitHub**. Verificado: `HEAD` = `origin/main` = `c74d162` y árbol de trabajo limpio. Historial lineal: `9174a98 → 1af4d2b → c74d162`.
+- **Retroceso disponible:** rama local `respaldo-16-09` (apunta al commit viejo `a09bc27`), por si se quiere volver al estado anterior al rebase.
+- **Sin cambios de código:** en esta sesión NO se tocó ninguna línea de la app; solo se completó la sincronización pendiente.
+
+### 16/09/2026 — PUNTO 1 (instrucciones.md): zona superior dividida + ajustes de la cartelera
+- **`index.html`:** nueva `#zona-superior` dividida — izquierda `#zona-branding` (1/3: branding corporativo o STRATOS) y derecha `#zona-cartelera` (2/3: el mensaje rotativo/avisos). IDs intactos; el cuerpo de pantalla crece al liberar la fila completa que ocupaba el mensaje.
+- **`estilos.css` — nueva sección 2.2.1 ZONA SUPERIOR:** fila 1/3+2/3 con altura compartida, responsive apilado en ≤768px. Branding compacto y centrado dentro de su área: logo en espacio fijo 140×40 px (120×36 móvil) con `object-fit: contain` (cualquier foto se ajusta sin deformarse) y slogan acotado al MISMO ancho, centrado (no desborda; baja en líneas). Cartelera con ancho automático (flex).
+- **`logica.js` — `obtenerFragmentosMisionVisionValores()`:** se eliminó el corte forzado a 150 caracteres que amputaba frases largas y dejaba colas huérfanas (causa del mensaje suelto "los objetivos" en la cartelera). Ahora cada fragmento es la frase completa, separada solo en fronteras naturales (comas/puntos/dobles espacios).
+- **`logica.js` — `construirColaMensajes()`:** el mensaje del día se invalida si el texto guardado ya no existe en los fragmentos actuales (al editar Misión/Visión/Valores se rifa uno nuevo de inmediato; ya no hay que esperar a mañana).
+- **PUNTO 4 (instrucciones.md) — Configuración limpia + botón de IA:**
+  - **`index.html`:** eliminada la sección completa "🔔 Notificaciones" (casillas Sonido, Vibración y Push — Push incluida porque también es gestión de notificaciones; el sistema ahora toma los permisos autorizados del dispositivo). En su lugar quedó la sección "🤖 Configuración de IA" con el botón `#boton-ia-configuracion` (clase `.boton-ia`; sin lógica todavía — Vero se conecta en el PUNTO 7). Nota: "Modo Nocturno" no existía como opción en pantalla (`temaOscuro` es fijo `true`, definido por el No.1).
+  - **`datos.js`:** claves de traducción `cfg_notif`/`cfg_sonido`/`cfg_vibracion`/`cfg_push` reemplazadas por `cfg_ia`/`cfg_ia_desc`/`cfg_ia_boton` (ES/EN).
+  - **`estilos.css`:** nueva sección 3.12 BOTÓN DE IA — rediseñada como **esfera de 110px** con el diseño del PUNTO 7 adelantado: humo verde circulando dentro (2 nubes difusas animadas), rótulo "Configuración IA" sobre la esfera y **halo verde Stratos** al posicionar el cursor o presionar. Este diseño (`.boton-ia`) es la base reutilizable del botón flotante de las demás pantallas (PUNTO 7). La clase genérica `.config-options` quedó sin uso (no se tocó).
+  - **`logica.js`:** `guardarConfiguracion()` ya no lee sonido/vibración/push — guarda solo idioma y biometría. Idioma, Seguridad, Recuperación de Contraseñas y Acciones Rápidas intactos.
+  - **Rediseño visual del botón (comentario del Arquitecto):** esfera centrada en su área con rótulo en dos líneas — "Configuración" pequeña arriba y "IA" grande abajo (traducciones `cfg_ia_boton1`/`cfg_ia_boton2`). **Decisión para el PUNTO 7:** en las demás pantallas el botón flotante tendrá el TAMAÑO del círculo del libro (tuerca) y estará centrado en su área. El texto "Vero" se retiró de la app: el usuario nombrará a su asistente en la Configuración de IA.
+- **Pendiente de verificación del Arquitecto en el navegador** (recargar con Ctrl+F5 por caché de CSS/JS).
+- **PUNTO 6 (instrucciones.md) — Saludo "Hola [Nombre]" en Login:**
+  - **HTML:** ya existía el saludo `#bienvenida-usuario` ("Hola" + `#nombre-usuario-login`); agregada la fila de biometría `#opciones-biometria` (facial 👤 / patrón 🔳 / huella ☝️) debajo del botón ENTRAR.
+  - **`logica.js` — nuevas funciones:** `actualizarSaludoLogin()` (el saludo cambia EN VIVO al escribir/elegir nombre del desplegable, ANTES de presionar ENTRAR; si el campo está vacío usa el ÚLTIMO USUARIO del sistema); `inicializarBiometria()` (detecta autenticador de plataforma del dispositivo vía WebAuthn `isUserVerifyingPlatformAuthenticatorAvailable` — si no hay, los botones quedan atenuados); `intentarBiometria()` (avisa disponibilidad; su activación real queda enlazada al checkbox "Habilitar autenticación biométrica" de Configuración).
+  - **Al ENTRAR:** `validarEntrada()` guarda `stratos_ultimo_usuario` y llama `actualizarSaludoLogin()` → el saludo cambia de nombre y luego entra (el usuario ve el cambio).
+  - **Cartelera:** en `construirColaMensajes()` se agregó el mensaje tipo 'saludo' "👋 Hola, [nombre]" que aparece SOLO la primera vez del día (clave `stratos_ultimo_saludo_fecha`; base para la estadística de horario de trabajo).
+  - **`datos.js`:** nuevas claves en `STORAGE_KEYS`: `ULTIMO_USUARIO` y `ULTIMO_SALUDO`.
+  - **`estilos.css`:** nueva sección 3.13 OPCIONES BIOMÉTRICAS — círculos de 44px con halo verde al pasar el mouse y estado atenuado cuando el dispositivo no ofrece autenticador.
+  - **Nota (limitación honesta):** el patrón visual no es autenticable vía navegador; los botones detectan el autenticador general del equipo (huella/PIN/cara según dispositivo). El registro biométrico por usuario se definirá más adelante (requiere decisión del Arquitecto).
+- **PUNTO 7 (instrucciones.md) — Botón de IA (esfera + ventana emergente + voz):**
+  - **HTML:** botón flotante `#boton-ia-flotante` (misma esfera `.boton-ia`, rótulo "Stratos", TAMAÑO del círculo del libro/tuerca — 50px desktop, 45px móvil — abajo-CENTRO, decisión del Arquitecto) + ventana emergente `#ventana-ia` (estado "Escuchando.../Respondiendo...", ⏸ PAUSA, ✏️ editar, ✕ cerrar, líneas de lo que dice el usuario y de la IA, campo de escritura si no hay micrófono). En Configuración se agregó el campo "Nombre de tu asistente" (`#config-nombre-asistente`; el comando de activación es "Hola [nombre]"; predeterminado "Vero" — el usuario lo cambia).
+  - **`logica.js` — nueva sección 33 (asistente):** `activarBotonIA()` (pitido WebAudio sin archivos, abre ventana, halo verde, auto-cierre), `iniciarEscuchaIA()` (Web Speech API; sin micrófono → entrada por teclado), `alternarPausaIA()` (PAUSA corrige manualmente), `editarTextoIA()`/`enviarTextoIA()`, `cerrarVentanaIA()`, `programarCierreAutomaticoIA()` (**(palabras/3.5)+0.75 s**, solo tras responder), `procesarComandoIA()` (confirmación "Hola [nombre]" obligatoria; comandos locales: abrir pantallas, hora, frase motivacional), `responderIA()` (texto + voz SpeechSynthesis según idioma). `mostrarBotonIA()` conectado a `irAPantalla()`: aparece en TODAS las pantallas excepto Login.
+  - **`datos.js`:** `configuracionPersonal.nombreAsistente` (reemplazó al bloque notificaciones eliminado en el Punto 4); traducciones nuevas: `cfg_ia_nombre`, `ia_escuchando`, `ia_respondiendo`, `ia_pausa`, `ia_sin_micro`, `ia_escribe`. Al cargar la app se restaura el nombre del asistente.
+  - **`estilos.css`:** secciones 3.14 (botón flotante, centrado con translateX, halo `ia-presionado`) y 3.15 (ventana abajo-centro, 70% ancho máx 420px, crece con el contenido, scroll interno).
+  - **Límites actuales:** reconocimiento/voz dependen del navegador (Chrome sí; si no hay, funciona por teclado). Los comandos son LOCALES (sin servidor); la IA completa de Vero se integrará más adelante.
+- **Pendiente de verificación del Arquitecto en el navegador** (recargar con Ctrl+F5).
+
+
+### 29/08/2026 — Revisión de las 3 opciones de Configuración (sonido, vibración, notificaciones)
+- **Diagnóstico (SIN tocar código):** las casillas `config-sonido`, `config-vibracion` y `config-push` SÍ guardan su estado en localStorage (`guardarConfiguracion()`), pero NO ejecutan acción real: no existe en todo el proyecto código de audio, vibración ni notificaciones. Hoy son casillas decorativas.
+- **Falla adicional detectada:** al reabrir la app NO se restauran los estados guardados de esas casillas (solo se recupera el idioma); reaparecen marcadas por el defecto del HTML.
+- **"Push":** el texto viene del diccionario `TRADUCCIONES` (`cfg_push`). Las push reales (app cerrada) requieren tokens por dispositivo (Firebase/servidor). Hoy no hay nada implementado → **0 tokens en uso**.
+- **Decisión del Arquitecto:** dejar PENDIENTE hacerlas funcionales; se conectarán cuando exista "recibir notificaciones nuevas". **Siguiente paso: desarrollar la Pantalla Comunicación.** El diseño acordado quedó anotado en VISIÓN.
+- **Revisión de pendientes solicitada por el Arquitecto:** `logica.js` SÍ fue renumerado (1→32) el 26/08, pero la renumeración de TÍTULOS internos de `datos.js` NO tiene registro de haberse hecho → anotada en PENDIENTES. Conteo de corrupciones: 14 detectadas (26/08) vs 11 corregidas (28/08); el escaneo final dio 0 caracteres corruptos en los 4 archivos → cerrado con verificación. La nota "NOTA IMPORTANTE (estado de duplicación)" de este archivo quedó desactualizada (decía que el duplicado existía) → corregida.
+- La respuesta detallada de esta revisión quedó escrita en `explicacion.txt` (se limpiará al grabar bitácora, según nuevo protocolo de `instrucciones.md`).
+
+### 28/08/2026 — GitHub resuelto, duplicado eliminado y frases corruptas corregidas
+- **Enlace GitHub ↔ repositorio RESUELTO:** credenciales OK y **upstream configurado** (`git push -u origin main`). `git push`/`git pull` a secas y el botón Sync de VS Code ya funcionan. Local = `origin/main`.
+- **Duplicado `Proyecto-Stratos` ELIMINADO:** antes de borrar se verificó que sus 9 commits ya existen en el repo real (`git cat-file`). Borrado con `rmdir /s /q` (el Explorador fallaba por el `.git` interno con archivos de solo lectura). Ahora hay UN SOLO repositorio en la raíz.
+- **Cadenas corruptas de `datos.js` CORREGIDAS (11 líneas):** 4 frases motivacionales (L312/313/314/318: comunicación, éxito, acción, confía, día) + 7 comentarios (L38, 42, 43, 44, 47, 55, 568). Verificado: escaneo Python = 0 caracteres corruptos en los 4 archivos; `node --check` = sintaxis OK. Respaldo: `_respaldo_pre_reorg/datos.js.antes_fix_frases`.
+- **Decisión DOMContentLoaded (cerrada):** el bloque de arranque final de `datos.js` SE QUEDA donde está (opción A del Arquitecto): funciona perfecto y moverlo no da beneficio.
+- **Verificación del Arquitecto en navegador (28/08):** los 3 botones de añadir, la edición de contactos y el idioma ES/EN funcionan. ✅
+- **PENDIENTE restante:** el "otro tema" del Arquitecto (punto 2 de la ruta) y, opcional, traducción de textos 100% dinámicos.
+
+### 27/08/2026 — Arreglos: display en blanco, menú con símbolos raros y contactos (añadir/editar)
+- **Display inicial en blanco** (textos crudos sin diseño): NO era error de código ni de texto. Live Server se abrió desde dentro de `Cuerpo-y-Textos`, y como el `index.html` enlaza sus hermanas con `../`, el navegador pedía rutas que no existen → 404 → rechazaba CSS/JS (MIME text/html). Solución (no código): abrir VS Code con la carpeta `C:\Proyectos\Para Crear APP\Stratos` como raíz y usar "Go Live"; la URL debe ser `http://127.0.0.1:5500/Cuerpo-y-Textos/index.html`.
+- **Menú de la tuerca (abajo, derecha) con símbolos raros y tildes rotas:** corrupción de codificación (doble encoding) en el bloque `estadoPantallas` (nombres/iconos) de `datos.js`. Se restauraron los valores originales desde `_respaldo_pre_reorg/datos.js.BAK` (iconos 👤🔐🏢📊🌐💬⚠️ y "Comunicación"/"Configuración"). Respaldo previo: `_respaldo_pre_reorg/datos.js.antes_menu_fix`. Quedan PENDIENTES otras cadenas corruptas de datos (frases motivacionales, algunos comentarios, token/`Textos`).
+- **BUG contactos (organigrama personal):** al editar agregaba el contacto como nuevo en lugar de modificarlo; y tras un borrar, los 3 botones "+ Añadir" (Colaborador/Indirecto/Observador) dejaban de funcionar.
+  - **Causa raíz:** el modal `#modal-contacto` NO tenía el campo oculto `#modal-contacto-id` que el código espera. Por eso `mostrarFormularioContacto()` daba error (los botones no abrían) y al guardar el tipo quedaba siempre "directo". Además `guardarContacto()` estaba duplicado (secciones 26 y 32) y la versión activa SIEMPRE creaba un contacto nuevo (por eso borrar/editar agregaba duplicados).
+  - **Arreglo aplicado:** (1) se agregó el campo oculto `#modal-contacto-id` al modal en `index.html`; (2) se eliminó el `guardarContacto()` duplicado; (3) `guardarContacto()` quedó unificado en la sección 32: en modo edición actualiza el contacto existente (mismo id) y en modo nuevo lo agrega respetando el tipo (directo/indirecto/observador); (4) `editarContactoDesdeDetalle()` deja el id y el tipo en el campo oculto para que guardar actualice y no duplique.
+  - Respaldos: `_respaldo_pre_reorg/logica.js.antes_contactos_fix` e `_respaldo_pre_reorg/index.html.antes_contactos_fix`.
+- **PENDIENTE:** Arquitecto verificar en el navegador los botones de añadir (los 3) y la edición de contactos; y sigue pendiente arreglar el enlace GitHub (tarea "Subir a Git") para que la bitácora y el código se suban solos.
+
+### 27/08/2026 — Idioma Español/Inglés (Configuración)
+- El selector de idioma en Configuración **sí guardaba** la preferencia (localStorage) pero **nunca la aplicaba**: no existía sistema de traducción, por eso elegir Inglés "no hacía nada".
+- Se implementó el mecanismo para traducir **solo los textos que el usuario lee** (nunca lo que escribe):
+  - Diccionario `TRADUCCIONES` (claves `data-i18n` → ES/EN) en `datos.js`.
+  - Función `aplicarIdioma(idioma)` en `logica.js` que reemplaza textos y placeholders marcados.
+  - `guardarConfiguracion()` ahora llama a `aplicarIdioma()` al guardar.
+  - Al cargar la app se lee la configuración guardada y se aplica el idioma (`DOMContentLoaded` en `datos.js`).
+- Se marcaron con `data-i18n` la pantalla de **Configuración** completa y la cabecera/branding (21 textos). El selector mantiene los nombres "Español/English" fijos (no se traducen a sí mismos).
+- **EXTENSIÓN INMEDIATA (27/08/2026):** el mecanismo se extendió a **TODAS las pantallas** (93 textos en total): Registro/Perfil, Acceso/Login, Identidad Corporativa, Organigrama Personal, Comunicación, Modales (contacto, detalle, cambio de contraseña) y el **menú de la tuerca** (nombres de pantalla + "Cerrar Sesión" traducidos en `actualizarMenuTuerca()` vía `traducirTexto`). La cabecera "HERRAMIENTA MULTIFUNCIONAL" también se traduce.
+  - `aplicarIdioma()` ahora omite elementos con hijos (spans/strong) para no romper el layout; se añadió `traducirTexto(clave)` para los textos dinámicos (menú y títulos de modales).
+  - Los títulos dinámicos de los modales ("Nuevo Colaborador/Indirecto/Observador", "Editar Contacto") usan traducción.
+  - Al guardar Configuración se refresca el menú (`actualizarMenuTuerca`) para aplicar el idioma al instante.
+  - Respaldos: `_respaldo_pre_reorg/*.antes_idioma_full`.
+- **PENDIENTE (menor):** los textos generados dinámicamente por JS (secciones "Contactos Indirectos"/"Observadores" del organigrama, mensajes de aviso/invitación, botón "Cerrar Sesión" ya cubierto) y el texto del modal de contraseña temporal con `<strong>` quedan en español (estructura compleja). Se pueden cubrir en una pasada futura si se desea 100% de cobertura dinámica.
+
+### 26/08/2026 — Sesión inicial (diagnóstico)
+- Se diagnosticó la estructura: la app real corre en las carpetas de la raíz; `Proyecto-Stratos` es duplicado viejo.
+- Se detectó que hay **2 repositorios git** (raíz y subcarpeta) apuntando al mismo GitHub.
+- El respaldo de GitHub **no está al día** (archivos modificados sin subir).
+- Se decidió crear este archivo **MEMORIA** para dar continuidad.
+- Se acordó: verificar que la app corre bien ANTES de hacer cambios.
+
+### 26/08/2026 — Sesión de estructura y continuidad (estilos + index)
+- Se creó este archivo `MEMORIA.md` y se editó `instrucciones.md` (paso obligatorio de leído).
+- Se alineó el objetivo: dar a los archivos títulos numerados + explicación humana comparable a `estilos.css`.
+- En `Colores-y-Estetica/estilos.css`:
+  - Se numeraron los sub-bloques de **3.7 BOTONES** (3.7.1 → 3.7.12) con su explicación.
+  - Se eliminó la **tuerca duplicada** que estaba mal ubicada y se completó la tuerca oficial **3.10** (base+hover+active+span), sin cambios visuales.
+- En `Cuerpo-y-Textos/index.html` se reorganizaron los **títulos-comentario** en 5 GRUPOS numerados (grupos + sub-procesos), SIN tocar el HTML real:
+  - GRUPO 1: Cabecera y avisos globales (1.1–1.5)
+  - GRUPO 2: Pantallas principales (2.1–2.7, con sub-procesos 2.3.1–2.3.8 y 2.7.1)
+  - GRUPO 3: Pie de página y navegación (3.1–3.4)
+  - GRUPO 4: Modales (4.1–4.3)
+  - GRUPO 5: Scripts (5.1)
+- Pendiente: analizar y proponer títulos para `datos.js` y `logica.js`.
+
+### 26/08/2026 — Análisis de arquitectura (datos.js / logica.js)
+Se decidió reorganizar `datos.js` y `logica.js` para que cada uno cumpla su propósito declarado:
+- `datos.js` = SOLO datos/estructuras/memoria.
+- `logica.js` = SOLO procesamiento/validaciones/interacción.
+- Sin duplicados, sin lógica en datos, sin datos sueltos en lógica.
+
+**Diagnóstico encontrado:**
+1. `datos.js` tiene **5 funciones DUPLICADAS** que también existen en `logica.js` (gana la de `logica` por orden de carga): `generarIdUnico`, `generarCodigoInvitacion`, `guardarEnStorage`, `cargarDeStorage`, `obtenerFraseMotivacional`.
+2. `datos.js` tiene `reconstruirOrganigramaDesdeUsuario` (uso real en `logica.js`, debería estar ahí).
+3. `datos.js` tiene 7 funciones de infraestructura futura SIN uso hoy (se conservan, se mueven a `logica`): `buscarUsuarioPorContacto`, `buscarUsuarioPorIdEmpleado`, `esUsuarioNo1`, `esUsuarioPrimeraLinea`, `obtenerSuperiorDirecto`, `obtenerSubordinados`, `limpiarSesion`.
+4. `logica.js` tiene DATOS embebidos que deberían estar en `datos`: `coloresSeguridad` (paleta, DUPLICADA en 2 lugares) y `tipoValido` (formatos de imagen).
+
+### 26/08/2026 — PLAN de reorganización (PASO A PASO, para rastrear conflictos)
+Orden acordado por el Arquitecto: (1) registrar plan en bitácora, (2) hacer respaldo, (3) aplicar cambios.
+Cada paso queda numerado para poder identificar en qué punto aparecería un conflicto.
+
+- **PASO 0 (hecho):** Registrar este plan en la bitácora.
+- **PASO 0.5 (hecho):** Crear COPIA DE RESPALDO de `datos.js` y `logica.js` (mismo estado que hoy).
+  - Carpeta: `Motor-Logica-y-Acronimos\_respaldo_pre_reorg\`
+  - `datos.js.BAK` (21.550 bytes) y `logica.js.BAK` (88.503 bytes) — tamaños idénticos a los originales.
+- **PASO 1 (hecho):** Mover de `logica.js` → `datos.js`: `coloresSeguridad` (una sola vez, quitando el duplicado) y `tipoValido`.
+  - Resultado: se MANTUVIERON las 2 listas originales SIN alterar (antón de decisión del Arquitecto: no cambiar textos). Se agregó en `datos.js` `COLORES_SEGURIDAD_ANALISIS` (11) y `COLORES_SEGURIDAD_PALETA` (10), más `TIPOS_IMAGEN_VALIDOS`. En `logica.js` cada función ya referencia la constante global; NO quedan listas literales en `logica.js`. Comportamiento visual intacto.
+- **PASO 2 (hecho):** Quitar de `datos.js` las 5 funciones duplicadas (viven en `logica`).
+  - Resultado verificado: `datos.js` ya no define `generarIdUnico`, `generarCodigoInvitacion`, `guardarEnStorage`, `cargarDeStorage`, `obtenerFraseMotivacional` (todas = 0). En `logica.js` cada una queda definida exactamente 1 vez.
+  - Nota de trazabilidad: la versión de `obtenerFraseMotivacional` en `datos.js` era distinta (usaba misión/visión/valores) pero quedaba anulada por la de `logica.js` (carga posterior). Sin cambio de comportamiento activo.
+- **PASO 3 (hecho):** Mover de `datos.js` → `logica.js`: `reconstruccionOrganigramaDesdeUsuario`.
+  - Resultado verificado: 0 definiciones en `datos.js`, 1 en `logica.js` (insertada junto a `generarAcronimo`). Sin cambio de comportamiento (calls en runtime 274/670/746).
+- **PASO 4 (hecho):** Mover de `datos.js` → `logica.js` las 7 funciones de infraestructura (sin borrar lógica).
+  - Movidas: `buscarUsuarioPorContacto`, `buscarUsuarioPorIdEmpleado`, `esUsuarioNo1`, `esUsuarioPrimeraLinea`, `obtenerSuperiorDirecto`, `obtenerSubordinados`, `limpiarSesion`.
+  - Verificado: 0 en `datos.js`, 1 en `logica.js` cada una.
+- **PASO 5 (hecho):** Verificación final global.
+  - Equilibrio de llaves/paréntesis PERFECTO en `datos.js` y `logica.js` (sin roturas de sintaxis).
+  - Orden de carga correcto: `datos.js` antes que `logica.js` en `index.html`.
+  - Sin llamadas a nivel de carga rotas (las llamadas a `cargarDeStorage` en `datos.js` están dentro de `DOMContentLoaded`, que corre tras la carga).
+- **RESULTADO FINAL de la reorganización:** `datos.js` = SOLO datos/estructuras/memoria (persistencia e inicialización de carga de datos). `logica.js` = toda la lógica/funciones. Sin funciones duplicadas.
+- **Nota pendiente:** la reorganización de TÍTULOS internos de `datos.js`/`logica.js` (estilo estilos/index) es un trabajo posterior. También el `DOMContentLoaded` final de `datos.js` es lógica de carga (se decide más adelante si se mueve).
+- IMPORTANTE: falta que el Arquitecto VERIFIQUE en el navegador que la app sigue funcionando igual tras esta reorganización.
+
+### 26/08/2026 — Pulido de títulos y codificación (datos.js + logica.js)
+Con el objetivo de dejar los 4 archivos con el mismo criterio (títulos numerados + comentario corto de guía, todo en español, sin tocar lógica):
+
+- **`datos.js` — corregida la CODIFICACIÓN de los títulos/comentarios:**
+  - El archivo tenía **doble-codificación** (UTF-8 ↔ cp1252): tildes, Ñ y emojis salían corruptos (`Sesión`, `CONFIGURACIÓN`).
+  - Se repararon **30 líneas de comentario/título** usando round-trip cp1252, solo en líneas de comentario.
+  - **No se tocó ninguna línea de código ni dato en ese momento** (quedaron 14 corrupciones en DATOS — cadenas de la app — pendientes). **RESUELTO 28/08/2026:** las 14 cadenas corruptas de `datos.js` fueron reparadas en el commit `d1c50ff` ("Fix: cadenas corruptas en datos.js (frases motivacionales + comentarios)"). Verificado 16/09/2026 con escaneo completo del archivo: **0 corrupciones restantes**. ✅
+  - `logica.js`, `estilos.css` e `index.html` ya estaban limpios (0 corrupciones).
+
+- **`logica.js` — reorganización de títulos y comentarios:**
+  - Se **renumeró correlativamente de principio a fin** (1 → 32) TODAS las secciones, incluidas las que no tenían número (FUNCIONES ADICIONALES, PERSISTENCIA, TEMPORIZADOR, etc.), respetando el **orden físico** (no se movió nada por depender de la lógica).
+  - Se añadió a **cada título su comentario corto descriptivo** (estilo estilos/index).
+  - Se **tradujeron al español** los 9 comentarios internos que estaban en inglés (sección análisis de colores).
+  - Sub-secciones actuales: 12.1 (reconstruir organigrama) y 12.2 (infraestructura de usuarios/sesión).
+  - **No se tocó ninguna línea de código.**
+
+- **Respaldo de codificación:** se creó `Motor-Logica-y-Acronimos\_respaldo_encoding\` (datos.js.BAK + logica.js.BAK) por si se quiere volver atrás.
+
+- **Detectado aparte (NO modificado):** hay una función **`guardarContacto()` DUPLICADA** en `logica.js` (en la sección 26 aprox. línea 1329 y en la 32 aprox. línea 1909). Es código, no comentario, así que queda PENDIENTE de revisión/explicación con el Arquitecto.
+
+### 26/08/2026 — RUTA DE TRABAJO ACORDADA PARA LA PRÓXIMA SESIÓN (orden de prioridad)
+El Arquitecto quiere no comenzar en 0 y avanzar por prioridad (un solo cupo por día):
+1. **Arreglar el enlace GitHub ↔ este repositorio** (que el respaldo suba todo automáticamente con la tarea "Subir a Git" de `.vscode/tasks.json`, incluida esta bitácora). Es la base de la continuidad.
+2. **El "otro tema" que el Arquitecto quiere hablar antes que el duplicado** (lo menciona como su prioridad; se retoma con calma ya con GitHub funcionando).
+3. **`guardarContacto()` duplicado** (dejarlo pendiente de última, si sobra cupo).
+- Objetivo de fondo: que la bitácora viva en GitHub para que **DeepSeek (internet) la lea y retome sin empezar en 0**, pegándola como contexto de continuidad.
+- Regla del Arquitecto para todas las sesiones: **respuestas cortas y al grano; no dejar temas a medias** (lo no terminado se anota como PENDIENTE claro aquí).
 
 ---
 
+## PENDIENTES / SIGUIENTES PASOS
+
+### Estado de los PUNTOS de `instrucciones.md` (04/10/2026)
+| Punto | Estado |
+|-------|--------|
+| 2 — Duración por prioridad | ✅ Hecho |
+| 3 — Anuncio motivacional + paso a la IA | ✅ Hecho |
+| 6 — Saludo "Hola [Nombre]" + iconos biométricos | ✅ Hecho (04/10) |
+| 9-10-11 — Biometría | ✅ Hecho (04/10) |
+| 31 — Organigrama General recursivo y persistente | ✅ Hecho (04/10 tarde) |
+| 33 — Cruce de datos al crear primera línea | ✅ Hecho (04/10 tarde) |
+| 34 — Banco de datos por usuario | ✅ Hecho |
+| 48 — Login (horas, errores, aviso al jefe) | ✅ Hecho |
+
+**Los 8 puntos de `instrucciones.md` están terminados.** Ya no queda ninguno a medias.
+
+- [ ] **VERIFICACIÓN DEL ARQUITECTO EN EL NAVEGADOR (04/10/2026) — es lo único que falta.** Abrir la carpeta `Stratos` como raíz en VS Code y hacer **Ctrl+F5** en `http://127.0.0.1:5500/Cuerpo-y-Textos/index.html`, y revisar:
+  1. **PUNTO 33:** en Organigrama Personal, guardar un contacto SIN teléfono ni email → debe salir la ventana verde "Entendido" y la IA debe hablar. Guardar un contacto con datos repetidos → ventana "¿Continuar con la invitación?" (Sí/No). Y **Editar contacto** → debe seguir funcionando (ya no hay campo oculto).
+  2. **PUNTO 31:** abrir Organigrama General con 3 o más niveles → deben verse TODOS, no solo 2. Al registrarse un usuario nuevo, el árbol debe actualizarse solo.
+  3. **PUNTO 9-10-11 (biometría):** inscribir un método en Perfil → cerrar sesión → entrar con el icono. En un equipo SIN autenticador, los 3 botones deben verse atenuados y explicar por qué. **Ojo:** en `file://` no funciona; hay que usar Live Server o https.
+  4. **Idioma:** cambiar a English y confirmar que la ventana de aviso, las prioridades y los botones quedan traducidos.
+
+- [ ] **PRIORIDAD 1 — PUNTO 33 (terminar):** hoy `guardarContacto()` solo compara el **nombre** dentro de su propia lista. Falta (a) revisar duplicados cruzando **nombre + puesto + teléfono + email** contra TODO el organigrama (directos, indirectos y observadores), (b) la **ventana de confirmación Sí/No** con la frase de la IA, y (c) que la IA hable el resultado.
+  - **Decisión pendiente del Arquitecto:** el PUNTO 33 pide **eliminar `#modal-contacto-id`**, pero ese campo oculto es lo que hace funcionar "Editar contacto" (se agregó el 27/08 para arreglar ese bug). **Recomendación de la IA: mantenerlo** y apartarse de esa línea del PUNTO; si se quita, se rompe la edición.
+- [ ] **PRIORIDAD 2 — PUNTO 31 (empezar):** `renderizarOrganigramaGeneral()` sigue dibujando **solo 2 niveles** (raíz + hijos directos) y **no persiste**. Falta hacerlo recursivo, que guarde los cambios, avise de doble registro y permita cambiar quién es el No.1.
+- [ ] **VERIFICACIÓN DEL ARQUITECTO de la biometría (04/10/2026):** en un equipo con Windows Hello o PIN → abrir con Live Server (Ctrl+F5), entrar a **Perfil**, inscribir un método, cerrar sesión y entrar con el icono del Login. En un equipo **sin** autenticador, los 3 botones deben verse atenuados y explicar el motivo. **Nota:** abierto como `file://` NO funciona (WebAuthn exige Live Server o https).
+- [ ] **VERIFICACIÓN DEL ARQUITECTO (programada para el 17/09/2026):** revisar en el navegador (Ctrl+F5) los Puntos 1, 4, 6 y 7 aplicados hoy: zona superior (logo/cartelera), Configuración (esfera de IA + nombre del asistente), Login (saludo + biometría) y botón flotante de IA con voz y ventana.
+- [ ] **VERIFICACIÓN DEL ARQUITECTO (nuevo 17/09, sesión 2):** abrir `Ctrl+Shift+P` → "Run Task" y comprobar que aparecen las 4 tareas nuevas (0 vigía, 1 diagnóstico, 2 sincronizar, 3 registro) y que la 1 dice **AL DÍA**. **Ya NO hay que lanzar nada al empezar: el vigía arranca solo al encender el PC.**
+- [ ] **Confirmar el arranque automático tras reiniciar:** la próxima vez que se reinicie el PC, revisar que el vigía arrancó solo (tarea 3 → "Ver registro": debe decir "Vigia iniciado" con la hora del encendido). El archivo que lo arranca vive en la carpeta de Inicio de Windows (`shell:startup\Stratos - respaldo automatico.vbs`), **fuera del repositorio**: si algún día se cambia de PC, hay que volver a crearlo (está explicado en `PROTOCOLO_GITHUB.md`).
+- [ ] **SIGUIENTE PASO (prioridad del Arquitecto): desarrollar la PANTALLA COMUNICACIÓN** (Pantalla 5, hoy sin funcionalidad).
+- [ ] **Decisión del Arquitecto (menor):** qué hacer con `_f.txt` y `_f2.txt` sueltos en la raíz (ya ignorados por Git): borrarlos o dejarlos.
+- [ ] **Opcional (solo si al Arquitecto le molesta):** los 3 commits de prueba del 17/09 en el historial ("Auto: respaldo y subida…" / "prueba_vigia_temporal.txt") se pueden limpiar, pero eso obliga a **reescribir el historial con `force push`** — precisamente la maniobra que causó el enredo del 16/09. Recomendación: dejarlos como están (no afectan a la app).
+- [ ] Registro biométrico por usuario (facial/huella reales): requiere decisión del Arquitecto sobre el flujo de inscripción; hoy solo hay detección de dispositivo en Login.
+- [ ] Activar el "cerebro" completo de Vero (IA real): hoy el asistente tiene voz + comandos LOCALES (navegación, hora, frase); los comandos solo tienen sentido con más usuarios inscritos y con Comunicación (nota del Arquitecto del 16/09).
+- [ ] Renumerar los TÍTULOS internos de `datos.js` (estilo logica.js 1→32) — sin registro de término; detectado en revisión 29/08.
+- [ ] Opcional: traducción 100% dinámica (avisos JS, secciones del organigrama, modal de contraseña temporal).
