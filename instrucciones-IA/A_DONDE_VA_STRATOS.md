@@ -172,7 +172,15 @@ Esta clasificación visual está ligada a la duración del mensaje: los mensajes
   - Acción irreversible o que descarta (Eliminar, Borrar, Cancelar, Cerrar): halo y contorno en rojo (`#e53935`).
 - **Color base de botones:** por defecto `#0b0f19` (el mismo fondo de la aplicación). Si el usuario define un color de Botones en Identidad Corporativa, ese color manda.
 - **Efecto unificado de halo y contorno:** todos los botones del sistema, presentes y futuros, comparten el mismo comportamiento visual (sombra suave en reposo, borde iluminado y sombra intensificada al pasar el cursor, halo interior al presionar). Los botones circulares (Libro y Vero) añaden rotación de 90° al interactuar.
-- **Color de letras:** todos los textos de contenido del sistema obedecen al color de Letras definido en Identidad Corporativa. Las únicas excepciones son los avisos sobre fondos semánticos fijos (barra de notificaciones) y la marca de agua de Stratos, que conservan su contraste propio.
+- **Color de letras:** todos los textos de contenido del sistema, botones (incluidas las "X" de cerrar) y textos generados por JS, obedecen al color de Letras definido en Identidad Corporativa. Las únicas excepciones son los avisos sobre fondos semánticos fijos (barra de notificaciones) y la marca de agua de Stratos, que conservan su contraste propio.
+- **Regla de tamaño de botones:** El tamaño de la letra de los botones debe ajustarse para evitar que el texto se rompa en dos líneas o se salga del botón. Si es necesario, se reduce el tamaño de la fuente.
+- **Regla de Iconos como Botones:** Todo icono que cumpla la función de un botón (como el clip para adjuntar, el de cargar logo, los de edición de texto o los biométricos) debe ser tratado visualmente bajo la misma regla general de botones: debe tener su recuadro, borde, color base (`--color-botones`), color de letras/icono (`--color-letras`) y los mismos efectos de hover y active (halo y escala) que el resto.
+- **Regla de Tamaño de Pantallas (Anchos):**
+  - **Pantallas Angostas (480px):** Formularios (Perfil, Login, Configuración) y pantallas de entrada a módulos (como Comunicación u Otras Actividades). Los botones dentro de ellas se ajustan al espacio.
+  - **Pantallas Anchas (875px):** Layouts de gestión (Correos, Tareas, Alarmas), Vistas de datos (Organigramas) y Configuración Compleja (Identidad Corporativa).
+- **Regla de Tamaño de Modales (Ventanas Flotantes):**
+  - **Informativos (Máx 500px):** Ventanas para visualizar datos (como Detalle de Contacto o Detalle de Correo).
+  - **De Trabajo (Máx 875px):** Ventanas para editar o redactar (como Nuevo Correo o Editar Contacto). Si un usuario presiona "Editar" en un modal informativo, este debe cambiar a su tamaño de trabajo.
 - **Uniformidad como principio:** la estructura de pantalla, la disposición de elementos y el comportamiento de los botones deben seguir una misma lógica en todo el sistema. Las excepciones son puntuales y responden a necesidades concretas (como el Login). La uniformidad es la base de las rutinas del usuario.
 
 ### I. Símbolos y sus porqués
