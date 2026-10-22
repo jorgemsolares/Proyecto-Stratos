@@ -165,3 +165,14 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 - **Punto 4 — hecho:** barra de formato **arriba** del área de texto (debajo del asunto); área ancho completo; cita (Responder/Reenviar) debajo con cursor al inicio para escribir arriba; uniforme en Redactar/Responder/Reenviar.
 - **Lista de correos:** tamaño devuelto a normal (remitente 15px, asunto/previa 14px, fecha 12px) para que no se vea gigante al ocupar el 75% de ancho.
 - **Verificación:** esprima OK logica.js (0 fallos). Pendiente: Ctrl+F5 del Arquitecto + sincronizar a GitHub.
+
+---
+
+## HISTORIAL ANTIGUO MOVIDO
+
+Todas las entradas de bitácora de **19/10/2026 hacia atrás** (agosto, septiembre y primera mitad de octubre 2026), ya 100% hechas y cerradas, se trasladaron a:
+
+`instrucciones-IA/Historial_Bitacora.md`
+
+`MEMORIA.md` conserva solo: estructura/protocolo, mapa de archivos, VISIÓN DEL ARQUITECTO, reglas de iconos, y las entradas de bitácora de octubre 2026 (20/10 y 21/10).
+
