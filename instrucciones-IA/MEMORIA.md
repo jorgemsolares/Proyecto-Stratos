@@ -166,6 +166,17 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 - **Lista de correos:** tamaño devuelto a normal (remitente 15px, asunto/previa 14px, fecha 12px) para que no se vea gigante al ocupar el 75% de ancho.
 - **Verificación:** esprima OK logica.js (0 fallos). Pendiente: Ctrl+F5 del Arquitecto + sincronizar a GitHub.
 
+
+### 21/10/2026 (ajustes de cumplimiento Sección H de A_DONDE_VA_STRATOS.md)
+- **Ajuste al 100% de la Sección H (Pantalla y botones - LEY DE DISEÑO):**
+  - `.btn-formato` (N C S A * 1 del modal de redacción): fondo ahora `var(--color-botones)`, borde `var(--color-botones)`, hover con halo verde + borde `--color-primario` (antes fondo transparente). Cumple Regla de Iconos como Botones.
+  - `.btn-adjunto-correo` (clip): fondo `var(--color-botones)`, borde `var(--color-botones)`, color `--color-letras` para el icono, hover con halo verde. Cumple Regla de Iconos como Botones.
+  - `.etiqueta-redaccion`: color cambió de `--color-primario` a `--color-letras` (Cumple Color de letras).
+  - `.redactar-de`: color cambió de `--color-texto` a `--color-letras` (Cumple Color de letras).
+  - `aplicarCambiosVisuales()` (logica.js): selector de botones dinámicos ahora incluye `.btn-formato` y `.btn-adjunto-correo` para aplicar color de botones y letras al cambiar Identidad Corporativa.
+- Los 4 puntos de instrucciones.md ya estaban hechos; estos ajustes cierran el cumplimiento al 100% de la Sección H.
+- **Verificación:** esprima OK logica.js (0 fallos). Pendiente: Ctrl+F5 del Arquitecto + sincronizar a GitHub.
+
 ---
 
 ## HISTORIAL ANTIGUO MOVIDO
