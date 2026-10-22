@@ -13,6 +13,7 @@
 3. **Las notas de visión** (comentarios del Arquitecto que aún no se aplican) se guardan en VISIÓN, para que la IA las tenga presentes cuando toque ese proceso.
 4. Este archivo también se respalda en GitHub junto al código.
 5. **`instrucciones.md` y `explicacion.txt` deben estar vacíos al inicio del día.** Se llenan después, cuando el Arquitecto quiere dar las órdenes del día o explicar algo (para evadir tokens).
+6. **CONTROL DE UNIFORMIDAD:** Antes de dar por terminado cualquier ajuste, cambio o creación de pantalla, modal o botón, la IA debe verificar obligatoriamente que se cumpla al 100% la **Sección H (Pantalla y botones)** de `A_DONDE_VA_STRATOS.md`.
 
 ---
 
@@ -25,6 +26,7 @@
 - Se trabaja **una sola área o funcionalidad a la vez**.
 - **Nada se deja a medias.** Si algo no se termina, se anota claramente en la sección PENDIENTES de esta bitácora.
 - La IA debe respetar el protocolo de lectura: primero `A_DONDE_VA_STRATOS.md` + `Minutas de Chats`, luego TODOS los archivos del sistema.
+- **REGLA DE DISEÑO INVIOLABLE:** Todo código nuevo o modificado **debe** aplicar las reglas de la Sección H de `A_DONDE_VA_STRATOS.md` (tamaños de pantallas, tamaños de modales, reglas de botones, colores de identidad, iconos como botones).
 
 ---
 
