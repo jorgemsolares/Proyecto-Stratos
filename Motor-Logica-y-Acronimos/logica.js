@@ -3873,7 +3873,15 @@ function prepararRedaccionResponderReenviar(c, tipo) {
     if (para) para.value = (c.remitente || '').indexOf('@') !== -1 ? c.remitente : '';
     if (asunto) asunto.value = (tipo === 'reenviar' ? 'Reenviar: ' : 'Re: ') + (c.asunto || '');
     if (mensaje) {
-        mensaje.textContent = cita;
+        // Insertar la cita debajo del sello FIRMA (el sello ya fue puesto por abrirRedaccionCorreo)
+        const sello = mensaje.querySelector('.sello-firma');
+        if (sello) {
+            sello.insertAdjacentHTML('afterend', '<br><br>' + cita.replace(/\n/g, '<br>'));
+        } else {
+            insertarSelloFirma(mensaje);
+            const s2 = mensaje.querySelector('.sello-firma');
+            if (s2) s2.insertAdjacentHTML('afterend', '<br><br>' + cita.replace(/\n/g, '<br>'));
+        }
         // PUNTO 4: la cita queda debajo del área de escritura; el usuario escribe arriba.
         try {
             const sel = window.getSelection();
@@ -4022,7 +4030,14 @@ function abrirRedaccionCorreo() {
     const asunto = document.getElementById('redactar-asunto');
     if (asunto) asunto.value = '';
     const mensaje = document.getElementById('redactar-mensaje');
-    if (mensaje) mensaje.textContent = '';
+    if (mensaje) {
+        mensaje.textContent = '';
+        insertarSelloFirma(mensaje);
+        // Firma automática si el checkbox está activo y hay firma configurada
+        if (configuracionPersonal?.firmaAutomatica && configuracionPersonal?.firmaTexto) {
+            insertarFirma();
+        }
+    }
     adjuntoCorreoActual = null;
     const nomAdj = document.getElementById('nombre-adjunto-correo');
     if (nomAdj) nomAdj.textContent = '';
@@ -4174,6 +4189,34 @@ function enviarCorreoRedactado(modo) {
     nuevo.cerradoEn = null;
     nuevo.respondidoEn = null;
     nuevo.carpeta = '';
+// ==========================================
+// PUNTO 1 instrucciones.md: SELLO "FIRMA" en áreas de escritura
+// ==========================================
+function insertarSelloFirma(mensaje) {
+    if (!mensaje) return;
+    // 5 líneas en blanco + sello FIRMA interactivo
+    mensaje.innerHTML = '<br><br><br><br><br><span class="sello-firma" onclick="insertarFirma()">FIRMA</span>';
+}
+function insertarFirma() {
+    const mensaje = document.getElementById('redactar-mensaje');
+    if (!mensaje) return;
+    const sello = mensaje.querySelector('.sello-firma');
+    const firmaTexto = configuracionPersonal?.firmaTexto || '';
+    if (firmaTexto) {
+        // Sustituir el sello por el texto de la firma guardada
+        sello.outerHTML = '<br>' + firmaTexto.replace(/\n/g, '<br>') + '<br>';
+    } else {
+        // No hay firma configurada: aviso amarillo y redirigir a Configuración con foco en el área de firma
+        mostrarAvisoInmediato("No hay firma configurada. Ve a Configuración para crear una.", "advertencia");
+        setTimeout(() => {
+            irAPantalla('pantalla-configuracion');
+            setTimeout(() => {
+                const ta = document.getElementById('config-firma-texto');
+                if (ta) ta.focus();
+            }, 100);
+        }, 1500);
+    }
+}
     nuevo.tipoSpam = '';
     nuevo.esDesconocido = false;
     nuevo.borradoEn = null;

@@ -228,6 +228,14 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 - **PUNTO 2 — logica.js:** funciones `abrirSelectorFirmaTipografia/Estilo/Tamano/Color()` para personalizar la firma.
 - **Verificación:** esprima OK logica.js y datos.js (0 fallos).
 
+### 23/10/2026 — PUNTO 1: Lógica del sello "FIRMA" en áreas de escritura
+- **logica.js `abrirRedaccionCorreo()`:** tras limpiar el área de texto, inserta 5 líneas en blanco + sello "FIRMA" (`<span class="sello-firma" onclick="insertarFirma()">FIRMA</span>`). Si `config-firma-automatica` está activo y hay `firmaTexto`, se inserta la firma automáticamente al abrir.
+- **logica.js `prepararRedaccionResponderReenviar()`:** la cita del correo original se inserta debajo del sello FIRMA (usando `insertAdjacentHTML` después del sello), no reemplazando todo el contenido.
+- **logica.js `insertarSelloFirma(mensaje)`:** nueva función que pone el sello FIRMA con 5 líneas en blanco previas.
+- **logica.js `insertarFirma()`:** nueva función. Si hay `firmaTexto` configurada, sustituye el sello por el texto. Si no hay firma, muestra aviso Amarillo y redirige a Configuración con foco en `#config-firma-texto`.
+- **estilos.css `.sello-firma`:** estilo de marca de agua (letra gris tenue `rgba(255,255,255,0.45)`, mayúsculas, subrayada, 1.3rem). Hover: escala 1.08. Active: halo verde Stratos.
+- **Verificación:** esprima OK logica.js (0 fallos).
+
 ---
 
 ## HISTORIAL ANTIGUO MOVIDO
