@@ -15,59 +15,34 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 - `A_DONDE_VA_STRATOS.md`.
 - Los 4 archivos del sistema: `index.html`, `estilos.css`, `datos.js`, `logica.js`.
 
-**REGLAS DE ORO INVIOLABLES (Para este y todos los desarrollos futuros):**
-1. **Color de Letras:** Todo texto, botón, título, icono de "X" o elemento generado por JS DEBE usar la variable `var(--color-letras)`. Las únicas excepciones son las alertas semánticas (éxito/error) y la marca de agua.
-2. **Color de Botones:** Todo fondo de botón DEBE usar `var(--color-botones)`.
-3. **Tamaño de Nodos (Modales):** Diferenciar entre Informativos (pequeños) y de Trabajo (grandes).
+**REGLAS DE ORO INVIOLABLES:**
+1. **Color de Letras:** Todo texto debe usar `var(--color-letras)`. Excepciones: alertas semánticas y marca de agua.
+2. **Color de Botones:** Todo fondo de botón debe usar `var(--color-botones)`.
 
 ---
 
-## PUNTO 1: CLASIFICACIÓN Y TAMAÑO DE PANTALLAS Y MODALES
+## PUNTO ÚNICO: OPTIMIZACIÓN DE LA APLICACIÓN DE IDENTIDAD CORPORATIVA (EL "NUDO")
 
-**Contexto:** Las pantallas y ventanas flotantes no tienen un tamaño uniforme, lo que rompe la experiencia en computadora. Se establecen dos tamaños base.
-
-**Qué cambiar:**
-- En `logica.js` (función `ajustarLayoutAdaptativo`) y `estilos.css`, aplicar las siguientes medidas:
-  - **Pantallas Angostas (480px):** `registro-invitacion` (Perfil), `pantalla-acceso` (Login), `pantalla-configuracion`, `pantalla-comunicacion`, `pantalla-otras-actividades`.
-  - **Pantallas Anchas (875px):** `pantalla-identidad`, `pantalla-organigrama`, `pantalla-organigrama-general`, `pantalla-correos` (y futuras como Tareas, Alarmas).
-- **Modales Informativos (Máx 500px):** `modal-detalle-contacto`, `modal-detalle-correo`, `ventana-aviso-contacto`.
-- **Modales de Trabajo (Máx 875px):** `modal-contacto`, `modal-redactar-correo`. Si el usuario hace clic en "Editar" o "Responder" desde un modal informativo, este debe expandirse al tamaño de trabajo.
-
----
-
-## PUNTO 2: CORRECCIÓN DE COLORES EN TODOS LOS BOTONES Y TEXTOS (IDENTIDAD)
-
-**Contexto:** La Identidad Corporativa se guarda, pero no se aplica a todos los textos (como los correos) ni a los botones de cerrar (X).
+**Contexto:** Actualmente, la función `aplicarCambiosVisuales` en `logica.js` recorre elemento por elemento (p, span, botones, etc.) para aplicar los colores de la Identidad Corporativa. Esto provoca que los modales nuevos, los textos dinámicos y algunas pantallas no tomen el color correctamente (o se queden en blanco/amarillo).
 
 **Qué cambiar:**
-- En `estilos.css`, asegurar que las clases de los botones de cerrar (`.btn-cerrar`), los textos de los correos (`.item-correo-remitente`, `.item-correo-asunto`, `.item-correo-previa`, `.item-correo-fecha`) y el texto del modal de detalle de correo usen `var(--color-letras)`.
-- En `logica.js` (función `aplicarCambiosVisuales`), asegurar que se aplique el color de letras a los elementos dinámicos.
-- **Alinear el texto:** En el modal de detalle de correo, quitar cualquier `text-align: center` para que el cuerpo del mensaje se lea a la izquierda (como lo escribió el emisor).
+- **En `estilos.css`:**
+  - En la regla universal `*`, agregar `color: var(--color-letras);` para que todos los textos hereden el color automáticamente.
+  - Revisar que los botones del sistema (`btn-principal`, `btn-secundario`, etc.) ya usen `background: var(--color-botones);` (esto ya está, solo verificar).
+- **En `logica.js`:**
+  - Modificar la función `aplicarCambiosVisuales()` (y `aplicarBrandingGlobal()` si es necesario) para que **dejen de recorrer elementos**.
+  - En su lugar, la función solo debe inyectar las variables CSS en la raíz del documento (`document.documentElement.style.setProperty('--color-letras', ...)`).
+  - Al cambiar la variable en la raíz, el CSS se encargará de pintar todos los textos y botones de forma automática.
 
----
+**Cómo debe quedar:**
+- Al guardar la Identidad y recargar, los colores se mantienen.
+- Al abrir un modal nuevo (como Detalle de Contacto o Detalle de Correo), el texto nace con el color correcto sin necesidad de que JS lo pinte.
+- El rendimiento mejora porque el sistema no tiene que buscar cientos de elementos para pintarlos.
 
-## PUNTO 3: UNIFICACIÓN DE LOS BOTONES DEL MENÚ LATERAL (CORREOS)
-
-**Contexto:** El botón "Recibidos" (y otros) se ven como texto plano o tienen sombras ("pantallitas") que rompen la uniformidad.
-
-**Qué cambiar:**
-- En `estilos.css`, en la clase `.btn-vista-correo`:
-  - **Estado Normal:** Fondo oscuro (`--color-botones`), sin sombra (`box-shadow: none`), texto con `var(--color-letras)`. El tamaño de la letra debe ajustarse (ej. `0.8rem` o `12px`) y asegurar que no se rompa en dos líneas.
-  - **Estado Activo/Hover:** Fondo oscuro, texto verde (`--color-primario`), borde verde y el halo/sombra (igual que el botón SPAM).
-
----
-
-## PUNTO 4: REESTRUCTURACIÓN DEL MODAL DE REDACCIÓN Y DETALLE
-
-**Contexto:** La ventana de Redactar (y Responder) tiene los botones de edición de texto a un lado, la cita mal posicionada y el texto no se puede escribir bien.
-
-**Qué cambiar:**
-- En `index.html` y `estilos.css`, dentro de `modal-redactar-correo`:
-  - **Botones de formato:** Moverlos a una barra horizontal arriba del área de texto (debajo del asunto).
-  - **Área de texto:** Debe ocupar todo el ancho disponible debajo de los botones de formato.
-  - **Cita (Responder/Reenviar):** El texto original citado debe ir debajo del área donde el usuario escribe, no arriba.
-  - **Uniformidad:** Tanto si es Redactar, como Responder o Reenviar, los elementos deben estar en las mismas posiciones.
-- En la lista de correos, ajustar el tamaño de la letra (vista previa) para que no se vea gigante al ocupar el 75% del ancho.
+**Qué NO hacer:**
+- NO cambiar el diseño de las pantallas.
+- NO tocar los textos de las alertas de éxito/error ni la marca de agua (ellos mantienen su color propio).
+- NO modificar la lógica de los botones.
 
 ---
 

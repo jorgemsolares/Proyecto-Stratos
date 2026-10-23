@@ -177,6 +177,11 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 - Los 4 puntos de instrucciones.md ya estaban hechos; estos ajustes cierran el cumplimiento al 100% de la Sección H.
 - **Verificación:** esprima OK logica.js (0 fallos). Pendiente: Ctrl+F5 del Arquitecto + sincronizar a GitHub.
 
+### 23/10/2026 — Punto Único: Optimización de aplicación de identidad corporativa (el "nudo")
+- **estilos.css:** regla universal `*` ahora incluye `color: var(--color-letras);` para que todos los textos hereden el color automáticamente. Botones del sistema (`.btn-principal`, `.btn-secundario`, `.btn-peligro`, `.btn-accion`, `.btn-cerrar`) ya usaban `background: var(--color-botones, ...)` — verificado, sin cambios.
+- **logica.js:** `aplicarCambiosVisuales()` deja de recorrer elementos (se eliminaron los `querySelectorAll` masivos de textos y botones que aplicaban `style.color`/`style.backgroundColor` inline). Ahora solo inyecta las variables CSS en la raíz (`--color-fondo`, `--color-texto`/`--color-letras`, `--color-primario`/`--color-botones`) mediante `document.documentElement.style.setProperty`. El CSS pinta automáticamente textos y botones. `aplicarBrandingGlobal()` ya inyectaba variables en la raíz y no recorre elementos masivos — sin cambios.
+- **Verificación:** esprima OK logica.js y datos.js (0 fallos).
+
 ---
 
 ## HISTORIAL ANTIGUO MOVIDO

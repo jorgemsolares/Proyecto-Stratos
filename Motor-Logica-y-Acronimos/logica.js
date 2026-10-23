@@ -2882,34 +2882,8 @@ function aplicarCambiosVisuales() {
     if (configuracionEstetica.colorTexto) { root.setProperty('--color-texto', configuracionEstetica.colorTexto); root.setProperty('--color-letras', configuracionEstetica.colorTexto); }
     // PUNTO 2: el color de botones del usuario vive en --color-botones (además de --color-primario por compatibilidad).
     if (configuracionEstetica.colorBotones) { root.setProperty('--color-primario', configuracionEstetica.colorBotones); root.setProperty('--color-botones', configuracionEstetica.colorBotones); }
-    const appContainer = document.getElementById('app-container');
-    if (appContainer) appContainer.style.backgroundColor = configuracionEstetica.colorFondo;
-    const textos = document.querySelectorAll('#app-container input, #app-container textarea, #app-container p, #app-container span, #app-container h2, #app-container h3, #app-container label, #app-container .descripcion-app');
-    textos.forEach(el => el.style.color = configuracionEstetica.colorTexto);
-    // PUNTO 2: TODOS los botones usan color de botones + color de letras del usuario (incluye Comunicación y Correos).
-    const botones = document.querySelectorAll('#app-container .btn-principal, #app-container .btn-secundario, #app-container .btn-opcion, #app-container .btn-accion, #app-container .btn-comunicacion, #app-container .btn-hexagono, #app-container .btn-vista-correo.activo, #app-container .btn-cerrar, #app-container .btn-formato, #app-container .btn-adjunto-correo');
-    botones.forEach(btn => {
-        btn.style.backgroundColor = configuracionEstetica.colorBotones;
-        btn.style.color = configuracionEstetica.colorTexto;
-    });
-    const previewFondo = document.getElementById('preview-fondo');
-    const previewTexto = document.getElementById('preview-texto');
-    const previewBotones = document.getElementById('preview-botones');
-    if (previewFondo) previewFondo.style.backgroundColor = configuracionEstetica.colorFondo;
-    if (previewTexto) previewTexto.style.backgroundColor = configuracionEstetica.colorTexto;
-    if (previewBotones) previewBotones.style.backgroundColor = configuracionEstetica.colorBotones;
-    const sloganPreview = document.getElementById('vista-previa-slogan');
-    if (sloganPreview) {
-        sloganPreview.style.color = configuracionEstetica.colorTexto;
-        sloganPreview.style.borderColor = configuracionEstetica.colorBotones;
-    }
-    let style = document.getElementById('dynamic-placeholder-style');
-    if (!style) {
-        style = document.createElement('style');
-        style.id = 'dynamic-placeholder-style';
-        document.head.appendChild(style);
-    }
-    style.textContent = `#app-container input::placeholder, #app-container textarea::placeholder { color: ${configuracionEstetica.colorTexto}80; }`;
+    // Solo se inyectan las variables CSS en la raíz; el CSS pinta automáticamente textos y botones.
+    // Ya no se recorre elemento por elemento (se eliminaron los querySelectorAll masivos de textos y botones).
 }
 
 function asignarDestino(tipo, botonPresionado) {
