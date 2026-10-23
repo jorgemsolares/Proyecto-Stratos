@@ -2146,12 +2146,8 @@ function salvarIdentidad() {
     const mision = document.getElementById('id-mision').value.trim();
     const vision = document.getElementById('id-vision').value.trim();
     const valores = document.getElementById('id-valores').value.trim();
-    if (!identidadCorporativa.logo || !empresaNombre || !slogan || !mision || !vision || !valores) {
-        mostrarAvisoInmediato("✖ Complete todos los campos, incluyendo el Logo", "error");
-        return;
-    }
-    identidadCorporativa.completada = true;
-    identidadCorporativa.completadaPor = usuarioActivo.id;
+    const camposCompletos = identidadCorporativa.logo && empresaNombre && slogan && mision && vision && valores;
+    // Guardar siempre lo que haya; no bloquear el guardado si faltan campos
     identidadCorporativa.nombre = empresaNombre;
     identidadCorporativa.acronimo = document.getElementById('empresa-acronimo').value;
     identidadCorporativa.slogan = slogan;
@@ -2162,15 +2158,23 @@ function salvarIdentidad() {
     identidadCorporativa.colorTexto = configuracionEstetica.colorTexto;
     identidadCorporativa.colorBotones = configuracionEstetica.colorBotones;
     identidadCorporativa.colorSlogan = configuracionEstetica.colorSlogan || identidadCorporativa.colorSlogan || '#00ff88';
-    guardarEnStorage(STORAGE_KEYS.IDENTIDAD, identidadCorporativa);
-    // PUNTO 2 instrucciones.md: registrar edicion de Identidad Corporativa en banco de datos
-    try {
-        if (typeof registrarActividadBancoDatos === 'function' && usuarioActivo && usuarioActivo.id) {
-            registrarActividadBancoDatos(usuarioActivo.id, 'identidad', 'Edito Identidad Corporativa (mision, vision, valores, colores, logo, slogan, tipografia, estilo, color slogan)');
-        }
-    } catch (e) {}
-    aplicarCambiosVisuales();
-    mostrarAvisoInmediato("✓ Identidad corporativa establecida con éxito", "exito");
+    if (camposCompletos) {
+        identidadCorporativa.completada = true;
+        identidadCorporativa.completadaPor = usuarioActivo.id;
+        guardarEnStorage(STORAGE_KEYS.IDENTIDAD, identidadCorporativa);
+        // PUNTO 2 instrucciones.md: registrar edicion de Identidad Corporativa en banco de datos
+        try {
+            if (typeof registrarActividadBancoDatos === 'function' && usuarioActivo && usuarioActivo.id) {
+                registrarActividadBancoDatos(usuarioActivo.id, 'identidad', 'Edito Identidad Corporativa (mision, vision, valores, colores, logo, slogan, tipografia, estilo, color slogan)');
+            }
+        } catch (e) {}
+        aplicarCambiosVisuales();
+        mostrarAvisoInmediato("Identidad guardada correctamente.", "exito");
+    } else {
+        identidadCorporativa.completada = false;
+        guardarEnStorage(STORAGE_KEYS.IDENTIDAD, identidadCorporativa);
+        mostrarAvisoInmediato("Se guardó el avance. La identidad aún está incompleta.", "advertencia");
+    }
     aplicarBrandingGlobal();
     iniciarRotacionMensajes();
     setTimeout(() => irAPantalla('pantalla-organigrama'), 1500);
@@ -2180,7 +2184,7 @@ function salvarIdentidad() {
 // 22. SALTAR IDENTIDAD (omite flag y permite continuar sin completar la identidad)
 // ==========================================
 function saltarIdentidad() {
-    mostrarAvisoInmediato("⚠ Accediendo con branding genérico temporal", "advertencia");
+    mostrarAvisoInmediato("Atención: los cambios no se guardaron. Si saliste sin guardar, lo escrito se borrará.", "advertencia");
     setTimeout(() => irAPantalla('pantalla-organigrama'), 1500);
 }
 

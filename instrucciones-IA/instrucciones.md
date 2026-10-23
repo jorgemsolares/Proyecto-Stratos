@@ -15,34 +15,28 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 - `A_DONDE_VA_STRATOS.md`.
 - Los 4 archivos del sistema: `index.html`, `estilos.css`, `datos.js`, `logica.js`.
 
-**REGLAS DE ORO INVIOLABLES:**
-1. **Color de Letras:** Todo texto debe usar `var(--color-letras)`. Excepciones: alertas semánticas y marca de agua.
-2. **Color de Botones:** Todo fondo de botón debe usar `var(--color-botones)`.
-
 ---
 
-## PUNTO ÚNICO: OPTIMIZACIÓN DE LA APLICACIÓN DE IDENTIDAD CORPORATIVA (EL "NUDO")
+## PUNTO 1: AVISOS DE FEEDBACK (VERDE/AMARILLO/ROJO) EN BOTONES DE EJECUCIÓN
 
-**Contexto:** Actualmente, la función `aplicarCambiosVisuales` en `logica.js` recorre elemento por elemento (p, span, botones, etc.) para aplicar los colores de la Identidad Corporativa. Esto provoca que los modales nuevos, los textos dinámicos y algunas pantallas no tomen el color correctamente (o se queden en blanco/amarillo).
+**Contexto:** Actualmente, al presionar botones de ejecución (como "Salvar" en Identidad o "Continuar sin completar"), el sistema a veces se detiene en silencio o no avisa al usuario qué pasó. Se necesita conectar los botones con la función de avisos existentes en la barra de notificaciones superior.
 
 **Qué cambiar:**
-- **En `estilos.css`:**
-  - En la regla universal `*`, agregar `color: var(--color-letras);` para que todos los textos hereden el color automáticamente.
-  - Revisar que los botones del sistema (`btn-principal`, `btn-secundario`, etc.) ya usen `background: var(--color-botones);` (esto ya está, solo verificar).
-- **En `logica.js`:**
-  - Modificar la función `aplicarCambiosVisuales()` (y `aplicarBrandingGlobal()` si es necesario) para que **dejen de recorrer elementos**.
-  - En su lugar, la función solo debe inyectar las variables CSS en la raíz del documento (`document.documentElement.style.setProperty('--color-letras', ...)`).
-  - Al cambiar la variable en la raíz, el CSS se encargará de pintar todos los textos y botones de forma automática.
+- En `logica.js`, en la función `salvarIdentidad()`:
+  - Si faltan campos por llenar (logo, misión, visión, etc.): **NO bloquear el guardado**. El sistema debe guardar lo que haya, mostrar un aviso **Amarillo** en la barra superior (`mostrarAvisoInmediato(..., 'advertencia')`) diciendo: *"Se guardó el avance. La identidad aún está incompleta."* y luego redirigir al Organigrama.
+  - Si todos los campos están llenos: guardar, mostrar un aviso **Verde** (`mostrarAvisoInmediato(..., 'exito')`) diciendo: *"Identidad guardada correctamente."* y redirigir al Organigrama.
+- En `logica.js`, en la función `saltarIdentidad()`:
+  - Al presionar "Continuar sin completar", el sistema debe mostrar un aviso **Amarillo** de advertencia: *"Atención: los cambios no se guardaron. Si saliste sin guardar, lo escrito se borrará."*
+  - Redirigir al Organigrama.
+- En `index.html`, corregir el evento del botón "Continuar sin completar" (actualmente tiene `ondblclick`, debe ser `onclick`).
 
-**Cómo debe quedar:**
-- Al guardar la Identidad y recargar, los colores se mantienen.
-- Al abrir un modal nuevo (como Detalle de Contacto o Detalle de Correo), el texto nace con el color correcto sin necesidad de que JS lo pinte.
-- El rendimiento mejora porque el sistema no tiene que buscar cientos de elementos para pintarlos.
+**Dónde:**
+- `Motor-Logica-y-Acronimos/logica.js`: funciones `salvarIdentidad` y `saltarIdentidad`.
+- `Cuerpo-y-Textos/index.html`: el botón de "Continuar sin completar" (línea donde dice `onclick="saltarIdentidad()"`).
 
 **Qué NO hacer:**
-- NO cambiar el diseño de las pantallas.
-- NO tocar los textos de las alertas de éxito/error ni la marca de agua (ellos mantienen su color propio).
-- NO modificar la lógica de los botones.
+- NO cambiar el diseño de la pantalla de Identidad.
+- NO usar `alert()` del navegador; usar siempre la barra de notificaciones (`mostrarAvisoInmediato`).
 
 ---
 

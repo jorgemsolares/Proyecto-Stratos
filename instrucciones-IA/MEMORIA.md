@@ -181,6 +181,12 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 - **estilos.css:** regla universal `*` ahora incluye `color: var(--color-letras);` para que todos los textos hereden el color automáticamente. Botones del sistema (`.btn-principal`, `.btn-secundario`, `.btn-peligro`, `.btn-accion`, `.btn-cerrar`) ya usaban `background: var(--color-botones, ...)` — verificado, sin cambios.
 - **logica.js:** `aplicarCambiosVisuales()` deja de recorrer elementos (se eliminaron los `querySelectorAll` masivos de textos y botones que aplicaban `style.color`/`style.backgroundColor` inline). Ahora solo inyecta las variables CSS en la raíz (`--color-fondo`, `--color-texto`/`--color-letras`, `--color-primario`/`--color-botones`) mediante `document.documentElement.style.setProperty`. El CSS pinta automáticamente textos y botones. `aplicarBrandingGlobal()` ya inyectaba variables en la raíz y no recorre elementos masivos — sin cambios.
 - **Verificación:** esprima OK logica.js y datos.js (0 fallos).
+### 23/10/2026 — Punto 1: Avisos de feedback en botones de ejecución (Identidad)
+- **logica.js `salvarIdentidad()`:** ya no bloquea el guardado si faltan campos. Guarda siempre lo que haya; si faltan campos (logo/misión/visión/valores/etc.) muestra aviso Amarillo "Se guardó el avance. La identidad aún está incompleta." y redirige al Organigrama; si todo está completo marca completada=true, muestra aviso Verde "Identidad guardada correctamente." y redirige al Organigrama.
+- **logica.js `saltarIdentidad()`:** aviso Amarillo "Atención: los cambios no se guardaron. Si saliste sin guardar, lo escrito se borrará." y redirige al Organigrama.
+- **index.html:** botón "CONTINUAR SIN COMPLETAR" ya usa `onclick="saltarIdentidad()"` (no había `ondblclick` que corregir).
+- **Verificación:** esprima OK logica.js (0 fallos).
+
 
 ---
 
