@@ -17,26 +17,32 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 
 ---
 
-## PUNTO 1: AVISOS DE FEEDBACK (VERDE/AMARILLO/ROJO) EN BOTONES DE EJECUCIÓN
+## PUNTO 1: CORRECCIÓN DEL NODO PRINCIPAL Y EDICIÓN EN EL ORGANIGRAMA PERSONAL
 
-**Contexto:** Actualmente, al presionar botones de ejecución (como "Salvar" en Identidad o "Continuar sin completar"), el sistema a veces se detiene en silencio o no avisa al usuario qué pasó. Se necesita conectar los botones con la función de avisos existentes en la barra de notificaciones superior.
+**Contexto:** 
+1. El nodo principal del Organigrama Personal (el usuario mismo) no está trayendo su correo, celular ni su puesto completo desde su Perfil. 
+2. Al intentar "Editar" el nodo principal, el sistema abre un modal de edición en lugar de llevar al usuario a "Mi Perfil" (que es de donde proviene la información).
+3. Al editar los datos de un contacto desde el Organigrama Personal y guardar, el sistema crea un contacto duplicado en lugar de actualizar el existente.
 
 **Qué cambiar:**
-- En `logica.js`, en la función `salvarIdentidad()`:
-  - Si faltan campos por llenar (logo, misión, visión, etc.): **NO bloquear el guardado**. El sistema debe guardar lo que haya, mostrar un aviso **Amarillo** en la barra superior (`mostrarAvisoInmediato(..., 'advertencia')`) diciendo: *"Se guardó el avance. La identidad aún está incompleta."* y luego redirigir al Organigrama.
-  - Si todos los campos están llenos: guardar, mostrar un aviso **Verde** (`mostrarAvisoInmediato(..., 'exito')`) diciendo: *"Identidad guardada correctamente."* y redirigir al Organigrama.
-- En `logica.js`, en la función `saltarIdentidad()`:
-  - Al presionar "Continuar sin completar", el sistema debe mostrar un aviso **Amarillo** de advertencia: *"Atención: los cambios no se guardaron. Si saliste sin guardar, lo escrito se borrará."*
-  - Redirigir al Organigrama.
-- En `index.html`, corregir el evento del botón "Continuar sin completar" (actualmente tiene `ondblclick`, debe ser `onclick`).
+
+1. **Sincronización del Nodo Principal:**
+   - En `logica.js`, en la función `renderizarOrganigrama()`, cuando se dibuja el nodo raíz (el usuario actual), el sistema no debe usar `datosOrganigrama` si este está desactualizado. Debe obtener la información directamente de `usuarioActivo` o de `baseDatosUsuarios` (buscando por el ID).
+   - Asegurar que el nombre, puesto, acrónimo, correo y celular se muestren completos, tal como están en el perfil.
+
+2. **Edición del Nodo Principal:**
+   - En `logica.js`, en la función `verDetalleContacto(id)` (o donde se maneje el doble clic del organigrama), validar si el `id` del contacto es igual al `id` del `usuarioActivo`.
+   - Si es el usuario activo: El botón "Editar" dentro del modal debe redirigir a la pantalla de "Mi Perfil" (`registro-invitacion`), no abrir el modal de edición de contactos.
+
+3. **Bug de Duplicación al Editar:**
+   - En `logica.js`, en la función `guardarContacto()`, en el bloque `if (enEdicion)`, el sistema debe buscar el contacto en la lista correspondiente (hijos directos, indirectos u observadores) usando su `id`. Si lo encuentra, debe reemplazar los datos (`lista[indice] = datosActualizados`) y **evitar que el flujo continúe a la creación de uno nuevo** (asegurarse de que haya un `return` después de guardar los cambios).
 
 **Dónde:**
-- `Motor-Logica-y-Acronimos/logica.js`: funciones `salvarIdentidad` y `saltarIdentidad`.
-- `Cuerpo-y-Textos/index.html`: el botón de "Continuar sin completar" (línea donde dice `onclick="saltarIdentidad()"`).
+- `Motor-Logica-y-Acronimos/logica.js`: funciones `renderizarOrganigrama`, `verDetalleContacto`, y `guardarContacto`.
 
 **Qué NO hacer:**
-- NO cambiar el diseño de la pantalla de Identidad.
-- NO usar `alert()` del navegador; usar siempre la barra de notificaciones (`mostrarAvisoInmediato`).
+- NO cambiar el diseño visual del organigrama ni del modal.
+- NO modificar la base de datos de usuarios.
 
 ---
 

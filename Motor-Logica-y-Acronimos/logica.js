@@ -2538,6 +2538,21 @@ function renderizarOrganigrama() {
             return;
         }
     }
+
+    // Sincronizar el nodo raíz (usuario actual) con los datos del perfil,
+    // para no mostrar datos desactualizados de datosOrganigrama
+    if (usuarioActivo && usuarioActivo.id && datosOrganigrama.id === usuarioActivo.id) {
+        datosOrganigrama.nombre = usuarioActivo.nombre;
+        datosOrganigrama.apellidos = usuarioActivo.apellidos;
+        datosOrganigrama.nombreCompleto = usuarioActivo.nombreCompleto;
+        datosOrganigrama.puesto = usuarioActivo.posicion;
+        datosOrganigrama.acronimo = usuarioActivo.acronimo;
+        datosOrganigrama.telefono = usuarioActivo.telefono;
+        datosOrganigrama.email = usuarioActivo.email;
+        datosOrganigrama.idEmpleado = usuarioActivo.idEmpleado;
+        datosOrganigrama.paisPrefijo = usuarioActivo.paisPrefijo;
+        guardarEnStorage(STORAGE_KEYS.ORGANIGRAMA, datosOrganigrama);
+    }
     
     // Función para dibujar SOLO el nodo principal (usuario actual) y sus colaboradores directos (hijos)
     const dibujarNodoPrincipal = (nodo) => {
@@ -2639,6 +2654,7 @@ function verDetalleContacto(id) {
     console.log("Ver detalle de contacto:", id);
     let contacto = null;
     let tipoContacto = 'directo';
+    const esUsuarioActivo = usuarioActivo && usuarioActivo.id && id === usuarioActivo.id;
     
     function buscarEnNodo(nodo) {
         if (nodo.id === id) {
@@ -2683,6 +2699,14 @@ function verDetalleContacto(id) {
                 <p><strong>Estado:</strong> ${contacto.invitacionAceptada ? 'Aceptado' : (contacto.invitacionEnviada ? 'Invitación enviada' : 'Pendiente')}</p>
             `;
             modal.style.display = 'flex';
+            // Si es el usuario activo (nodo principal), el botón EDITAR redirige a Mi Perfil
+            if (esUsuarioActivo && footer) {
+                const btnEditar = footer.querySelector('button[onclick="editarContactoDesdeDetalle()"]');
+                if (btnEditar) {
+                    btnEditar.onclick = () => { irAPantalla('registro-invitacion'); };
+                    btnEditar.setAttribute('onclick', '');
+                }
+            }
         }
     } else {
         mostrarAvisoInmediato("Contacto no encontrado", "error");

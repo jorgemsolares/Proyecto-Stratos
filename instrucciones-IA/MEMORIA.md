@@ -188,6 +188,12 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 - **Verificación:** esprima OK logica.js (0 fallos).
 
 
+### 23/10/2026 — Punto 1: Corrección del nodo principal y edición en el Organigrama Personal
+- **logica.js `renderizarOrganigrama()`:** tras asegurar que existe `datosOrganigrama`, se sincroniza el nodo raíz (usuario actual) con `usuarioActivo` (nombre, apellidos, nombreCompleto, puesto, acrónimo, teléfono, email, idEmpleado, paisPrefijo) para no mostrar datos desactualizados. Se guarda en storage.
+- **logica.js `verDetalleContacto(id)`:** se valida si `id === usuarioActivo.id` (esUsuarioActivo). Si es el usuario activo (nodo principal), al abrir el modal de detalle el botón "EDITAR" se reasigna para redirigir a `registro-invitacion` (Mi Perfil) en lugar de abrir el modal de edición de contactos.
+- **logica.js `guardarContacto()`:** ya cuenta con `return` después de `lista[indice] = datosActualizados` en el bloque `if (enEdicion)`, evitando que el flujo continúe a la creación de un contacto nuevo (sin duplicados).
+- **Verificación:** esprima OK logica.js (0 fallos).
+
 ---
 
 ## HISTORIAL ANTIGUO MOVIDO
