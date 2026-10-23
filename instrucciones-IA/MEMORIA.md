@@ -217,6 +217,17 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
   - Los correos no leídos reciben la clase `no-leido` (película de fondo).
 - **Verificación:** esprima OK logica.js (0 fallos).
 
+### 23/10/2026 — Punto 1: Reorganización visual del bloque de IA en Configuración + Punto 2: Área de Firma del Usuario
+- **PUNTO 1 — index.html:** El bloque de IA ahora usa contenedor `.config-ia-row` (flex fila, 50/50). Izquierda: título + texto "Personaliza a tu Asistente Ejecutivo...". Derecha: esfera `.boton-ia` reducida a 70x70px. Alto del bloque reducido con padding 12px.
+- **PUNTO 1 — estilos.css:** Agregadas clases `.config-ia-row`, `.config-ia-izquierda`, `.config-ia-derecha`; `#boton-ia-configuracion` a 70x70px con rótulos más pequeños.
+- **PUNTO 2 — index.html:** Eliminado bloque de "🔒 Seguridad" (biometría visual). Creado bloque "✍️ Firma del Usuario" con: textarea `#config-firma-texto` (5 líneas), barra de herramientas con 4 botones (Tipografía, Estilo, Tamaño, Color), checkbox `#config-firma-automatica` ("Insertar firma automáticamente en los correos").
+- **PUNTO 2 — estilos.css:** Clases `.config-firma-toolbar` y `#config-firma-texto`.
+- **PUNTO 2 — datos.js:** `configuracionPersonal` ahora incluye `firmaTexto` ("") y `firmaAutomatica` (false).
+- **PUNTO 2 — logica.js `guardarConfiguracion()`:** guarda `firmaTexto` y `firmaAutomatica` desde el DOM.
+- **PUNTO 2 — logica.js `irAPantalla()`:** al cargar `pantalla-configuracion`, recupera `firmaTexto` y `firmaAutomatica` del storage.
+- **PUNTO 2 — logica.js:** funciones `abrirSelectorFirmaTipografia/Estilo/Tamano/Color()` para personalizar la firma.
+- **Verificación:** esprima OK logica.js y datos.js (0 fallos).
+
 ---
 
 ## HISTORIAL ANTIGUO MOVIDO

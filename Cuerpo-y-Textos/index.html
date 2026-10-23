@@ -469,15 +469,17 @@
             <p class="descripcion-app" data-i18n="cfg_desc">Personaliza tu experiencia</p>
             
             <div class="configuracion-container">
-                <div class="config-section">
-                    <h3><img src="../Colores-y-Estetica/Iconos/IA.svg" alt="" class="icono-inline"> <span data-i18n="cfg_ia">Configuración de IA</span></h3>
-                    <p class="descripcion-app" data-i18n="cfg_ia_desc">Personaliza a tu asistente de Stratos.</p>
-                    <!-- PUNTO 6: sin campo de nombre; la IA lo pide en su primera interacción -->
-                    <!-- Botón de IA (diseño de esfera; la lógica de la IA se conecta en el PUNTO 7) -->
-                    <button type="button" id="boton-ia-configuracion" class="boton-ia">
-                        <span class="rotulo-ia-linea1" data-i18n="cfg_ia_boton1">Configuración</span>
-                        <span class="rotulo-ia-linea2" data-i18n="cfg_ia_boton2">IA</span>
-                    </button>
+                <div class="config-section config-ia-row">
+                    <div class="config-ia-izquierda">
+                        <h3><img src="../Colores-y-Estetica/Iconos/IA.svg" alt="" class="icono-inline"> <span data-i18n="cfg_ia">Configuración de IA</span></h3>
+                        <p class="descripcion-app" data-i18n="cfg_ia_desc">Personaliza a tu Asistente Ejecutivo...</p>
+                    </div>
+                    <div class="config-ia-derecha">
+                        <button type="button" id="boton-ia-configuracion" class="boton-ia">
+                            <span class="rotulo-ia-linea1" data-i18n="cfg_ia_boton1">Configuración</span>
+                            <span class="rotulo-ia-linea2" data-i18n="cfg_ia_boton2">IA</span>
+                        </button>
+                    </div>
                 </div>
                 
                 <div class="config-section">
@@ -489,8 +491,19 @@
                 </div>
                 
                 <div class="config-section">
-                    <h3><img src="../Colores-y-Estetica/Iconos/Cambiar contraseña.svg" alt="" class="icono-inline"> <span data-i18n="cfg_seguridad">Seguridad</span></h3>
-                    <p class="descripcion-app">La biometría se inscribe desde tu Perfil.</p>
+                    <h3>✍️ Firma del Usuario</h3>
+                    <p class="descripcion-app">Personaliza tu firma para los correos electrónicos.</p>
+                    <textarea id="config-firma-texto" rows="5" placeholder="Escribe tu firma aquí..." class="input-estilizado"></textarea>
+                    <div class="config-firma-toolbar" style="display:flex; gap:8px; margin:10px 0; flex-wrap:wrap;">
+                        <button type="button" class="btn-secundario" onclick="abrirSelectorFirmaTipografia()">Tipografía</button>
+                        <button type="button" class="btn-secundario" onclick="abrirSelectorFirmaEstilo()">Estilo</button>
+                        <button type="button" class="btn-secundario" onclick="abrirSelectorFirmaTamano()">Tamaño</button>
+                        <button type="button" class="btn-secundario" onclick="abrirSelectorFirmaColor()">Color</button>
+                    </div>
+                    <label style="display:flex; align-items:center; gap:8px; margin-top:10px;">
+                        <input type="checkbox" id="config-firma-automatica">
+                        <span>Insertar firma automáticamente en los correos</span>
+                    </label>
                 </div>
                 
                 <div class="config-section">

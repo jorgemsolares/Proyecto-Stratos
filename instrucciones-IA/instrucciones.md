@@ -17,35 +17,39 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 
 ---
 
-## PUNTO 1: CORRECCIÓN DE LA LISTA Y MODAL DE DETALLE DE CORREOS
+## PUNTO 1: REORGANIZACIÓN VISUAL DEL BLOQUE DE IA EN CONFIGURACIÓN
 
-**Contexto:** El modal de detalle de correo tiene el texto centrado (debe ir a la izquierda), muestra una flecha en lugar de "De:", los botones no están en una línea y falta el botón de "Reenviar". Además, la lista de correos no tiene checkboxes para selección múltiple ni el indicador visual (película blanca) para los correos no leídos.
+**Contexto:** El bloque de la IA en Configuración ocupa demasiado espacio vertical. Se ajustará a un diseño de dos columnas (50% y 50%) y se le dará la relevancia de "Asistente Ejecutivo".
 
 **Qué cambiar:**
+- En `index.html` y `estilos.css`, dentro de la sección de IA en Configuración:
+  - Crear un contenedor Flexbox (fila).
+  - A la izquierda (50%): Título y texto descriptivo ("Personaliza a tu Asistente Ejecutivo...").
+  - A la derecha (50%): La esfera del botón de IA (`.boton-ia`), reducida de tamaño (ej. `width: 70px; height: 70px;`) para que quepa en esa mitad.
+  - El alto total del bloque debe reducirse.
 
-1. **Título del Modal (index.html / logica.js):**
-   - En lugar de decir siempre "Detalle del correo", el título debe mostrar el nombre de la bandeja actual. Ejemplo: si estás en Recibidos, dirá "Detalle - Recibidos" (o el nombre de la carpeta correspondiente).
+---
 
-2. **Contenido del Modal (index.html / logica.js):**
-   - Asegurar que el cuerpo del mensaje (`detalle-correo-cuerpo`) tenga `text-align: left` y use `var(--color-letras)`.
-   - Cambiar la flecha (→) del remitente para que diga claramente **"De: [remitente]"**.
-   - Agregar el botón **"REENVIAR"** junto a los botones de Responder y Archivar.
-   - Asegurar que los 4 botones (Responder, Reenviar, Archivar, Eliminar) queden en una sola línea, ajustando el tamaño de la letra si es necesario.
+## PUNTO 2: IMPLEMENTACIÓN DEL ÁREA DE FIRMA EN CONFIGURACIÓN
 
-3. **Checkboxes y Leído/No leído (index.html / estilos.css / logica.js):**
-   - Agregar un checkbox en la parte superior de la lista para "Seleccionar todos".
-   - Agregar un checkbox a cada fila de correo.
-   - Los correos no leídos deben llevar una "película" de fondo (un fondo gris/blanco sutil) para diferenciarlos visualmente. Al abrirlos (marcarlos como leídos), pierden ese fondo.
-   - **Lógica de apertura:** Al hacer doble clic o clic en un correo para abrirlo, el sistema debe marcarlo como leído y quitarle la película de fondo automáticamente. (Opcional: permitir volver a marcarlo como no leído desde el menú de opciones).
+**Contexto:** Se reemplazará el bloque de "Seguridad" por el área de configuración de la Firma del Usuario. El sistema debe permitir al usuario crear una firma con formato (tipo de letra, tamaño, color) y decidir si se inserta automáticamente.
 
-**Dónde:**
-- `Cuerpo-y-Textos/index.html` (estructura de la lista y el modal).
-- `Colores-y-Estetica/estilos.css` (clases de los correos, checkboxes y modal).
-- `Motor-Logica-y-Acronimos/logica.js` (funciones de renderizado y apertura de correos).
+**Qué cambiar:**
+- En `index.html`, en `pantalla-configuracion`:
+  - Eliminar el bloque de `<div class="config-section">` que contiene "🔒 Seguridad" y su texto.
+  - Crear un nuevo bloque "✍️ Firma del Usuario".
+  - **Título:** Un encabezado que diga "Firma del Usuario".
+  - **Área de texto:** Un `<textarea id="config-firma-texto">` (o un `div contenteditable="true"`) de 5 líneas de alto, donde el usuario escriba.
+  - **Barra de herramientas:** Justo debajo del área de texto, agregar los botones de personalización (Tipografía, Estilo, Tamaño y Color con la paleta `coloresExtraidos`), replicando las opciones que ya existen en Identidad Corporativa.
+  - **Checkbox:** Debajo de la barra de herramientas, un `<input type="checkbox" id="config-firma-automatica">` con la etiqueta: "Insertar firma automáticamente en los correos".
+- En `logica.js`:
+  - En la función `guardarConfiguracion()`, guardar el texto de la firma en `configuracionPersonal.firmaTexto` y el estado del checkbox en `configuracionPersonal.firmaAutomatica`.
+  - Asegurar que al cargar la pantalla de Configuración (función `irAPantalla('pantalla-configuracion')` o similar), se recupere el texto de la firma y el estado del checkbox.
 
 **Qué NO hacer:**
-- NO cambiar la forma en que se envían los correos.
-- NO alterar el diseño del menú lateral.
+- NO mencionar ni inyectar nada en el módulo de Correos todavía.
+- NO borrar la lógica de biometría que existe en el sistema, solo el bloque visual de "Seguridad" en esta pantalla.
+- NO agregar botones extra fuera de los 3 permitidos (Tipografía, Estilo, Color, y el de Tamaño).
 
 ---
 

@@ -467,7 +467,9 @@ let configuracionPersonal = {
     nombreAsistente: "Vero", // Nombre de la IA; el usuario lo cambia en Configuración (PUNTO 7)
     idioma: "es", // es, en
     biometria: false,
-    temaOscuro: true // Siempre true (definido por No.1)
+    temaOscuro: true, // Siempre true (definido por No.1)
+    firmaTexto: "", // Texto de firma del usuario (PUNTO 2 instrucciones.md)
+    firmaAutomatica: false // Insertar firma automáticamente en correos (PUNTO 2 instrucciones.md)
 };
 
 // ==========================================

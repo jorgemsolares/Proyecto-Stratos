@@ -428,6 +428,13 @@ function irAPantalla(id) {
     if (id === 'pantalla-organigrama-general') renderizarOrganigramaGeneral();
     if (id === 'pantalla-organigrama') renderizarOrganigrama();
     if (id === 'pantalla-correos' && typeof registrarEntradaCorreosInicial === 'function') registrarEntradaCorreosInicial();
+    // PUNTO 2 instrucciones.md: recuperar firma al cargar Configuración
+    if (id === 'pantalla-configuracion') {
+        const ta = document.getElementById('config-firma-texto');
+        const cb = document.getElementById('config-firma-automatica');
+        if (ta && configuracionPersonal?.firmaTexto) ta.value = configuracionPersonal.firmaTexto;
+        if (cb && configuracionPersonal?.firmaAutomatica !== undefined) cb.checked = configuracionPersonal.firmaAutomatica;
+    }
     actualizarMenuTuerca();
     aplicarBrandingGlobal();
     verificarMensajeIdentidad();
@@ -2743,7 +2750,9 @@ function guardarConfiguracion() {
     const config = {
         nombreAsistente: (configuracionPersonal && configuracionPersonal.nombreAsistente) || 'Vero',
         idioma: document.getElementById('config-idioma')?.value || 'es',
-        biometria: !!(configuracionPersonal && configuracionPersonal.biometria)
+        biometria: !!(configuracionPersonal && configuracionPersonal.biometria),
+        firmaTexto: document.getElementById('config-firma-texto')?.value || '',
+        firmaAutomatica: !!document.getElementById('config-firma-automatica')?.checked
     };
     configuracionPersonal = config;
     guardarEnStorage(STORAGE_KEYS.CONFIG_PERSONAL, configuracionPersonal);
@@ -4189,6 +4198,41 @@ function enviarCorreoRedactado(modo) {
     }
 }
 
+// ==========================================
+// PUNTO 2 instrucciones.md: SELECTORES DE FIRMA (configuración en pantalla de Configuración)
+// ==========================================
+function abrirSelectorFirmaTipografia() {
+    const tip = prompt("Tipografía de la firma (ej. 'Segoe UI', 'Arial', 'Courier New'):", "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif");
+    if (tip !== null) {
+        const ta = document.getElementById('config-firma-texto');
+        if (ta) ta.style.fontFamily = tip;
+    }
+}
+function abrirSelectorFirmaEstilo() {
+    const estilo = prompt("Estilo de la firma (normal, bold, italic):", "normal");
+    if (estilo !== null) {
+        const ta = document.getElementById('config-firma-texto');
+        if (ta) ta.style.fontStyle = estilo.includes('italic') ? 'italic' : 'normal';
+        if (ta) ta.style.fontWeight = estilo.includes('bold') ? 'bold' : 'normal';
+    }
+}
+function abrirSelectorFirmaTamano() {
+    const tam = prompt("Tamaño de la firma (ej. 12px, 14px, 16px):", "14px");
+    if (tam !== null) {
+        const ta = document.getElementById('config-firma-texto');
+        if (ta) ta.style.fontSize = tam;
+    }
+}
+function abrirSelectorFirmaColor() {
+    const colores = (typeof coloresExtraidos !== 'undefined' && coloresExtraidos.length) ? coloresExtraidos.slice(0, 8) : ['#00ff88'];
+    const lista = colores.map((c, i) => i + 1 + ') ' + c).join('\n');
+    const sel = prompt("Elige un color de la paleta (número):\n" + lista, "1");
+    const idx = parseInt(sel) - 1;
+    if (!isNaN(idx) && idx >= 0 && idx < colores.length) {
+        const ta = document.getElementById('config-firma-texto');
+        if (ta) ta.style.color = colores[idx];
+    }
+}
 // ==========================================
 // 33. ASISTENTE DE IA (BOTÓN FLOTANTE, VOZ Y VENTANA EMERGENTE — PUNTO 7)
 // ==========================================

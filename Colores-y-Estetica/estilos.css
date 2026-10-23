@@ -1033,6 +1033,41 @@ textarea {
     font-size: 1.1rem;
 }
 
+/* PUNTO 1: Bloque de IA en dos columnas (50/50) */
+.config-ia-row {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+    padding: 12px;
+}
+.config-ia-izquierda {
+    flex: 1;
+}
+.config-ia-derecha {
+    flex: 0 0 50%;
+    display: flex;
+    justify-content: center;
+}
+#boton-ia-configuracion {
+    width: 70px;
+    height: 70px;
+}
+#boton-ia-configuracion .rotulo-ia-linea1 { font-size: 0.5rem; }
+#boton-ia-configuracion .rotulo-ia-linea2 { font-size: 0.85rem; }
+
+/* PUNTO 2: Área de firma */
+.config-firma-toolbar {
+    display: flex;
+    gap: 8px;
+    margin: 10px 0;
+    flex-wrap: wrap;
+}
+#config-firma-texto {
+    width: 100%;
+    font-family: inherit;
+}
+
 .config-options {
     display: flex;
     flex-direction: column;
