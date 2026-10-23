@@ -17,32 +17,31 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 
 ---
 
-## PUNTO 1: CORRECCIÓN DEL NODO PRINCIPAL Y EDICIÓN EN EL ORGANIGRAMA PERSONAL
+## PUNTO 1: AJUSTE DE PROPORCIÓN Y BOTONES LATERALES EN CORREOS
 
-**Contexto:** 
-1. El nodo principal del Organigrama Personal (el usuario mismo) no está trayendo su correo, celular ni su puesto completo desde su Perfil. 
-2. Al intentar "Editar" el nodo principal, el sistema abre un modal de edición en lugar de llevar al usuario a "Mi Perfil" (que es de donde proviene la información).
-3. Al editar los datos de un contacto desde el Organigrama Personal y guardar, el sistema crea un contacto duplicado en lugar de actualizar el existente.
+**Contexto:** El menú lateral de la pantalla de correos ocupa mucho espacio (1/4) y los botones no están respetando la regla general de botones (halo, fondo, color de letras). Además, el texto de los botones se alineó a la izquierda por error. Se ajustará la proporción a 1/5 y 4/5 para dar más espacio a la lectura de correos, y se corregirán los botones.
 
 **Qué cambiar:**
-
-1. **Sincronización del Nodo Principal:**
-   - En `logica.js`, en la función `renderizarOrganigrama()`, cuando se dibuja el nodo raíz (el usuario actual), el sistema no debe usar `datosOrganigrama` si este está desactualizado. Debe obtener la información directamente de `usuarioActivo` o de `baseDatosUsuarios` (buscando por el ID).
-   - Asegurar que el nombre, puesto, acrónimo, correo y celular se muestren completos, tal como están en el perfil.
-
-2. **Edición del Nodo Principal:**
-   - En `logica.js`, en la función `verDetalleContacto(id)` (o donde se maneje el doble clic del organigrama), validar si el `id` del contacto es igual al `id` del `usuarioActivo`.
-   - Si es el usuario activo: El botón "Editar" dentro del modal debe redirigir a la pantalla de "Mi Perfil" (`registro-invitacion`), no abrir el modal de edición de contactos.
-
-3. **Bug de Duplicación al Editar:**
-   - En `logica.js`, en la función `guardarContacto()`, en el bloque `if (enEdicion)`, el sistema debe buscar el contacto en la lista correspondiente (hijos directos, indirectos u observadores) usando su `id`. Si lo encuentra, debe reemplazar los datos (`lista[indice] = datosActualizados`) y **evitar que el flujo continúe a la creación de uno nuevo** (asegurarse de que haya un `return` después de guardar los cambios).
+- En `estilos.css`:
+  - Modificar el contenedor de la pantalla de correos para que el menú lateral ocupe `flex: 0 0 20%` (1/5) o un ancho fijo proporcional, y la lista de correos ocupe el `flex: 1` restante (4/5).
+  - Ajustar el tamaño de la letra de los botones del menú (`.btn-vista-correo`) para que quepan en una línea en este nuevo espacio más angosto.
+  - **Asegurar que el texto de los botones del menú esté centrado** (`text-align: center` o `justify-content: center`).
+  - Asegurar que todos los botones del menú (Recibidos, Enviados, etc.) tengan la regla general de botones:
+    - Fondo: `var(--color-botones)`.
+    - Texto: `var(--color-letras)`.
+    - Estado normal: sin sombra fija.
+    - Estado activo/hover: borde y halo verde (`var(--color-primario)`).
+- En `logica.js`:
+  - En la función que inyecta los correos de prueba, quitar el texto "Bienvenido a tu bandeja Stratos". En su lugar, el título de la lista debe mostrar el nombre de la carpeta seleccionada (ej. "Recibidos", "Enviados").
+  - Asegurar que el texto de la vista previa del correo (`.item-correo-previa`) esté alineado a la izquierda y respete el color de letras.
 
 **Dónde:**
-- `Motor-Logica-y-Acronimos/logica.js`: funciones `renderizarOrganigrama`, `verDetalleContacto`, y `guardarContacto`.
+- `Colores-y-Estetica/estilos.css` (clases de la pantalla de correos y `.btn-vista-correo`).
+- `Motor-Logica-y-Acronimos/logica.js` (función `renderizarListaCorreos` y los datos de prueba).
 
 **Qué NO hacer:**
-- NO cambiar el diseño visual del organigrama ni del modal.
-- NO modificar la base de datos de usuarios.
+- NO cambiar la estructura del modal de redactar.
+- NO alterar la lógica de envío.
 
 ---
 

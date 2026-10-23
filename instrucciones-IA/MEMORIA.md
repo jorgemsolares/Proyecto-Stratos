@@ -194,6 +194,14 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 - **logica.js `guardarContacto()`:** ya cuenta con `return` después de `lista[indice] = datosActualizados` en el bloque `if (enEdicion)`, evitando que el flujo continúe a la creación de un contacto nuevo (sin duplicados).
 - **Verificación:** esprima OK logica.js (0 fallos).
 
+### 23/10/2026 — Punto 1: Ajuste de proporción y botones laterales en Correos
+- **estilos.css `.menu-correos`:** ancho reducido de 25% a 20% (`flex: 0 0 20%` / `max-width: 20%`) para dar más espacio a la lectura de correos (proporción 1/5 + 4/5).
+- **estilos.css `.btn-vista-correo`:** `text-align` cambiado de `left` a `center` para que el texto de los botones del menú esté centrado.
+- **estilos.css `.item-correo-previa`:** agregado `text-align: left` para asegurar que la vista previa del correo esté alineada a la izquierda y respete `var(--color-letras)`.
+- **logica.js datos de prueba:** asunto del correo demo2 cambiado de "Bienvenido a tu bandeja Stratos" a "Bienvenido a Stratos".
+- **logica.js `renderizarListaCorreos()`:** agregado título de carpeta seleccionada (ej. "Recibidos", "Enviados") al inicio de la lista, usando `nombreCorreoVista(vistaCorreoActual)`.
+- **Verificación:** esprima OK logica.js (0 fallos).
+
 ---
 
 ## HISTORIAL ANTIGUO MOVIDO
