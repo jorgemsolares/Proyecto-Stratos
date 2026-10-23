@@ -17,31 +17,35 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 
 ---
 
-## PUNTO 1: AJUSTE DE PROPORCIÓN Y BOTONES LATERALES EN CORREOS
+## PUNTO 1: CORRECCIÓN DE LA LISTA Y MODAL DE DETALLE DE CORREOS
 
-**Contexto:** El menú lateral de la pantalla de correos ocupa mucho espacio (1/4) y los botones no están respetando la regla general de botones (halo, fondo, color de letras). Además, el texto de los botones se alineó a la izquierda por error. Se ajustará la proporción a 1/5 y 4/5 para dar más espacio a la lectura de correos, y se corregirán los botones.
+**Contexto:** El modal de detalle de correo tiene el texto centrado (debe ir a la izquierda), muestra una flecha en lugar de "De:", los botones no están en una línea y falta el botón de "Reenviar". Además, la lista de correos no tiene checkboxes para selección múltiple ni el indicador visual (película blanca) para los correos no leídos.
 
 **Qué cambiar:**
-- En `estilos.css`:
-  - Modificar el contenedor de la pantalla de correos para que el menú lateral ocupe `flex: 0 0 20%` (1/5) o un ancho fijo proporcional, y la lista de correos ocupe el `flex: 1` restante (4/5).
-  - Ajustar el tamaño de la letra de los botones del menú (`.btn-vista-correo`) para que quepan en una línea en este nuevo espacio más angosto.
-  - **Asegurar que el texto de los botones del menú esté centrado** (`text-align: center` o `justify-content: center`).
-  - Asegurar que todos los botones del menú (Recibidos, Enviados, etc.) tengan la regla general de botones:
-    - Fondo: `var(--color-botones)`.
-    - Texto: `var(--color-letras)`.
-    - Estado normal: sin sombra fija.
-    - Estado activo/hover: borde y halo verde (`var(--color-primario)`).
-- En `logica.js`:
-  - En la función que inyecta los correos de prueba, quitar el texto "Bienvenido a tu bandeja Stratos". En su lugar, el título de la lista debe mostrar el nombre de la carpeta seleccionada (ej. "Recibidos", "Enviados").
-  - Asegurar que el texto de la vista previa del correo (`.item-correo-previa`) esté alineado a la izquierda y respete el color de letras.
+
+1. **Título del Modal (index.html / logica.js):**
+   - En lugar de decir siempre "Detalle del correo", el título debe mostrar el nombre de la bandeja actual. Ejemplo: si estás en Recibidos, dirá "Detalle - Recibidos" (o el nombre de la carpeta correspondiente).
+
+2. **Contenido del Modal (index.html / logica.js):**
+   - Asegurar que el cuerpo del mensaje (`detalle-correo-cuerpo`) tenga `text-align: left` y use `var(--color-letras)`.
+   - Cambiar la flecha (→) del remitente para que diga claramente **"De: [remitente]"**.
+   - Agregar el botón **"REENVIAR"** junto a los botones de Responder y Archivar.
+   - Asegurar que los 4 botones (Responder, Reenviar, Archivar, Eliminar) queden en una sola línea, ajustando el tamaño de la letra si es necesario.
+
+3. **Checkboxes y Leído/No leído (index.html / estilos.css / logica.js):**
+   - Agregar un checkbox en la parte superior de la lista para "Seleccionar todos".
+   - Agregar un checkbox a cada fila de correo.
+   - Los correos no leídos deben llevar una "película" de fondo (un fondo gris/blanco sutil) para diferenciarlos visualmente. Al abrirlos (marcarlos como leídos), pierden ese fondo.
+   - **Lógica de apertura:** Al hacer doble clic o clic en un correo para abrirlo, el sistema debe marcarlo como leído y quitarle la película de fondo automáticamente. (Opcional: permitir volver a marcarlo como no leído desde el menú de opciones).
 
 **Dónde:**
-- `Colores-y-Estetica/estilos.css` (clases de la pantalla de correos y `.btn-vista-correo`).
-- `Motor-Logica-y-Acronimos/logica.js` (función `renderizarListaCorreos` y los datos de prueba).
+- `Cuerpo-y-Textos/index.html` (estructura de la lista y el modal).
+- `Colores-y-Estetica/estilos.css` (clases de los correos, checkboxes y modal).
+- `Motor-Logica-y-Acronimos/logica.js` (funciones de renderizado y apertura de correos).
 
 **Qué NO hacer:**
-- NO cambiar la estructura del modal de redactar.
-- NO alterar la lógica de envío.
+- NO cambiar la forma en que se envían los correos.
+- NO alterar el diseño del menú lateral.
 
 ---
 

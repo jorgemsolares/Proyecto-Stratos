@@ -3681,6 +3681,19 @@ function renderizarListaCorreos() {
         return;
     }
     lista.innerHTML = '';
+    // Checkbox "Seleccionar todos"
+    const cbTodos = document.createElement('label');
+    cbTodos.style.display = 'flex';
+    cbTodos.style.alignItems = 'center';
+    cbTodos.style.gap = '6px';
+    cbTodos.style.marginBottom = '10px';
+    cbTodos.style.fontSize = '0.85rem';
+    cbTodos.style.color = 'var(--color-letras)';
+    cbTodos.innerHTML = '<input type=\"checkbox\" id=\"cb-seleccionar-todos\" style=\"width:14px;height:14px;\"> <span>Seleccionar todos</span>';
+    cbTodos.querySelector('input').onchange = (e) => {
+        document.querySelectorAll('#lista-correos .item-correo input[type=\"checkbox\"]').forEach(cb => cb.checked = e.target.checked);
+    };
+    lista.appendChild(cbTodos);
     // Título de la carpeta seleccionada
     const tituloCarpeta = document.createElement('h3');
     tituloCarpeta.textContent = nombreCorreoVista(vistaCorreoActual);
@@ -3694,11 +3707,13 @@ function renderizarListaCorreos() {
         const fecha = c.fecha ? new Date(c.fecha) : null;
         const f = fecha ? (fecha.toLocaleDateString('es') + ' ' + fecha.toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' })) : '';
         // PUNTO 3 (19/10 tarde): fila Gmail — línea 1 remitente + fecha; línea 2 asunto; línea 3 previa (3 líneas máx).
-        d.innerHTML = '<div class="fila-correo-superior"><span class="item-correo-remitente"></span><span class="item-correo-fecha"></span></div><div class="item-correo-asunto"></div><div class="item-correo-previa"></div>';
+        d.innerHTML = '<label style="display:flex;align-items:center;gap:8px;width:100%;cursor:pointer;"><input type="checkbox" style="width:14px;height:14px;flex-shrink:0;margin:0;" onchange="event.stopPropagation();"><div class="fila-correo-superior"><span class="item-correo-remitente"></span><span class="item-correo-fecha"></span></div><div class="item-correo-asunto"></div><div class="item-correo-previa"></div></label>';
         d.querySelector('.item-correo-remitente').textContent = c.remitente || '';
         d.querySelector('.item-correo-asunto').textContent = c.asunto || '';
         d.querySelector('.item-correo-previa').textContent = c.previa || '';
         d.querySelector('.item-correo-fecha').textContent = f;
+        // Película de fondo para correos no leídos
+        if (!c.leido) d.classList.add('no-leido');
         // PUNTO 3 (19/10 noche 3): doble clic abre el modal (un clic solo marca la fila).
         d.setAttribute('data-correo-id', c.id);
         d.onclick = () => marcarFilaCorreo(c.id);
@@ -3725,12 +3740,17 @@ function abrirDetalleCorreo(id) {
     marcarFilaCorreo(id);
     const modal = document.getElementById('modal-detalle-correo');
     if (modal) modal.style.display = 'flex';
+    // Título del modal con el nombre de la bandeja actual
+    const t = document.getElementById('detalle-correo-titulo');
+    if (t) t.innerHTML = '<img src=\"../Colores-y-Estetica/Iconos/correos.svg\" alt=\"\" class=\"icono-inline\"> Detalle - ' + nombreCorreoVista(vistaCorreoActual);
     const a = document.getElementById('detalle-correo-asunto');
     const m = document.getElementById('detalle-correo-meta');
     const b = document.getElementById('detalle-correo-cuerpo');
     if (a) a.textContent = c.asunto || '';
-    if (m) m.textContent = (c.remitente || '') + ' → ' + ((c.destinatarios || []).join(', ') || '');
+    if (m) m.textContent = 'De: ' + (c.remitente || '') + (c.destinatarios && c.destinatarios.length ? ' → ' + c.destinatarios.join(', ') : '');
     if (b) b.textContent = c.cuerpo || c.previa || '';
+    // Marcar como leído y quitar película de fondo al abrir
+    c.leido = true;
     guardarCorreosLocales();
 }
 

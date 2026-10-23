@@ -202,6 +202,21 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 - **logica.js `renderizarListaCorreos()`:** agregado título de carpeta seleccionada (ej. "Recibidos", "Enviados") al inicio de la lista, usando `nombreCorreoVista(vistaCorreoActual)`.
 - **Verificación:** esprima OK logica.js (0 fallos).
 
+### 23/10/2026 — Punto 1: Corrección de la lista y modal de detalle de correos
+- **estilos.css `#detalle-correo-cuerpo`:** agregado `color: var(--color-letras)` para que el cuerpo del mensaje use el color de identidad corporativa.
+- **estilos.css `.item-correo.no-leido`:** agregada película de fondo (`background: rgba(255,255,255,0.06)`) para diferenciar visualmente los correos no leídos.
+- **estilos.css `.modal-footer`:** `flex-wrap: nowrap` y `justify-content: center` para que los 4 botones (Responder, Reenviar, Archivar, Eliminar) queden en una sola línea; tamaño de letra reducido a 0.85rem.
+- **index.html `modal-detalle-correo`:** el `<h3>` del título ahora tiene `id="detalle-correo-titulo"` para poder cambiarlo dinámicamente.
+- **logica.js `abrirDetalleCorreo(id)`:** 
+  - El título del modal ahora muestra "Detalle - [nombre de la bandeja]" (ej. "Detalle - Recibidos").
+  - La meta del remitente cambió de "remitente → destinatarios" a "De: remitente".
+  - Al abrir un correo se marca como leído (`c.leido = true`) y se guarda.
+- **logica.js `renderizarListaCorreos()`:**
+  - Agregado checkbox "Seleccionar todos" en la parte superior de la lista.
+  - Cada fila de correo ahora incluye un checkbox individual.
+  - Los correos no leídos reciben la clase `no-leido` (película de fondo).
+- **Verificación:** esprima OK logica.js (0 fallos).
+
 ---
 
 ## HISTORIAL ANTIGUO MOVIDO

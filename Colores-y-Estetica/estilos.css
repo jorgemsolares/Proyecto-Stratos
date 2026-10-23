@@ -1251,7 +1251,7 @@ button .icono-inline,
     font-size: 1.2rem;
     color: var(--color-letras, var(--color-texto));
 }
-#detalle-correo-cuerpo { text-align: left; }
+#detalle-correo-cuerpo { text-align: left; color: var(--color-letras); }
 
 .modal-body {
     padding: 20px;
@@ -1265,13 +1265,16 @@ button .icono-inline,
     background: rgba(0, 0, 0, 0.3);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+    gap: 8px;
+    flex-wrap: nowrap;
+    justify-content: center;
 }
 
 .modal-footer button {
-    flex: 1;
-    min-width: 100px;
+    flex: none;
+    min-width: 90px;
+    font-size: 0.85rem;
+    padding: 6px 10px;
 }
 
 .descripcion-tipo {
@@ -2205,6 +2208,9 @@ No toca .btn-principal / .btn-secundario existentes.
     font-size: 15px;
 }
 .item-correo:hover { border-color: rgba(0, 255, 136, 0.5); }
+/* Película de fondo para correos no leídos */
+.item-correo.no-leido { background: rgba(255, 255, 255, 0.06); }
+.item-correo.no-leido:hover { background: rgba(255, 255, 255, 0.1); }
 /* PUNTO 3 (19/10 noche 3): fila en visualización — borde iluminado permanente */
 .item-correo.viendo {
     border-color: var(--color-primario);
