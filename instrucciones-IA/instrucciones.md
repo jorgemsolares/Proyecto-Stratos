@@ -17,34 +17,52 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 
 ---
 
-## PUNTO 1: LÓGICA DEL SELLO "FIRMA" (INTERACCIÓN Y SUSTITUCIÓN)
+## PUNTO 1: REPARAR EL MODAL DE REDACCIÓN DE CORREOS
 
-**Contexto:** Se necesita programar el comportamiento del sello "FIRMA" en las áreas de escritura. El sello debe ser interactivo (como un botón) y sustituirse por el texto configurado.
+**Contexto:** Al presionar el botón "REDACTAR" (o Responder/Reenviar), el modal no se abre. La función en `logica.js` está lanzando un error de JavaScript antes de mostrar la ventana (posiblemente porque intenta leer `configuracionPersonal.firmaTexto` sin que exista o hay un error de sintaxis).
 
 **Qué cambiar:**
+- En `logica.js`, revisar la función que abre el modal de redacción (`abrirModalRedactar` o similar).
+- Asegurar que la variable `configuracionPersonal.firmaTexto` esté definida en `datos.js` (si no existe, crearla vacía: `firmaTexto: ""`).
+- Corregir cualquier error de referencia que esté deteniendo la ejecución de la función y evitar que se rompa el flujo.
 
-1. **Estructura base del área de texto:**
-   - Al abrir un área de escritura (o al responder/reenviar), el sistema debe preparar el texto con esta estructura:
-     - 5 líneas en blanco.
-     - Una marca visual (sello) con la palabra **"FIRMA"**.
-     - Si es respuesta/reenvío, el texto del correo original debajo del sello.
-
-2. **Estilo visual del Sello "FIRMA":**
-   - En `estilos.css`, darle el estilo de marca de agua (letra gris tenue, mayúsculas, subrayada, un poco más grande que el texto normal).
-   - **Efecto Hover/Active:** Aplicar los mismos efectos de la regla de botones (escala 1.08 al pasar el mouse y halo al hacer clic) para que el usuario sepa que es un elemento interactivo.
-
-3. **Interacción (Clic):**
-   - **Si hay firma configurada:** Al hacer clic en el sello "FIRMA", el sistema debe **SUSTITUIR** el sello por el texto guardado en `configuracionPersonal.firmaTexto`.
-   - **Si es automático:** Si el checkbox `config-firma-automatica` está activo, la sustitución se hace sola al abrir el área de texto (el usuario no tiene que hacer clic).
-   - **Si NO hay firma configurada:** Al hacer clic en el sello (o si el sistema intenta insertar la firma automática y no la encuentra), se debe mostrar un aviso Amarillo y redirigir al usuario a la pantalla de Configuración, haciendo foco en el recuadro de la firma.
-
-**Dónde:**
-- `Motor-Logica-y-Acronimos/logica.js`: lógica de apertura del área de texto y el evento clic del sello.
-- `Cuerpo-y-Textos/index.html` y `Colores-y-Estetica/estilos.css`: estructura y diseño del sello.
+**Cómo debe quedar:**
+- Al presionar "REDACTAR", el modal debe abrirse correctamente, mostrando los campos (De, Para, CC, CCo, Asunto) y el área de texto con el sello de la Firma.
 
 **Qué NO hacer:**
-- NO modificar la pantalla de Configuración (eso ya está listo).
-- NO borrar el texto original del correo al sustituir la firma.
+- NO cambiar el diseño del modal.
+- NO alterar la lógica de los otros botones.
+
+---
+
+## PUNTO 2: REPARAR LOS BOTONES DE COLOR EN IDENTIDAD CORPORATIVA
+
+**Contexto:** Los botones de "Fondo", "Letras" y "Botones" en la pantalla de Identidad Corporativa no están aplicando el color seleccionado.
+
+**Qué cambiar:**
+- En `logica.js`, revisar la función `aplicarCambioEstetico` (o la que asigne el color). Asegurar que la variable `colorSeleccionado` esté capturando bien el valor y que esté llamando a `aplicarCambiosVisuales()` correctamente.
+
+**Cómo debe quedar:**
+- Al seleccionar un color de la paleta y presionar "Fondo", "Letras" o "Botones", el sistema debe aplicar el cambio en vivo y reflejarlo en la vista previa.
+
+**Qué NO hacer:**
+- NO alterar las reglas de la Sección H (tamaños y colores base del sistema).
+- NO cambiar el diseño de la paleta.
+
+---
+
+## PUNTO 3: REPARAR EL BOTÓN "EDITAR" EN EL ORGANIGRAMA PERSONAL
+
+**Contexto:** Al dar doble clic en el nodo raíz (el del usuario) en el Organigrama Personal, se abre el detalle, pero al presionar "Editar", no hace nada. Debería redirigir a "Mi Perfil".
+
+**Qué cambiar:**
+- En `logica.js`, en la función `editarContactoDesdeDetalle()` (o la que maneje ese botón), agregar una validación: si el contacto que se está editando tiene el mismo `id` que el `usuarioActivo`, cerrar el modal y redirigir a la pantalla `registro-invitacion` (Mi Perfil).
+
+**Cómo debe quedar:**
+- Al editar tu propio nodo, el sistema te lleva a tu Perfil. Al editar un contacto, abre el modal de edición normal.
+
+**Qué NO hacer:**
+- NO modificar la estructura del Organigrama.
 
 ---
 

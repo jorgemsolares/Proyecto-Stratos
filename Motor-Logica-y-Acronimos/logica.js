@@ -2802,6 +2802,12 @@ function editarContactoDesdeDetalle() {
         mostrarAvisoInmediato("No hay contacto seleccionado", "error");
         return;
     }
+    // PUNTO 3 instrucciones.md: si se edita el propio usuario, redirigir a Mi Perfil
+    if (contactoEnEdicion.id === usuarioActivo.id) {
+        cerrarModalDetalle();
+        irAPantalla('registro-invitacion');
+        return;
+    }
     const modalDetalle = document.getElementById('modal-detalle-contacto');
     if (modalDetalle) modalDetalle.style.display = 'none';
     const modal = document.getElementById('modal-contacto');
@@ -4047,7 +4053,7 @@ function abrirRedaccionCorreo() {
     if (aviso) { aviso.innerText = ''; aviso.className = 'aviso-letrero'; aviso.style.maxHeight = '0'; }
     poblarDestinatariosCorreo();
     validarDestinatarioCorreo();
-    const firma = (configuracionPersonal && configuracionPersonal.firma) || (usuarioActivo && usuarioActivo.firma) || '';
+    const firma = (configuracionPersonal && configuracionPersonal.firmaTexto) || (usuarioActivo && usuarioActivo.firmaTexto) || '';
     if (firma && mensaje) {
         mensaje.textContent = (mensaje.textContent || '') + (mensaje.textContent ? '\n\n-- \n' : '') + firma;
     }

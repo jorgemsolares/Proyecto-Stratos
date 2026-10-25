@@ -236,6 +236,12 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 - **estilos.css `.sello-firma`:** estilo de marca de agua (letra gris tenue `rgba(255,255,255,0.45)`, mayúsculas, subrayada, 1.3rem). Hover: escala 1.08. Active: halo verde Stratos.
 - **Verificación:** esprima OK logica.js (0 fallos).
 
+### 25/10/2026 — instrucciones.md (PUNTOS 1, 2 y 3): Reparación de modal de redacción, botones de color y edición de contacto
+- **PUNTO 1 — hecho:** `logica.js` línea 4056: `configuracionPersonal.firma` corregido a `configuracionPersonal.firmaTexto` para consistencia con la propiedad definida en `datos.js` (línea 471, `firmaTexto: ""` ya existía).
+- **PUNTO 2 — hecho:** `index.html` líneas 193-195: los botones "Fondo", "Letras", "Botones" ahora pasan `event` a `aplicarCambioEstetico(tipo, event)` para que `asignarDestino` reciba el botón presionado y aplique la clase `activo`. `colorSeleccionado` se captura correctamente en `seleccionarColor()` y `aplicarCambiosVisuales()` se llama después del switch.
+- **PUNTO 3 — hecho:** `logica.js` `editarContactoDesdeDetalle()`: agregada validación al inicio: si `contactoEnEdicion.id === usuarioActivo.id`, cierra el modal y redirige a `registro-invitacion` (Mi Perfil).
+- **Verificación:** esprima OK logica.js y datos.js (0 problemas).
+
 ---
 
 ## HISTORIAL ANTIGUO MOVIDO
