@@ -17,29 +17,29 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 
 ---
 
-## PUNTO ÚNICO: REPARAR LA APLICACIÓN DEL COLOR DE FONDO EN IDENTIDAD CORPORATIVA
+## PUNTO ÚNICO: ARREGLAR EL BOTÓN "FONDO" EN IDENTIDAD CORPORATIVA
 
-**Contexto:** Al presionar el botón "Fondo" en Identidad Corporativa, el color seleccionado no se aplica correctamente al área de trabajo. Además, al recargar la página (F5), el sistema no mantiene el color de fondo guardado y vuelve al color por defecto. Esto ocurre porque la función `aplicarCambiosVisuales` está intentando aplicar el color a elementos incorrectos (como el fondo general de la app) o se está ejecutando antes de que los datos carguen.
+**Contexto:** Al presionar el botón "Fondo" en Identidad Corporativa, el color no se aplica al contenedor de trabajo. El problema está en el evento del botón y en cómo la función `aplicarCambiosVisuales` pisa el CSS.
 
 **Qué cambiar:**
-1. **En `logica.js`, función `aplicarCambiosVisuales()`:**
-   - Asegurar que el color de fondo (`configuracionEstetica.colorFondo`) se aplique **ÚNICAMENTE** al contenedor de trabajo (`#app-container`).
-   - **NO** aplicar el color de fondo al `body` (el fondo general debe quedarse con el color oscuro de Stratos).
-   - Verificar que al presionar el botón "Fondo", el color se aplique en tiempo real al área de trabajo.
-   - Asegurar que, al recargar la página (F5), la función que carga los datos guardados (en `window.onload`) llame a `aplicarCambiosVisuales()` después de haber cargado la identidad desde el `localStorage`.
+1. En `Cuerpo-y-Textos/index.html` (línea donde están los botones de Fondo/Letras/Botones):
+   - Asegurar que los botones llamen a la función pasando el `event` correctamente. Debe verse así:
+     `onclick="aplicarCambioEstetico('fondo', event)"`
+     `onclick="aplicarCambioEstetico('texto', event)"`
+     `onclick="aplicarCambioEstetico('botones', event)"`
 
-2. **Limpieza de la prueba anterior:**
-   - No es necesario borrar el localStorage a mano. Al corregir la función, el sistema aplicará los colores correctos que estén guardados en la identidad actual.
+2. En `Motor-Logica-y-Acronimos/logica.js` (función `aplicarCambiosVisuales`):
+   - **ELIMINAR** la línea `contenedor.style.backgroundColor = configuracionEstetica.colorFondo;` (porque pisa el CSS y causa conflicto).
+   - **DEJAR** la línea `root.setProperty('--color-fondo', configuracionEstetica.colorFondo);` para que el CSS haga su trabajo.
 
 **Cómo debe quedar:**
-- Al seleccionar un color y presionar "Fondo", el fondo del área de trabajo (el recuadro central) cambia inmediatamente.
-- Al recargar la página (F5), el color de fondo se mantiene si está guardado en la identidad.
-- El fondo general de la app sigue siendo el color oscuro de Stratos.
+- Al seleccionar un color y presionar "Fondo", el color se aplica inmediatamente al recuadro central (`#app-container`), y el botón se queda marcado como activo.
+- Al recargar la página (F5), el color se mantiene.
+- El fondo general de la app (el `body`) sigue siendo el color oscuro de Stratos.
 
 **Qué NO hacer:**
-- NO cambiar el diseño del resto de la pantalla.
-- NO alterar los colores de los textos o botones.
-- NO modificar la lógica de otras pantallas.
+- NO cambiar el fondo general (`body`).
+- NO tocar la lógica de otros botones o pantallas.
 
 ---
 

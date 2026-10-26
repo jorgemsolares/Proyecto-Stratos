@@ -246,6 +246,10 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 - **Punto Único — hecho:** `estilos.css` `#app-container` ahora usa `background: var(--color-fondo, rgba(255, 255, 255, 0.03))` para pintar el color de fondo en el área de trabajo. `logica.js` `aplicarCambiosVisuales()` aplica `configuracionEstetica.colorFondo` únicamente a `#app-container` (nunca al `body`), tanto al pulsar "Fondo" en tiempo real como al recargar la página (window.onload ya lo invoca tras cargar la identidad desde localStorage). El fondo general de la app (`body`) se mantiene oscuro.
 - **Verificación:** esprima OK logica.js y datos.js (0 problemas).
 
+### 26/10/2026 — instrucciones.md (PUNTO ÚNICO): Arreglar el botón "Fondo" en Identidad Corporativa
+- **Punto Único — hecho:** `index.html` líneas 193-195 ya pasan `event` a `aplicarCambioEstetico('fondo'/'texto'/'botones', event)`. `logica.js` `aplicarCambiosVisuales()` se corrigió: se eliminó `contenedor.style.backgroundColor = configuracionEstetica.colorFondo;` (que pisaba el CSS) y se conserva `root.setProperty('--color-fondo', configuracionEstetica.colorFondo);` para que el CSS de `#app-container` (`var(--color-fondo, ...)`) pinte el área de trabajo. El `body` no se toca.
+- **Verificación:** esprima OK logica.js y datos.js (0 problemas).
+
 ---
 
 ## HISTORIAL ANTIGUO MOVIDO
