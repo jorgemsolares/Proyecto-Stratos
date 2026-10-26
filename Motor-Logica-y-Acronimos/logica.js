@@ -2925,6 +2925,12 @@ function aplicarCambiosVisuales() {
     if (configuracionEstetica.colorTexto) { root.setProperty('--color-texto', configuracionEstetica.colorTexto); root.setProperty('--color-letras', configuracionEstetica.colorTexto); }
     // PUNTO 2: el color de botones del usuario vive en --color-botones (además de --color-primario por compatibilidad).
     if (configuracionEstetica.colorBotones) { root.setProperty('--color-primario', configuracionEstetica.colorBotones); root.setProperty('--color-botones', configuracionEstetica.colorBotones); }
+    // PUNTO ÚNICO instrucciones.md: el color de fondo se aplica ÚNICAMENTE al contenedor de trabajo (#app-container),
+    // nunca al body (el fondo general de la app se mantiene con el color oscuro de Stratos).
+    const contenedor = document.getElementById('app-container');
+    if (contenedor && configuracionEstetica.colorFondo) {
+        contenedor.style.backgroundColor = configuracionEstetica.colorFondo;
+    }
     // Solo se inyectan las variables CSS en la raíz; el CSS pinta automáticamente textos y botones.
     // Ya no se recorre elemento por elemento (se eliminaron los querySelectorAll masivos de textos y botones).
 }

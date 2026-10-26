@@ -17,52 +17,29 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 
 ---
 
-## PUNTO 1: REPARAR EL MODAL DE REDACCIÓN DE CORREOS
+## PUNTO ÚNICO: REPARAR LA APLICACIÓN DEL COLOR DE FONDO EN IDENTIDAD CORPORATIVA
 
-**Contexto:** Al presionar el botón "REDACTAR" (o Responder/Reenviar), el modal no se abre. La función en `logica.js` está lanzando un error de JavaScript antes de mostrar la ventana (posiblemente porque intenta leer `configuracionPersonal.firmaTexto` sin que exista o hay un error de sintaxis).
-
-**Qué cambiar:**
-- En `logica.js`, revisar la función que abre el modal de redacción (`abrirModalRedactar` o similar).
-- Asegurar que la variable `configuracionPersonal.firmaTexto` esté definida en `datos.js` (si no existe, crearla vacía: `firmaTexto: ""`).
-- Corregir cualquier error de referencia que esté deteniendo la ejecución de la función y evitar que se rompa el flujo.
-
-**Cómo debe quedar:**
-- Al presionar "REDACTAR", el modal debe abrirse correctamente, mostrando los campos (De, Para, CC, CCo, Asunto) y el área de texto con el sello de la Firma.
-
-**Qué NO hacer:**
-- NO cambiar el diseño del modal.
-- NO alterar la lógica de los otros botones.
-
----
-
-## PUNTO 2: REPARAR LOS BOTONES DE COLOR EN IDENTIDAD CORPORATIVA
-
-**Contexto:** Los botones de "Fondo", "Letras" y "Botones" en la pantalla de Identidad Corporativa no están aplicando el color seleccionado.
+**Contexto:** Al presionar el botón "Fondo" en Identidad Corporativa, el color seleccionado no se aplica correctamente al área de trabajo. Además, al recargar la página (F5), el sistema no mantiene el color de fondo guardado y vuelve al color por defecto. Esto ocurre porque la función `aplicarCambiosVisuales` está intentando aplicar el color a elementos incorrectos (como el fondo general de la app) o se está ejecutando antes de que los datos carguen.
 
 **Qué cambiar:**
-- En `logica.js`, revisar la función `aplicarCambioEstetico` (o la que asigne el color). Asegurar que la variable `colorSeleccionado` esté capturando bien el valor y que esté llamando a `aplicarCambiosVisuales()` correctamente.
+1. **En `logica.js`, función `aplicarCambiosVisuales()`:**
+   - Asegurar que el color de fondo (`configuracionEstetica.colorFondo`) se aplique **ÚNICAMENTE** al contenedor de trabajo (`#app-container`).
+   - **NO** aplicar el color de fondo al `body` (el fondo general debe quedarse con el color oscuro de Stratos).
+   - Verificar que al presionar el botón "Fondo", el color se aplique en tiempo real al área de trabajo.
+   - Asegurar que, al recargar la página (F5), la función que carga los datos guardados (en `window.onload`) llame a `aplicarCambiosVisuales()` después de haber cargado la identidad desde el `localStorage`.
+
+2. **Limpieza de la prueba anterior:**
+   - No es necesario borrar el localStorage a mano. Al corregir la función, el sistema aplicará los colores correctos que estén guardados en la identidad actual.
 
 **Cómo debe quedar:**
-- Al seleccionar un color de la paleta y presionar "Fondo", "Letras" o "Botones", el sistema debe aplicar el cambio en vivo y reflejarlo en la vista previa.
+- Al seleccionar un color y presionar "Fondo", el fondo del área de trabajo (el recuadro central) cambia inmediatamente.
+- Al recargar la página (F5), el color de fondo se mantiene si está guardado en la identidad.
+- El fondo general de la app sigue siendo el color oscuro de Stratos.
 
 **Qué NO hacer:**
-- NO alterar las reglas de la Sección H (tamaños y colores base del sistema).
-- NO cambiar el diseño de la paleta.
-
----
-
-## PUNTO 3: REPARAR EL BOTÓN "EDITAR" EN EL ORGANIGRAMA PERSONAL
-
-**Contexto:** Al dar doble clic en el nodo raíz (el del usuario) en el Organigrama Personal, se abre el detalle, pero al presionar "Editar", no hace nada. Debería redirigir a "Mi Perfil".
-
-**Qué cambiar:**
-- En `logica.js`, en la función `editarContactoDesdeDetalle()` (o la que maneje ese botón), agregar una validación: si el contacto que se está editando tiene el mismo `id` que el `usuarioActivo`, cerrar el modal y redirigir a la pantalla `registro-invitacion` (Mi Perfil).
-
-**Cómo debe quedar:**
-- Al editar tu propio nodo, el sistema te lleva a tu Perfil. Al editar un contacto, abre el modal de edición normal.
-
-**Qué NO hacer:**
-- NO modificar la estructura del Organigrama.
+- NO cambiar el diseño del resto de la pantalla.
+- NO alterar los colores de los textos o botones.
+- NO modificar la lógica de otras pantallas.
 
 ---
 

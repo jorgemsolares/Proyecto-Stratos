@@ -242,6 +242,10 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 - **PUNTO 3 — hecho:** `logica.js` `editarContactoDesdeDetalle()`: agregada validación al inicio: si `contactoEnEdicion.id === usuarioActivo.id`, cierra el modal y redirige a `registro-invitacion` (Mi Perfil).
 - **Verificación:** esprima OK logica.js y datos.js (0 problemas).
 
+### 26/10/2026 — instrucciones.md (PUNTO ÚNICO): Reparación del color de fondo en Identidad Corporativa
+- **Punto Único — hecho:** `estilos.css` `#app-container` ahora usa `background: var(--color-fondo, rgba(255, 255, 255, 0.03))` para pintar el color de fondo en el área de trabajo. `logica.js` `aplicarCambiosVisuales()` aplica `configuracionEstetica.colorFondo` únicamente a `#app-container` (nunca al `body`), tanto al pulsar "Fondo" en tiempo real como al recargar la página (window.onload ya lo invoca tras cargar la identidad desde localStorage). El fondo general de la app (`body`) se mantiene oscuro.
+- **Verificación:** esprima OK logica.js y datos.js (0 problemas).
+
 ---
 
 ## HISTORIAL ANTIGUO MOVIDO

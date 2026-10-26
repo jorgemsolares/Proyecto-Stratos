@@ -214,7 +214,7 @@ body {
     width: 90%;
     max-width: 480px;
     padding: 30px;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--color-fondo, rgba(255, 255, 255, 0.03));
     border-radius: 20px;
     text-align: center;
     box-shadow: var(--sombra-elevada);
