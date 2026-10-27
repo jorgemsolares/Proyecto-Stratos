@@ -258,6 +258,10 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 - **Punto Único — hecho:** `logica.js` `analizarColoresLogoAutomatico()` corregido: (1) filtra blanco/negro por brillo (umbral >245 / <10) en el escaneo inicial; (2) agrupa colores similares con distancia RGB < 50 promediando ponderado por conteo; (3) cuenta los colores reales tras el agrupamiento; (4) aplica los 3 casos matemáticos (0: base Stratos, 1: 1 color + 2 mezclas, 2: 2 colores + combinaciones). `generarPaleta()` renderiza los 8 colores del algoritmo.
 - **Verificación:** esprima OK logica.js y datos.js (0 problemas).
 
+### 26/10/2026 — instrucciones.md (PUNTO ÚNICO): Mejorar el contraste de las combinaciones en la paleta
+- **Punto Único — hecho:** `logica.js` agregó funciones globales `calcularLuminosidad(hex)` (luminancia relativa WCAG 0-1) y `obtenerPorcentajeMezcla(colorBase)` (60% si el color base es oscuro, 75% si es claro). En `analizarColoresLogoAutomatico()`, las mezclas de los Casos 1 y 2 usan ahora el porcentaje dinámico según la luminosidad del color base del logo: 60% base + 40% Stratos si es oscuro (más fuerza al Rojo/Verde), 75% base + 25% Stratos si es claro. El Caso 0 no se modifica (no hay color base del logo).
+- **Verificación:** esprima OK logica.js y datos.js (0 problemas).
+
 ---
 
 ## HISTORIAL ANTIGUO MOVIDO

@@ -17,25 +17,26 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 
 ---
 
-## PUNTO ÚNICO: CORRECCIÓN DEL ALGORITMO DE LA PALETA (AGRUPACIÓN DE COLORES SIMILARES)
+## PUNTO ÚNICO: MEJORAR EL CONTRASTE DE LAS COMBINACIONES EN LA PALETA
 
-**Contexto:** El intento anterior de la paleta falló porque el código no agrupó los colores similares antes de contar. Si el logo tiene muchos tonos de un mismo color (por ejemplo, una foto), el sistema los cuenta todos como diferentes, se hace un lío y no aplica las reglas de los 3 casos.
+**Contexto:** Las mezclas de colores (los últimos dos cuadros de la paleta) están quedando muy apagadas cuando el color extraído del logo es oscuro. Para garantizar que los colores Stratos (Rojo y Verde) resalten, la mezcla debe ser dinámica dependiendo de la luminosidad del color base.
 
 **Qué cambiar:**
-En `Motor-Logica-y-Acronimos/logica.js`, dentro de la función `analizarColoresLogoAutomatico()` (o el método usado para extraer colores):
-
-1. **Filtrar Blanco y Negro:** Eliminar cualquier color que sea muy claro (blanco) o muy oscuro (negro) del escaneo inicial, para no contaminar la paleta.
-2. **Agrupar Similares:** Implementar una función de agrupación matemática. Si dos colores son muy parecidos (por ejemplo, su distancia en el espacio RGB es menor a un umbral, como 50), deben fusionarse en uno solo, promediando su color.
-3. **Contar los Reales:** Una vez agrupados, contar cuántos colores quedan realmente.
-4. **Aplicar los Casos (0, 1 y 2+):** Aplicar exactamente las combinaciones matemáticas que se definieron antes (Caso 0: todo Stratos, Caso 1: 75% del color + 25% Verde/Rojo, Caso 2: los dos colores más pesados + las combinaciones).
+- En `Motor-Logica-y-Acronimos/logica.js`, en la función que construye la paleta (donde se hacen las combinaciones de 75%/25%):
+  1. Calcular la luminosidad del Color 1 y del Color 2 (los extraídos del logo).
+  2. **Si el color base es oscuro:** La mezcla debe ser **60% Color Base + 40% Color Stratos** (para que el Rojo o el Verde tengan más fuerza).
+  3. **Si el color base es claro:** La mezcla se mantiene en **75% Color Base + 25% Color Stratos**.
 
 **Dónde:**
-- `Motor-Logica-y-Acronimos/logica.js`: en la función de análisis de colores.
+- `Motor-Logica-y-Acronimos/logica.js`: funciones de generación de paleta y combinación de colores.
+
+**Cómo debe quedar:**
+- Los dos últimos cuadros de la paleta se verán más vivos y contrastantes, sin importar si el logo tiene colores oscuros o claros.
 
 **Qué NO hacer:**
-- NO modificar el diseño de los cuadros de la paleta.
-- NO cambiar los colores base de Stratos definidos en `datos.js`.
-- NO alterar la lógica de selección de colores por parte del usuario.
+- NO cambiar la lógica de los Casos 0, 1 y 2.
+- NO alterar los colores base de Stratos.
+- NO cambiar el diseño de los cuadros.
 
 ---
 

@@ -2369,6 +2369,22 @@ function mezclarColores(hex1, hex2, porcentaje1) {
     return rgbToHex(r, g, b);
 }
 
+// Calcula la luminancia relativa WCAG de un color HEX (0 = negro, 1 = blanco)
+function calcularLuminosidad(hex) {
+    const c = hexToRgb(hex);
+    const lineal = (channel) => {
+        const s = channel / 255;
+        return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+    };
+    return 0.2126 * lineal(c.r) + 0.7152 * lineal(c.g) + 0.0722 * lineal(c.b);
+}
+
+// Devuelve el porcentaje del color base para la mezcla: 60% si el base es oscuro
+// (para que el Rojo/Verde Stratos tengan más fuerza), 75% si es claro.
+function obtenerPorcentajeMezcla(colorBase) {
+    return calcularLuminosidad(colorBase) < 0.5 ? 60 : 75;
+}
+
 function analizarColoresLogoAutomatico() {
     const imgElement = document.getElementById('vista-previa-logo');
     if (!imgElement || !imgElement.src || imgElement.style.display === 'none') return;
@@ -2458,10 +2474,11 @@ function analizarColoresLogoAutomatico() {
     } else if (coloresLogo.length === 1) {
         // Caso 1: un solo color
         const c1 = coloresLogo[0];
+        const pct1 = obtenerPorcentajeMezcla(c1);
         paleta = [
             c1,                                         // 1. Color encontrado
-            mezclarColores(c1, COLOR_VERDE_STRATOS, 75),   // 2. 75% c1 + 25% Verde Stratos
-            mezclarColores(c1, COLOR_ROJO_STRATOS, 75),    // 3. 75% c1 + 25% Rojo Stratos
+            mezclarColores(c1, COLOR_VERDE_STRATOS, pct1),   // 2. Color base + Verde Stratos (dinámico por luminosidad)
+            mezclarColores(c1, COLOR_ROJO_STRATOS, pct1),    // 3. Color base + Rojo Stratos (dinámico por luminosidad)
             '#FFFFFF',                                  // 4. Blanco
             '#000000',                                  // 5. Negro
             COLOR_AZUL_FONDO_GENERAL,                   // 6. Azul Fondo General
@@ -2472,6 +2489,8 @@ function analizarColoresLogoAutomatico() {
         // Caso 2: dos o más colores (tomar solo los 2 de mayor peso)
         const c1 = coloresLogo[0];
         const c2 = coloresLogo[1];
+        const pctC1 = obtenerPorcentajeMezcla(c1);
+        const pctC2 = obtenerPorcentajeMezcla(c2);
         paleta = [
             c1,                                         // 1. Color 1
             c2,                                         // 2. Color 2
@@ -2479,8 +2498,8 @@ function analizarColoresLogoAutomatico() {
             '#000000',                                  // 4. Negro
             COLOR_VERDE_STRATOS,                        // 5. Verde Stratos
             COLOR_NARANJA_STRATOS,                      // 6. Naranja Stratos
-            mezclarColores(c1, COLOR_ROJO_STRATOS, 75), // 7. 75% Color 1 + 25% Rojo Stratos
-            mezclarColores(c2, COLOR_VERDE_STRATOS, 75) // 8. 75% Color 2 + 25% Verde Stratos
+            mezclarColores(c1, COLOR_ROJO_STRATOS, pctC1), // 7. Color 1 + Rojo Stratos (dinámico por luminosidad)
+            mezclarColores(c2, COLOR_VERDE_STRATOS, pctC2) // 8. Color 2 + Verde Stratos (dinámico por luminosidad)
         ];
     }
 
