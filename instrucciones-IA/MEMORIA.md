@@ -250,6 +250,10 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 - **Punto Único — hecho:** `index.html` líneas 193-195 ya pasan `event` a `aplicarCambioEstetico('fondo'/'texto'/'botones', event)`. `logica.js` `aplicarCambiosVisuales()` se corrigió: se eliminó `contenedor.style.backgroundColor = configuracionEstetica.colorFondo;` (que pisaba el CSS) y se conserva `root.setProperty('--color-fondo', configuracionEstetica.colorFondo);` para que el CSS de `#app-container` (`var(--color-fondo, ...)`) pinte el área de trabajo. El `body` no se toca.
 - **Verificación:** esprima OK logica.js y datos.js (0 problemas).
 
+### 26/10/2026 — instrucciones.md (PUNTO ÚNICO): Rediseño del algoritmo de la paleta de colores (diversidad)
+- **Punto Único — hecho:** `datos.js` agregó constantes globales `COLOR_VERDE_STRATOS`, `COLOR_ROJO_STRATOS`, `COLOR_NARANJA_STRATOS`, `COLOR_AZUL_FONDO_GENERAL`, `COLOR_AZUL_AREA_UTIL`. `logica.js` agregó funciones globales `hexToRgb` y `mezclarColores(hex1, hex2, porcentaje1)`, y reescribió `analizarColoresLogoAutomatico()` con los 3 casos matemáticos (Caso 0: logo blanco/negro → 8 colores base; Caso 1: un color → color + 2 mezclas + blanco/negro/azules/naranja; Caso 2: 2+ colores → 2 colores + blanco/negro/verde/naranja + 2 mezclas). `generarPaleta()` renderiza exactamente los 8 colores del algoritmo sin rellenar con colores de seguridad.
+- **Verificación:** esprima OK logica.js y datos.js (0 problemas).
+
 ---
 
 ## HISTORIAL ANTIGUO MOVIDO

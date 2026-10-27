@@ -2351,6 +2351,24 @@ function obtenerComplementario(hex) {
     return rgbToHex(255 - rgb.r, 255 - rgb.g, 255 - rgb.b);
 }
 
+// Convierte un color HEX (#RRGGBB o #RGB) a objeto {r,g,b}
+function hexToRgb(hex) {
+    const clean = hex.replace('#', '');
+    const num = parseInt(clean.length === 3 ? clean.split('').map(c => c + c).join('') : clean, 16);
+    return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
+}
+
+// Mezcla dos colores HEX con un porcentaje (ej. 75% color1 + 25% color2)
+function mezclarColores(hex1, hex2, porcentaje1) {
+    const c1 = hexToRgb(hex1);
+    const c2 = hexToRgb(hex2);
+    const p = porcentaje1 / 100;
+    const r = Math.round(c1.r * p + c2.r * (1 - p));
+    const g = Math.round(c1.g * p + c2.g * (1 - p));
+    const b = Math.round(c1.b * p + c2.b * (1 - p));
+    return rgbToHex(r, g, b);
+}
+
 function analizarColoresLogoAutomatico() {
     const imgElement = document.getElementById('vista-previa-logo');
     if (!imgElement || !imgElement.src || imgElement.style.display === 'none') return;
@@ -2382,87 +2400,57 @@ function analizarColoresLogoAutomatico() {
         coloresMap[hex] = (coloresMap[hex] || 0) + 1;
     }
     
-    // Helpers: luminancia y contraste (WCAG)
-    function hexToRgb(hex) {
-        const clean = hex.replace('#', '');
-        const num = parseInt(clean.length === 3 ? clean.split('').map(c => c + c).join('') : clean, 16);
-        return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
-    }
-    function linearizeChannel(c) {
-        const s = c / 255;
-        return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
-    }
-    function luminance(hex) {
-        const { r, g, b } = hexToRgb(hex);
-        return 0.2126 * linearizeChannel(r) + 0.7152 * linearizeChannel(g) + 0.0722 * linearizeChannel(b);
-    }
-    function contrastRatio(a, b) {
-        const L1 = luminance(a);
-        const L2 = luminance(b);
-        const light = Math.max(L1, L2);
-        const dark = Math.min(L1, L2);
-        return (light + 0.05) / (dark + 0.05);
-    }
-
-    // Determina los colores detectados y selecciona hasta 3 colores del logo (conteo exacto)
-    let coloresPrincipales = Object.keys(coloresMap)
+    // Construir lista de colores del logo: descartar blanco/negro puro, ordenar por presencia (mayor a menor)
+    let coloresLogo = Object.keys(coloresMap)
         .map(hex => ({ hex: hex.toUpperCase(), count: coloresMap[hex] }))
+        .filter(item => item.hex !== '#FFFFFF' && item.hex !== '#000000')
         .sort((a, b) => b.count - a.count)
         .map(item => item.hex);
 
-    const totalColoresDetectados = coloresPrincipales.length;
-    const tieneBlanco = coloresPrincipales.includes('#FFFFFF');
-    const tieneNegro = coloresPrincipales.includes('#000000');
+    let paleta = [];
 
-    // Excluye blanco/negro al elegir los colores del logo y cuenta las restantes
-    const coloresFiltrados = coloresPrincipales.filter(hex => hex !== '#FFFFFF' && hex !== '#000000');
-    let seleccionLogo = [];
-    if (coloresFiltrados.length > 3) {
-        seleccionLogo = coloresFiltrados.slice(0, 3);
+    if (coloresLogo.length === 0) {
+        // Caso 0: logo puro blanco y negro (o sin colores detectados)
+        paleta = [
+            '#FFFFFF',                                  // 1. Blanco
+            '#000000',                                  // 2. Negro
+            COLOR_AZUL_FONDO_GENERAL,                   // 3. Azul Fondo General
+            COLOR_AZUL_AREA_UTIL,                       // 4. Azul Área Útil
+            COLOR_NARANJA_STRATOS,                      // 5. Naranja
+            COLOR_ROJO_STRATOS,                         // 6. Rojo
+            COLOR_VERDE_STRATOS,                        // 7. Verde Stratos
+            mezclarColores(COLOR_VERDE_STRATOS, COLOR_AZUL_AREA_UTIL, 75)  // 8. 75% Verde + 25% Azul Área Útil
+        ];
+    } else if (coloresLogo.length === 1) {
+        // Caso 1: un solo color
+        const c1 = coloresLogo[0];
+        paleta = [
+            c1,                                         // 1. Color encontrado
+            mezclarColores(c1, COLOR_VERDE_STRATOS, 75),   // 2. 75% c1 + 25% Verde Stratos
+            mezclarColores(c1, COLOR_ROJO_STRATOS, 75),    // 3. 75% c1 + 25% Rojo Stratos
+            '#FFFFFF',                                  // 4. Blanco
+            '#000000',                                  // 5. Negro
+            COLOR_AZUL_FONDO_GENERAL,                   // 6. Azul Fondo General
+            COLOR_AZUL_AREA_UTIL,                       // 7. Azul Área Útil
+            COLOR_NARANJA_STRATOS                       // 8. Naranja
+        ];
     } else {
-        seleccionLogo = coloresFiltrados.slice(0);
+        // Caso 2: dos o más colores (tomar solo los 2 de mayor peso)
+        const c1 = coloresLogo[0];
+        const c2 = coloresLogo[1];
+        paleta = [
+            c1,                                         // 1. Color 1
+            c2,                                         // 2. Color 2
+            '#FFFFFF',                                  // 3. Blanco
+            '#000000',                                  // 4. Negro
+            COLOR_VERDE_STRATOS,                        // 5. Verde Stratos
+            COLOR_NARANJA_STRATOS,                      // 6. Naranja Stratos
+            mezclarColores(c1, COLOR_ROJO_STRATOS, 75), // 7. 75% Color 1 + 25% Rojo Stratos
+            mezclarColores(c2, COLOR_VERDE_STRATOS, 75) // 8. 75% Color 2 + 25% Verde Stratos
+        ];
     }
 
-    // Incluye siempre blanco y negro como entradas separadas
-    const basePaleta = [...seleccionLogo];
-
-    // Prepara los candidatos de seguridad y los puntúa por contraste contra los colores del logo
-    // coloresTrasladado a datos.js -> COLORES_SEGURIDAD_ANALISIS
-    const coloresSeguridad = COLORES_SEGURIDAD_ANALISIS;
-
-    // Si la selección del logo está vacía (logo solo blanco/negro o muy simple), toma 6 colores de seguridad
-    let paletaLogo = [];
-    if (basePaleta.length === 0) {
-        paletaLogo = coloresSeguridad.slice(0, 6);
-    } else {
-        paletaLogo = [...basePaleta];
-        // Puntúa los colores de seguridad por la suma de contrastes contra los colores del logo
-        const scored = coloresSeguridad.map(c => {
-            const score = basePaleta.reduce((acc, lc) => acc + contrastRatio(c, lc), 0);
-            return { color: c, score };
-        }).sort((a, b) => b.score - a.score);
-
-        for (let s of scored) {
-            if (paletaLogo.length >= 6) break;
-            if (!paletaLogo.includes(s.color)) paletaLogo.push(s.color);
-        }
-    }
-
-    // Paleta final: hasta 6 colores del logo/de apoyo, luego blanco y negro (únicos)
-    const final = [];
-    paletaLogo.forEach(c => { if (!final.includes(c)) final.push(c); });
-    if (!final.includes('#FFFFFF')) final.push('#FFFFFF');
-    if (!final.includes('#000000')) final.push('#000000');
-
-    // Asegura un total de 8 agregando los colores de seguridad restantes (diversidad)
-    let idx = 0;
-    while (final.length < 8 && idx < coloresSeguridad.length) {
-        const c = coloresSeguridad[idx];
-        if (!final.includes(c)) final.push(c);
-        idx++;
-    }
-
-    coloresExtraidos = final.slice(0, 8).map(h => h.toUpperCase());
+    coloresExtraidos = paleta.slice(0, 8).map(h => h.toUpperCase());
     generarPaleta();
     mostrarAvisoInmediato("✓ Paleta sugerida con colores de contraste (luminosidad)", "exito");
 }
@@ -2473,30 +2461,11 @@ function analizarColoresLogoAutomatico() {
 function generarPaleta() {
     const contenedor = document.getElementById('paleta-colores-centrada');
     if (!contenedor || !Array.isArray(coloresExtraidos)) return;
-    
+
     contenedor.innerHTML = '';
     const coloresUnicos = [...new Set(coloresExtraidos)];
-    let paletaFinal = [...coloresUnicos];
-    // lista trasladada a datos.js -> COLORES_SEGURIDAD_PALETA
-    const coloresSeguridad = COLORES_SEGURIDAD_PALETA;
-    
-    if (!paletaFinal.includes('#FFFFFF')) paletaFinal.push('#FFFFFF');
-    if (!paletaFinal.includes('#000000')) paletaFinal.push('#000000');
-    
-    let coloresNoBW = paletaFinal.filter(color => color !== '#FFFFFF' && color !== '#000000');
-    let paletaOrdenada = coloresNoBW.slice(0, 6);
-    if (!paletaOrdenada.includes('#FFFFFF')) paletaOrdenada.push('#FFFFFF');
-    if (!paletaOrdenada.includes('#000000')) paletaOrdenada.push('#000000');
-    
-    let i = 0;
-    while (paletaOrdenada.length < 8 && i < coloresSeguridad.length) {
-        if (!paletaOrdenada.includes(coloresSeguridad[i])) {
-            paletaOrdenada.push(coloresSeguridad[i]);
-        }
-        i++;
-    }
-    
-    paletaOrdenada.forEach(color => {
+    // Renderizar exactamente los 8 colores definidos por el algoritmo de la paleta
+    coloresUnicos.slice(0, 8).forEach(color => {
         const div = document.createElement('div');
         div.className = 'color-cuadro';
         div.style.backgroundColor = color;
@@ -2504,8 +2473,8 @@ function generarPaleta() {
         div.onclick = (e) => seleccionarColor(color, e.target);
         contenedor.appendChild(div);
     });
-    
-    coloresExtraidos = paletaOrdenada;
+
+    coloresExtraidos = coloresUnicos.slice(0, 8);
 }
 
 // ==========================================

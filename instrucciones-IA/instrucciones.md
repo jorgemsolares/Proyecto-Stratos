@@ -17,29 +17,37 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 
 ---
 
-## PUNTO ÚNICO: ARREGLAR EL BOTÓN "FONDO" EN IDENTIDAD CORPORATIVA
+## PUNTO ÚNICO: REDISEÑO DEL ALGORITMO DE LA PALETA DE COLORES (DIVERSIDAD)
 
-**Contexto:** Al presionar el botón "Fondo" en Identidad Corporativa, el color no se aplica al contenedor de trabajo. El problema está en el evento del botón y en cómo la función `aplicarCambiosVisuales` pisa el CSS.
+**Contexto:** Actualmente, el algoritmo de la paleta (`analizarColoresLogoAutomatico`) está metiendo colores repetidos (varios tonos de azul, o varios blancos) porque no descarta los colores similares del logo. El Arquitecto ha definido una regla exacta de combinatoria y pesos para garantizar que siempre haya 8 colores variados.
 
 **Qué cambiar:**
-1. En `Cuerpo-y-Textos/index.html` (línea donde están los botones de Fondo/Letras/Botones):
-   - Asegurar que los botones llamen a la función pasando el `event` correctamente. Debe verse así:
-     `onclick="aplicarCambioEstetico('fondo', event)"`
-     `onclick="aplicarCambioEstetico('texto', event)"`
-     `onclick="aplicarCambioEstetico('botones', event)"`
+- En `logica.js`, reescribir la lógica de la función `analizarColoresLogoAutomatico` (y `generarPaleta` si es necesario) para que construya la paleta de 8 colores basándose en la siguiente regla:
 
-2. En `Motor-Logica-y-Acronimos/logica.js` (función `aplicarCambiosVisuales`):
-   - **ELIMINAR** la línea `contenedor.style.backgroundColor = configuracionEstetica.colorFondo;` (porque pisa el CSS y causa conflicto).
-   - **DEJAR** la línea `root.setProperty('--color-fondo', configuracionEstetica.colorFondo);` para que el CSS haga su trabajo.
+1. **Escaneo:** Analizar los colores del logo. Descartar el blanco puro (`#FFFFFF`) y el negro puro (`#000000`).
+2. **Pesos:** Si quedan 2 o más colores, ordenarlos de mayor a menor presencia en el logo.
+3. **Construcción de la paleta según el caso:**
+   - **Caso 0 (Cero colores, logo puro blanco y negro):** 
+     1. Blanco, 2. Negro, 3. Azul Fondo General, 4. Azul Área Útil, 5. Naranja, 6. Rojo, 7. Verde Stratos, 8. Combinación (75% Verde Stratos + 25% Azul Área Útil).
+   - **Caso 1 (Un solo color encontrado, ej. Azul):**
+     1. Color encontrado, 2. Combinación (75% Color encontrado + 25% Verde Stratos), 3. Combinación (75% Color encontrado + 25% Rojo Stratos), 4. Blanco, 5. Negro, 6. Azul Fondo General, 7. Azul Área Útil, 8. Naranja.
+   - **Caso 2 (Dos o más colores encontrados):** (Tomar solo los 2 de mayor peso).
+     1. Color 1, 2. Color 2, 3. Blanco, 4. Negro, 5. Verde Stratos, 6. Naranja Stratos, 7. Combinación (75% Color 1 + 25% Rojo Stratos), 8. Combinación (75% Color 2 + 25% Verde Stratos).
+
+**Funciones de utilidad:**
+- Crear o usar una función que mezcle dos colores HEX con un porcentaje (ej. 75% / 25%) para generar las combinaciones.
+
+**Dónde:**
+- `Motor-Logica-y-Acronimos/logica.js`: funciones de análisis de logo y paleta.
+- `Motor-Logica-y-Acronimos/datos.js`: si es necesario, mover las listas de colores base (Azul Fondo, Azul Útil, Naranja, Rojo, Verde) para que sean constantes globales.
 
 **Cómo debe quedar:**
-- Al seleccionar un color y presionar "Fondo", el color se aplica inmediatamente al recuadro central (`#app-container`), y el botón se queda marcado como activo.
-- Al recargar la página (F5), el color se mantiene.
-- El fondo general de la app (el `body`) sigue siendo el color oscuro de Stratos.
+- Al cargar un logo, la paleta siempre debe mostrar 8 colores variados (sin repetir el mismo tono del logo, salvo en los Casos 0 y 1 que es imposible).
+- La paleta debe respetar los 3 casos matemáticos definidos.
 
 **Qué NO hacer:**
-- NO cambiar el fondo general (`body`).
-- NO tocar la lógica de otros botones o pantallas.
+- NO cambiar el diseño de los cuadros de la paleta.
+- NO alterar la forma en que el usuario selecciona los colores.
 
 ---
 

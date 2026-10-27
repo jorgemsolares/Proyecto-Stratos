@@ -18,6 +18,12 @@
 const COLORES_SEGURIDAD_ANALISIS = ["#0f3460", "#16213e", "#00ff88", "#e94560", "#533483", "#ff6b6b", "#4ecdc4", "#ffd166", "#ffa500", "#800080", "#1a1a2e"];
 // Colores de seguridad usados al generar la paleta visible (orden y contenido originales, sin modificar)
 const COLORES_SEGURIDAD_PALETA = ["#1a1a2e", "#16213e", "#0f3460", "#e94560", "#533483", "#00ff88", "#ff6b6b", "#4ecdc4", "#ffd166", "#ffa500", "#800080"];
+// Colores base de la paleta (constantes globales para el algoritmo de diversidad)
+const COLOR_VERDE_STRATOS = '#00ff88';
+const COLOR_ROJO_STRATOS = '#e53935';
+const COLOR_NARANJA_STRATOS = '#ff8c00';
+const COLOR_AZUL_FONDO_GENERAL = '#0f3460';
+const COLOR_AZUL_AREA_UTIL = '#16213e';
 // Formatos de imagen permitidos para el logo
 const TIPOS_IMAGEN_VALIDOS = ['image/jpeg', 'image/jpg', 'image/png'];
 
