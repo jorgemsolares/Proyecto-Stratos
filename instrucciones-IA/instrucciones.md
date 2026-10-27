@@ -17,26 +17,40 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 
 ---
 
-## PUNTO ÚNICO: MEJORAR EL CONTRASTE DE LAS COMBINACIONES EN LA PALETA
+## PUNTO ÚNICO: REDISEÑO DE LA PALETA E INSERCIÓN DE BOTONES DE CONTROL DE IDENTIDAD
 
-**Contexto:** Las mezclas de colores (los últimos dos cuadros de la paleta) están quedando muy apagadas cuando el color extraído del logo es oscuro. Para garantizar que los colores Stratos (Rojo y Verde) resalten, la mezcla debe ser dinámica dependiendo de la luminosidad del color base.
+**Contexto:** Se necesita optimizar el espacio en la pantalla de Identidad Corporativa. Los cuadros de la paleta pasarán a ser rectángulos horizontales para liberar altura, y en ese espacio se insertarán dos botones de control con una distribución específica.
 
 **Qué cambiar:**
-- En `Motor-Logica-y-Acronimos/logica.js`, en la función que construye la paleta (donde se hacen las combinaciones de 75%/25%):
-  1. Calcular la luminosidad del Color 1 y del Color 2 (los extraídos del logo).
-  2. **Si el color base es oscuro:** La mezcla debe ser **60% Color Base + 40% Color Stratos** (para que el Rojo o el Verde tengan más fuerza).
-  3. **Si el color base es claro:** La mezcla se mantiene en **75% Color Base + 25% Color Stratos**.
 
-**Dónde:**
-- `Motor-Logica-y-Acronimos/logica.js`: funciones de generación de paleta y combinación de colores.
+1. **Paleta de Colores (CSS):**
+   - En `estilos.css`, cambiar la clase `.color-cuadro` (o la que renderice la paleta). Eliminar `aspect-ratio: 1`.
+   - Aplicar `height: 40px; width: 100%;` (o similar) para que se vean como rectángulos horizontales en lugar de cuadrados.
+   - Ajustar el `grid` de la paleta para que los 8 rectángulos quepan en una fila, ocupando el ancho disponible.
+
+2. **Botones de Control (HTML y CSS):**
+   - En `index.html`, justo arriba de la paleta de colores (en el espacio liberado), agregar un contenedor (fila) para los botones.
+   - **Botón 1 (Izquierda):** `Mantener colores actuales`. Clase `.btn-principal` (verde). 
+   - **Botón 2 (Derecha):** `Volver a colores Stratos`. Clase `.btn-peligro` (rojo).
+   - **Distribución (CSS):** El contenedor debe tener un `display: grid` con `grid-template-columns: repeat(7, 1fr)`.
+     - El Botón 1 debe ocupar las columnas 2, 3 y 4 (ancho 3/7).
+     - El Botón 2 debe ocupar las columnas 6, 7 y 8 (ancho 3/7).
+     - El espacio entre ellos (columna 5) quedará vacío (1/7).
+   - **Tamaño y texto:** Ambos botones deben tener el mismo tamaño que los botones de Fondo/Letras/Botones. Asegurar que el texto se ajuste al ancho (reduciendo el tamaño de letra si es necesario para que quepa en una sola línea).
+
+3. **Lógica (JS):**
+   - En `logica.js`, crear la función `mantenerColoresActuales()`: No altera los colores, solo confirma el guardado con el nuevo logo.
+   - En `logica.js`, crear la función `restaurarColoresStratos()`: Resetea las variables `configuracionEstetica.colorFondo`, `colorTexto` y `colorBotones` a sus valores por defecto (`#0b0f19`, `#ffffff`, `#00ff88`), llama a `aplicarCambiosVisuales()` y actualiza la vista previa.
+   - Conectar los botones a estas funciones.
 
 **Cómo debe quedar:**
-- Los dos últimos cuadros de la paleta se verán más vivos y contrastantes, sin importar si el logo tiene colores oscuros o claros.
+- La paleta se ve como una fila de 8 rectángulos.
+- Justo arriba de la paleta, hay dos botones distribuidos según la regla 3/7 - 1/7 - 3/7, con sus textos legibles en una sola línea y los efectos de botón correspondientes (verde y rojo).
 
 **Qué NO hacer:**
-- NO cambiar la lógica de los Casos 0, 1 y 2.
-- NO alterar los colores base de Stratos.
-- NO cambiar el diseño de los cuadros.
+- NO cambiar el tamaño total de la pantalla ni agrandar el contenedor.
+- NO alterar el algoritmo de generación de colores (los 3 casos ya están hechos).
+- NO cambiar el diseño del recuadro de carga de logo.
 
 ---
 

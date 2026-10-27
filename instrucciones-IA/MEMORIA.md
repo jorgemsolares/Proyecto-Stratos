@@ -262,6 +262,10 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 - **Punto Único — hecho:** `logica.js` agregó funciones globales `calcularLuminosidad(hex)` (luminancia relativa WCAG 0-1) y `obtenerPorcentajeMezcla(colorBase)` (60% si el color base es oscuro, 75% si es claro). En `analizarColoresLogoAutomatico()`, las mezclas de los Casos 1 y 2 usan ahora el porcentaje dinámico según la luminosidad del color base del logo: 60% base + 40% Stratos si es oscuro (más fuerza al Rojo/Verde), 75% base + 25% Stratos si es claro. El Caso 0 no se modifica (no hay color base del logo).
 - **Verificación:** esprima OK logica.js y datos.js (0 problemas).
 
+### 26/10/2026 — instrucciones.md (PUNTO ÚNICO): Rediseño de la paleta e inserción de botones de control de identidad
+- **Punto Único — hecho:** `estilos.css` `.color-cuadro` pasó de `aspect-ratio: 1` a `height: 40px; width: 100%;` (rectángulos horizontales). Agregado `.controles-paleta-botones` con `display: grid; grid-template-columns: repeat(7, 1fr);` y ajuste de texto de botones (`font-size 0.85rem`, `white-space nowrap`, `text-overflow ellipsis`). `index.html` insertó contenedor con 2 botones justo arriba de la paleta: Botón 1 "Mantener colores actuales" (`.btn-principal`, `grid-column: 2 / 5`) y Botón 2 "Volver a colores Stratos" (`.btn-peligro`, `grid-column: 6 / 9`). `logica.js` agregó `mantenerColoresActuales()` y `restaurarColoresStratos()` (resetea `colorFondo`/`colorTexto`/`colorBotones` a `#0b0f19`/`#ffffff`/`#00ff88`, llama `aplicarCambiosVisuales()` y actualiza vistas previas).
+- **Verificación:** esprima OK logica.js y datos.js (0 problemas).
+
 ---
 
 ## HISTORIAL ANTIGUO MOVIDO

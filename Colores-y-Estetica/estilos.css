@@ -820,12 +820,28 @@ textarea {
 
 .color-cuadro {
     width: 100%;
-    aspect-ratio: 1;
+    height: 40px;
     border-radius: 8px;
     cursor: pointer;
     transition: all var(--transicion-rapida);
     border: 3px solid transparent;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Contenedor de botones de control de identidad (distribución 3/7 - 1/7 - 3/7) */
+.controles-paleta-botones {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin: 10px 0 8px 0;
+}
+.controles-paleta-botones button {
+    width: 100%;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 8px 4px;
 }
 
 .color-cuadro:hover {

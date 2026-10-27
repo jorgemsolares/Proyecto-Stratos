@@ -2531,6 +2531,35 @@ function generarPaleta() {
 }
 
 // ==========================================
+// 25.1 BOTONES DE CONTROL DE IDENTIDAD (paleta de colores)
+// ==========================================
+// Mantener colores actuales: confirma el guardado sin alterar los colores.
+function mantenerColoresActuales() {
+    mostrarAvisoInmediato("✓ Colores actuales mantenidos.", "exito");
+}
+
+// Restaurar colores Stratos: resetea fondo, letras y botones a sus valores por defecto.
+function restaurarColoresStratos() {
+    configuracionEstetica.colorFondo = "#0b0f19";
+    configuracionEstetica.colorTexto = "#ffffff";
+    configuracionEstetica.colorBotones = "#00ff88";
+    if (typeof identidadCorporativa !== 'undefined') {
+        identidadCorporativa.colorFondo = "#0b0f19";
+        identidadCorporativa.colorTexto = "#ffffff";
+        identidadCorporativa.colorBotones = "#00ff88";
+    }
+    aplicarCambiosVisuales();
+    // Actualizar vistas previas de la pantalla de Identidad
+    const pf = document.getElementById('preview-fondo');
+    const pt = document.getElementById('preview-texto');
+    const pb = document.getElementById('preview-botones');
+    if (pf) pf.style.backgroundColor = "#0b0f19";
+    if (pt) pt.style.backgroundColor = "#ffffff";
+    if (pb) pb.style.backgroundColor = "#00ff88";
+    mostrarAvisoInmediato("✓ Colores restaurados a Stratos por defecto.", "exito");
+}
+
+// ==========================================
 // 26. GUARDAR CONTACTO (versión unificada)
 // La lógica única de guardar/actualizar contactos vive en la sección 32.
 // Esta declaración duplicada se eliminó para evitar conflicto de definiciones.// 27. RENDERIZAR ORGANIGRAMA PERSONAL (dibuja el nodo del usuario y su primera línea de colaboradores)
