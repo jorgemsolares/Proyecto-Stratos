@@ -2372,19 +2372,19 @@ function mezclarColores(hex1, hex2, porcentaje1) {
 function analizarColoresLogoAutomatico() {
     const imgElement = document.getElementById('vista-previa-logo');
     if (!imgElement || !imgElement.src || imgElement.style.display === 'none') return;
-    
+
     if (!imgElement.complete) {
         imgElement.onload = () => analizarColoresLogoAutomatico();
         return;
     }
-    
+
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     canvas.width = 100;
     canvas.height = 100;
     ctx.drawImage(imgElement, 0, 0, 100, 100);
     const data = ctx.getImageData(0, 0, 100, 100).data;
-    
+
     const coloresMap = {};
     for (let i = 0; i < data.length; i += 4) {
         const r = data[i];
@@ -2392,23 +2392,57 @@ function analizarColoresLogoAutomatico() {
         const b = data[i + 2];
         const a = data[i + 3];
         if (a < 200) continue;
-        
+
+        // 1. Filtrar blanco y negro: descartar colores muy claros o muy oscuros del escaneo inicial
+        const brillo = (r + g + b) / 3;
+        if (brillo > 245 || brillo < 10) continue;
+
         const rQ = Math.round(r / 16) * 16;
         const gQ = Math.round(g / 16) * 16;
         const bQ = Math.round(b / 16) * 16;
         const hex = rgbToHex(rQ, gQ, bQ);
         coloresMap[hex] = (coloresMap[hex] || 0) + 1;
     }
-    
-    // Construir lista de colores del logo: descartar blanco/negro puro, ordenar por presencia (mayor a menor)
-    let coloresLogo = Object.keys(coloresMap)
-        .map(hex => ({ hex: hex.toUpperCase(), count: coloresMap[hex] }))
-        .filter(item => item.hex !== '#FFFFFF' && item.hex !== '#000000')
+
+    // Función local: distancia euclidiana simplificada en RGB entre dos colores {r,g,b}
+    function distanciaRGB(c1, c2) {
+        return Math.sqrt(Math.pow(c1.r - c2.r, 2) + Math.pow(c1.g - c2.g, 2) + Math.pow(c1.b - c2.b, 2));
+    }
+
+    // 2. Agrupar similares: si dos colores están a distancia < 50 en RGB, fusionarlos promediando ponderado por conteo
+    const UMBRAL_SIMILARIDAD = 50;
+    let grupos = []; // cada uno: { r, g, b, count }
+
+    Object.keys(coloresMap).forEach(hex => {
+        const color = hexToRgb(hex);
+        const count = coloresMap[hex];
+        let grupoEncontrado = null;
+        for (let g of grupos) {
+            if (distanciaRGB(color, g) < UMBRAL_SIMILARIDAD) {
+                grupoEncontrado = g;
+                break;
+            }
+        }
+        if (grupoEncontrado) {
+            const total = grupoEncontrado.count + count;
+            grupoEncontrado.r = Math.round((grupoEncontrado.r * grupoEncontrado.count + color.r * count) / total);
+            grupoEncontrado.g = Math.round((grupoEncontrado.g * grupoEncontrado.count + color.g * count) / total);
+            grupoEncontrado.b = Math.round((grupoEncontrado.b * grupoEncontrado.count + color.b * count) / total);
+            grupoEncontrado.count = total;
+        } else {
+            grupos.push({ r: color.r, g: color.g, b: color.b, count });
+        }
+    });
+
+    // 3. Contar los Reales: colores del logo ya agrupados, ordenados por presencia (mayor a menor)
+    let coloresLogo = grupos
+        .map(g => ({ hex: rgbToHex(g.r, g.g, g.b), count: g.count }))
         .sort((a, b) => b.count - a.count)
         .map(item => item.hex);
 
     let paleta = [];
 
+    // 4. Aplicar los Casos (0, 1 y 2+) con las combinaciones matemáticas definidas
     if (coloresLogo.length === 0) {
         // Caso 0: logo puro blanco y negro (o sin colores detectados)
         paleta = [
