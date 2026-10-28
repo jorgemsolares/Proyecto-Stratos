@@ -266,6 +266,13 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 - **Punto Único — hecho:** `estilos.css` `.color-cuadro` pasó de `aspect-ratio: 1` a `height: 40px; width: 100%;` (rectángulos horizontales). Agregado `.controles-paleta-botones` con `display: grid; grid-template-columns: repeat(7, 1fr);` y ajuste de texto de botones (`font-size 0.85rem`, `white-space nowrap`, `text-overflow ellipsis`). `index.html` insertó contenedor con 2 botones justo arriba de la paleta: Botón 1 "Mantener colores actuales" (`.btn-principal`, `grid-column: 2 / 5`) y Botón 2 "Volver a colores Stratos" (`.btn-peligro`, `grid-column: 6 / 9`). `logica.js` agregó `mantenerColoresActuales()` y `restaurarColoresStratos()` (resetea `colorFondo`/`colorTexto`/`colorBotones` a `#0b0f19`/`#ffffff`/`#00ff88`, llama `aplicarCambiosVisuales()` y actualiza vistas previas).
 - **Verificación:** esprima OK logica.js y datos.js (0 problemas).
 
+### 28/10/2026 — instrucciones.md (PUNTOS 1, 2 y 3): Identidad Corporativa — textos, paleta y botones de control
+- **Punto 1 — hecho:** `estilos.css` `input::placeholder`/`textarea::placeholder` ahora usan `var(--color-letras)` con `opacity: 0.6`; agregadas reglas `.controles-destino-color p` y `.preview-colores span` con `color: var(--color-letras)`. `logica.js` `aplicarCambiosVisuales()` aplica el color de letras dinámico a los `p` y `span` de la sección de paleta.
+- **Punto 2 — hecho:** `estilos.css` `.color-cuadro` vuelve a cuadrado (`width: 100%; aspect-ratio: 1;`), quitando `height: 40px;`; `.contenedor-paleta-ocho` conserva `repeat(8, 1fr)`.
+- **Punto 3 — hecho:** `estilos.css` `.controles-paleta-botones button` igualado a `.btn-opcion` (Fondo/Letras/Botones): `padding: 8px 12px`, `font-size: 0.8rem`, `border: 2px solid transparent`; el texto se ajusta en una sola línea (Sección H).
+- **Verificación:** esprima OK logica.js y datos.js (0 problemas).
+
+---
 ---
 
 ## HISTORIAL ANTIGUO MOVIDO

@@ -2981,6 +2981,11 @@ function aplicarCambiosVisuales() {
     // y nunca se toca el body (fondo general oscuro de Stratos).
     // Solo se inyectan las variables CSS en la raíz; el CSS pinta automáticamente textos y botones.
     // Ya no se recorre elemento por elemento (se eliminaron los querySelectorAll masivos de textos y botones).
+
+    // PUNTO 1 instrucciones.md (28/10): los p y span de la sección de paleta toman el color de letras dinámicamente
+    document.querySelectorAll('.controles-destino-color p, .preview-colores span').forEach(function (el) {
+        el.style.color = configuracionEstetica.colorTexto ? configuracionEstetica.colorTexto : '';
+    });
 }
 
 function asignarDestino(tipo, botonPresionado) {

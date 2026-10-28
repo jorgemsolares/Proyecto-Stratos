@@ -38,3 +38,9 @@
 - Todos los textos deben usar `var(--color-letras)`.
 - Los botones deben usar `var(--color-botones)`.
 - Las únicas excepciones son las alertas semánticas (barra superior) y la marca de agua.
+
+## Reglas de Redacción de Instrucciones (Para el Arquitecto y la IA)
+1. **Cero interpretaciones:** Cada instrucción debe decir exactamente QUÉ hacer, DÓNDE y CÓMO debe quedar visualmente. Si hay espacio para la duda, la IA buscará el atajo (ej. usar un `prompt()` en lugar de crear un menú real).
+2. **Un cambio a la vez:** No se agrupan múltiples correcciones en un solo texto. Si un cambio requiere tocar varias partes, primero se hace una, se aprueba, y luego la siguiente.
+3. **Revisión previa obligatoria:** Antes de enviar el texto, se debe leer en voz alta y preguntarse: "¿Hay alguna forma en que la IA pueda malinterpretar esto?". Si la respuesta es sí, se reescribe.
+4. **Prohibiciones explícitas:** Siempre incluir un apartado de "Qué NO hacer" para bloquear los atajos (ej. "NO uses alert()", "NO uses prompt()", "NO modifiques archivos que no se mencionen").

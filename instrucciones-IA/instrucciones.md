@@ -17,40 +17,47 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 
 ---
 
-## PUNTO ÚNICO: REDISEÑO DE LA PALETA E INSERCIÓN DE BOTONES DE CONTROL DE IDENTIDAD
+## PUNTO 1: CORREGIR COLOR DE TEXTOS Y PLACEHOLDERS EN IDENTIDAD Y FORMULARIOS
 
-**Contexto:** Se necesita optimizar el espacio en la pantalla de Identidad Corporativa. Los cuadros de la paleta pasarán a ser rectángulos horizontales para liberar altura, y en ese espacio se insertarán dos botones de control con una distribución específica.
+**Contexto:** Varios textos en la pantalla de Identidad Corporativa y los *placeholders* de los inputs no están heredando el color definido en `--color-letras`.
 
 **Qué cambiar:**
+- En `estilos.css`, agregar reglas específicas para que:
+  - Los textos de la paleta (ej. "Asignar color seleccionado a:", "Fondo", "Letras", "Botones") usen `var(--color-letras)`.
+  - Todos los `::placeholder` de los inputs y textareas usen `var(--color-letras)` con opacidad (ej. `opacity: 0.6`) para que se distingan pero respeten el color.
+- En `logica.js`, en la función `aplicarCambiosVisuales()`:
+  - Asegurar que el selector de elementos incluya los `p` y `span` de la sección de la paleta para que tomen el color dinámicamente.
 
-1. **Paleta de Colores (CSS):**
-   - En `estilos.css`, cambiar la clase `.color-cuadro` (o la que renderice la paleta). Eliminar `aspect-ratio: 1`.
-   - Aplicar `height: 40px; width: 100%;` (o similar) para que se vean como rectángulos horizontales en lugar de cuadrados.
-   - Ajustar el `grid` de la paleta para que los 8 rectángulos quepan en una fila, ocupando el ancho disponible.
+---
 
-2. **Botones de Control (HTML y CSS):**
-   - En `index.html`, justo arriba de la paleta de colores (en el espacio liberado), agregar un contenedor (fila) para los botones.
-   - **Botón 1 (Izquierda):** `Mantener colores actuales`. Clase `.btn-principal` (verde). 
-   - **Botón 2 (Derecha):** `Volver a colores Stratos`. Clase `.btn-peligro` (rojo).
-   - **Distribución (CSS):** El contenedor debe tener un `display: grid` con `grid-template-columns: repeat(7, 1fr)`.
-     - El Botón 1 debe ocupar las columnas 2, 3 y 4 (ancho 3/7).
-     - El Botón 2 debe ocupar las columnas 6, 7 y 8 (ancho 3/7).
-     - El espacio entre ellos (columna 5) quedará vacío (1/7).
-   - **Tamaño y texto:** Ambos botones deben tener el mismo tamaño que los botones de Fondo/Letras/Botones. Asegurar que el texto se ajuste al ancho (reduciendo el tamaño de letra si es necesario para que quepa en una sola línea).
+## PUNTO 2: VOLVER LA PALETA A CUADRADOS
 
-3. **Lógica (JS):**
-   - En `logica.js`, crear la función `mantenerColoresActuales()`: No altera los colores, solo confirma el guardado con el nuevo logo.
-   - En `logica.js`, crear la función `restaurarColoresStratos()`: Resetea las variables `configuracionEstetica.colorFondo`, `colorTexto` y `colorBotones` a sus valores por defecto (`#0b0f19`, `#ffffff`, `#00ff88`), llama a `aplicarCambiosVisuales()` y actualiza la vista previa.
-   - Conectar los botones a estas funciones.
+**Contexto:** Los rectángulos horizontales no se ven bien estéticamente. Se deben volver a los cuadrados, aunque la pantalla se alargue un poco.
 
-**Cómo debe quedar:**
-- La paleta se ve como una fila de 8 rectángulos.
-- Justo arriba de la paleta, hay dos botones distribuidos según la regla 3/7 - 1/7 - 3/7, con sus textos legibles en una sola línea y los efectos de botón correspondientes (verde y rojo).
+**Qué cambiar:**
+- En `estilos.css`, en la clase `.color-cuadro`:
+  - Quitar el `height: 40px; width: 100%;`.
+  - Volver a poner `aspect-ratio: 1;` (o el tamaño cuadrado que tenía antes).
+  - Ajustar el `grid` (`.contenedor-paleta-ocho`) para que vuelva a mostrar los cuadros en el formato anterior.
+
+---
+
+## PUNTO 3: IGUALAR EL TAMAÑO DE LOS BOTONES DE CONTROL (MANTENER Y VOLVER)
+
+**Contexto:** Los botones "Mantener colores actuales" y "Volver a colores Stratos" se ven más grandes que los de Fondo, Letras y Botones. El texto no se ajusta al tamaño y eso rompe el centrado visual.
+
+**Qué cambiar:**
+- En `estilos.css`, en la clase o clase(s) de estos dos botones nuevos:
+  - Igualar exactamente el `padding`, el `font-size` y el `border` a los de los botones de Fondo/Letras/Botones.
+  - Asegurar que el texto se ajuste al ancho del botón (reduciendo el tamaño de letra si es necesario para que quepa en una sola línea, respetando la regla de la Sección H).
+
+**Dónde:**
+- `Colores-y-Estetica/estilos.css`: clases de la paleta y de los botones de control.
+- `Motor-Logica-y-Acronimos/logica.js`: función `aplicarCambiosVisuales()`.
 
 **Qué NO hacer:**
-- NO cambiar el tamaño total de la pantalla ni agrandar el contenedor.
-- NO alterar el algoritmo de generación de colores (los 3 casos ya están hechos).
-- NO cambiar el diseño del recuadro de carga de logo.
+- NO cambiar la lógica de la paleta (los 3 casos).
+- NO alterar el tamaño de la pantalla general.
 
 ---
 
