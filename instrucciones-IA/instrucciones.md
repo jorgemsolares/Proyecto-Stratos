@@ -17,47 +17,31 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 
 ---
 
-## PUNTO 1: CORREGIR COLOR DE TEXTOS Y PLACEHOLDERS EN IDENTIDAD Y FORMULARIOS
+## PUNTO ÚNICO: HACER FUNCIONAR LOS BOTONES DEL ÁREA DE FIRMA (SIN PROMPT)
 
-**Contexto:** Varios textos en la pantalla de Identidad Corporativa y los *placeholders* de los inputs no están heredando el color definido en `--color-letras`.
-
-**Qué cambiar:**
-- En `estilos.css`, agregar reglas específicas para que:
-  - Los textos de la paleta (ej. "Asignar color seleccionado a:", "Fondo", "Letras", "Botones") usen `var(--color-letras)`.
-  - Todos los `::placeholder` de los inputs y textareas usen `var(--color-letras)` con opacidad (ej. `opacity: 0.6`) para que se distingan pero respeten el color.
-- En `logica.js`, en la función `aplicarCambiosVisuales()`:
-  - Asegurar que el selector de elementos incluya los `p` y `span` de la sección de la paleta para que tomen el color dinámicamente.
-
----
-
-## PUNTO 2: VOLVER LA PALETA A CUADRADOS
-
-**Contexto:** Los rectángulos horizontales no se ven bien estéticamente. Se deben volver a los cuadrados, aunque la pantalla se alargue un poco.
+**Contexto:** En la pantalla de Configuración, el área de Firma tiene botones (Tipografía, Estilo, Tamaño, Color) que actualmente abren una ventana genérica del navegador (`prompt()`). Deben funcionar exactamente como los botones del Slogan, mostrando menús desplegables propios de la interfaz de Stratos.
 
 **Qué cambiar:**
-- En `estilos.css`, en la clase `.color-cuadro`:
-  - Quitar el `height: 40px; width: 100%;`.
-  - Volver a poner `aspect-ratio: 1;` (o el tamaño cuadrado que tenía antes).
-  - Ajustar el `grid` (`.contenedor-paleta-ocho`) para que vuelva a mostrar los cuadros en el formato anterior.
+1. En `index.html` (sección `pantalla-configuracion`, área de la firma):
+   - Quitar el `onclick` que llama a la función del `prompt()`. 
+   - Agregar la estructura HTML necesaria para los menús desplegables (selects o listas personalizadas) que se abrirán al presionar cada botón.
+2. En `logica.js`:
+   - Eliminar cualquier uso de `prompt()` o `alert()` relacionado con los botones de la firma.
+   - Crear las funciones para:
+     - **Tipografía:** Desplegar la misma lista de fuentes que usa el Slogan.
+     - **Estilo:** Desplegar Normal, Negrita, Cursiva, Negrita Cursiva.
+     - **Tamaño:** Desplegar una lista de tamaños (ej. 10px, 12px, 14px, 16px, 18px).
+     - **Color:** Desplegar la paleta visual de colores (los mismos 8 colores que usa el Slogan).
+   - Al seleccionar una opción de estos menús, aplicar el cambio al texto dentro del recuadro de la firma.
 
----
-
-## PUNTO 3: IGUALAR EL TAMAÑO DE LOS BOTONES DE CONTROL (MANTENER Y VOLVER)
-
-**Contexto:** Los botones "Mantener colores actuales" y "Volver a colores Stratos" se ven más grandes que los de Fondo, Letras y Botones. El texto no se ajusta al tamaño y eso rompe el centrado visual.
-
-**Qué cambiar:**
-- En `estilos.css`, en la clase o clase(s) de estos dos botones nuevos:
-  - Igualar exactamente el `padding`, el `font-size` y el `border` a los de los botones de Fondo/Letras/Botones.
-  - Asegurar que el texto se ajuste al ancho del botón (reduciendo el tamaño de letra si es necesario para que quepa en una sola línea, respetando la regla de la Sección H).
-
-**Dónde:**
-- `Colores-y-Estetica/estilos.css`: clases de la paleta y de los botones de control.
-- `Motor-Logica-y-Acronimos/logica.js`: función `aplicarCambiosVisuales()`.
+**Cómo debe quedar:**
+- Al presionar "Tipografía", "Estilo", "Tamaño" o "Color", se debe abrir un menú propio de la app (no la ventana gris del navegador).
+- El menú de Color debe mostrar los cuadros de colores.
 
 **Qué NO hacer:**
-- NO cambiar la lógica de la paleta (los 3 casos).
-- NO alterar el tamaño de la pantalla general.
+- NO usar `prompt()`, `alert()` ni `confirm()` del navegador.
+- NO modificar los botones del Slogan (esos ya funcionan bien).
+- NO cambiar el diseño general de la pantalla de Configuración.
 
 ---
 

@@ -4307,39 +4307,69 @@ function insertarFirma() {
 }
 
 // ==========================================
-// PUNTO 2 instrucciones.md: SELECTORES DE FIRMA (configuración en pantalla de Configuración)
+// PUNTO ÚNICO instrucciones.md: SELECTORES DE FIRMA SIN prompt() (configuración en pantalla de Configuración)
 // ==========================================
-function abrirSelectorFirmaTipografia() {
-    const tip = prompt("Tipografía de la firma (ej. 'Segoe UI', 'Arial', 'Courier New'):", "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif");
-    if (tip !== null) {
-        const ta = document.getElementById('config-firma-texto');
-        if (ta) ta.style.fontFamily = tip;
+function aplicarTipografiaFirma() {
+    const sel = document.getElementById('sel-firma-tipografia');
+    const ta = document.getElementById('config-firma-texto');
+    if (sel && ta) ta.style.fontFamily = sel.value;
+}
+function aplicarEstiloFirma() {
+    const sel = document.getElementById('sel-firma-estilo');
+    const ta = document.getElementById('config-firma-texto');
+    if (!sel || !ta) return;
+    const v = sel.value;
+    ta.style.fontWeight = v.includes('bold') ? 'bold' : 'normal';
+    ta.style.fontStyle = v.includes('italic') ? 'italic' : 'normal';
+}
+function aplicarTamanoFirma() {
+    const sel = document.getElementById('sel-firma-tamano');
+    const ta = document.getElementById('config-firma-texto');
+    if (sel && ta) ta.style.fontSize = sel.value;
+}
+function alternarDesplegableFirma(ev) {
+    if (ev) ev.stopPropagation();
+    const lista = document.getElementById('lista-color-firma');
+    if (!lista) return;
+    if (typeof poblarSelectorColorFirma === 'function') poblarSelectorColorFirma();
+    lista.style.display = (lista.style.display === 'none' || !lista.style.display) ? 'flex' : 'none';
+}
+function elegirColorFirma(color) {
+    const ta = document.getElementById('config-firma-texto');
+    if (ta) ta.style.color = color;
+    const lista = document.getElementById('lista-color-firma');
+    if (lista) {
+        lista.style.display = 'none';
+        lista.querySelectorAll('.opcion-color-firma').forEach(o => o.classList.toggle('seleccionado', o.getAttribute('data-color') === color));
     }
 }
-function abrirSelectorFirmaEstilo() {
-    const estilo = prompt("Estilo de la firma (normal, bold, italic):", "normal");
-    if (estilo !== null) {
-        const ta = document.getElementById('config-firma-texto');
-        if (ta) ta.style.fontStyle = estilo.includes('italic') ? 'italic' : 'normal';
-        if (ta) ta.style.fontWeight = estilo.includes('bold') ? 'bold' : 'normal';
-    }
-}
-function abrirSelectorFirmaTamano() {
-    const tam = prompt("Tamaño de la firma (ej. 12px, 14px, 16px):", "14px");
-    if (tam !== null) {
-        const ta = document.getElementById('config-firma-texto');
-        if (ta) ta.style.fontSize = tam;
-    }
-}
-function abrirSelectorFirmaColor() {
+function poblarSelectorColorFirma() {
+    const lista = document.getElementById('lista-color-firma');
+    const muestra = document.getElementById('muestra-color-firma');
     const colores = (typeof coloresExtraidos !== 'undefined' && coloresExtraidos.length) ? coloresExtraidos.slice(0, 8) : ['#00ff88'];
-    const lista = colores.map((c, i) => i + 1 + ') ' + c).join('\n');
-    const sel = prompt("Elige un color de la paleta (número):\n" + lista, "1");
-    const idx = parseInt(sel) - 1;
-    if (!isNaN(idx) && idx >= 0 && idx < colores.length) {
-        const ta = document.getElementById('config-firma-texto');
-        if (ta) ta.style.color = colores[idx];
-    }
+    const actual = (muestra && muestra.style.background) ? muestra.style.background : (colores[0] || '#00ff88');
+    if (muestra && !muestra.style.background) muestra.style.background = actual;
+    if (!lista) return;
+    lista.innerHTML = '';
+    colores.forEach(c => {
+        const o = document.createElement('button');
+        o.type = 'button';
+        o.className = 'opcion-color-firma' + (c === actual ? ' seleccionado' : '');
+        o.setAttribute('data-color', c);
+        o.title = c;
+        o.style.background = c;
+        o.onclick = (ev) => { if (ev) ev.stopPropagation(); elegirColorFirma(c); };
+        lista.appendChild(o);
+    });
+    if (muestra) muestra.style.background = actual;
+}
+// Cierra el desplegable de color de firma al hacer clic fuera (se registra una sola vez).
+if (typeof document !== 'undefined' && !document._cierreDesplegableFirma) {
+    document._cierreDesplegableFirma = true;
+    document.addEventListener('click', () => {
+        const lista = document.getElementById('lista-color-firma');
+        if (lista) lista.style.display = 'none';
+    });
 }
 // ==========================================
 // 33. ASISTENTE DE IA (BOTÓN FLOTANTE, VOZ Y VENTANA EMERGENTE — PUNTO 7)

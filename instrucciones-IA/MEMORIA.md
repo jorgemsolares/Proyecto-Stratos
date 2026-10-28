@@ -8,7 +8,7 @@
 
 ## CÓMO USAR ESTE ARCHIVO (protocolo)
 
-1. **Al abrir una sesión nueva**, la IA debe leer primero `A_DONDE_VA_STRATOS.md` + `Minutas de Chats` (https://github.com/jorgemsolares/Comunicaci-n-IA-Internet/blob/main/Minutas%20de%20Chats), y luego TODOS los archivos del sistema (los que están en las carpetas `Cuerpo-y-Textos`, `Colores-y-Estetica`, `Motor-Logica-y-Acronimos`, y los de `instrucciones-IA`).
+1. **Al abrir una sesión nueva**, la IA debe leer primero `A_DONDE_VA_STRATOS.md` + `Minutas de Chats` (https://github.com/jorgemsolares/Comunicaci-n-IA-Internet/blob/main/Minutas%20de%20Chats), luego `instrucciones-IA/Historial_Bitacora.md` (bitácora cerrada, 19/10/2026 hacia atrás), y después TODOS los archivos del sistema (los que están en las carpetas `Cuerpo-y-Textos`, `Colores-y-Estetica`, `Motor-Logica-y-Acronimos`, y los de `instrucciones-IA`).
 2. **Cada avance real** se anota en la sección BITÁCORA (con fecha).
 3. **Las notas de visión** (comentarios del Arquitecto que aún no se aplican) se guardan en VISIÓN, para que la IA las tenga presentes cuando toque ese proceso.
 4. Este archivo también se respalda en GitHub junto al código.
@@ -271,6 +271,10 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 - **Punto 2 — hecho:** `estilos.css` `.color-cuadro` vuelve a cuadrado (`width: 100%; aspect-ratio: 1;`), quitando `height: 40px;`; `.contenedor-paleta-ocho` conserva `repeat(8, 1fr)`.
 - **Punto 3 — hecho:** `estilos.css` `.controles-paleta-botones button` igualado a `.btn-opcion` (Fondo/Letras/Botones): `padding: 8px 12px`, `font-size: 0.8rem`, `border: 2px solid transparent`; el texto se ajusta en una sola línea (Sección H).
 - **Verificación:** esprima OK logica.js y datos.js (0 problemas).
+
+### 28/10/2026 — instrucciones.md (PUNTO ÚNICO): Botones del área de Firma sin prompt()
+- **Punto Único — hecho:** `index.html` área Firma: quitados los 4 botones `onclick` que llamaban a `prompt()`; agregados `<select>` de Tipografía (6 fuentes del Slogan), Estilo (Normal/Negrita/Cursiva/Negrita Cursiva) y Tamaño (10-18px), más botón desplegable de Color con muestra + lista de 8 cuadros de color (ids propios `#sel-firma-*`, `#btn-color-firma`, `#muestra-color-firma`, `#lista-color-firma`). `estilos.css`: agregadas reglas `.selector-color-firma`, `.btn-desplegable-firma`, `.muestra-color-firma`, `.lista-color-firma`, `.opcion-color-firma` (patrón igual al Slogan, z-index 50). `logica.js`: eliminadas las 4 funciones `abrirSelectorFirma*` que usaban `prompt()`; creadas `aplicarTipografiaFirma/Estilo/Tamano()`, `alternarDesplegableFirma()`, `elegirColorFirma()`, `poblarSelectorColorFirma()` y cierre al clic fuera (bandera `document._cierreDesplegableFirma`). No se tocaron los botones del Slogan ni el diseño general de Configuración.
+- **Verificación:** se eliminaron todas las referencias a `abrirSelectorFirma*` y `prompt()` del área Firma; llaves de `logica.js` balanceadas (969/969). Node/esprima no disponible en el entorno para validación automática.
 
 ---
 ---

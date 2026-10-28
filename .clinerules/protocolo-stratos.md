@@ -44,3 +44,8 @@
 2. **Un cambio a la vez:** No se agrupan múltiples correcciones en un solo texto. Si un cambio requiere tocar varias partes, primero se hace una, se aprueba, y luego la siguiente.
 3. **Revisión previa obligatoria:** Antes de enviar el texto, se debe leer en voz alta y preguntarse: "¿Hay alguna forma en que la IA pueda malinterpretar esto?". Si la respuesta es sí, se reescribe.
 4. **Prohibiciones explícitas:** Siempre incluir un apartado de "Qué NO hacer" para bloquear los atajos (ej. "NO uses alert()", "NO uses prompt()", "NO modifiques archivos que no se mencionen").
+
+## Reglas de Redacción (Adición)
+
+5. **Autorización Explícita de Modificación:** En el encabezado de cada `instrucciones.md` debe ir una frase que diga: *"El Arquitecto te autoriza formalmente a modificar los archivos (index.html, estilos.css, logica.js, datos.js) para aplicar estos puntos. NO necesitas pedir permiso después de leer los archivos; procede a escribir el código."* Esto evita que la IA se detenga a preguntar si puede editar.
+6. **Definición de Botones:** Si una instrucción solicita crear un botón (o activar uno existente), es OBLIGATORIO que el texto defina también su función exacta en `logica.js`. Si el Arquitecto pide un botón pero no especifica su función, la IA DEBE DETENERSE y preguntar: *"¿Qué acción debe ejecutar este botón?"*, antes de crear solo la parte visual.
