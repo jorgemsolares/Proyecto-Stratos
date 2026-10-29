@@ -8,7 +8,7 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 3. Reportar cada punto como "Punto X: hecho" o "Punto X: no se pudo porque [razón]".
 4. Al terminar, actualizar `MEMORIA.md` y ejecutar `sincronizar_git.ps1`.
 
-**El Arquitecto ya autorizó estos cambios al entregar este documento.** No se requiere confirmación adicional para leer, ejecutar o proceder.
+**AUTORIZACIÓN EXPLÍCITA DE MODIFICACIÓN:** El Arquitecto te autoriza formalmente a **modificar los archivos** (`index.html`, `estilos.css`, `logica.js`, `datos.js`) para aplicar estos puntos. **NO necesitas pedir permiso después de leer los archivos; procede directamente a escribir el código.**
 
 **Documentos y archivos de contexto a leer antes de empezar:**
 - `MEMORIA.md`.
@@ -17,31 +17,43 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 
 ---
 
-## PUNTO ÚNICO: HACER FUNCIONAR LOS BOTONES DEL ÁREA DE FIRMA (SIN PROMPT)
+## PUNTO 1: IGUALAR EL TAMAÑO Y CENTRADO DE LOS BOTONES DE IDENTIDAD
 
-**Contexto:** En la pantalla de Configuración, el área de Firma tiene botones (Tipografía, Estilo, Tamaño, Color) que actualmente abren una ventana genérica del navegador (`prompt()`). Deben funcionar exactamente como los botones del Slogan, mostrando menús desplegables propios de la interfaz de Stratos.
+**Contexto:** En la pantalla de Identidad Corporativa, los botones "Mantener colores actuales" y "Volver a colores Stratos" no tienen el mismo tamaño que los botones de "Fondo/Letras/Botones", no están centrados y el texto no se ajusta al ancho del botón.
 
 **Qué cambiar:**
-1. En `index.html` (sección `pantalla-configuracion`, área de la firma):
-   - Quitar el `onclick` que llama a la función del `prompt()`. 
-   - Agregar la estructura HTML necesaria para los menús desplegables (selects o listas personalizadas) que se abrirán al presionar cada botón.
-2. En `logica.js`:
-   - Eliminar cualquier uso de `prompt()` o `alert()` relacionado con los botones de la firma.
-   - Crear las funciones para:
-     - **Tipografía:** Desplegar la misma lista de fuentes que usa el Slogan.
-     - **Estilo:** Desplegar Normal, Negrita, Cursiva, Negrita Cursiva.
-     - **Tamaño:** Desplegar una lista de tamaños (ej. 10px, 12px, 14px, 16px, 18px).
-     - **Color:** Desplegar la paleta visual de colores (los mismos 8 colores que usa el Slogan).
-   - Al seleccionar una opción de estos menús, aplicar el cambio al texto dentro del recuadro de la firma.
+- En `estilos.css`:
+  - Quitar la propiedad `grid-column` a los botones "Mantener" y "Volver" (para que no se estiren de forma independiente).
+  - Asegurar que los botones de arriba tengan exactamente el mismo `padding`, `font-size` y `border` que los de abajo.
+  - Si el texto es muy largo, reducir el `font-size` para que quepa en una sola línea.
 
-**Cómo debe quedar:**
-- Al presionar "Tipografía", "Estilo", "Tamaño" o "Color", se debe abrir un menú propio de la app (no la ventana gris del navegador).
-- El menú de Color debe mostrar los cuadros de colores.
+---
+
+## PUNTO 2: CORREGIR LA FUNCIÓN DEL BOTÓN "MANTENER COLORES ACTUALES"
+
+**Contexto:** La función `mantenerColoresActuales()` solo muestra un mensaje pero no guarda los cambios con el nuevo logo en la memoria.
+
+**Qué cambiar:**
+- En `logica.js`, en la función `mantenerColoresActuales()`:
+  - Después de mostrar el aviso, llamar a la función de guardado (`guardarEnStorage(STORAGE_KEYS.IDENTIDAD, identidadCorporativa)`).
+  - Asegurarse de que el logo nuevo se guarde en la identidad.
+
+---
+
+## PUNTO 3: CORREGIR LA FUNCIÓN DEL BOTÓN "VOLVER A COLORES STRATOS"
+
+**Contexto:** La función `restaurarColoresStratos()` cambia los colores en pantalla pero no los guarda en la memoria, por lo que al recargar se pierden.
+
+**Qué cambiar:**
+- En `logica.js`, en la función `restaurarColoresStratos()`:
+  - Actualizar `identidadCorporativa.colorFondo`, `colorTexto` y `colorBotones` con los valores por defecto.
+  - Llamar a la función `aplicarCambiosVisuales()`.
+  - Llamar a `guardarEnStorage(STORAGE_KEYS.IDENTIDAD, identidadCorporativa)` para que los cambios sean permanentes.
 
 **Qué NO hacer:**
-- NO usar `prompt()`, `alert()` ni `confirm()` del navegador.
-- NO modificar los botones del Slogan (esos ya funcionan bien).
-- NO cambiar el diseño general de la pantalla de Configuración.
+- NO usar `prompt()`, `alert()` ni `confirm()`.
+- NO cambiar el diseño del resto de la pantalla.
+- NO alterar los botones de Fondo/Letras/Botones.
 
 ---
 

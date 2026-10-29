@@ -844,7 +844,9 @@ textarea {
 }
 .controles-paleta-botones button {
     width: 100%;
-    font-size: 0.8rem;
+    padding: 8px 12px;
+    border: 2px solid transparent;
+    font-size: 0.7rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

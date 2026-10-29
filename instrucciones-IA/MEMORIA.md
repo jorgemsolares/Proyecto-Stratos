@@ -276,6 +276,12 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 - **Punto Único — hecho:** `index.html` área Firma: quitados los 4 botones `onclick` que llamaban a `prompt()`; agregados `<select>` de Tipografía (6 fuentes del Slogan), Estilo (Normal/Negrita/Cursiva/Negrita Cursiva) y Tamaño (10-18px), más botón desplegable de Color con muestra + lista de 8 cuadros de color (ids propios `#sel-firma-*`, `#btn-color-firma`, `#muestra-color-firma`, `#lista-color-firma`). `estilos.css`: agregadas reglas `.selector-color-firma`, `.btn-desplegable-firma`, `.muestra-color-firma`, `.lista-color-firma`, `.opcion-color-firma` (patrón igual al Slogan, z-index 50). `logica.js`: eliminadas las 4 funciones `abrirSelectorFirma*` que usaban `prompt()`; creadas `aplicarTipografiaFirma/Estilo/Tamano()`, `alternarDesplegableFirma()`, `elegirColorFirma()`, `poblarSelectorColorFirma()` y cierre al clic fuera (bandera `document._cierreDesplegableFirma`). No se tocaron los botones del Slogan ni el diseño general de Configuración.
 - **Verificación:** se eliminaron todas las referencias a `abrirSelectorFirma*` y `prompt()` del área Firma; llaves de `logica.js` balanceadas (969/969). Node/esprima no disponible en el entorno para validación automática.
 
+### 28/10/2026 — instrucciones.md (PUNTOS 1, 2 y 3): Botones de control de identidad
+- **Punto 1 — hecho:** `index.html` quitados `grid-column: 2 / 5` y `grid-column: 6 / 9` de los botones "Mantener colores actuales" y "Volver a colores Stratos"; `estilos.css` `.controles-paleta-botones button` igualado a `.btn-opcion` con `padding: 8px 12px`, `border: 2px solid transparent`, `font-size: 0.7rem`, `white-space: nowrap` para que ambos botones tengan mismo tamaño, estén centrados en su celda y el texto quepa en una línea.
+- **Punto 2 — hecho:** `logica.js` `mantenerColoresActuales()` ahora llama `guardarEnStorage(STORAGE_KEYS.IDENTIDAD, identidadCorporativa)` tras mostrar el aviso, para que los cambios se persistan con el logo nuevo.
+- **Punto 3 — hecho:** `logica.js` `restaurarColoresStratos()` ya llama `guardarEnStorage(STORAGE_KEYS.IDENTIDAD, identidadCorporativa)` tras `aplicarCambiosVisuales()`, para que el restablecimiento a colores Stratos por defecto sea permanente al recargar.
+- **Verificación:** `guardarEnStorage` y `STORAGE_KEYS.IDENTIDAD` existen y se usan en otros puntos del código; llaves de `logica.js` balanceadas (971/971). Node/esprima no disponible en el entorno para validación automática.
+
 ---
 ---
 

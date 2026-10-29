@@ -2536,6 +2536,9 @@ function generarPaleta() {
 // Mantener colores actuales: confirma el guardado sin alterar los colores.
 function mantenerColoresActuales() {
     mostrarAvisoInmediato("✓ Colores actuales mantenidos.", "exito");
+    if (typeof identidadCorporativa !== 'undefined' && typeof guardarEnStorage === 'function') {
+        guardarEnStorage(STORAGE_KEYS.IDENTIDAD, identidadCorporativa);
+    }
 }
 
 // Restaurar colores Stratos: resetea fondo, letras y botones a sus valores por defecto.
@@ -2557,6 +2560,9 @@ function restaurarColoresStratos() {
     if (pt) pt.style.backgroundColor = "#ffffff";
     if (pb) pb.style.backgroundColor = "#00ff88";
     mostrarAvisoInmediato("✓ Colores restaurados a Stratos por defecto.", "exito");
+    if (typeof identidadCorporativa !== 'undefined' && typeof guardarEnStorage === 'function') {
+        guardarEnStorage(STORAGE_KEYS.IDENTIDAD, identidadCorporativa);
+    }
 }
 
 // ==========================================
