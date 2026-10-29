@@ -4377,6 +4377,88 @@ if (typeof document !== 'undefined' && !document._cierreDesplegableFirma) {
         if (lista) lista.style.display = 'none';
     });
 }
+// Cierra todos los desplegables de firma al hacer clic fuera (se registra una sola vez).
+if (typeof document !== 'undefined' && !document._cierreDesplegablesFirma) {
+    document._cierreDesplegablesFirma = true;
+    document.addEventListener('click', () => {
+        ['lista-firma-tipografia','lista-firma-estilo','lista-firma-tamano','lista-color-firma'].forEach(id => {
+            const lista = document.getElementById(id);
+            if (lista) lista.style.display = 'none';
+        });
+    });
+}
+
+function cerrarDesplegablesFirma() {
+    ['lista-firma-tipografia','lista-firma-estilo','lista-firma-tamano','lista-color-firma'].forEach(id => {
+        const lista = document.getElementById(id);
+        if (lista) lista.style.display = 'none';
+    });
+}
+
+function poblarListaFirma(listaId, items, aplicarFn) {
+    const lista = document.getElementById(listaId);
+    if (!lista) return;
+    lista.innerHTML = '';
+    items.forEach(item => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'desplegable-firma-lista-item';
+        b.textContent = item.label || item;
+        b.title = item.label || item;
+        b.onclick = (ev) => { if (ev) ev.stopPropagation(); if (typeof aplicarFn === 'function') aplicarFn(item.valor !== undefined ? item.valor : item); cerrarDesplegablesFirma(); };
+        lista.appendChild(b);
+    });
+}
+
+function alternarDesplegableFirmaTipografia(ev) {
+    if (ev) ev.stopPropagation();
+    const lista = document.getElementById('lista-firma-tipografia');
+    if (!lista) return;
+    const fuentes = [
+        { label: 'Segoe UI', valor: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" },
+        { label: 'Arial', valor: "Arial, Helvetica, sans-serif" },
+        { label: 'Montserrat', valor: "'Montserrat', sans-serif" },
+        { label: 'Roboto', valor: "'Roboto', sans-serif" },
+        { label: 'Georgia', valor: "Georgia, serif" },
+        { label: 'Courier New', valor: "'Courier New', monospace" }
+    ];
+    poblarListaFirma('lista-firma-tipografia', fuentes, (valor) => {
+        const ta = document.getElementById('config-firma-texto');
+        if (ta) ta.style.fontFamily = valor;
+    });
+    lista.style.display = (lista.style.display === 'none' || !lista.style.display) ? 'flex' : 'none';
+}
+
+function alternarDesplegableFirmaEstilo(ev) {
+    if (ev) ev.stopPropagation();
+    const lista = document.getElementById('lista-firma-estilo');
+    if (!lista) return;
+    const estilos = [
+        { label: 'Normal', valor: 'normal' },
+        { label: 'Negrita', valor: 'bold' },
+        { label: 'Cursiva', valor: 'italic' },
+        { label: 'Negrita Cursiva', valor: 'bold italic' }
+    ];
+    poblarListaFirma('lista-firma-estilo', estilos, (valor) => {
+        const ta = document.getElementById('config-firma-texto');
+        if (!ta) return;
+        ta.style.fontWeight = valor.includes('bold') ? 'bold' : 'normal';
+        ta.style.fontStyle = valor.includes('italic') ? 'italic' : 'normal';
+    });
+    lista.style.display = (lista.style.display === 'none' || !lista.style.display) ? 'flex' : 'none';
+}
+
+function alternarDesplegableFirmaTamano(ev) {
+    if (ev) ev.stopPropagation();
+    const lista = document.getElementById('lista-firma-tamano');
+    if (!lista) return;
+    const tamaños = ['10px','12px','14px','16px','18px'];
+    poblarListaFirma('lista-firma-tamano', tamaños, (valor) => {
+        const ta = document.getElementById('config-firma-texto');
+        if (ta) ta.style.fontSize = valor;
+    });
+    lista.style.display = (lista.style.display === 'none' || !lista.style.display) ? 'flex' : 'none';
+}
 // ==========================================
 // 33. ASISTENTE DE IA (BOTÓN FLOTANTE, VOZ Y VENTANA EMERGENTE — PUNTO 7)
 // ==========================================

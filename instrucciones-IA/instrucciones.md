@@ -17,43 +17,49 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 
 ---
 
-## PUNTO 1: IGUALAR EL TAMAÑO Y CENTRADO DE LOS BOTONES DE IDENTIDAD
+## PUNTO 1: CORREGIR DISEÑO Y TEXTOS DE LOS BOTONES (SLOGAN Y FIRMA)
 
-**Contexto:** En la pantalla de Identidad Corporativa, los botones "Mantener colores actuales" y "Volver a colores Stratos" no tienen el mismo tamaño que los botones de "Fondo/Letras/Botones", no están centrados y el texto no se ajusta al ancho del botón.
+**Contexto:** Cline eliminó los textos de los botones (Tipografía, Estilo, etc.) y los reemplazó por menús desplegables. Esto rompe la uniformidad visual. Además, en la Firma, los botones están apilados hacia abajo en lugar de estar en una fila horizontal.
+
+**Qué cambiar:**
+1. En `index.html`:
+   - **Slogan:** Devolver los textos "Tipografía:", "Estilo:" y "Color:" a los botones/etiquetas. Asegurar que los menús desplegables aparezcan al presionarlos.
+   - **Firma:** Hacer exactamente lo mismo. Devolver los textos "Tipografía", "Estilo", "Tamaño" y "Color" a sus botones.
+   - **Firma (distribución):** Asegurar que estos 4 botones estén en una fila horizontal, alineados y con el mismo tamaño. Si el texto no cabe en una línea, reducir la letra.
+2. En `estilos.css`:
+   - Aplicar los estilos para que los botones de la firma se vean como botones reales (con fondo, borde y halo) y no como simples listas desplegables.
+
+---
+
+## PUNTO 2: QUITAR EL EMOJI Y EL COLOR DEL TÍTULO "FIRMA DEL USUARIO"
+
+**Contexto:** El título "Firma del Usuario" tiene un emoji genérico (✍️) y un color que no corresponde a la pantalla de Configuración.
+
+**Qué cambiar:**
+- En `index.html` (sección de la Firma):
+  - **Quitar el emoji** (✍️).
+  - Asegurar que el título "Firma del Usuario" use el mismo estilo y color que los demás títulos de Configuración (Idioma, Seguridad, etc.), sin clases que lo pinten de verde o amarillo.
+
+**Qué NO hacer:**
+- NO usar `prompt()` ni `alert()`.
+- NO usar emojis (revisar la carpeta de iconos si se necesita uno).
+- NO cambiar el diseño de otras pantallas.
+
+---
+
+## PUNTO 3: ARREGLAR EL TAMAÑO DEL RECUADRO DE LA FIRMA (FONDO FIJO)
+
+**Contexto:** Al cambiar el tamaño de la letra de la firma, todo el recuadro y la pantalla se estiran. El recuadro debe tener un tamaño fijo, y solo el texto de adentro debe cambiar de tamaño.
 
 **Qué cambiar:**
 - En `estilos.css`:
-  - Quitar la propiedad `grid-column` a los botones "Mantener" y "Volver" (para que no se estiren de forma independiente).
-  - Asegurar que los botones de arriba tengan exactamente el mismo `padding`, `font-size` y `border` que los de abajo.
-  - Si el texto es muy largo, reducir el `font-size` para que quepa en una sola línea.
+  - Asegurar que el contenedor del área de la firma (`textarea` o `div`) tenga un `height` fijo (ej. 120px o 150px) y un `resize: vertical` (o `none`).
+  - Al aplicar los botones de formato (negrita, tamaño, etc.), asegurarse de que solo afecten al texto y no al contenedor.
 
----
-
-## PUNTO 2: CORREGIR LA FUNCIÓN DEL BOTÓN "MANTENER COLORES ACTUALES"
-
-**Contexto:** La función `mantenerColoresActuales()` solo muestra un mensaje pero no guarda los cambios con el nuevo logo en la memoria.
-
-**Qué cambiar:**
-- En `logica.js`, en la función `mantenerColoresActuales()`:
-  - Después de mostrar el aviso, llamar a la función de guardado (`guardarEnStorage(STORAGE_KEYS.IDENTIDAD, identidadCorporativa)`).
-  - Asegurarse de que el logo nuevo se guarde en la identidad.
-
----
-
-## PUNTO 3: CORREGIR LA FUNCIÓN DEL BOTÓN "VOLVER A COLORES STRATOS"
-
-**Contexto:** La función `restaurarColoresStratos()` cambia los colores en pantalla pero no los guarda en la memoria, por lo que al recargar se pierden.
-
-**Qué cambiar:**
-- En `logica.js`, en la función `restaurarColoresStratos()`:
-  - Actualizar `identidadCorporativa.colorFondo`, `colorTexto` y `colorBotones` con los valores por defecto.
-  - Llamar a la función `aplicarCambiosVisuales()`.
-  - Llamar a `guardarEnStorage(STORAGE_KEYS.IDENTIDAD, identidadCorporativa)` para que los cambios sean permanentes.
-
-**Qué NO hacer:**
-- NO usar `prompt()`, `alert()` ni `confirm()`.
-- NO cambiar el diseño del resto de la pantalla.
-- NO alterar los botones de Fondo/Letras/Botones.
+**Dónde:**
+- `Cuerpo-y-Textos/index.html`: Sección de la Firma y Slogan.
+- `Colores-y-Estetica/estilos.css`: Clases de los botones de formato y del recuadro de firma.
+- `Motor-Logica-y-Acronimos/logica.js`: Funciones de los botones de formato.
 
 ---
 

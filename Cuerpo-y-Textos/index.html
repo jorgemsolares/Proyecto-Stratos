@@ -496,40 +496,34 @@
                 </div>
                 
                 <div class="config-section">
-                    <h3>✍️ Firma del Usuario</h3>
+                    <h3>Firma del Usuario</h3>
                     <p class="descripcion-app">Personaliza tu firma para los correos electrónicos.</p>
                     <textarea id="config-firma-texto" rows="5" placeholder="Escribe tu firma aquí..." class="input-estilizado"></textarea>
-                    <div class="config-firma-toolbar" style="display:flex; gap:8px; margin:10px 0; flex-wrap:wrap;">
-                        <select id="sel-firma-tipografia" class="input-estilizado-mejorado" onchange="aplicarTipografiaFirma()">
-                            <option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Segoe UI</option>
-                            <option value="Arial, Helvetica, sans-serif">Arial</option>
-                            <option value="'Montserrat', sans-serif">Montserrat</option>
-                            <option value="'Roboto', sans-serif">Roboto</option>
-                            <option value="Georgia, serif">Georgia</option>
-                            <option value="'Courier New', monospace">Courier New</option>
-                        </select>
-                        <select id="sel-firma-estilo" class="input-estilizado-mejorado" onchange="aplicarEstiloFirma()">
-                            <option value="normal">Normal</option>
-                            <option value="bold">Negrita</option>
-                            <option value="italic">Cursiva</option>
-                            <option value="bold italic">Negrita Cursiva</option>
-                        </select>
-                        <select id="sel-firma-tamano" class="input-estilizado-mejorado" onchange="aplicarTamanoFirma()">
-                            <option value="10px">10px</option>
-                            <option value="12px">12px</option>
-                            <option value="14px" selected>14px</option>
-                            <option value="16px">16px</option>
-                            <option value="18px">18px</option>
-                        </select>
-                        <label class="selector-color-firma">
-                            <div class="desplegable-color-firma">
-                                <button type="button" id="btn-color-firma" class="input-estilizado-mejorado btn-desplegable-firma" onclick="alternarDesplegableFirma(event)">
-                                    <span id="muestra-color-firma" class="muestra-color-firma"></span>
-                                    <span class="flecha-desplegable">▾</span>
-                                </button>
-                                <div id="lista-color-firma" class="lista-color-firma" style="display:none;"></div>
-                            </div>
-                        </label>
+                    <div class="config-firma-toolbar">
+                        <!-- Botón Tipografía con desplegable propio de la app -->
+                        <div class="campo-firma-desplegable">
+                            <button type="button" class="btn-firma" onclick="alternarDesplegableFirmaTipografia(event)">Tipografía</button>
+                            <div id="lista-firma-tipografia" class="desplegable-firma-lista" style="display:none;"></div>
+                        </div>
+                        <!-- Botón Estilo con desplegable propio de la app -->
+                        <div class="campo-firma-desplegable">
+                            <button type="button" class="btn-firma" onclick="alternarDesplegableFirmaEstilo(event)">Estilo</button>
+                            <div id="lista-firma-estilo" class="desplegable-firma-lista" style="display:none;"></div>
+                        </div>
+                        <!-- Botón Tamaño con desplegable propio de la app -->
+                        <div class="campo-firma-desplegable">
+                            <button type="button" class="btn-firma" onclick="alternarDesplegableFirmaTamano(event)">Tamaño</button>
+                            <div id="lista-firma-tamano" class="desplegable-firma-lista" style="display:none;"></div>
+                        </div>
+                        <!-- Botón Color con desplegable propio de la app (patrón igual al Slogan) -->
+                        <div class="campo-firma-desplegable">
+                            <button type="button" class="btn-firma btn-desplegable-firma" onclick="alternarDesplegableFirma(event)">
+                                <span id="muestra-color-firma" class="muestra-color-firma"></span>
+                                <span>Color</span>
+                                <span class="flecha-desplegable">▾</span>
+                            </button>
+                            <div id="lista-color-firma" class="lista-color-firma" style="display:none;"></div>
+                        </div>
                     </div>
                     <label style="display:flex; align-items:center; gap:8px; margin-top:10px;">
                         <input type="checkbox" id="config-firma-automatica">

@@ -282,6 +282,12 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 - **Punto 3 — hecho:** `logica.js` `restaurarColoresStratos()` ya llama `guardarEnStorage(STORAGE_KEYS.IDENTIDAD, identidadCorporativa)` tras `aplicarCambiosVisuales()`, para que el restablecimiento a colores Stratos por defecto sea permanente al recargar.
 - **Verificación:** `guardarEnStorage` y `STORAGE_KEYS.IDENTIDAD` existen y se usan en otros puntos del código; llaves de `logica.js` balanceadas (971/971). Node/esprima no disponible en el entorno para validación automática.
 
+### 28/10/2026 — instrucciones.md (PUNTOS 1, 2 y 3): Diseño y textos de botones Firma
+- **Punto 1 — hecho:** `index.html` área Firma: quitados los `<select>` y devueltos los textos a botones reales ("Tipografía", "Estilo", "Tamaño", "Color") en una fila horizontal (`.config-firma-toolbar` flex, 4 `.campo-firma-desplegable` con `flex:1`, mismo tamaño, `text-overflow: ellipsis`). Cada botón abre un desplegable propio de la app (Tipografía: 6 fuentes del Slogan; Estilo: Normal/Negrita/Cursiva/Negrita Cursiva; Tamaño: 10-18px; Color: muestra + 8 cuadros de color). Slogan: ya cumplía con textos "Tipografía:/Estilo:/Color:" y desplegables que aparecen al presionar (no se tocó). `estilos.css`: `.btn-firma` con fondo, borde, halo y efectos hover/active; `.desplegable-firma-lista` z-index 50. `logica.js`: creadas `alternarDesplegableFirmaTipografia/Estilo/Tamano()`, `poblarListaFirma()`, `cerrarDesplegablesFirma()` y cierre al clic fuera (bandera `document._cierreDesplegablesFirma`). No se usan `prompt()`/`alert()`/`confirm()`.
+- **Punto 2 — hecho:** `index.html` quitado el emoji (✍️) del título; ahora `<h3>Firma del Usuario</h3>` sin emoji, igual que los demás títulos de Configuración.
+- **Punto 3 — hecho:** `estilos.css` `#config-firma-texto` con `height: 140px` y `resize: vertical` (contenedor fijo; solo el texto cambia de tamaño con los botones de formato).
+- **Verificación:** llaves de `logica.js` balanceadas (995/995). Node/esprima no disponible en el entorno para validación automática.
+
 ---
 ---
 

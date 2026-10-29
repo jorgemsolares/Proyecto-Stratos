@@ -1087,10 +1087,87 @@ textarea {
     display: flex;
     gap: 8px;
     margin: 10px 0;
-    flex-wrap: wrap;
+    align-items: center;
+}
+.campo-firma-desplegable {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+.btn-firma {
+    width: 100%;
+    padding: 8px 12px;
+    border: 2px solid transparent;
+    border-radius: var(--radio-bordes);
+    background: var(--color-botones, var(--color-primario));
+    color: var(--color-letras, #ffffff);
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+    transition: all var(--transicion-rapida);
+}
+.btn-firma:hover {
+    border-color: #00ff88;
+    box-shadow: 0 12px 28px rgba(0, 255, 136, 0.5);
+    transform: scale(1.05);
+}
+.btn-firma:active {
+    box-shadow: 0 0 25px 8px #00ff88, inset 0 0 10px #00ff88;
+}
+.btn-firma.btn-desplegable-firma {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+.desplegable-firma-lista {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px;
+    background: #1a1a2e;
+    border: 1px solid var(--color-primario);
+    border-radius: var(--radio-bordes);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    z-index: 50;
+}
+.desplegable-firma-lista button {
+    width: 100%;
+    padding: 6px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--color-letras, #ffffff);
+    font-size: 0.75rem;
+    text-align: left;
+    cursor: pointer;
+    transition: all var(--transicion-rapida);
+}
+.desplegable-firma-lista button:hover {
+    background: var(--color-botones, var(--color-primario));
+    color: var(--color-letras, #0b0f19);
+    border-color: #00ff88;
+}
+.desplegable-firma-lista button.seleccionado {
+    background: #00ff88;
+    color: #0b0f19;
+    border-color: #ffffff;
 }
 #config-firma-texto {
     width: 100%;
+    height: 140px;
+    resize: vertical;
     font-family: inherit;
 }
 
