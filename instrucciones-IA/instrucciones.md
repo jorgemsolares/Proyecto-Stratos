@@ -17,49 +17,26 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 
 ---
 
-## PUNTO 1: CORREGIR DISEÑO Y TEXTOS DE LOS BOTONES (SLOGAN Y FIRMA)
+## PUNTO ÚNICO: IMPLEMENTAR LA FUNCIÓN DE DESHACER (CTRL + Z)
 
-**Contexto:** Cline eliminó los textos de los botones (Tipografía, Estilo, etc.) y los reemplazó por menús desplegables. Esto rompe la uniformidad visual. Además, en la Firma, los botones están apilados hacia abajo en lugar de estar en una fila horizontal.
-
-**Qué cambiar:**
-1. En `index.html`:
-   - **Slogan:** Devolver los textos "Tipografía:", "Estilo:" y "Color:" a los botones/etiquetas. Asegurar que los menús desplegables aparezcan al presionarlos.
-   - **Firma:** Hacer exactamente lo mismo. Devolver los textos "Tipografía", "Estilo", "Tamaño" y "Color" a sus botones.
-   - **Firma (distribución):** Asegurar que estos 4 botones estén en una fila horizontal, alineados y con el mismo tamaño. Si el texto no cabe en una línea, reducir la letra.
-2. En `estilos.css`:
-   - Aplicar los estilos para que los botones de la firma se vean como botones reales (con fondo, borde y halo) y no como simples listas desplegables.
-
----
-
-## PUNTO 2: QUITAR EL EMOJI Y EL COLOR DEL TÍTULO "FIRMA DEL USUARIO"
-
-**Contexto:** El título "Firma del Usuario" tiene un emoji genérico (✍️) y un color que no corresponde a la pantalla de Configuración.
+**Contexto:** Actualmente el sistema no permite deshacer acciones (como cambiar un color, escribir en un campo o modificar la identidad). El Arquitecto requiere que la combinación de teclas Ctrl + Z funcione en todo el sistema para revertir el último cambio realizado.
 
 **Qué cambiar:**
-- En `index.html` (sección de la Firma):
-  - **Quitar el emoji** (✍️).
-  - Asegurar que el título "Firma del Usuario" use el mismo estilo y color que los demás títulos de Configuración (Idioma, Seguridad, etc.), sin clases que lo pinten de verde o amarillo.
+1. En `logica.js`:
+   - Crear un sistema de historial (un arreglo o "stack" global) que guarde el estado anterior de las variables o del DOM cada vez que el usuario realice una acción que modifique algo (escribir en un input, cambiar un color, editar un texto, etc.).
+   - Escuchar el evento `keydown` en el documento. Si el usuario presiona `Ctrl + Z` (o `Cmd + Z` en Mac), el sistema debe leer el último estado guardado en el historial y restaurarlo.
+   - El historial debe aplicarse a los campos de texto (`input`, `textarea`) y a las acciones de la interfaz (como la selección de colores en Identidad).
+
+2. En `index.html` y `estilos.css`:
+   - No se requieren cambios visuales para este punto.
+
+**Cómo debe quedar:**
+- Si el usuario cambia un color o escribe en un campo y presiona `Ctrl + Z`, el sistema revierte ese último cambio visual y lógicamente.
 
 **Qué NO hacer:**
-- NO usar `prompt()` ni `alert()`.
-- NO usar emojis (revisar la carpeta de iconos si se necesita uno).
-- NO cambiar el diseño de otras pantallas.
-
----
-
-## PUNTO 3: ARREGLAR EL TAMAÑO DEL RECUADRO DE LA FIRMA (FONDO FIJO)
-
-**Contexto:** Al cambiar el tamaño de la letra de la firma, todo el recuadro y la pantalla se estiran. El recuadro debe tener un tamaño fijo, y solo el texto de adentro debe cambiar de tamaño.
-
-**Qué cambiar:**
-- En `estilos.css`:
-  - Asegurar que el contenedor del área de la firma (`textarea` o `div`) tenga un `height` fijo (ej. 120px o 150px) y un `resize: vertical` (o `none`).
-  - Al aplicar los botones de formato (negrita, tamaño, etc.), asegurarse de que solo afecten al texto y no al contenedor.
-
-**Dónde:**
-- `Cuerpo-y-Textos/index.html`: Sección de la Firma y Slogan.
-- `Colores-y-Estetica/estilos.css`: Clases de los botones de formato y del recuadro de firma.
-- `Motor-Logica-y-Acronimos/logica.js`: Funciones de los botones de formato.
+- NO usar `prompt()`, `alert()` ni `confirm()`.
+- NO implementar un botón visual para "Deshacer" (se solicitó la función por teclado).
+- NO interferir con el funcionamiento normal de los campos de texto.
 
 ---
 

@@ -825,6 +825,10 @@ function limpiarSesion() {
     }
 }
 document.addEventListener('input', (e) => {
+    // Capturar estado antes del cambio para permitir deshacer (Ctrl+Z)
+    if (!_resturandoDeshacer) {
+        pushHistorial(capturarEstadoParaDeshacer());
+    }
     if (e.target.id === 'empresa-nombre') {
         const acronimoInput = document.getElementById('empresa-acronimo');
         if (acronimoInput) acronimoInput.value = generarAcronimo(e.target.value, false);
@@ -2148,6 +2152,10 @@ function iniciarSesionBiometrica(usuario) {
 // 21. SALVAR IDENTIDAD (PANTALLA 3) (guarda la identidad corporativa definida por el No.1)
 // ==========================================
 function salvarIdentidad() {
+    // Capturar estado antes de guardar identidad para permitir deshacer (Ctrl+Z)
+    if (!_resturandoDeshacer) {
+        pushHistorial(capturarEstadoParaDeshacer());
+    }
     const empresaNombre = document.getElementById('empresa-nombre').value.trim();
     const slogan = document.getElementById('id-slogan').value.trim();
     const mision = document.getElementById('id-mision').value.trim();
@@ -2535,6 +2543,10 @@ function generarPaleta() {
 // ==========================================
 // Mantener colores actuales: confirma el guardado sin alterar los colores.
 function mantenerColoresActuales() {
+    // Capturar estado antes de mantener colores para permitir deshacer (Ctrl+Z)
+    if (!_resturandoDeshacer) {
+        pushHistorial(capturarEstadoParaDeshacer());
+    }
     mostrarAvisoInmediato("✓ Colores actuales mantenidos.", "exito");
     if (typeof identidadCorporativa !== 'undefined' && typeof guardarEnStorage === 'function') {
         guardarEnStorage(STORAGE_KEYS.IDENTIDAD, identidadCorporativa);
@@ -2543,6 +2555,10 @@ function mantenerColoresActuales() {
 
 // Restaurar colores Stratos: resetea fondo, letras y botones a sus valores por defecto.
 function restaurarColoresStratos() {
+    // Capturar estado antes de restaurar colores para permitir deshacer (Ctrl+Z)
+    if (!_resturandoDeshacer) {
+        pushHistorial(capturarEstadoParaDeshacer());
+    }
     configuracionEstetica.colorFondo = "#0b0f19";
     configuracionEstetica.colorTexto = "#ffffff";
     configuracionEstetica.colorBotones = "#00ff88";
@@ -2999,6 +3015,10 @@ function asignarDestino(tipo, botonPresionado) {
         mostrarAvisoInmediato("✖ Selecciona un color de la paleta", "error");
         return;
     }
+    // Capturar estado antes del cambio de color para permitir deshacer (Ctrl+Z)
+    if (!_resturandoDeshacer) {
+        pushHistorial(capturarEstadoParaDeshacer());
+    }
     switch(tipo) {
         case 'texto': configuracionEstetica.colorTexto = colorSeleccionado; break;
         case 'fondo': configuracionEstetica.colorFondo = colorSeleccionado; break;
@@ -3078,6 +3098,10 @@ if (typeof document !== 'undefined' && !document._cierreDesplegableSlogan) {
     });
 }
 function actualizarVistaPrevia() {
+    // Capturar estado antes del cambio de tipografía/estilo/color slogan para permitir deshacer (Ctrl+Z)
+    if (!_resturandoDeshacer) {
+        pushHistorial(capturarEstadoParaDeshacer());
+    }
     if (typeof poblarSelectorColorSlogan === 'function') poblarSelectorColorSlogan();
     const slogan = document.getElementById('id-slogan').value;
     const tipografia = document.getElementById('sel-tipografia').value;
@@ -4662,3 +4686,109 @@ function responderIA(texto) {
     }
     programarCierreAutomaticoIA();
 }
+
+// ==========================================
+// SISTEMA DE DESHACER (CTRL + Z / CMD + Z)
+// ==========================================
+let historialDeshacer = [];
+const MAX_HISTORIAL = 50;
+let _resturandoDeshacer = false; // evita recursión al restaurar valores de inputs
+
+// Captura el estado actual del sistema antes de un cambio
+function capturarEstadoParaDeshacer() {
+    const estado = {};
+    if (typeof identidadCorporativa !== 'undefined') {
+        estado.identidadCorporativa = JSON.parse(JSON.stringify(identidadCorporativa));
+    }
+    if (typeof configuracionEstetica !== 'undefined') {
+        estado.configuracionEstetica = JSON.parse(JSON.stringify(configuracionEstetica));
+    }
+    if (typeof colorSeleccionado !== 'undefined') {
+        estado.colorSeleccionado = colorSeleccionado;
+    }
+    if (typeof coloresExtraidos !== 'undefined') {
+        estado.coloresExtraidos = [...coloresExtraidos];
+    }
+    // Capturar valores de inputs de texto relevantes
+    const inputs = {};
+    const todosInputs = document.querySelectorAll('input, textarea');
+    for (let i = 0; i < todosInputs.length; i++) {
+        const el = todosInputs[i];
+        if (el.id) {
+            inputs[el.id] = el.value;
+        }
+    }
+    estado.inputs = inputs;
+    return estado;
+}
+
+// Guarda un estado en el historial (con límite máximo)
+function pushHistorial(estado) {
+    if (!estado) return;
+    historialDeshacer.push(estado);
+    if (historialDeshacer.length > MAX_HISTORIAL) {
+        historialDeshacer.shift();
+    }
+}
+
+// Restaura un estado capturado previamente
+function restaurarEstadoParaDeshacer(estado) {
+    if (!estado) return false;
+    _resturandoDeshacer = true;
+
+    try {
+        if (estado.identidadCorporativa && typeof identidadCorporativa !== 'undefined') {
+            Object.assign(identidadCorporativa, estado.identidadCorporativa);
+        }
+        if (estado.configuracionEstetica && typeof configuracionEstetica !== 'undefined') {
+            Object.assign(configuracionEstetica, estado.configuracionEstetica);
+        }
+        if (typeof estado.colorSeleccionado !== 'undefined' && typeof colorSeleccionado !== 'undefined') {
+            colorSeleccionado = estado.colorSeleccionado;
+        }
+        if (estado.coloresExtraidos && typeof coloresExtraidos !== 'undefined') {
+            coloresExtraidos = [...estado.coloresExtraidos];
+        }
+
+        // Restaurar valores de inputs
+        if (estado.inputs) {
+            Object.keys(estado.inputs).forEach(function (id) {
+                const el = document.getElementById(id);
+                if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA')) {
+                    el.value = estado.inputs[id];
+                }
+            });
+        }
+
+        // Reaplicar cambios visuales
+        if (typeof aplicarCambiosVisuales === 'function') {
+            aplicarCambiosVisuales();
+        }
+        if (typeof aplicarBrandingGlobal === 'function') {
+            aplicarBrandingGlobal();
+        }
+        if (typeof generarPaleta === 'function') {
+            generarPaleta();
+        }
+    } catch (e) {
+        console.error('Error restaurando estado de deshacer:', e);
+    } finally {
+        _resturandoDeshacer = false;
+    }
+    return true;
+}
+
+// Ejecuta el deshacer del último cambio
+function deshacerUltimoCambio() {
+    if (historialDeshacer.length === 0) return;
+    const estado = historialDeshacer.pop();
+    restaurarEstadoParaDeshacer(estado);
+}
+
+// Escuchar Ctrl + Z (Windows/Linux) y Cmd + Z (Mac)
+document.addEventListener('keydown', function (e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+        e.preventDefault();
+        deshacerUltimoCambio();
+    }
+});

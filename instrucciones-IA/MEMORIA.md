@@ -288,6 +288,12 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 - **Punto 3 — hecho:** `estilos.css` `#config-firma-texto` con `height: 140px` y `resize: vertical` (contenedor fijo; solo el texto cambia de tamaño con los botones de formato).
 - **Verificación:** llaves de `logica.js` balanceadas (995/995). Node/esprima no disponible en el entorno para validación automática.
 
+### 29/10/2026 — instrucciones.md (PUNTO ÚNICO): Implementar función de deshacer (Ctrl+Z / Cmd+Z)
+- **Punto Único — hecho:** `logica.js` — creado sistema de historial (stack global `historialDeshacer`, máx 50 estados) con funciones `capturarEstadoParaDeshacer()`, `pushHistorial()`, `restaurarEstadoParaDeshacer()` y `deshacerUltimoCambio()`. Se captura el estado antes de cada cambio en: event listener `input` (línea 828), `salvarIdentidad()` (línea 2155), `mantenerColoresActuales()` (línea 2546), `restaurarColoresStratos()` (línea 2558), `asignarDestino()` (línea 3018) y `actualizarVistaPrevia()` (línea 3101). Listener `keydown` detecta Ctrl+Z / Cmd+Z y ejecuta `deshacerUltimoCambio()`. Se aplica a campos de texto (`input`, `textarea`) y acciones de interfaz (selección de colores en Identidad).
+- **No se tocaron:** `index.html`, `estilos.css` (no se requieren cambios visuales).
+- **Qué NO se hizo:** No se usó `prompt()`, `alert()` ni `confirm()`; no se creó botón visual de "Deshacer"; no se interfirió con el funcionamiento normal de los campos de texto.
+- **Verificación:** Se integraron 6 puntos de captura en `logica.js` + sistema de deshacer al final del archivo (líneas 4691+). Node/esprima no disponible para validación automática.
+
 ---
 ---
 
