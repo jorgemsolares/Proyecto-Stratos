@@ -17,26 +17,31 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 
 ---
 
-## PUNTO ÚNICO: IMPLEMENTAR LA FUNCIÓN DE DESHACER (CTRL + Z)
+## PUNTO ÚNICO: CORREGIR EL COMPORTAMIENTO DE CTRL + Z
 
-**Contexto:** Actualmente el sistema no permite deshacer acciones (como cambiar un color, escribir en un campo o modificar la identidad). El Arquitecto requiere que la combinación de teclas Ctrl + Z funcione en todo el sistema para revertir el último cambio realizado.
+**Contexto:** La implementación actual de Ctrl+Z reemplaza el comportamiento nativo del navegador con un sistema de "foto completa" (historial de 50 estados) que afecta a TODOS los inputs y textareas. Esto causa que, al escribir en un campo de texto y presionar Ctrl+Z, se borre todo el texto de golpe en lugar de deshacer letra por letra (el estándar natural del navegador). Esta implementación es incorrecta y confunde al usuario.
 
 **Qué cambiar:**
-1. En `logica.js`:
-   - Crear un sistema de historial (un arreglo o "stack" global) que guarde el estado anterior de las variables o del DOM cada vez que el usuario realice una acción que modifique algo (escribir en un input, cambiar un color, editar un texto, etc.).
-   - Escuchar el evento `keydown` en el documento. Si el usuario presiona `Ctrl + Z` (o `Cmd + Z` en Mac), el sistema debe leer el último estado guardado en el historial y restaurarlo.
-   - El historial debe aplicarse a los campos de texto (`input`, `textarea`) y a las acciones de la interfaz (como la selección de colores en Identidad).
+En `logica.js`:
 
-2. En `index.html` y `estilos.css`:
-   - No se requieren cambios visuales para este punto.
+1. **Desvincular los inputs del sistema de historial:**
+   - En el listener de `keydown` (donde se detecta `Ctrl+Z` o `Cmd+Z`), agregar una condición que verifique si el elemento activo (`document.activeElement`) es un `<input>` o un `<textarea>`.
+   - Si el usuario está escribiendo dentro de un input o textarea, el sistema **NO debe ejecutar `preventDefault()`** ni llamar a `deshacerUltimoCambio()`. Debe dejar que el navegador maneje el deshacer nativo (letra por letra).
+
+2. **Dejar de capturar estados en los inputs:**
+   - En el listener de `input` (línea 828 aproximadamente), eliminar la llamada a `capturarEstadoParaDeshacer()` cuando el evento provenga de un `input` o `textarea`. El sistema de historial solo debe capturar cambios de la interfaz (colores, paleta, identidad), no la escritura de texto.
+
+3. **Mantener el Ctrl+Z solo para acciones de la interfaz:**
+   - El historial de 50 estados (`historialDeshacer`) debe seguir funcionando única y exclusivamente para los cambios de color, paleta, tipografía, logo e identidad. Si el usuario presiona Ctrl+Z fuera de un input (o en un elemento que no sea de escritura), se restaurará la "foto completa" del estado anterior.
 
 **Cómo debe quedar:**
-- Si el usuario cambia un color o escribe en un campo y presiona `Ctrl + Z`, el sistema revierte ese último cambio visual y lógicamente.
+- Si el usuario escribe en un input y presiona Ctrl+Z, el texto se borra letra por letra (comportamiento nativo del navegador).
+- Si el usuario cambia un color en la paleta y presiona Ctrl+Z, el color vuelve al anterior (foto completa).
 
 **Qué NO hacer:**
 - NO usar `prompt()`, `alert()` ni `confirm()`.
-- NO implementar un botón visual para "Deshacer" (se solicitó la función por teclado).
-- NO interferir con el funcionamiento normal de los campos de texto.
+- NO eliminar el sistema de historial (`historialDeshacer`), solo limitar su alcance.
+- NO interferir con la función nativa de los inputs.
 
 ---
 

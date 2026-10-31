@@ -825,9 +825,12 @@ function limpiarSesion() {
     }
 }
 document.addEventListener('input', (e) => {
-    // Capturar estado antes del cambio para permitir deshacer (Ctrl+Z)
-    if (!_resturandoDeshacer) {
-        pushHistorial(capturarEstadoParaDeshacer());
+    // No capturar estados de escritura en inputs/textarea (el navegador maneja el deshacer nativo)
+    if (e.target && !(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) {
+        // Capturar estado antes del cambio para permitir deshacer (Ctrl+Z)
+        if (!_resturandoDeshacer) {
+            pushHistorial(capturarEstadoParaDeshacer());
+        }
     }
     if (e.target.id === 'empresa-nombre') {
         const acronimoInput = document.getElementById('empresa-acronimo');
@@ -4788,6 +4791,10 @@ function deshacerUltimoCambio() {
 // Escuchar Ctrl + Z (Windows/Linux) y Cmd + Z (Mac)
 document.addEventListener('keydown', function (e) {
     if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+        const elementoActivo = document.activeElement;
+        if (elementoActivo && (elementoActivo.tagName === 'INPUT' || elementoActivo.tagName === 'TEXTAREA')) {
+            return; // dejar que el navegador maneje el deshacer nativo (letra por letra)
+        }
         e.preventDefault();
         deshacerUltimoCambio();
     }
