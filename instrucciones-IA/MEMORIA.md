@@ -297,6 +297,19 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
 - **Qué NO se hizo:** No se usó `prompt()`, `alert()` ni `confirm()`; no se eliminó el sistema de historial; no se creó botón visual de "Deshacer".
 - **Verificación:** 5 puntos de captura restantes en `logica.js` (solo interfaz) + listener `keydown` con filtro de elemento activo. Node/esprima no disponible para validación automática.
 
+### 2/11/2026 — instrucciones.md (PUNTO 1): Flujo de recuperación de contraseña
+- **Punto 1 — hecho:**
+  - `index.html`: `#btn-olvidaste-pass` de la pantalla de Login visible siempre (quitado `style="display:none;"`).
+  - `estilos.css`: `.btn-link` ya tiene efecto hover claro (verde Stratos `#00dd77` + resplandor con `text-shadow`); se verificó, sin cambios necesarios.
+  - `datos.js`: agregado `fechaExpiracionTemporal: null` a `usuarioActivo` y a la ficha de `baseDatosUsuarios`.
+  - `logica.js`:
+    - Nueva `solicitarRecuperacionContrasena()`: registra solicitud con `usuarioId`, `nombre`, `fechaSolicitud` y `estado: 'pendiente'` en `stratos_solicitudes_recuperacion`; aviso en barra de notificaciones ("Solicitud de contraseña enviada al jefe. Espere su respuesta."); correo simulado en `correosLocales` ("Correo silencioso enviado al jefe solicitando recuperación de contraseña").
+    - Nueva `enviarContrasenaAUsuario()`: candado — si no hay solicitud pendiente para el usuario buscado (correo/teléfono), deshabilita el botón y avisa "No hay ninguna solicitud de recuperación pendiente para este usuario"; si existe, guarda la temporal en `baseDatosUsuarios` (`requiereCambioContrasena = true`, `fechaExpiracionTemporal = +1 día`), marca la solicitud `completada` y avisa "Contraseña temporal generada: [Clave]. (Simulación de envío al correo/celular del usuario)".
+    - `validarEntrada()`: contraseña temporal vencida (>1 día) deniega el acceso con aviso rojo "Contraseña temporal expirada. Solicite una nueva recuperación."; temporal válida permite acceso con cambio obligatorio y redirección a Mi Perfil al cambiarla.
+    - `cambiarContrasenaObligatoria()`: tras el cambio, redirige a `pantalla-registro-invitacion` (Mi Perfil).
+  - No se usaron `prompt()`, `alert()` ni `confirm()`; no se conectó a servidor de correo real (solo simulación en pantalla).
+- **Verificación:** ediciones revisadas sección por sección; validación automática con esprima/Node no disponible en el entorno.
+
 ---
 ---
 
