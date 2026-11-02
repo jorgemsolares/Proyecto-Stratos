@@ -1098,7 +1098,7 @@ function validarEntrada() {
         const expiracion = usuario.fechaExpiracionTemporal ? new Date(usuario.fechaExpiracionTemporal) : null;
         if (expiracion && new Date() > expiracion) {
             if (aviso) {
-                aviso.innerText = "✖ Contraseña temporal expirada. Solicite una nueva recuperación.";
+                aviso.innerText = "Tu contraseña temporal ha expirado. Por favor, solicita una nueva recuperación.";
                 aviso.className = "aviso-letrero texto-error";
                 aviso.style.maxHeight = "40px";
             }
@@ -2487,6 +2487,7 @@ function cambiarContrasenaObligatoria() {
     if (usuarioActivo) {
         usuarioActivo.contrasena = passNueva;
         usuarioActivo.requiereCambioContrasena = false;
+        usuarioActivo.fechaExpiracionTemporal = null;
         const idx = baseDatosUsuarios.findIndex(u => u.id === usuarioActivo.id);
         if (idx !== -1) baseDatosUsuarios[idx] = { ...usuarioActivo };
         guardarEnStorage(STORAGE_KEYS.USUARIO_ACTIVO, usuarioActivo);
@@ -2506,7 +2507,7 @@ function cambiarContrasenaObligatoria() {
     if (inputNueva) inputNueva.value = '';
     if (inputConf) inputConf.value = '';
     mostrarAvisoInmediato('✓ Contraseña actualizada correctamente', 'exito');
-    setTimeout(() => irAPantalla('pantalla-registro-invitacion'), 800);
+    setTimeout(() => irAPantalla('pantalla-comunicacion'), 800);
 }
 
 // ==========================================
