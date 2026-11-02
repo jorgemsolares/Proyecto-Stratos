@@ -68,6 +68,7 @@ let usuarioActivo = {
     fechaRegistro: null,
     ultimoAcceso: null,
     requiereCambioContrasena: false, // Flag para contraseña temporal
+    fechaExpiracionTemporal: null, // Vencimiento de la contraseña temporal (1 día)
     intentosLoginFallidos: 0, // Intentos de login fallidos de ESTE usuario (PUNTO 48 - por usuario, no global)
     ultimaContrasenaTemporal: null, // Fecha del último uso de contraseña temporal (PUNTO 48)
     // PUNTO 6 (Parte A) — marcas del día en curso. Se alimentan de `registrosAsistencia`
@@ -239,6 +240,7 @@ Estructura:
     esPrimeraLinea: false,
     activo: true,
     requiereCambioContrasena: false,
+    fechaExpiracionTemporal: null, // Vencimiento de la contraseña temporal (1 día)
     intentosLoginFallidos: 0, // PUNTO 48 - por usuario, no global
     ultimaContrasenaTemporal: null, // PUNTO 48
     primeraEntradaDelDia: null, // PUNTO 6A - "YYYY-MM-DD HH:MM" (primera entrada de hoy)

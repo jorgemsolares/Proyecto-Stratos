@@ -1093,6 +1093,20 @@ function validarEntrada() {
         if (intentosLogin >= maxIntentosLogin && btnOlvido) btnOlvido.style.display = 'block';
         return;
     }
+    // PUNTO instrucciones.md: contraseña temporal vencida (más de 1 día) deniega el acceso
+    if (usuario.requiereCambioContrasena) {
+        const expiracion = usuario.fechaExpiracionTemporal ? new Date(usuario.fechaExpiracionTemporal) : null;
+        if (expiracion && new Date() > expiracion) {
+            if (aviso) {
+                aviso.innerText = "✖ Contraseña temporal expirada. Solicite una nueva recuperación.";
+                aviso.className = "aviso-letrero texto-error";
+                aviso.style.maxHeight = "40px";
+            }
+            window.claveAccesoReal = "";
+            if (campoPass) { campoPass.value = ""; manejarMascara(campoPass); }
+            return;
+        }
+    }
     intentosLogin = 0;
     // PUNTO 48: al entrar correctamente se reinicia el contador de errores de ESTE usuario
     usuario.intentosLoginFallidos = 0;
