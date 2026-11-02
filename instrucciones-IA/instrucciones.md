@@ -17,52 +17,39 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 
 ---
 
-## PUNTO 1: FLUJO DE RECUPERACIÓN DE CONTRASEÑA (SOLICITUD Y TEMPORAL SIMULADA)
+## PUNTO ÚNICO: EXPIRACIÓN DE CONTRASEÑA TEMPORAL Y CAMBIO OBLIGATORIO
 
-**Contexto:** El sistema debe permitir al usuario recuperar su contraseña si la olvida. Al no tener un servidor de correos real todavía, el envío se simulará guardando la contraseña temporal y mostrándola en pantalla al jefe (para pruebas), pero con toda la lógica de seguridad (vencimiento de 1 día, obligación de cambio, etc.).
+**Contexto:** Cuando el jefe genera una contraseña temporal, esta solo debe servir por 1 día. Si el usuario entra con ella, el sistema debe obligarlo a cambiarla inmediatamente y no dejarlo usar la app hasta que lo haga.
 
 **Qué cambiar:**
 
-1. **Visibilidad y Efecto del Botón (index.html y estilos.css):**
-   - En `index.html`, en la pantalla de Login (`pantalla-acceso`), quitar el `style="display: none;"` al botón `#btn-olvidaste-pass` para que sea visible siempre.
-   - En `estilos.css`, asegurar que el botón `.btn-link` tenga un efecto hover claro (que cambie a verde Stratos o tenga un resplandor).
+1. **Validación de Expiración en el Login (`logica.js`):**
+   - En la función `validarEntrada()`:
+     - Al encontrar al usuario y validar que la contraseña es correcta, verificar si `requiereCambioContrasena` es `true` y si tiene una fecha de expiración (`fechaExpiracionTemporal`).
+     - Si la fecha actual es mayor a la fecha de expiración: rechazar el acceso, mostrar un aviso rojo (barra de notificaciones) con el mensaje: *"Tu contraseña temporal ha expirado. Por favor, solicita una nueva recuperación."* y limpiar el campo de contraseña.
+     - Si la fecha es válida: permitir el ingreso, pero redirigir automáticamente a la pantalla de "Mi Perfil" (o mostrar el modal de cambio obligatorio) y bloquear la navegación a otras pantallas.
 
-2. **Lógica de la Solicitud (logica.js):**
-   - Al presionar "¿Olvidaste tu contraseña?", el sistema debe:
-     - Registrar una solicitud en la memoria (`localStorage`, clave `stratos_solicitudes_recuperacion`). Esta solicitud debe incluir el ID del usuario, el nombre, la fecha y el estado (`pendiente`).
-     - Mostrar un aviso en la barra de notificaciones: *"Solicitud de contraseña enviada al jefe. Espere su respuesta."*
-     - (Simulación de correo enviado): Registrar en la bandeja local de correos (o en el banco de datos) un mensaje que diga: *"Correo silencioso enviado al jefe solicitando recuperación de contraseña"*.
-
-3. **Configuración del Jefe (Candado de Seguridad y Generación de Temporal):**
-   - En la pantalla de Configuración (`pantalla-configuracion`), en el área de recuperación de contraseñas:
-     - **El Candado:** Si no existe una solicitud pendiente en `stratos_solicitudes_recuperacion` para el usuario que se está buscando, el sistema debe bloquear el campo de "Enviar Contraseña" y mostrar un aviso: *"No hay ninguna solicitud de recuperación pendiente para este usuario"*.
-     - **La Generación (Simulada):** Si la solicitud existe, el jefe ingresa la contraseña temporal manualmente (puede ser cualquier texto, como "otravezlaolvidaste"). Al presionar "Enviar Contraseña":
-       - El sistema guarda esa contraseña temporal en el perfil del usuario solicitante (`baseDatosUsuarios`).
-       - Marca al usuario con la bandera `requiereCambioContrasena = true`.
-       - Asigna una fecha de vencimiento a la contraseña temporal (`fechaExpiracionTemporal = new Date() + 1 día`).
-       - **Para pruebas:** Muestra en pantalla un aviso (o en el modal) que diga: *"Contraseña temporal generada: [Clave]. (Simulación de envío al correo/celular del usuario)"*.
-       - Cambia el estado de la solicitud a `completada`.
-
-4. **Bloqueo y Cambio Obligatorio (logica.js):**
-   - En `validarEntrada()` (Login): Si el usuario intenta entrar con una contraseña temporal y ha pasado más de 1 día desde su creación, el sistema debe negar el acceso y mostrar un aviso rojo: *"Contraseña temporal expirada. Solicite una nueva recuperación."*
-   - Si la temporal es válida, el sistema debe permitir el acceso pero redirigir automáticamente a "Mi Perfil" (área de contraseña) y mostrar un modal o aviso bloqueante que diga: *"Debes cambiar tu contraseña temporal antes de continuar"*.
+2. **Forzar el Cambio en "Mi Perfil" (`logica.js` y `index.html`):**
+   - Si el usuario entró con una contraseña temporal, el sistema debe abrir la pantalla de "Mi Perfil" con el foco puesto en el área de cambio de contraseña.
+   - Mostrar un aviso llamativo (amarillo o rojo) que diga: *"Estás usando una contraseña temporal. Debes cambiarla para continuar."*
+   - El usuario debe ingresar la contraseña actual (la temporal), la nueva y la confirmación.
+   - Al guardar la nueva contraseña exitosamente, el sistema debe:
+     - Actualizar la contraseña en la base de datos.
+     - Poner `requiereCambioContrasena = false` y limpiar la `fechaExpiracionTemporal`.
+     - Redirigir al usuario a la pantalla de Comunicación (o a donde corresponda).
 
 **Dónde:**
-- `Cuerpo-y-Textos/index.html`: Pantalla de Login y Configuración.
-- `Colores-y-Estetica/estilos.css`: Efecto del botón de olvido.
-- `Motor-Logica-y-Acronimos/logica.js`: Lógica de solicitud, generación de temporal, validación de vencimiento y redirección al Perfil.
-- `Motor-Logica-y-Acronimos/datos.js`: Añadir la estructura para las solicitudes y la fecha de expiración en el usuario.
+- `Motor-Logica-y-Acronimos/logica.js`: funciones de validación de login y guardado de perfil.
+- `Cuerpo-y-Textos/index.html`: modal o área de cambio de contraseña en Mi Perfil.
 
 **Cómo debe quedar:**
-- El usuario puede pedir recuperación desde el Login.
-- El jefe solo puede generar la temporal si el usuario la pidió (candado).
-- La contraseña temporal vence en 1 día.
-- El usuario es obligado a cambiarla al entrar.
+- Si la temporal expiró, el usuario no puede entrar.
+- Si la temporal es válida, el usuario entra pero queda "atrapado" en el Perfil hasta que cambie la contraseña.
 
 **Qué NO hacer:**
-- NO usar `prompt()`, `alert()` ni `confirm()` (usar la barra de notificaciones y modales).
-- NO permitir que el jefe cambie contraseñas sin solicitud.
-- NO conectar a un servidor de correo real (solo simular mostrando el mensaje en pantalla).
+- NO permitir el acceso a la app si la contraseña temporal está vencida.
+- NO dejar que el usuario navegue a otras pantallas sin cambiar la contraseña.
+- NO usar `prompt()`, `alert()` ni `confirm()`.
 
 ---
 
