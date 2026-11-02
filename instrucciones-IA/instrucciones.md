@@ -17,31 +17,52 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 
 ---
 
-## PUNTO ÚNICO: CORREGIR EL COMPORTAMIENTO DE CTRL + Z
+## PUNTO 1: FLUJO DE RECUPERACIÓN DE CONTRASEÑA (SOLICITUD Y TEMPORAL SIMULADA)
 
-**Contexto:** La implementación actual de Ctrl+Z reemplaza el comportamiento nativo del navegador con un sistema de "foto completa" (historial de 50 estados) que afecta a TODOS los inputs y textareas. Esto causa que, al escribir en un campo de texto y presionar Ctrl+Z, se borre todo el texto de golpe en lugar de deshacer letra por letra (el estándar natural del navegador). Esta implementación es incorrecta y confunde al usuario.
+**Contexto:** El sistema debe permitir al usuario recuperar su contraseña si la olvida. Al no tener un servidor de correos real todavía, el envío se simulará guardando la contraseña temporal y mostrándola en pantalla al jefe (para pruebas), pero con toda la lógica de seguridad (vencimiento de 1 día, obligación de cambio, etc.).
 
 **Qué cambiar:**
-En `logica.js`:
 
-1. **Desvincular los inputs del sistema de historial:**
-   - En el listener de `keydown` (donde se detecta `Ctrl+Z` o `Cmd+Z`), agregar una condición que verifique si el elemento activo (`document.activeElement`) es un `<input>` o un `<textarea>`.
-   - Si el usuario está escribiendo dentro de un input o textarea, el sistema **NO debe ejecutar `preventDefault()`** ni llamar a `deshacerUltimoCambio()`. Debe dejar que el navegador maneje el deshacer nativo (letra por letra).
+1. **Visibilidad y Efecto del Botón (index.html y estilos.css):**
+   - En `index.html`, en la pantalla de Login (`pantalla-acceso`), quitar el `style="display: none;"` al botón `#btn-olvidaste-pass` para que sea visible siempre.
+   - En `estilos.css`, asegurar que el botón `.btn-link` tenga un efecto hover claro (que cambie a verde Stratos o tenga un resplandor).
 
-2. **Dejar de capturar estados en los inputs:**
-   - En el listener de `input` (línea 828 aproximadamente), eliminar la llamada a `capturarEstadoParaDeshacer()` cuando el evento provenga de un `input` o `textarea`. El sistema de historial solo debe capturar cambios de la interfaz (colores, paleta, identidad), no la escritura de texto.
+2. **Lógica de la Solicitud (logica.js):**
+   - Al presionar "¿Olvidaste tu contraseña?", el sistema debe:
+     - Registrar una solicitud en la memoria (`localStorage`, clave `stratos_solicitudes_recuperacion`). Esta solicitud debe incluir el ID del usuario, el nombre, la fecha y el estado (`pendiente`).
+     - Mostrar un aviso en la barra de notificaciones: *"Solicitud de contraseña enviada al jefe. Espere su respuesta."*
+     - (Simulación de correo enviado): Registrar en la bandeja local de correos (o en el banco de datos) un mensaje que diga: *"Correo silencioso enviado al jefe solicitando recuperación de contraseña"*.
 
-3. **Mantener el Ctrl+Z solo para acciones de la interfaz:**
-   - El historial de 50 estados (`historialDeshacer`) debe seguir funcionando única y exclusivamente para los cambios de color, paleta, tipografía, logo e identidad. Si el usuario presiona Ctrl+Z fuera de un input (o en un elemento que no sea de escritura), se restaurará la "foto completa" del estado anterior.
+3. **Configuración del Jefe (Candado de Seguridad y Generación de Temporal):**
+   - En la pantalla de Configuración (`pantalla-configuracion`), en el área de recuperación de contraseñas:
+     - **El Candado:** Si no existe una solicitud pendiente en `stratos_solicitudes_recuperacion` para el usuario que se está buscando, el sistema debe bloquear el campo de "Enviar Contraseña" y mostrar un aviso: *"No hay ninguna solicitud de recuperación pendiente para este usuario"*.
+     - **La Generación (Simulada):** Si la solicitud existe, el jefe ingresa la contraseña temporal manualmente (puede ser cualquier texto, como "otravezlaolvidaste"). Al presionar "Enviar Contraseña":
+       - El sistema guarda esa contraseña temporal en el perfil del usuario solicitante (`baseDatosUsuarios`).
+       - Marca al usuario con la bandera `requiereCambioContrasena = true`.
+       - Asigna una fecha de vencimiento a la contraseña temporal (`fechaExpiracionTemporal = new Date() + 1 día`).
+       - **Para pruebas:** Muestra en pantalla un aviso (o en el modal) que diga: *"Contraseña temporal generada: [Clave]. (Simulación de envío al correo/celular del usuario)"*.
+       - Cambia el estado de la solicitud a `completada`.
+
+4. **Bloqueo y Cambio Obligatorio (logica.js):**
+   - En `validarEntrada()` (Login): Si el usuario intenta entrar con una contraseña temporal y ha pasado más de 1 día desde su creación, el sistema debe negar el acceso y mostrar un aviso rojo: *"Contraseña temporal expirada. Solicite una nueva recuperación."*
+   - Si la temporal es válida, el sistema debe permitir el acceso pero redirigir automáticamente a "Mi Perfil" (área de contraseña) y mostrar un modal o aviso bloqueante que diga: *"Debes cambiar tu contraseña temporal antes de continuar"*.
+
+**Dónde:**
+- `Cuerpo-y-Textos/index.html`: Pantalla de Login y Configuración.
+- `Colores-y-Estetica/estilos.css`: Efecto del botón de olvido.
+- `Motor-Logica-y-Acronimos/logica.js`: Lógica de solicitud, generación de temporal, validación de vencimiento y redirección al Perfil.
+- `Motor-Logica-y-Acronimos/datos.js`: Añadir la estructura para las solicitudes y la fecha de expiración en el usuario.
 
 **Cómo debe quedar:**
-- Si el usuario escribe en un input y presiona Ctrl+Z, el texto se borra letra por letra (comportamiento nativo del navegador).
-- Si el usuario cambia un color en la paleta y presiona Ctrl+Z, el color vuelve al anterior (foto completa).
+- El usuario puede pedir recuperación desde el Login.
+- El jefe solo puede generar la temporal si el usuario la pidió (candado).
+- La contraseña temporal vence en 1 día.
+- El usuario es obligado a cambiarla al entrar.
 
 **Qué NO hacer:**
-- NO usar `prompt()`, `alert()` ni `confirm()`.
-- NO eliminar el sistema de historial (`historialDeshacer`), solo limitar su alcance.
-- NO interferir con la función nativa de los inputs.
+- NO usar `prompt()`, `alert()` ni `confirm()` (usar la barra de notificaciones y modales).
+- NO permitir que el jefe cambie contraseñas sin solicitud.
+- NO conectar a un servidor de correo real (solo simular mostrando el mensaje en pantalla).
 
 ---
 
