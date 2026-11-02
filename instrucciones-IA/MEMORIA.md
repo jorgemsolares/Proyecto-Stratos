@@ -310,6 +310,14 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
   - No se usaron `prompt()`, `alert()` ni `confirm()`; no se conectó a servidor de correo real (solo simulación en pantalla).
 - **Verificación:** ediciones revisadas sección por sección; validación automática con esprima/Node no disponible en el entorno.
 
+### 2/11/2026 — instrucciones.md (PUNTO ÚNICO): Expiración de contraseña temporal y cambio obligatorio
+- **Punto Único — hecho:**
+  - `logica.js` `validarEntrada()`: mensaje de expiración ajustado al texto exacto *"Tu contraseña temporal ha expirado. Por favor, solicita una nueva recuperación."* (aviso rojo, barra de notificaciones); la verificación de `requiereCambioContrasena` + `fechaExpiracionTemporal` se hace tras validar la contraseña correcta, antes de permitir el ingreso.
+  - `logica.js` `cambiarContrasenaObligatoria()`: al guardar la nueva contraseña se limpia `usuarioActivo.fechaExpiracionTemporal = null` y se pone `requiereCambioContrasena = false`; tras el éxito se redirige a `pantalla-comunicacion` (no a Mi Perfil).
+  - El flujo completo: temporal vencida → acceso denegado; temporal válida → ingreso con modal de cambio obligatorio bloqueante → tras cambiar, redirección a Comunicación.
+  - No se usaron `prompt()`, `alert()` ni `confirm()`.
+- **Verificación:** esprima OK en `logica.js` y `datos.js` (0 problemas).
+
 ---
 ---
 
