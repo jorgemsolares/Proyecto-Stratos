@@ -1397,6 +1397,76 @@ function mostrarSolicitudesPendientesJefe(usuario) {
 }
 
 // ==========================================
+// 16.1.1 RECUPERACIÓN DE CONTRASEÑA - SOLICITUD DESDE EL LOGIN (PUNTO instrucciones.md)
+// ==========================================
+function solicitarRecuperacionContrasena() {
+    const campoNombre = document.getElementById('acc-nombre-completo');
+    const campoId = document.getElementById('acc-id');
+    const nombre = (campoNombre ? campoNombre.value : '').trim();
+    const idEmpleado = (campoId ? campoId.value : '').trim();
+    if (!nombre || !idEmpleado) {
+        mostrarAvisoInmediato('✖ Escribe tu nombre completo y tu ID de empleado para solicitar la recuperación', 'error');
+        return;
+    }
+    const usuario = baseDatosUsuarios.find(u =>
+        u && u.idEmpleado === idEmpleado && (u.nombreCompleto || u.nombre || '').toLowerCase() === nombre.toLowerCase()
+    );
+    if (!usuario) {
+        mostrarAvisoInmediato('✖ No se encontró un usuario con ese nombre e ID de empleado', 'error');
+        return;
+    }
+    const yaPendiente = solicitudesRecuperacion.find(s => s.usuarioId === usuario.id && s.estado === 'pendiente');
+    if (yaPendiente) {
+        mostrarAvisoInmediato('⚠ Ya existe una solicitud de recuperación pendiente para este usuario. Espera la respuesta de tu jefe.', 'advertencia');
+        return;
+    }
+    const solicitud = {
+        id: generarIdUnico(),
+        usuarioId: usuario.id,
+        nombreUsuario: usuario.nombreCompleto || usuario.nombre || '',
+        solicitadoA: usuario.superiorId || null,
+        nombreSuperior: '',
+        quienAyudo: '',
+        nombreQuienAyudo: '',
+        fechaSolicitud: new Date(),
+        fechaResolucion: null,
+        estado: 'pendiente',
+        contrasenaTemporalGenerada: ''
+    };
+    solicitudesRecuperacion.push(solicitud);
+    guardarEnStorage(STORAGE_KEYS.SOLICITUDES_RECUPERACION, solicitudesRecuperacion);
+    // Aviso en la barra de notificaciones
+    mostrarAvisoInmediato('Solicitud de contraseña enviada al jefe. Espere su respuesta.', 'exito');
+    // Simulación de correo: mensaje en la bandeja local de correos
+    const simulado = {
+        id: generarIdUnico(),
+        vista: 'recibidos',
+        remitente: 'sistema@stratos.local',
+        destinatarios: [usuario.email || usuario.idEmpleado],
+        copias: [],
+        asunto: 'Recuperación de contraseña - solicitud registrada',
+        previa: 'Correo silencioso enviado al jefe solicitando recuperación de contraseña',
+        cuerpo: 'Correo silencioso enviado al jefe solicitando recuperación de contraseña',
+        fecha: new Date().toISOString(),
+        pesoKb: 1,
+        soloCopia: false,
+        leido: false,
+        abiertoEn: null,
+        cerradoEn: null,
+        respondidoEn: null,
+        carpeta: '',
+        tipoSpam: '',
+        esDesconocido: false,
+        borradoEn: null,
+        procesoActivado: '',
+        adjunto: '',
+        accionGenerada: ''
+    };
+    correosLocales.push(simulado);
+    guardarCorreosLocales();
+}
+
+// ==========================================
 // 16.2 BANCO DE DATOS POR USUARIO (PUNTO 34)
 // Ficha aparte por usuario con bloques: días/sesiones, errores, permisos,
 // invitaciones, actividad y campos libres. Histórico: 5 años.
@@ -2343,6 +2413,7 @@ function cambiarContrasenaObligatoria() {
     if (inputNueva) inputNueva.value = '';
     if (inputConf) inputConf.value = '';
     mostrarAvisoInmediato('✓ Contraseña actualizada correctamente', 'exito');
+    setTimeout(() => irAPantalla('pantalla-registro-invitacion'), 800);
 }
 
 // ==========================================
