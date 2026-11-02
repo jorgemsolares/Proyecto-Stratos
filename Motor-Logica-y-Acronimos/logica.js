@@ -1467,6 +1467,99 @@ function solicitarRecuperacionContrasena() {
 }
 
 // ==========================================
+// 16.1.2 RECUPERACIÓN DE CONTRASEÑA - GENERACIÓN DE CONTRASEÑA TEMPORAL DESDE CONFIGURACIÓN (JEFE)
+// ==========================================
+function enviarContrasenaAUsuario() {
+    const campoDestino = document.getElementById('recuperacion-destino');
+    const campoPass = document.getElementById('recuperacion-nueva-pass');
+    const campoConf = document.getElementById('recuperacion-conf-pass');
+    const aviso = document.getElementById('mensaje-recuperacion');
+    const btnEnviar = document.querySelector('button[onclick="enviarContrasenaAUsuario()"]');
+    const destino = (campoDestino ? campoDestino.value : '').trim();
+    const passNueva = (campoPass ? campoPass.value : '').trim();
+    const passConf = (campoConf ? campoConf.value : '').trim();
+    if (!destino || !passNueva || !passConf) {
+        if (aviso) {
+            aviso.innerText = '✖ Completa todos los campos';
+            aviso.className = 'aviso-letrero texto-error';
+            aviso.style.maxHeight = '40px';
+        }
+        return;
+    }
+    if (passNueva !== passConf) {
+        if (aviso) {
+            aviso.innerText = '✖ Las contraseñas no coinciden';
+            aviso.className = 'aviso-letrero texto-error';
+            aviso.style.maxHeight = '40px';
+        }
+        return;
+    }
+    if (passNueva.length < 6) {
+        if (aviso) {
+            aviso.innerText = '✖ La contraseña temporal debe tener al menos 6 caracteres';
+            aviso.className = 'aviso-letrero texto-error';
+            aviso.style.maxHeight = '40px';
+        }
+        return;
+    }
+    const usuario = baseDatosUsuarios.find(u => u && (u.email === destino || u.telefono === destino));
+    if (!usuario) {
+        if (aviso) {
+            aviso.innerText = '✖ No se encontró un usuario con ese correo o teléfono';
+            aviso.className = 'aviso-letrero texto-error';
+            aviso.style.maxHeight = '40px';
+        }
+        return;
+    }
+    // CANDADO DE SEGURIDAD: solo se genera la temporal si el usuario solicitó recuperación (estado pendiente)
+    const solicitud = solicitudesRecuperacion.find(s => s.usuarioId === usuario.id && s.estado === 'pendiente');
+    if (!solicitud) {
+        if (btnEnviar) btnEnviar.disabled = true;
+        if (aviso) {
+            aviso.innerText = 'No hay ninguna solicitud de recuperación pendiente para este usuario';
+            aviso.className = 'aviso-letrero texto-error';
+            aviso.style.maxHeight = '40px';
+        }
+        return;
+    }
+    if (btnEnviar) btnEnviar.disabled = false;
+    const expiracion = new Date(new Date().getTime() + 24 * 60 * 60 * 1000); // 1 día
+    const idx = baseDatosUsuarios.findIndex(u => u && u.id === usuario.id);
+    if (idx === -1) {
+        if (aviso) {
+            aviso.innerText = '✖ No se pudo actualizar el perfil del usuario';
+            aviso.className = 'aviso-letrero texto-error';
+            aviso.style.maxHeight = '40px';
+        }
+        return;
+    }
+    const objetivo = baseDatosUsuarios[idx];
+    objetivo.contrasena = passNueva;
+    objetivo.requiereCambioContrasena = true;
+    objetivo.fechaExpiracionTemporal = expiracion;
+    baseDatosUsuarios[idx] = { ...objetivo };
+    guardarEnStorage(STORAGE_KEYS.BASE_USUARIOS, baseDatosUsuarios);
+    // Solicitud pasada a completada (trazabilidad)
+    solicitud.estado = 'completada';
+    solicitud.fechaResolucion = new Date();
+    solicitud.contrasenaTemporalGenerada = passNueva;
+    solicitud.quienAyudo = (usuarioActivo && usuarioActivo.id) || '';
+    solicitud.nombreQuienAyudo = (usuarioActivo ? (usuarioActivo.nombreCompleto || usuarioActivo.nombre || '') : '');
+    const sIdx = solicitudesRecuperacion.findIndex(s => s.id === solicitud.id);
+    if (sIdx !== -1) solicitudesRecuperacion[sIdx] = { ...solicitud };
+    guardarEnStorage(STORAGE_KEYS.SOLICITUDES_RECUPERACION, solicitudesRecuperacion);
+    // Aviso en pantalla (simulación de envío al correo/celular del usuario)
+    if (aviso) {
+        aviso.innerText = 'Contraseña temporal generada: ' + passNueva + '. (Simulación de envío al correo/celular del usuario)';
+        aviso.className = 'aviso-letrero texto-exito';
+        aviso.style.maxHeight = '40px';
+    }
+    if (campoDestino) campoDestino.value = '';
+    if (campoPass) campoPass.value = '';
+    if (campoConf) campoConf.value = '';
+}
+
+// ==========================================
 // 16.2 BANCO DE DATOS POR USUARIO (PUNTO 34)
 // Ficha aparte por usuario con bloques: días/sesiones, errores, permisos,
 // invitaciones, actividad y campos libres. Histórico: 5 años.
