@@ -1554,7 +1554,7 @@ function enviarContrasenaAUsuario() {
         }
         return;
     }
-    // CANDADO DE SEGURIDAD: solo se genera la temporal si el usuario solicitó recuperación (estado pendiente)
+    // Buscar solicitud pendiente para este usuario
     const solicitud = solicitudesRecuperacion.find(s => s.usuarioId === usuario.id && s.estado === 'pendiente');
     if (!solicitud) {
         if (btnEnviar) btnEnviar.disabled = true;
@@ -1582,15 +1582,53 @@ function enviarContrasenaAUsuario() {
     objetivo.fechaExpiracionTemporal = expiracion;
     baseDatosUsuarios[idx] = { ...objetivo };
     guardarEnStorage(STORAGE_KEYS.BASE_USUARIOS, baseDatosUsuarios);
-    // Solicitud pasada a completada (trazabilidad)
-    solicitud.estado = 'completada';
-    solicitud.fechaResolucion = new Date();
+
+    // === PUNTO ÚNICO: MÚLTIPLES CONTRASEÑAS TEMPORALES ===
+    // Inicializar la lista si no existe (migración de solicitudes antiguas)
+    if (!Array.isArray(solicitud.contrasenasGeneradas)) solicitud.contrasenasGeneradas = [];
+
+    // Agregar la nueva contraseña a la lista (flexibilidad: múltiples permitidas)
+    const generadoPor = (usuarioActivo && usuarioActivo.id) || '';
+    const generadoPorNombre = (usuarioActivo ? (usuarioActivo.nombreCompleto || usuarioActivo.nombre || '') : '');
+    solicitud.contrasenasGeneradas.push({
+        contrasena: passNueva,
+        fechaGeneracion: new Date(),
+        generadoPor: generadoPor,
+        generadoPorNombre: generadoPorNombre,
+        usada: false
+    });
+
+    // Mantener también la última generada en contrasenaTemporalGenerada (compatibilidad)
     solicitud.contrasenaTemporalGenerada = passNueva;
-    solicitud.quienAyudo = (usuarioActivo && usuarioActivo.id) || '';
-    solicitud.nombreQuienAyudo = (usuarioActivo ? (usuarioActivo.nombreCompleto || usuarioActivo.nombre || '') : '');
+    solicitud.quienAyudo = generadoPor;
+    solicitud.nombreQuienAyudo = generadoPorNombre;
+    // La solicitud sigue PENDIENTE hasta que el usuario use una de las contraseñas
+    // (estado 'resuelta' se asigna al validarEntrada)
+
     const sIdx = solicitudesRecuperacion.findIndex(s => s.id === solicitud.id);
     if (sIdx !== -1) solicitudesRecuperacion[sIdx] = { ...solicitud };
     guardarEnStorage(STORAGE_KEYS.SOLICITUDES_RECUPERACION, solicitudesRecuperacion);
+
+    // Registrar en banco de datos del solicitante y del jefe (trazabilidad de generación)
+    const ahora = new Date();
+    const detalleGen = `Contraseña temporal generada para ${usuario.nombreCompleto || usuario.nombre || ''} (${passNueva}). Fecha: ${_fechaISO(ahora)} ${_horaHM(ahora)}`;
+    if (usuario.id) registrarActividadBancoDatos(usuario.id, 'contrasena_temporal_generada', detalleGen);
+    const jefeId = usuario.superiorId;
+    if (jefeId && jefeId !== usuario.id) registrarActividadBancoDatos(jefeId, 'contrasena_temporal_generada', detalleGen);
+
+    // Contador de solicitudes de recuperación por mes (para Vero - bandera >3 en un mes)
+    const mesActual = ahora.getFullYear() + '-' + String(ahora.getMonth() + 1).padStart(2, '0');
+    const fichaSolicitante = fichaBancoDatos(usuario.id);
+    if (fichaSolicitante) {
+        if (fichaSolicitante.mesContadorSolicitudes !== mesActual) {
+            fichaSolicitante.mesContadorSolicitudes = mesActual;
+            fichaSolicitante.solicitudesRecuperacionMes = 0;
+        }
+        fichaSolicitante.solicitudesRecuperacionMes++;
+        fichaSolicitante.actualizado = ahora.toISOString();
+        guardarBancoDatos();
+    }
+
     // Aviso en pantalla (simulación de envío al correo/celular del usuario)
     if (aviso) {
         aviso.innerText = 'Contraseña temporal generada: ' + passNueva + '. (Simulación de envío al correo/celular del usuario)';
@@ -1598,6 +1636,8 @@ function enviarContrasenaAUsuario() {
         aviso.style.maxHeight = '40px';
     }
     if (campoDestino) campoDestino.value = '';
+    if (campoPass) campoPass.value = '';
+    if (campoConf) campoConf.value = '';
     if (campoPass) campoPass.value = '';
     if (campoConf) campoConf.value = '';
 }
