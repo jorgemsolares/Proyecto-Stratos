@@ -18,37 +18,43 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 
 ---
 
-## PUNTO ÚNICO: VALIDACIONES Y LÓGICA DEL BOTÓN "SALVAR" EN PERFIL
+## PUNTO ÚNICO: LÓGICA DE MÚLTIPLES CONTRASEÑAS TEMPORALES, ANULACIÓN Y REGISTRO
 
-**Contexto:** La pantalla de Perfil necesita validar los campos correctamente y manejar dos flujos distintos: el primer registro (que debe llevar a Configuración para terminar el onboarding) y la edición posterior (que debe quedarse en el Perfil). Además, debe gestionar el aviso de contraseña temporal.
+**Contexto:** El flujo actual permite que un jefe genere una contraseña temporal para un subalterno. Sin embargo, en la vida real, si el jefe tarda, el usuario puede pedirle a varios compañeros que le ayuden. El sistema debe ser flexible (permitir múltiples contraseñas generadas para una misma solicitud) pero seguro (la primera que se use anula las demás). Además, debe registrar todos los datos para medir la operatividad.
 
-**Qué cambiar:**
+**Qué cambiar en `logica.js`:**
 
-1. **Validación de Campos (logica.js):**
-   - En la función `procesarRegistro()`:
-     - **Campos estrictamente obligatorios (bloquean el guardado):** Nombres, Apellidos, ID Empleado, Posición, Contraseña y Confirmar Contraseña.
-     - **Contacto obligatorio:** Debe haber al menos un Teléfono o un Email. Si ambos están vacíos, no se permite grabar.
-     - **Si falta un campo obligatorio:** Mostrar un aviso **Amarillo** en la barra de notificaciones listando exactamente qué falta (ej. *"Falta el Apellido y el Email"*) y detener el guardado.
-     - **Si se graba con campos opcionales vacíos (ej. falta el Email pero hay Teléfono):** Guardar los datos y mostrar un aviso **Amarillo** que diga *"Perfil guardado. Quedó pendiente: [campo faltante]"*.
+1. **Generación de Múltiples Contraseñas (Flexibilidad):**
+   - En la función `enviarContrasenaAUsuario()`, permitir que se generen y envíen múltiples contraseñas temporales para una misma solicitud. No bloquear la acción si ya existe una contraseña generada previamente.
+   - Guardar cada nueva contraseña temporal generada en una lista dentro de la solicitud (ej. `contrasenasGeneradas: []`).
 
-2. **Lógica del Botón "SALVAR" (logica.js):**
-   - **Primera vez (Registro nuevo):** Después de guardar exitosamente, redirigir a la pantalla `pantalla-configuracion` (para completar el onboarding).
-   - **Ediciones posteriores (ya existe usuarioActivo.id):** Después de guardar, quedarse en la pantalla de Perfil y mostrar el aviso Verde de *"Perfil actualizado correctamente"*.
+2. **Anulación por Uso (Seguridad):**
+   - En la función `validarEntrada()` (Login), cuando el usuario ingrese con una contraseña temporal:
+     - Validar que coincida con **cualquiera** de las contraseñas generadas para su solicitud.
+     - Si la contraseña es válida y el usuario entra, el sistema debe **invalidar automáticamente todas las demás contraseñas temporales** de esa solicitud (marcarlas como `usadas` o borrarlas de la lista) y marcar la solicitud como `resuelta`.
 
-3. **Aviso de Contraseña Temporal (logica.js y estilos.css):**
-   - Si el usuario entró con una contraseña temporal, al cargar la pantalla de Perfil, mostrar un aviso claro y bloqueante (Amarillo o Rojo) en la barra de notificaciones: *"Debes crear y guardar una nueva contraseña ahora"*.
-   - **Conteo de 24 horas:** La fecha de expiración de la contraseña temporal debe calcularse desde el momento en que el usuario **recibe** la contraseña (o cuando el sistema la simula), no desde que el jefe la crea.
-   - El usuario debe poder cambiar la contraseña en esta misma pantalla (campos de contraseña actual, nueva y confirmación).
+3. **Aviso Operativo al Jefe (Cartelera):**
+   - Al resolverse la solicitud, generar un aviso en la cartelera del jefe que diga: *"El usuario [Nombre del solicitante] ya está operativo de nuevo"* (sin especificar quién le dio la contraseña).
+
+4. **Registro en el Banco de Datos (Trazabilidad):**
+   - Al generar cada contraseña temporal, registrar en el banco de datos del solicitante y del jefe:
+     - Quién generó la contraseña (ID del jefe o compañero).
+     - Fecha y hora de generación.
+   - Al resolverse la solicitud (cuando el usuario entra y cambia la contraseña), registrar:
+     - Cuál de todas las contraseñas se usó (quién la generó).
+     - Fecha y hora en que el usuario ingresó (tiempo total de respuesta).
+     - Fecha y hora en que se cambió la contraseña definitiva.
+   - **Alerta de patrón:** Si el usuario ha solicitado recuperación de contraseña más de 3 veces en un mes, registrar esta bandera en su banco de datos para que Vero pueda analizarlo posteriormente (no lanzar alerta en tiempo real, solo guardar el dato).
 
 **Dónde:**
-- `Motor-Logica-y-Acronimos/logica.js`: función `procesarRegistro()`, lógica de redirección y validación.
-- `Cuerpo-y-Textos/index.html`: estructura del Perfil (ya existe).
-- `Colores-y-Estetica/estilos.css`: estilos del aviso (si es necesario).
+- `Motor-Logica-y-Acronimos/logica.js`: funciones `enviarContrasenaAUsuario`, `validarEntrada` y `registrarActividadBancoDatos`.
+- `Motor-Logica-y-Acronimos/datos.js`: estructuras de la solicitud y el usuario (para guardar la lista de contraseñas generadas y la bandera de solicitudes repetidas).
 
 **Qué NO hacer:**
 - NO usar `prompt()`, `alert()` ni `confirm()`.
-- NO agregar botón de "ojo" al campo de contraseña (mantener la máscara actual).
-- NO bloquear el guardado si falta un campo opcional (solo avisar).
+- NO bloquear la generación de una segunda contraseña si ya existe una (la flexibilidad es obligatoria).
+- NO permitir que se use más de una contraseña temporal para entrar (la primera que se use anula las demás).
+- NO analizar los datos en tiempo real (eso es tarea de Vero después).
 
 ---
 
