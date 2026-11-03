@@ -393,6 +393,11 @@ function irAModuloComunicacion(id) {
 function irAPantalla(id) {
     const destino = document.getElementById(id);
     if (!destino) return;
+    // PUNTO ÚNICO: si hay contraseña temporal pendiente, solo se permite estar en Perfil o Login
+    if (usuarioActivo?.requiereCambioContrasena && id !== 'registro-invitacion' && id !== 'pantalla-acceso') {
+        mostrarAvisoInmediato('Debes crear y guardar una nueva contraseña antes de continuar', 'advertencia');
+        return;
+    }
     if (id === 'pantalla-acceso') {
         const campoId = document.getElementById('acc-id');
         const campoPass = document.getElementById('acc-pass');
@@ -424,6 +429,12 @@ function irAPantalla(id) {
         historialPantallas.push(id);
     }
     if (id === 'registro-invitacion' && usuarioActivo?.id) { cargarDatosPantalla1(); actualizarEstadoEnrolamiento(); }
+    // PUNTO ÚNICO: aviso de contraseña temporal al cargar el Perfil y mostrar campos de cambio
+    if (id === 'registro-invitacion' && usuarioActivo?.id && usuarioActivo.requiereCambioContrasena) {
+        const cc = document.getElementById('campos-cambio-contrasena');
+        if (cc) cc.style.display = 'block';
+        mostrarAvisoInmediato('Debes crear y guardar una nueva contraseña ahora', 'advertencia');
+    }
     if (id === 'pantalla-identidad') cargarDatosPantalla3();
     if (id === 'pantalla-organigrama-general') renderizarOrganigramaGeneral();
     if (id === 'pantalla-organigrama') renderizarOrganigrama();
@@ -926,12 +937,30 @@ function procesarRegistro() {
     const posicion = document.getElementById('reg-posicion').value.trim();
     const esEdicion = (typeof usuarioActivo !== 'undefined' && usuarioActivo && usuarioActivo.id);
     const nombreAnteriorPerfil = (esEdicion && usuarioActivo) ? usuarioActivo.nombreCompleto : null;
-    
+
+    // Validaciones obligatorias (bloquean el guardado)
+    const faltantes = [];
+    if (!nombres) faltantes.push('Nombres');
+    if (!apellidos) faltantes.push('Apellidos');
+    if (!idEmpleado) faltantes.push('ID Empleado');
+    if (!posicion) faltantes.push('Posición');
+    if (!telefono && !email) faltantes.push('Teléfono o Email');
+
+    if (esEdicion && usuarioActivo.requiereCambioContrasena) {
+        const passActual = document.getElementById('edit-pass-actual')?.value || '';
+        const passNueva = document.getElementById('edit-pass-nueva')?.value || '';
+        const passConf = document.getElementById('edit-pass-conf')?.value || '';
+        if (!passActual) faltantes.push('Contraseña Actual');
+        if (!passNueva) faltantes.push('Nueva Contraseña');
+        if (!passConf) faltantes.push('Confirmar Contraseña');
+    }
+
+    if (faltantes.length > 0) {
+        mostrarAvisoInmediato('Falta el ' + faltantes.join(' y '), 'advertencia');
+        return;
+    }
+
     if (esEdicion) {
-        if (!nombres || !idEmpleado || !posicion) {
-            mostrarAvisoInmediato("✖ Campos obligatorios incompletos", "error");
-            return;
-        }
         usuarioActivo.nombre = nombres;
         usuarioActivo.apellidos = apellidos;
         usuarioActivo.nombreCompleto = `${nombres} ${apellidos}`;
@@ -940,10 +969,11 @@ function procesarRegistro() {
         usuarioActivo.email = email;
         usuarioActivo.posicion = posicion;
         usuarioActivo.acronimo = generarAcronimo(posicion, true);
-        const passActual = document.getElementById('edit-pass-actual')?.value;
-        const passNueva = document.getElementById('edit-pass-nueva')?.value;
-        const passConf = document.getElementById('edit-pass-conf')?.value;
-        if (passActual || passNueva) {
+        // Cambio de contraseña opcional (sólo si se toca al menos un campo de contraseña)
+        const passActual = document.getElementById('edit-pass-actual')?.value || '';
+        const passNueva = document.getElementById('edit-pass-nueva')?.value || '';
+        const passConf = document.getElementById('edit-pass-conf')?.value || '';
+        if (passActual || passNueva || passConf) {
             if (usuarioActivo.contrasena !== passActual) {
                 mostrarAvisoInmediato("✖ Contraseña actual incorrecta", "error");
                 return;
@@ -953,8 +983,18 @@ function procesarRegistro() {
                 return;
             }
             usuarioActivo.contrasena = passNueva;
+            usuarioActivo.requiereCambioContrasena = false;
+            usuarioActivo.fechaExpiracionTemporal = null;
             ['edit-pass-actual', 'edit-pass-nueva', 'edit-pass-conf'].forEach(id => { const el = document.getElementById(id); if (el) { el.value = ""; manejarMascara(el); } });
         }
+        usuarioActivo.nombre = nombres;
+        usuarioActivo.apellidos = apellidos;
+        usuarioActivo.nombreCompleto = `${nombres} ${apellidos}`;
+        usuarioActivo.idEmpleado = idEmpleado;
+        usuarioActivo.telefono = telefono;
+        usuarioActivo.email = email;
+        usuarioActivo.posicion = posicion;
+        usuarioActivo.acronimo = generarAcronimo(posicion, true);
         const idx = baseDatosUsuarios.findIndex(u => u.id === usuarioActivo.id);
         if (idx !== -1) baseDatosUsuarios[idx] = {...usuarioActivo};
         guardarEnStorage(STORAGE_KEYS.USUARIO_ACTIVO, usuarioActivo);
@@ -971,8 +1011,10 @@ function procesarRegistro() {
             if (!listaDispositivo.includes(usuarioActivo.nombreCompleto)) listaDispositivo.push(usuarioActivo.nombreCompleto);
             localStorage.setItem('usuarios_del_dispositivo', JSON.stringify(listaDispositivo));
         } catch (e) { console.error("Error sincronizando autocompletado:", e); }
-        mostrarAvisoInmediato("✓ Perfil actualizado", "exito");
-        setTimeout(() => irAPantalla('pantalla-configuracion'), 1500);
+        // Quedarse en la pantalla de Perfil (edición posterior)
+        mostrarAvisoInmediato("✓ Perfil actualizado correctamente", "exito");
+        return;
+    }
         return;
     }
     
