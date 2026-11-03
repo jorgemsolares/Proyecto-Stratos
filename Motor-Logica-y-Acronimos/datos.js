@@ -393,8 +393,9 @@ Estructura:
     nombreQuienAyudo: "",
     fechaSolicitud: Date,
     fechaResolucion: Date,
-    estado: "pendiente" | "completada" | "rechazada",
-    contrasenaTemporalGenerada: ""
+    estado: "pendiente" | "completada" | "resuelta" | "rechazada",
+    contrasenaTemporalGenerada: "",
+    contrasenasGeneradas: [] // Lista de contraseñas temporales generadas para esta solicitud: [{contrasena, fechaGeneracion, generadoPor, generadoPorNombre, usada: false}]
 }
 */
 
