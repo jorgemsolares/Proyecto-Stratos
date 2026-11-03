@@ -1651,6 +1651,8 @@ function completarFichaBancoDatos(ficha, usuario) {
     if (!ficha.invitaciones || typeof ficha.invitaciones !== 'object') ficha.invitaciones = def.invitaciones;
     else ficha.invitaciones = { ...def.invitaciones, ...ficha.invitaciones };
     if (!ficha.camposLibres || typeof ficha.camposLibres !== 'object') ficha.camposLibres = {};
+    if (typeof ficha.solicitudesRecuperacionMes !== 'number') ficha.solicitudesRecuperacionMes = 0;
+    if (ficha.mesContadorSolicitudes === null || ficha.mesContadorSolicitudes === undefined) ficha.mesContadorSolicitudes = null;
     if (!ficha.usuarioId && usuario) ficha.usuarioId = usuario.id;
     if (!ficha.creado) ficha.creado = def.creado;
     ficha.actualizado = new Date().toISOString();
