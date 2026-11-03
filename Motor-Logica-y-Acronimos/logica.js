@@ -1191,6 +1191,79 @@ function validarEntrada() {
     actualizarPermisosBancoDatos(usuario);
     registrarActividadBancoDatos(usuario.id, 'sesion', 'Inicio de sesión');
     if (usuario.requiereCambioContrasena) {
+        // Entró con contraseña temporal: validar contra cualquiera de las generadas
+        const solicitud = solicitudesRecuperacion.find(s => s.usuarioId === usuario.id && s.estado === 'pendiente');
+        const contrasenaIngresada = window.claveAccesoReal;
+        let contrasenaValida = false;
+        let contrasenaUsada = null;
+
+        if (solicitud && Array.isArray(solicitud.contrasenasGeneradas)) {
+            const entrada = solicitud.contrasenasGeneradas.find(c => c.contrasena === contrasenaIngresada && !c.usada);
+            if (entrada) {
+                contrasenaValida = true;
+                contrasenaUsada = entrada;
+                entrada.usada = true;
+            }
+        }
+
+        if (!contrasenaValida) {
+            if (aviso) {
+                aviso.innerText = '✖ Contraseña temporal inválida o ya utilizada';
+                aviso.className = 'aviso-letrero texto-error';
+                aviso.style.maxHeight = '40px';
+            }
+            window.claveAccesoReal = '';
+            if (campoPass) { campoPass.value = ''; manejarMascara(campoPass); }
+            return;
+        }
+
+        // Anular todas las demás contraseñas temporales de esta solicitud (primera que se usa anula las demás)
+        solicitud.contrasenasGeneradas.forEach(c => {
+            if (c.contrasena !== contrasenaIngresada) c.usada = true;
+        });
+
+        // Marcar solicitud como resuelta
+        solicitud.estado = 'resuelta';
+        solicitud.fechaResolucion = new Date();
+        const sIdx = solicitudesRecuperacion.findIndex(s => s.id === solicitud.id);
+        if (sIdx !== -1) solicitudesRecuperacion[sIdx] = { ...solicitud };
+        guardarEnStorage(STORAGE_KEYS.SOLICITUDES_RECUPERACION, solicitudesRecuperacion);
+
+        // Registro en banco de datos: qué contraseña se usó (quién la generó), fecha de entrada del usuario
+        const ahora = new Date();
+        const detalleUso = `Contraseña temporal usada para ingreso. Generada por: ${contrasenaUsada.generadoPorNombre || contrasenaUsada.generadoPor} (${contrasenaUsada.generadoPor}). Fecha entrada: ${_fechaISO(ahora)} ${_horaHM(ahora)}`;
+        registrarActividadBancoDatos(usuario.id, 'contrasena_temporal_usada', detalleUso);
+        const jefeId = usuario.superiorId;
+        if (jefeId && jefeId !== usuario.id) {
+            registrarActividadBancoDatos(jefeId, 'contrasena_temporal_usada', detalleUso);
+
+            // Aviso en cartelera del jefe: "El usuario [Nombre] ya está operativo de nuevo"
+            const fichaJefe = fichaBancoDatos(jefeId);
+            if (fichaJefe) {
+                if (!Array.isArray(fichaJefe.mensajesCartelera)) fichaJefe.mensajesCartelera = [];
+                fichaJefe.mensajesCartelera.push({
+                    texto: `El usuario ${usuario.nombreCompleto || usuario.nombre || ''} ya está operativo de nuevo`,
+                    tipo: 'aviso',
+                    prioridad: 'alta',
+                    fechaInicio: new Date(),
+                    resuelto: false
+                });
+                fichaJefe.actualizado = ahora.toISOString();
+                guardarBancoDatos();
+            }
+            // Si el jefe está logueado ahora, inyectar el mensaje en la cartelera activa
+            if (usuarioActivo && usuarioActivo.id === jefeId) {
+                colaMensajes.push({
+                    texto: `<img src="../Colores-y-Estetica/Iconos/Exito-verde.svg" alt="" class="icono-inline" onerror="this.remove()"> El usuario ${usuario.nombreCompleto || usuario.nombre || ''} ya está operativo de nuevo`,
+                    tipo: 'aviso',
+                    prioridad: 'alta',
+                    fechaInicio: new Date(),
+                    resuelto: false
+                });
+                if (typeof programarSiguienteMensaje === 'function') programarSiguienteMensaje();
+            }
+        }
+
         // Entró con contraseña temporal: cambio obligatorio y registro del incidente
         usuario.ultimaContrasenaTemporal = new Date();
         registrarIncidenteLogin(usuario, 'contrasena_temporal', 'exitoso');
