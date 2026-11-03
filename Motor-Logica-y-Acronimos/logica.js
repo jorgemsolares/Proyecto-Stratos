@@ -987,14 +987,6 @@ function procesarRegistro() {
             usuarioActivo.fechaExpiracionTemporal = null;
             ['edit-pass-actual', 'edit-pass-nueva', 'edit-pass-conf'].forEach(id => { const el = document.getElementById(id); if (el) { el.value = ""; manejarMascara(el); } });
         }
-        usuarioActivo.nombre = nombres;
-        usuarioActivo.apellidos = apellidos;
-        usuarioActivo.nombreCompleto = `${nombres} ${apellidos}`;
-        usuarioActivo.idEmpleado = idEmpleado;
-        usuarioActivo.telefono = telefono;
-        usuarioActivo.email = email;
-        usuarioActivo.posicion = posicion;
-        usuarioActivo.acronimo = generarAcronimo(posicion, true);
         const idx = baseDatosUsuarios.findIndex(u => u.id === usuarioActivo.id);
         if (idx !== -1) baseDatosUsuarios[idx] = {...usuarioActivo};
         guardarEnStorage(STORAGE_KEYS.USUARIO_ACTIVO, usuarioActivo);
@@ -1015,16 +1007,16 @@ function procesarRegistro() {
         mostrarAvisoInmediato("✓ Perfil actualizado correctamente", "exito");
         return;
     }
-        return;
-    }
     
-    // REGISTRO NUEVO
-    if (!nombres || !idEmpleado || !posicion || (!telefono && !email)) {
-        mostrarAvisoInmediato("✖ Datos incompletos", "error");
-        return;
-    }
+    // REGISTRO NUEVO (las obligatorias ya se validaron arriba)
     if (!validarPasswords()) {
         mostrarAvisoInmediato("✖ Las contraseñas no son válidas o no coinciden", "error");
+        return;
+    }
+    const clave = window.claveReal || '';
+    const claveConf = window.claveConfReal || '';
+    if (!clave || !claveConf || clave !== claveConf) {
+        mostrarAvisoInmediato("Falta el Contraseña y Confirmar Contraseña", "advertencia");
         return;
     }
     const usuarioExistente = baseDatosUsuarios.find(u => u.telefono === telefono || u.email === email || u.idEmpleado === idEmpleado);
@@ -1059,7 +1051,7 @@ function procesarRegistro() {
     const nuevoUsuario = {
         id: generarIdUnico(), nombre: nombres, apellidos: apellidos, nombreCompleto: `${nombres} ${apellidos}`,
         idEmpleado: idEmpleado, telefono: telefono, email: email, posicion: posicion,
-        acronimo: generarAcronimo(posicion, true), contrasena: claveReal, rol: "Colaborador",
+        acronimo: generarAcronimo(posicion, true), contrasena: clave, rol: "Colaborador",
         superiorId: (datosInvitacionActual && datosInvitacionActual.invitadoPor) ? datosInvitacionActual.invitadoPor : null,
         esNo1: (!datosInvitacionActual || !datosInvitacionActual.invitadoPor), esPrimeraLinea: false,
         activo: true, fechaRegistro: new Date()
@@ -1094,9 +1086,18 @@ function procesarRegistro() {
     claveReal = ""; claveConfReal = "";
     document.getElementById('reg-pass').value = "";
     document.getElementById('reg-pass-conf').value = "";
-    mostrarAvisoInmediato("✓ Registro exitoso", "exito");
+    // Aviso de campos opcionales pendientes (Teléfono o Email faltantes)
+    const pendientes = [];
+    if (!telefono) pendientes.push('Teléfono');
+    if (!email) pendientes.push('Email');
+    if (pendientes.length > 0) {
+        mostrarAvisoInmediato("Perfil guardado. Quedó pendiente: " + pendientes.join(' y '), "advertencia");
+    } else {
+        mostrarAvisoInmediato("✓ Registro exitoso", "exito");
+    }
     datosInvitacionActual = {};
-    setTimeout(() => irAPantalla('pantalla-acceso'), 1500);
+    // Primera vez (Registro nuevo): ir a Configuración para completar el onboarding
+    setTimeout(() => irAPantalla('pantalla-configuracion'), 1500);
 }
 
 // ==========================================

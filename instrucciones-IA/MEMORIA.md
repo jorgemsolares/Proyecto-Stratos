@@ -318,6 +318,19 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
   - No se usaron `prompt()`, `alert()` ni `confirm()`.
 - **Verificación:** esprima OK en `logica.js` y `datos.js` (0 problemas).
 
+### 2/11/2026 — instrucciones.md (PUNTO ÚNICO): Validaciones y lógica del botón "SALVAR" en Perfil
+- **Punto Único — hecho:**
+  - `logica.js` `procesarRegistro()`:
+    - Campos estrictamente obligatorios (bloquean): Nombres, Apellidos, ID Empleado, Posición, Contraseña, Confirmar Contraseña; y al menos un contacto (Teléfono o Email).
+    - Si falta alguno: aviso Amarillo en barra de notificaciones listando exactamente qué falta (*"Falta el X y Y"*) y detiene el guardado.
+    - Si se graba con opcionales vacíos (falta Teléfono o Email): guarda y aviso Amarillo *"Perfil guardado. Quedó pendiente: [campo]"*.
+    - Contraseñas validadas con `validarPasswords()` (mínimo 6, coinciden).
+  - Botón "SALVAR": registro nuevo → redirige a `pantalla-configuracion` (onboarding); edición posterior (`usuarioActivo.id`) → se queda en Perfil con aviso Verde *"Perfil actualizado correctamente"*.
+  - Edición con `requiereCambioContrasena`: obliga a Contraseña Actual/Nueva/Confirmar; al cambiar, limpia `requiereCambioContrasena = false` y `fechaExpiracionTemporal = null`.
+  - `irAPantalla()`: si hay contraseña temporal pendiente, bloquea navegación fuera de Perfil/Login y muestra aviso *"Debes crear y guardar una nueva contraseña antes de continuar"*; al cargar Perfil con temporal, muestra campos de cambio y aviso Amarillo *"Debes crear y guardar una nueva contraseña ahora"*. Expiración calculada desde que el usuario recibe la temporal (+24h).
+  - No se usaron `prompt()`, `alert()` ni `confirm()`; no se agregó botón de "ojo" a contraseñas.
+- **Verificación:** esprima OK en `logica.js` y `datos.js` (0 problemas).
+
 ---
 ---
 
