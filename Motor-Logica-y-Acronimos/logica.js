@@ -264,6 +264,25 @@ function construirColaMensajes() {
             resuelto: false
         });
     }
+    // Mensajes de cartelera almacenados en la ficha del banco de datos del usuario activo
+    if (usuarioActivo && usuarioActivo.id) {
+        const fichaActivo = fichaBancoDatos(usuarioActivo.id);
+        if (fichaActivo && Array.isArray(fichaActivo.mensajesCartelera)) {
+            fichaActivo.mensajesCartelera.forEach(function(m) {
+                if (!m.resuelto) {
+                    colaMensajes.push({
+                        texto: '<img src="../Colores-y-Estetica/Iconos/Exito-verde.svg" alt="" class="icono-inline" onerror="this.remove()"> ' + m.texto,
+                        tipo: m.tipo || 'aviso',
+                        prioridad: m.prioridad || 'alta',
+                        fechaInicio: m.fechaInicio || new Date(),
+                        resuelto: m.resuelto || false
+                    });
+                    m.resuelto = true;
+                }
+            });
+            guardarBancoDatos();
+        }
+    }
     if (identidadCorporativa.completada) {
         const hoy = new Date().toDateString();
         const fragmentos = obtenerFragmentosMisionVisionValores();
