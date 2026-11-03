@@ -1619,7 +1619,9 @@ function fichaBancoDatosPorDefecto(usuario) {
         permisos: { modulos: [] },
         invitaciones: { invitoA: [], invitadoPor: usuario ? (usuario.invitadoPor || null) : null },
         actividad: [],
-        camposLibres: {}
+        camposLibres: {},
+        solicitudesRecuperacionMes: 0, // Contador de solicitudes de recuperación en el mes actual (para Vero)
+        mesContadorSolicitudes: null   // Mes (YYYY-MM) del último conteo, para resetear al cambiar de mes
     };
 }
 
