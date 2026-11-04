@@ -2671,6 +2671,24 @@ function cambiarContrasenaObligatoria() {
         if (idx !== -1) baseDatosUsuarios[idx] = { ...usuarioActivo };
         guardarEnStorage(STORAGE_KEYS.USUARIO_ACTIVO, usuarioActivo);
         guardarEnStorage(STORAGE_KEYS.BASE_USUARIOS, baseDatosUsuarios);
+
+        // Registrar en banco de datos: fecha y hora de cambio de contraseña definitiva
+        const ahora = new Date();
+        // Buscar la solicitud resuelta para saber cuál contraseña temporal se usó y quién la generó
+        const solicitudResuelta = solicitudesRecuperacion.find(s => s.usuarioId === usuarioActivo.id && s.estado === 'resuelta');
+        let detalleCambio = 'Contraseña definitiva cambiada tras recuperación temporal. ';
+        if (solicitudResuelta && solicitudResuelta.contrasenasGeneradas) {
+            const usada = solicitudResuelta.contrasenasGeneradas.find(c => c.usada);
+            if (usada) {
+                detalleCambio += 'Contraseña temporal usada generada por: ' + (usada.generadoPorNombre || usada.generadoPor) + ' (' + usada.generadoPor + '). ';
+            }
+        }
+        detalleCambio += 'Fecha cambio definitivo: ' + _fechaISO(ahora) + ' ' + _horaHM(ahora);
+        registrarActividadBancoDatos(usuarioActivo.id, 'contrasena_definitiva_cambiada', detalleCambio);
+        const jefeId = usuarioActivo.superiorId;
+        if (jefeId && jefeId !== usuarioActivo.id) {
+            registrarActividadBancoDatos(jefeId, 'contrasena_definitiva_cambiada', detalleCambio);
+        }
     }
     if (mensaje) {
         mensaje.innerText = '✓ Contraseña actualizada';
