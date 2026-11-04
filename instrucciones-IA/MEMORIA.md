@@ -331,6 +331,18 @@ y le recuerde al Arquitecto cuando lleguemos a ese proceso.
   - No se usaron `prompt()`, `alert()` ni `confirm()`; no se agregó botón de "ojo" a contraseñas.
 - **Verificación:** esprima OK en `logica.js` y `datos.js` (0 problemas).
 
+### 3/11/2026 — instrucciones.md (PUNTO ÚNICO): Lógica de múltiples contraseñas temporales, anulación y registro
+- **Punto Único — hecho:**
+  - `datos.js`: estructura de `solicitudesRecuperacion` ampliada con `estado: "resuelta"` y campo `contrasenasGeneradas: []` (lista de contraseñas temporales generadas con {contrasena, fechaGeneracion, generadoPor, generadoPorNombre, usada}).
+  - `logica.js` `fichaBancoDatosPorDefecto()`: agregados campos `solicitudesRecuperacionMes` (contador del mes) y `mesContadorSolicitudes` (mes de referencia para reset).
+  - `logica.js` `completarFichaBancoDatos()`: migración de fichas existentes con los nuevos campos.
+  - `logica.js` `enviarContrasenaAUsuario()`: permite múltiples contraseñas temporales para una misma solicitud (no bloquea si ya existe una); guarda cada una en `solicitud.contrasenasGeneradas[]` con quién la generó y cuándo; registra en banco de datos del solicitante y del jefe (`contrasena_temporal_generada`); contador de solicitudes por mes; bandera `camposLibres.reincidenciaRecuperacion` si >3 en un mes (para Vero, sin alerta en tiempo real).
+  - `logica.js` `validarEntrada()`: valida la contraseña temporal contra cualquiera de las generadas para la solicitud; si es válida, invalida las restantes (primera que se usa anula las demás), marca la solicitud como `resuelta`; registra en banco de datos del usuario y jefe (`contrasena_temporal_usada`); agrega aviso en cartelera del jefe *"El usuario [Nombre] ya está operativo de nuevo"* (prioridad ALTA) e inyecta en cola de mensajes si el jefe está logueado.
+  - `logica.js` `construirColaMensajes()`: muestra mensajes de cartelera almacenados en `fichaBancoDatos.mensajesCartelera` del usuario activo.
+  - `logica.js` `cambiarContrasenaObligatoria()`: registra en banco de datos el cambio de contraseña definitiva (`contrasena_definitiva_cambiada`) con fecha, hora y quién generó la temporal usada.
+  - No se usaron `prompt()`, `alert()` ni `confirm()`.
+- **Verificación:** ediciones revisadas sección por sección.
+
 ---
 ---
 

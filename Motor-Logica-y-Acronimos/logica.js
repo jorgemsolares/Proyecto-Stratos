@@ -1717,6 +1717,11 @@ function enviarContrasenaAUsuario() {
             fichaSolicitante.solicitudesRecuperacionMes = 0;
         }
         fichaSolicitante.solicitudesRecuperacionMes++;
+        // Bandera de reincidencia: más de 3 solicitudes en el mes (solo para Vero, sin alerta en tiempo real)
+        if (fichaSolicitante.solicitudesRecuperacionMes > 3 && !fichaSolicitante.camposLibres.reincidenciaRecuperacion) {
+            fichaSolicitante.camposLibres.reincidenciaRecuperacion = true;
+            fichaSolicitante.camposLibres.mesReincidenciaRecuperacion = mesActual;
+        }
         fichaSolicitante.actualizado = ahora.toISOString();
         guardarBancoDatos();
     }
