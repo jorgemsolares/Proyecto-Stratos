@@ -696,7 +696,7 @@ function manejarMascara(input) {
     window[varNombre] = memoriaActual;
     if (memoriaActual.length > 0) {
         input.value = "●".repeat(memoriaActual.length - 1) + memoriaActual.slice(-1);
-        timerOcultarCaracter = setTimeout(() => { if (input.value.length === memoriaActual.length) input.value = "●".repeat(memoriaActual.length); }, 2000);
+        timerOcultarCaracter = setTimeout(() => { if (input.value.length === memoriaActual.length) input.value = "●".repeat(memoriaActual.length); }, 2500);
     }
     if (input.id === 'reg-pass' || input.id === 'reg-pass-conf') validarPasswords();
 }
@@ -3218,7 +3218,7 @@ function guardarConfiguracion() {
     aplicarIdioma(config.idioma);
     actualizarEstadoBiometriaLogin(); // PUNTO 9-10-11: refleja la casilla en el Login
     if (typeof actualizarMenuTuerca === 'function') actualizarMenuTuerca();
-    mostrarAvisoInmediato("✓ Configuración guardada", "exito");
+    mostrarAvisoInmediato("Configuración guardada correctamente", "exito");
 }
 
 // Devuelve el texto traducido de una clave según el idioma actual.

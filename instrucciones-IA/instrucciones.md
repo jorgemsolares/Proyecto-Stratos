@@ -18,39 +18,67 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 
 ---
 
-## PUNTO 1: AGREGAR AVISOS DE FEEDBACK EN EL BOTÓN "SALVAR" DE PERFIL
+## PUNTO 1: AGREGAR AVISO DE FEEDBACK AL BOTÓN "GUARDAR CAMBIOS" EN CONFIGURACIÓN
 
-**Contexto:** En la función `procesarRegistro()`, cuando el usuario guarda su perfil (en cualquiera de sus 3 variantes), el sistema debe mostrar un aviso en la barra de notificaciones con su icono correspondiente (Verde para éxito, Amarillo para advertencia).
+**Contexto:** Al presionar "GUARDAR CAMBIOS" en Configuración, el sistema guarda los datos pero no muestra ningún aviso, por lo que el usuario no sabe si la acción tuvo éxito.
 
 **Qué cambiar:**
-1. En `logica.js`, en la función `procesarRegistro()`:
-   - **Registro nuevo (primera vez):** Antes de redirigir a `pantalla-configuracion`, mostrar un aviso **Verde** con el icono `Exito-verde.svg` que diga: *"Perfil creado correctamente. Continúa con la configuración"*.
-   - **Edición normal:** Asegurar que el aviso actual (`"✓ Perfil actualizado"`) use el icono `Exito-verde.svg` y sea de tipo `exito` (Verde).
-   - **Cambio de contraseña obligatorio:** Al cambiar la contraseña exitosamente, mostrar un aviso **Verde** con el icono `Exito-verde.svg` que diga: *"Contraseña actualizada correctamente. Perfil guardado"*.
-   - **Si faltan campos:** Asegurar que el aviso actual (Amarillo, listando los campos) use el icono `Advertencia-naranja.svg` y sea de tipo `advertencia`.
+- En `logica.js`, en la función `guardarConfiguracion()`:
+  - Al finalizar exitosamente el guardado, mostrar un aviso **Verde** en la barra de notificaciones usando la función `mostrarAvisoInmediato`, con el icono `Exito-verde.svg` y el texto: *"Configuración guardada correctamente"*.
 
 **Dónde:**
-- `Motor-Logica-y-Acronimos/logica.js`: función `procesarRegistro()`.
+- `Motor-Logica-y-Acronimos/logica.js`: función `guardarConfiguracion()`.
 
 **Qué NO hacer:**
 - NO usar `prompt()`, `alert()` ni `confirm()`.
-- NO cambiar la lógica de las validaciones.
 
 ---
 
-## PUNTO 2: AUMENTAR EL TIEMPO DE VISIÓN DEL ÚLTIMO CARÁCTER EN LA MÁSCARA DE CONTRASEÑA
+## PUNTO 2: INSERTAR EL ICONO "FIRMA.SVG" EN EL TÍTULO
 
-**Contexto:** En la función `manejarMascara()`, el último carácter de la contraseña se muestra por 800 milisegundos. Ese tiempo es muy corto para que el usuario verifique que escribió bien. Se aumentará a 2500 milisegundos (2.5 segundos) para mayor comodidad, sin comprometer la seguridad.
+**Contexto:** El título "Firma del Usuario" en Configuración perdió el icono (se eliminó el emoji genérico) pero no se colocó el icono correspondiente de la carpeta.
+
+**Qué cambiar:**
+- En `index.html`, en el bloque del área de Firma:
+  - Antes del texto "Firma del Usuario", insertar la etiqueta de imagen usando el icono `firma.svg` de la carpeta correspondiente, con la clase `icono-inline` y la ruta `../Colores-y-Estetica/Iconos/firma.svg`.
+
+**Dónde:**
+- `Cuerpo-y-Textos/index.html`: Sección `pantalla-configuracion`.
+
+**Qué NO hacer:**
+- NO usar emojis.
+
+---
+
+## PUNTO 3: QUITAR EL HALO AL CHECKBOX "INSERTAR FIRMA AUTOMÁTICAMENTE"
+
+**Contexto:** El checkbox de "Insertar firma automáticamente" tiene un halo/brillo que lo distorsiona visualmente. No debe tener los estilos de la regla de botones.
+
+**Qué cambiar:**
+- En `estilos.css`:
+  - Asegurar que el checkbox `#config-firma-automatica` (o la clase que se le esté aplicando) NO tenga el `box-shadow` (halo) ni el borde iluminado de los botones. Debe verse como un checkbox estándar.
+
+**Dónde:**
+- `Colores-y-Estetica/estilos.css`: clases relacionadas con el checkbox de la firma.
+
+**Qué NO hacer:**
+- NO cambiar el tamaño ni la funcionalidad del checkbox.
+
+---
+
+## PUNTO 4: AJUSTAR EL TIEMPO DE LA MÁSCARA DE CONTRASEÑA A 2500 MS
+
+**Contexto:** El tiempo de visión del último carácter en la máscara de contraseña se estableció en 2000 ms, pero el Arquitecto solicitó 2500 ms.
 
 **Qué cambiar:**
 - En `logica.js`, en la función `manejarMascara()`:
-  - Cambiar el valor `800` en el `setTimeout` (que oculta el carácter) a `2000`.
+  - Cambiar el valor `2000` del `setTimeout` a `2500`.
 
 **Dónde:**
 - `Motor-Logica-y-Acronimos/logica.js`: función `manejarMascara()`.
 
 **Qué NO hacer:**
-- NO agregar un botón de "ojo" para ver la contraseña (decisión de seguridad del Arquitecto).
+- NO agregar botón de "ojo".
 
 ---
 

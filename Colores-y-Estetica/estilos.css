@@ -1171,6 +1171,15 @@ textarea {
     font-family: inherit;
 }
 
+#config-firma-automatica {
+    width: 18px;
+    height: 18px;
+    box-shadow: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: transparent;
+    cursor: pointer;
+}
+
 /* Desplegables del área de Firma (patrón igual al Slogan, ids propios para no colisionar) */
 .selector-color-firma {
     position: relative;
