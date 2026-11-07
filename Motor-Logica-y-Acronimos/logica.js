@@ -5198,8 +5198,11 @@ function deshacerUltimoCambio() {
 document.addEventListener('keydown', function (e) {
     if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
         const elementoActivo = document.activeElement;
-        if (elementoActivo && (elementoActivo.tagName === 'INPUT' || elementoActivo.tagName === 'TEXTAREA')) {
-            return; // dejar que el navegador maneje el deshacer nativo (letra por letra)
+        if (elementoActivo && ((elementoActivo.tagName === 'INPUT' && elementoActivo.type === 'password') || elementoActivo.tagName === 'TEXTAREA')) {
+            return; // dejar que el navegador maneje el input de contraseña de forma nativa sin interferir
+        }
+        if (elementoActivo && elementoActivo.tagName === 'INPUT') {
+            return;
         }
         e.preventDefault();
         deshacerUltimoCambio();
