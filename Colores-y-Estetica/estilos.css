@@ -369,10 +369,9 @@ textarea {
 }
 
 /* Inputs de contraseña con máscara */
-/* Clase input-password requerida para enmascaramiento nativo/visual */
+/* Clase input-password requerida para campos de contraseña con texto y puntos manuales */
 .input-password {
     font-family: 'Verdana', sans-serif;
-    -webkit-text-security: disc;
 }
 
 #reg-pass, #reg-pass-conf, #acc-pass {

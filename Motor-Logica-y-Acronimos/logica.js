@@ -694,16 +694,26 @@ function manejarMascara(input) {
     if (currentVal === "") {
         real = "";
     } else if (currentVal.includes('●')) {
-        // Si contiene puntos, deducimos qué pasó
-        if (currentVal.length > real.length) {
-            const nuevoChar = currentVal[currentVal.length - 1];
-            if (nuevoChar !== '●') real += nuevoChar;
-        } else if (currentVal.length < real.length) {
+        // Si el usuario borró o hay puntos, deducimos el cambio
+        if (currentVal.length < real.length) {
             real = real.substring(0, currentVal.length);
+        } else if (currentVal.length > real.length) {
+            const nuevoChar = currentVal[currentVal.length - 1];
+            if (nuevoChar !== '●') {
+                real += nuevoChar;
+            }
         }
     } else {
-        // Texto normal tipeado o pegado
-        real = currentVal;
+        // El usuario escribió texto directamente
+        // Si la longitud cambió o se añadió un carácter nuevo al final
+        if (currentVal.length > real.length) {
+            const nuevoChar = currentVal[currentVal.length - 1];
+            real += nuevoChar;
+        } else if (currentVal.length < real.length) {
+            real = real.substring(0, currentVal.length);
+        } else {
+            real = currentVal;
+        }
     }
 
     valoresRealesPassword[input.id] = real;
