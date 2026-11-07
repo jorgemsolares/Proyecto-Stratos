@@ -688,16 +688,39 @@ function manejarMascara(input) {
     if (!varNombre) return;
     let memoriaActual = window[varNombre] || '';
     const valorActual = input.value;
-    if (valorActual === "") memoriaActual = "";
-    else if (valorActual.length > memoriaActual.length) {
-        const nuevoChar = valorActual[valorActual.length - 1];
-        if (nuevoChar !== '●') memoriaActual += nuevoChar;
-    } else memoriaActual = memoriaActual.substring(0, valorActual.length);
-    window[varNombre] = memoriaActual;
-    if (memoriaActual.length > 0) {
-        input.value = "●".repeat(memoriaActual.length - 1) + memoriaActual.slice(-1);
-        timerOcultarCaracter = setTimeout(() => { if (input.value.length === memoriaActual.length) input.value = "●".repeat(memoriaActual.length); }, 2500);
+
+    if (valorActual === "") {
+        memoriaActual = "";
+    } else if (valorActual.includes('●')) {
+        // El input contiene puntos, reconstruimos o agregamos el nuevo carácter tipeado
+        if (valorActual.length > memoriaActual.length) {
+            const nuevoChar = valorActual[valorActual.length - 1];
+            if (nuevoChar !== '●') {
+                memoriaActual += nuevoChar;
+            }
+        } else if (valorActual.length < memoriaActual.length) {
+            memoriaActual = memoriaActual.substring(0, valorActual.length);
+        }
+    } else {
+        // El usuario tipeó o pegó texto normal directamente
+        memoriaActual = valorActual;
     }
+
+    window[varNombre] = memoriaActual;
+
+    if (memoriaActual.length > 0) {
+        // Mostrar todos los caracteres como puntos excepto el último, que permanece visible
+        input.value = "●".repeat(memoriaActual.length - 1) + memoriaActual.slice(-1);
+        
+        timerOcultarCaracter = setTimeout(() => {
+            if (input.value.length === memoriaActual.length) {
+                input.value = "●".repeat(memoriaActual.length);
+            }
+        }, 2500);
+    } else {
+        input.value = "";
+    }
+
     if (input.id === 'reg-pass' || input.id === 'reg-pass-conf') validarPasswords();
 }
 

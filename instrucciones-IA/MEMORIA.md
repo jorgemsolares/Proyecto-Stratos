@@ -49,6 +49,14 @@
 5. **`instrucciones-IA/instrucciones.md`**
    - Protocolo: el rol del Arquitecto (dueño) y de la IA (asistente técnico).
 
+### 6/11/2026 — instrucciones.md (PUNTO ÚNICO): Reparar máscara de contraseña
+- **Punto Único — hecho:**
+  - `logica.js`: función `manejarMascara()` optimizada para que el último carácter escrito permanezca visible temporalmente y se reemplace por `●` tras 2,500 ms (`setTimeout`), asegurando que `memoriaActual` guarde correctamente el texto real de forma robusta.
+  - No se usaron `prompt()`, `alert()` ni `confirm()`; no se agregó botón de "ojo".
+- **Verificación:** código revisado y validado.
+
+---
+
 6. **`instrucciones-IA/MEMORIA.md`** (este archivo)
    - Memoria de continuidad: estado actual, visión, bitácora.
 
