@@ -673,9 +673,11 @@ function procesarLogo(input) {
 }
 
 // ==========================================
-// 11. SEGURIDAD: MÁSCARA DE CONTRASEÑA (cambia temporalmente a tipo text por 2.5s y gestiona variables globales)
+// 11. SEGURIDAD: MÁSCARA DE CONTRASEÑA (Mecánica exacta: muestra última letra y la oculta tras 2.5s)
 // ==========================================
-let timersMascara = {};
+let valoresRealesPassword = {};
+let timersOcultarUltimaLetra = {};
+
 function manejarMascara(input) {
     if (!input) return;
     const mapaVariables = {
@@ -685,20 +687,49 @@ function manejarMascara(input) {
         'nueva-pass-obligatoria': 'claveObligatoriaNueva', 'conf-pass-obligatoria': 'claveObligatoriaConf'
     };
     const varNombre = mapaVariables[input.id];
+    
+    let real = valoresRealesPassword[input.id] || '';
+    const currentVal = input.value;
+
+    if (currentVal === "") {
+        real = "";
+    } else if (currentVal.includes('●')) {
+        // Si contiene puntos, deducimos qué pasó
+        if (currentVal.length > real.length) {
+            const nuevoChar = currentVal[currentVal.length - 1];
+            if (nuevoChar !== '●') real += nuevoChar;
+        } else if (currentVal.length < real.length) {
+            real = real.substring(0, currentVal.length);
+        }
+    } else {
+        // Texto normal tipeado o pegado
+        real = currentVal;
+    }
+
+    valoresRealesPassword[input.id] = real;
     if (varNombre) {
-        window[varNombre] = input.value;
+        window[varNombre] = real;
     }
 
-    // Cambiar temporalmente a tipo text para que el navegador maneje el texto y el cursor de forma nativa
-    input.type = 'text';
-
-    if (timersMascara[input.id]) {
-        clearTimeout(timersMascara[input.id]);
+    if (real.length === 0) {
+        input.value = "";
+        return;
     }
 
-    timersMascara[input.id] = setTimeout(() => {
+    // Mostrar todo como puntos excepto el último carácter
+    input.value = "●".repeat(real.length - 1) + real.slice(-1);
+
+    if (timersOcultarUltimaLetra[input.id]) {
+        clearTimeout(timersOcultarUltimaLetra[input.id]);
+    }
+
+    // Tras 2500 ms sin escribir, ocultar la última letra (poner todo con '●')
+    timersOcultarUltimaLetra[input.id] = setTimeout(() => {
         if (input && document.body.contains(input)) {
-            input.type = 'password';
+            const r = valoresRealesPassword[input.id] || '';
+            if (r.length > 0) {
+                input.value = "●".repeat(r.length);
+            }
         }
     }, 2500);
 
@@ -706,13 +737,6 @@ function manejarMascara(input) {
         if (typeof validarPasswords === 'function') validarPasswords();
     }
 }
-
-// Listener global para el evento input en campos de contraseña
-document.addEventListener('input', function(e) {
-    if (e.target && e.target.tagName === 'INPUT' && e.target.type === 'password') {
-        manejarMascara(e.target);
-    }
-});
 
 // ==========================================
 // 12. GENERACIÓN DE ACRÓNIMOS (genera acrónimos a partir de nombres o puestos)

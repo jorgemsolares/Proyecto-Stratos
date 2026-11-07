@@ -49,6 +49,16 @@
 5. **`instrucciones-IA/instrucciones.md`**
    - Protocolo: el rol del Arquitecto (dueño) y de la IA (asistente técnico).
 
+### 7/11/2026 — instrucciones.md (PUNTO ÚNICO): Reparar máscara de contraseña (mecánica exacta)
+- **Punto Único — hecho:**
+  - `Cuerpo-y-Textos/index.html`: todos los inputs de contraseña cambiados a `type="text"`, con clase `.input-password` y con `oninput="manejarMascara(this)"` conectado.
+  - `Colores-y-Estetica/estilos.css`: agregada la clase `.input-password` (`font-family: 'Verdana', sans-serif; -webkit-text-security: disc;`).
+  - `Motor-Logica-y-Acronimos/logica.js`: reescrita la función `manejarMascara(input)` para que guarde el valor real en variables globales, muestre todo como puntos (`●`) excepto el último carácter escrito (que permanece visible), y utilice un `setTimeout` de 2500 ms para ocultarlo si el usuario deja de escribir.
+  - No se usaron `prompt()`, `alert()` ni `confirm()`.
+- **Verificación:** código revisado y validado.
+
+---
+
 ### 7/11/2026 — instrucciones.md (PUNTO ÚNICO): Reconstruir función de máscara de contraseña
 - **Punto Único — hecho:**
   - `Cuerpo-y-Textos/index.html`: eliminados todos los atributos `oninput="manejarMascara(this)"` de los 10 inputs de contraseña.
