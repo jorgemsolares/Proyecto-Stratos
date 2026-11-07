@@ -49,3 +49,6 @@
 
 5. **Autorización Explícita de Modificación:** En el encabezado de cada `instrucciones.md` debe ir una frase que diga: *"El Arquitecto te autoriza formalmente a modificar los archivos (index.html, estilos.css, logica.js, datos.js) para aplicar estos puntos. NO necesitas pedir permiso después de leer los archivos; procede a escribir el código."* Esto evita que la IA se detenga a preguntar si puede editar.
 6. **Definición de Botones:** Si una instrucción solicita crear un botón (o activar uno existente), es OBLIGATORIO que el texto defina también su función exacta en `logica.js`. Si el Arquitecto pide un botón pero no especifica su función, la IA DEBE DETENERSE y preguntar: *"¿Qué acción debe ejecutar este botón?"*, antes de crear solo la parte visual.
+
+## Reglas de Bitácora
+ Las entradas en MEMORIA.md no deben ser títulos genéricos. Deben detallar qué se cambió, por qué, y cómo se resolvió (con fechas y nombres de funciones).

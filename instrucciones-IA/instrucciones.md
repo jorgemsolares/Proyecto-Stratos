@@ -18,43 +18,39 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 
 ---
 
-## PUNTO ÚNICO: LÓGICA DE MÚLTIPLES CONTRASEÑAS TEMPORALES, ANULACIÓN Y REGISTRO
+## PUNTO 1: AGREGAR AVISOS DE FEEDBACK EN EL BOTÓN "SALVAR" DE PERFIL
 
-**Contexto:** El flujo actual permite que un jefe genere una contraseña temporal para un subalterno. Sin embargo, en la vida real, si el jefe tarda, el usuario puede pedirle a varios compañeros que le ayuden. El sistema debe ser flexible (permitir múltiples contraseñas generadas para una misma solicitud) pero seguro (la primera que se use anula las demás). Además, debe registrar todos los datos para medir la operatividad.
+**Contexto:** En la función `procesarRegistro()`, cuando el usuario guarda su perfil (en cualquiera de sus 3 variantes), el sistema debe mostrar un aviso en la barra de notificaciones con su icono correspondiente (Verde para éxito, Amarillo para advertencia).
 
-**Qué cambiar en `logica.js`:**
-
-1. **Generación de Múltiples Contraseñas (Flexibilidad):**
-   - En la función `enviarContrasenaAUsuario()`, permitir que se generen y envíen múltiples contraseñas temporales para una misma solicitud. No bloquear la acción si ya existe una contraseña generada previamente.
-   - Guardar cada nueva contraseña temporal generada en una lista dentro de la solicitud (ej. `contrasenasGeneradas: []`).
-
-2. **Anulación por Uso (Seguridad):**
-   - En la función `validarEntrada()` (Login), cuando el usuario ingrese con una contraseña temporal:
-     - Validar que coincida con **cualquiera** de las contraseñas generadas para su solicitud.
-     - Si la contraseña es válida y el usuario entra, el sistema debe **invalidar automáticamente todas las demás contraseñas temporales** de esa solicitud (marcarlas como `usadas` o borrarlas de la lista) y marcar la solicitud como `resuelta`.
-
-3. **Aviso Operativo al Jefe (Cartelera):**
-   - Al resolverse la solicitud, generar un aviso en la cartelera del jefe que diga: *"El usuario [Nombre del solicitante] ya está operativo de nuevo"* (sin especificar quién le dio la contraseña).
-
-4. **Registro en el Banco de Datos (Trazabilidad):**
-   - Al generar cada contraseña temporal, registrar en el banco de datos del solicitante y del jefe:
-     - Quién generó la contraseña (ID del jefe o compañero).
-     - Fecha y hora de generación.
-   - Al resolverse la solicitud (cuando el usuario entra y cambia la contraseña), registrar:
-     - Cuál de todas las contraseñas se usó (quién la generó).
-     - Fecha y hora en que el usuario ingresó (tiempo total de respuesta).
-     - Fecha y hora en que se cambió la contraseña definitiva.
-   - **Alerta de patrón:** Si el usuario ha solicitado recuperación de contraseña más de 3 veces en un mes, registrar esta bandera en su banco de datos para que Vero pueda analizarlo posteriormente (no lanzar alerta en tiempo real, solo guardar el dato).
+**Qué cambiar:**
+1. En `logica.js`, en la función `procesarRegistro()`:
+   - **Registro nuevo (primera vez):** Antes de redirigir a `pantalla-configuracion`, mostrar un aviso **Verde** con el icono `Exito-verde.svg` que diga: *"Perfil creado correctamente. Continúa con la configuración"*.
+   - **Edición normal:** Asegurar que el aviso actual (`"✓ Perfil actualizado"`) use el icono `Exito-verde.svg` y sea de tipo `exito` (Verde).
+   - **Cambio de contraseña obligatorio:** Al cambiar la contraseña exitosamente, mostrar un aviso **Verde** con el icono `Exito-verde.svg` que diga: *"Contraseña actualizada correctamente. Perfil guardado"*.
+   - **Si faltan campos:** Asegurar que el aviso actual (Amarillo, listando los campos) use el icono `Advertencia-naranja.svg` y sea de tipo `advertencia`.
 
 **Dónde:**
-- `Motor-Logica-y-Acronimos/logica.js`: funciones `enviarContrasenaAUsuario`, `validarEntrada` y `registrarActividadBancoDatos`.
-- `Motor-Logica-y-Acronimos/datos.js`: estructuras de la solicitud y el usuario (para guardar la lista de contraseñas generadas y la bandera de solicitudes repetidas).
+- `Motor-Logica-y-Acronimos/logica.js`: función `procesarRegistro()`.
 
 **Qué NO hacer:**
 - NO usar `prompt()`, `alert()` ni `confirm()`.
-- NO bloquear la generación de una segunda contraseña si ya existe una (la flexibilidad es obligatoria).
-- NO permitir que se use más de una contraseña temporal para entrar (la primera que se use anula las demás).
-- NO analizar los datos en tiempo real (eso es tarea de Vero después).
+- NO cambiar la lógica de las validaciones.
+
+---
+
+## PUNTO 2: AUMENTAR EL TIEMPO DE VISIÓN DEL ÚLTIMO CARÁCTER EN LA MÁSCARA DE CONTRASEÑA
+
+**Contexto:** En la función `manejarMascara()`, el último carácter de la contraseña se muestra por 800 milisegundos. Ese tiempo es muy corto para que el usuario verifique que escribió bien. Se aumentará a 2500 milisegundos (2.5 segundos) para mayor comodidad, sin comprometer la seguridad.
+
+**Qué cambiar:**
+- En `logica.js`, en la función `manejarMascara()`:
+  - Cambiar el valor `800` en el `setTimeout` (que oculta el carácter) a `2000`.
+
+**Dónde:**
+- `Motor-Logica-y-Acronimos/logica.js`: función `manejarMascara()`.
+
+**Qué NO hacer:**
+- NO agregar un botón de "ojo" para ver la contraseña (decisión de seguridad del Arquitecto).
 
 ---
 

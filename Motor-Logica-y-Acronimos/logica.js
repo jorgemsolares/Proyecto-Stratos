@@ -696,7 +696,7 @@ function manejarMascara(input) {
     window[varNombre] = memoriaActual;
     if (memoriaActual.length > 0) {
         input.value = "●".repeat(memoriaActual.length - 1) + memoriaActual.slice(-1);
-        timerOcultarCaracter = setTimeout(() => { if (input.value.length === memoriaActual.length) input.value = "●".repeat(memoriaActual.length); }, 800);
+        timerOcultarCaracter = setTimeout(() => { if (input.value.length === memoriaActual.length) input.value = "●".repeat(memoriaActual.length); }, 2000);
     }
     if (input.id === 'reg-pass' || input.id === 'reg-pass-conf') validarPasswords();
 }
@@ -994,17 +994,20 @@ function procesarRegistro() {
         const passConf = document.getElementById('edit-pass-conf')?.value || '';
         if (passActual || passNueva || passConf) {
             if (usuarioActivo.contrasena !== passActual) {
-                mostrarAvisoInmediato("✖ Contraseña actual incorrecta", "error");
+                mostrarAvisoInmediato("Contraseña actual incorrecta", "error");
                 return;
             }
             if (!passNueva || passNueva.length < 6 || passNueva !== passConf) {
-                mostrarAvisoInmediato("✖ Error en nueva contraseña", "error");
+                mostrarAvisoInmediato("Error en nueva contraseña", "error");
                 return;
             }
             usuarioActivo.contrasena = passNueva;
             usuarioActivo.requiereCambioContrasena = false;
             usuarioActivo.fechaExpiracionTemporal = null;
             ['edit-pass-actual', 'edit-pass-nueva', 'edit-pass-conf'].forEach(id => { const el = document.getElementById(id); if (el) { el.value = ""; manejarMascara(el); } });
+            mostrarAvisoInmediato("Contraseña actualizada correctamente. Perfil guardado", "exito");
+        } else {
+            mostrarAvisoInmediato("Perfil actualizado correctamente", "exito");
         }
         const idx = baseDatosUsuarios.findIndex(u => u.id === usuarioActivo.id);
         if (idx !== -1) baseDatosUsuarios[idx] = {...usuarioActivo};
@@ -1023,7 +1026,6 @@ function procesarRegistro() {
             localStorage.setItem('usuarios_del_dispositivo', JSON.stringify(listaDispositivo));
         } catch (e) { console.error("Error sincronizando autocompletado:", e); }
         // Quedarse en la pantalla de Perfil (edición posterior)
-        mostrarAvisoInmediato("✓ Perfil actualizado correctamente", "exito");
         return;
     }
     
@@ -1105,14 +1107,14 @@ function procesarRegistro() {
     claveReal = ""; claveConfReal = "";
     document.getElementById('reg-pass').value = "";
     document.getElementById('reg-pass-conf').value = "";
-    // Aviso de campos opcionales pendientes (Teléfono o Email faltantes)
+    // Aviso de campos opcionales pendientes (Teléfono o Email faltantes) o éxito de registro nuevo
     const pendientes = [];
     if (!telefono) pendientes.push('Teléfono');
     if (!email) pendientes.push('Email');
     if (pendientes.length > 0) {
         mostrarAvisoInmediato("Perfil guardado. Quedó pendiente: " + pendientes.join(' y '), "advertencia");
     } else {
-        mostrarAvisoInmediato("✓ Registro exitoso", "exito");
+        mostrarAvisoInmediato("Perfil creado correctamente. Continúa con la configuración", "exito");
     }
     datosInvitacionActual = {};
     // Primera vez (Registro nuevo): ir a Configuración para completar el onboarding
