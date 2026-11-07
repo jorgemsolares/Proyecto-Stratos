@@ -85,17 +85,17 @@
         </div>
         <p class="leyenda-acronimo" data-i18n="reg_leyenda_acronimo">El acrónimo se forma con las mayúsculas y números de tu posición</p>
 
-        <input type="password" id="reg-pass" placeholder="Contraseña *" data-i18n="reg_pass" oninput="manejarMascara(this)" autocomplete="new-password" required>
-        <input type="password" id="reg-pass-conf" placeholder="Confirmar Contraseña *" data-i18n="reg_pass_conf" oninput="manejarMascara(this)" autocomplete="new-password" required>
+        <input type="password" id="reg-pass" placeholder="Contraseña *" data-i18n="reg_pass" autocomplete="new-password" required>
+        <input type="password" id="reg-pass-conf" placeholder="Confirmar Contraseña *" data-i18n="reg_pass_conf" autocomplete="new-password" required>
         <p id="mensaje-password" class="aviso-letrero"></p>
       
         <div id="campos-cambio-contrasena" style="display:none;">
             <hr style="margin: 20px 0; border: 1px solid rgba(255,255,255,0.1);">
             <p style="font-size: 0.9rem; color: var(--color-primario); margin-bottom: 10px; font-weight: 600;"><img src="../Colores-y-Estetica/Iconos/Cambiar contraseña.svg" alt="" class="icono-inline"> <span data-i18n="reg_cambiar_pass">Cambiar mi contraseña (opcional)</span>
             </p>
-            <input type="password" id="edit-pass-actual" placeholder="Contraseña Actual" data-i18n="reg_pass_actual" oninput="manejarMascara(this)" autocomplete="current-password">
-            <input type="password" id="edit-pass-nueva" placeholder="Nueva Contraseña" data-i18n="reg_pass_nueva" oninput="manejarMascara(this)" autocomplete="new-password">
-            <input type="password" id="edit-pass-conf" placeholder="Confirmar Nueva Contraseña" data-i18n="reg_pass_nueva_conf" oninput="manejarMascara(this)" autocomplete="new-password">
+            <input type="password" id="edit-pass-actual" placeholder="Contraseña Actual" data-i18n="reg_pass_actual" autocomplete="current-password">
+            <input type="password" id="edit-pass-nueva" placeholder="Nueva Contraseña" data-i18n="reg_pass_nueva" autocomplete="new-password">
+            <input type="password" id="edit-pass-conf" placeholder="Confirmar Nueva Contraseña" data-i18n="reg_pass_nueva_conf" autocomplete="new-password">
             <p id="mensaje-cambio-password" class="aviso-letrero"></p>
         </div>
 
@@ -140,7 +140,7 @@
        
         <input type="text" id="acc-id" placeholder="ID Empleado" data-i18n="acc_id" autocomplete="new-password" spellcheck="true" readonly onfocus="this.removeAttribute('readonly')">
         
-        <input type="password" id="acc-pass" placeholder="Contraseña" data-i18n="acc_pass" oninput="manejarMascara(this)" autocomplete="current-password">
+        <input type="password" id="acc-pass" placeholder="Contraseña" data-i18n="acc_pass" autocomplete="current-password">
       
         <p id="mensaje-acceso" class="aviso-letrero"></p>
         <p id="intentos-restantes" class="texto-advertencia" style="display:none;"></p>
@@ -540,8 +540,8 @@
                     
                     <div class="formulario">
                         <input type="text" id="recuperacion-destino" placeholder="Email o Teléfono del usuario *" data-i18n="cfg_rec_dest" spellcheck="true">
-                        <input type="password" id="recuperacion-nueva-pass" placeholder="Contraseña temporal *" data-i18n="cfg_rec_temp" oninput="manejarMascara(this)" autocomplete="new-password">
-                        <input type="password" id="recuperacion-conf-pass" placeholder="Confirmar contraseña *" data-i18n="cfg_rec_conf" oninput="manejarMascara(this)" autocomplete="new-password">
+                        <input type="password" id="recuperacion-nueva-pass" placeholder="Contraseña temporal *" data-i18n="cfg_rec_temp" autocomplete="new-password">
+                        <input type="password" id="recuperacion-conf-pass" placeholder="Confirmar contraseña *" data-i18n="cfg_rec_conf" autocomplete="new-password">
                         <p id="mensaje-recuperacion" class="aviso-letrero"></p>
                     </div>
                     
@@ -731,8 +731,8 @@
                 </p>
                 
                 <div class="formulario">
-                    <input type="password" id="nueva-pass-obligatoria" placeholder="Nueva Contraseña *" data-i18n="cambio_nueva" oninput="manejarMascara(this)" autocomplete="new-password">
-                    <input type="password" id="conf-pass-obligatoria" placeholder="Confirmar Contraseña *" data-i18n="cambio_conf" oninput="manejarMascara(this)" autocomplete="new-password">
+                    <input type="password" id="nueva-pass-obligatoria" placeholder="Nueva Contraseña *" data-i18n="cambio_nueva" autocomplete="new-password">
+                    <input type="password" id="conf-pass-obligatoria" placeholder="Confirmar Contraseña *" data-i18n="cambio_conf" autocomplete="new-password">
                     <p id="mensaje-cambio-obligatorio" class="aviso-letrero"></p>
                 </div>
             </div>

@@ -673,11 +673,11 @@ function procesarLogo(input) {
 }
 
 // ==========================================
-// 11. SEGURIDAD: EFECTO LETRA-PUNTO (enmascara las contraseñas con puntos y guarda el valor real)
+// 11. SEGURIDAD: MÁSCARA DE CONTRASEÑA (cambia temporalmente a tipo text por 2.5s y gestiona variables globales)
 // ==========================================
-let timerOcultarCaracter;
+let timersMascara = {};
 function manejarMascara(input) {
-    if (timerOcultarCaracter) clearTimeout(timerOcultarCaracter);
+    if (!input) return;
     const mapaVariables = {
         'reg-pass': 'claveReal', 'reg-pass-conf': 'claveConfReal', 'acc-pass': 'claveAccesoReal',
         'edit-pass-actual': 'claveEditActual', 'edit-pass-nueva': 'claveEditNueva', 'edit-pass-conf': 'claveEditConf',
@@ -685,44 +685,34 @@ function manejarMascara(input) {
         'nueva-pass-obligatoria': 'claveObligatoriaNueva', 'conf-pass-obligatoria': 'claveObligatoriaConf'
     };
     const varNombre = mapaVariables[input.id];
-    if (!varNombre) return;
-    let memoriaActual = window[varNombre] || '';
-    const valorActual = input.value;
+    if (varNombre) {
+        window[varNombre] = input.value;
+    }
 
-    if (valorActual === "") {
-        memoriaActual = "";
-    } else if (valorActual.includes('●')) {
-        // El input contiene puntos, reconstruimos o agregamos el nuevo carácter tipeado
-        if (valorActual.length > memoriaActual.length) {
-            const nuevoChar = valorActual[valorActual.length - 1];
-            if (nuevoChar !== '●') {
-                memoriaActual += nuevoChar;
-            }
-        } else if (valorActual.length < memoriaActual.length) {
-            memoriaActual = memoriaActual.substring(0, valorActual.length);
+    // Cambiar temporalmente a tipo text para que el navegador maneje el texto y el cursor de forma nativa
+    input.type = 'text';
+
+    if (timersMascara[input.id]) {
+        clearTimeout(timersMascara[input.id]);
+    }
+
+    timersMascara[input.id] = setTimeout(() => {
+        if (input && document.body.contains(input)) {
+            input.type = 'password';
         }
-    } else {
-        // El usuario tipeó o pegó texto normal directamente
-        memoriaActual = valorActual;
+    }, 2500);
+
+    if (input.id === 'reg-pass' || input.id === 'reg-pass-conf') {
+        if (typeof validarPasswords === 'function') validarPasswords();
     }
-
-    window[varNombre] = memoriaActual;
-
-    if (memoriaActual.length > 0) {
-        // Mostrar todos los caracteres como puntos excepto el último, que permanece visible
-        input.value = "●".repeat(memoriaActual.length - 1) + memoriaActual.slice(-1);
-        
-        timerOcultarCaracter = setTimeout(() => {
-            if (input.value.length === memoriaActual.length) {
-                input.value = "●".repeat(memoriaActual.length);
-            }
-        }, 2500);
-    } else {
-        input.value = "";
-    }
-
-    if (input.id === 'reg-pass' || input.id === 'reg-pass-conf') validarPasswords();
 }
+
+// Listener global para el evento input en campos de contraseña
+document.addEventListener('input', function(e) {
+    if (e.target && e.target.tagName === 'INPUT' && e.target.type === 'password') {
+        manejarMascara(e.target);
+    }
+});
 
 // ==========================================
 // 12. GENERACIÓN DE ACRÓNIMOS (genera acrónimos a partir de nombres o puestos)

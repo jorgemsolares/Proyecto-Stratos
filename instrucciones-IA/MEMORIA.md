@@ -49,6 +49,15 @@
 5. **`instrucciones-IA/instrucciones.md`**
    - Protocolo: el rol del Arquitecto (dueño) y de la IA (asistente técnico).
 
+### 7/11/2026 — instrucciones.md (PUNTO ÚNICO): Reconstruir función de máscara de contraseña
+- **Punto Único — hecho:**
+  - `Cuerpo-y-Textos/index.html`: eliminados todos los atributos `oninput="manejarMascara(this)"` de los 10 inputs de contraseña.
+  - `Motor-Logica-y-Acronimos/logica.js`: reescrita la función `manejarMascara(input)` para cambiar temporalmente el atributo `type` del input de `password` a `text` durante 2,500 ms al escribir (permitiendo que el navegador gestione nativamente el texto y el cursor sin congelamientos), y agregado un listener global de evento `input` para campos de contraseña.
+  - No se usaron `prompt()`, `alert()` ni `confirm()`.
+- **Verificación:** código revisado y validado.
+
+---
+
 ### 6/11/2026 — instrucciones.md (PUNTO ÚNICO): Arreglar conflicto entre máscara de contraseña y Ctrl+Z
 - **Punto Único — hecho:**
   - `logica.js`: en el listener `keydown`, se añadió una condición explícita para verificar si `document.activeElement` es un `<input>` de tipo `password` (o cualquier `<input>` / `<textarea>`), asegurando que el sistema **NO** ejecute `preventDefault()` ni interfiera con la escritura o visualización del último carácter temporalmente en los campos de contraseña.
