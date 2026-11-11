@@ -49,6 +49,15 @@
 5. **`instrucciones-IA/instrucciones.md`**
    - Protocolo: el rol del Arquitecto (dueño) y de la IA (asistente técnico).
 
+### 7/11/2026 — instrucciones.md (PUNTO ÚNICO): Validación en tiempo real de contraseñas en Configuración
+- **Punto Único — hecho:**
+  - `Cuerpo-y-Textos/index.html`: agregado evento `oninput="validarPasswordsConfig()"` a los inputs `#recuperacion-nueva-pass` y `#recuperacion-conf-pass`, y el elemento `<p id="mensaje-password-config" class="aviso-letrero"></p>`.
+  - `Motor-Logica-y-Acronimos/logica.js`: creada la función `validarPasswordsConfig()` para validar en tiempo real que las contraseñas de recuperación coincidan (aviso verde "✓ Coinciden" o rojo "✖ No coinciden"), vinculada también desde `manejarMascara()`.
+  - No se usaron `prompt()`, `alert()` ni `confirm()`.
+- **Verificación:** código revisado y validado.
+
+---
+
 ### 7/11/2026 — instrucciones.md (PUNTO ÚNICO): Reparar máscara de contraseña (mecánica exacta afinada)
 - **Punto Único — hecho:**
   - `Colores-y-Estetica/estilos.css`: removido `-webkit-text-security` de `.input-password` para evitar conflictos visuales.

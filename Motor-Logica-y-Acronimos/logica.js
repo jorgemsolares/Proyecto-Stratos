@@ -737,6 +737,46 @@ function manejarMascara(input) {
     timersOcultarUltimaLetra[input.id] = setTimeout(() => {
         if (input && document.body.contains(input)) {
             const r = valoresRealesPassword[input.id] || '';
+    if (input.id === 'reg-pass' || input.id === 'reg-pass-conf') {
+        if (typeof validarPasswords === 'function') validarPasswords();
+    }
+    if (input.id === 'recuperacion-nueva-pass' || input.id === 'recuperacion-conf-pass') {
+        if (typeof validarPasswordsConfig === 'function') validarPasswordsConfig();
+    }
+}
+
+// ==========================================
+// VALIDACIÓN DE CONTRASEÑAS EN CONFIGURACIÓN (Recuperación)
+// ==========================================
+function validarPasswordsConfig() {
+    const p1 = window.claveRecuperacion || '';
+    const p2 = window.claveRecuperacionConf || '';
+    const aviso = document.getElementById('mensaje-password-config');
+    if (!aviso) return false;
+    if (p1 === '' && p2 === '') {
+        aviso.innerText = '';
+        aviso.className = 'aviso-letrero';
+        aviso.style.maxHeight = '0';
+        return false;
+    }
+    if (p2 !== '') {
+        if (p1 !== p2) {
+            aviso.innerText = '✖ No coinciden';
+            aviso.className = 'aviso-letrero texto-error';
+            aviso.style.maxHeight = '40px';
+            return false;
+        } else {
+            aviso.innerText = '✓ Coinciden';
+            aviso.className = 'aviso-letrero texto-exito';
+            aviso.style.maxHeight = '40px';
+            return true;
+        }
+    }
+    aviso.innerText = '';
+    aviso.className = 'aviso-letrero';
+    aviso.style.maxHeight = '0';
+    return false;
+}
             if (r.length > 0) {
                 input.value = "●".repeat(r.length);
             }

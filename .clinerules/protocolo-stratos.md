@@ -52,3 +52,8 @@
 
 ## Reglas de Bitácora
  Las entradas en MEMORIA.md no deben ser títulos genéricos. Deben detallar qué se cambió, por qué, y cómo se resolvió (con fechas y nombres de funciones).
+
+ ## Regla de Instrucciones Ambiguas
+- Si el texto de `instrucciones.md` no especifica con precisión matemática qué cambiar, dónde y cómo debe quedar, tienes ESTRICTAMENTE PROHIBIDO escribir código.
+- En ese caso, debes detenerte y preguntar al Arquitecto: *"La instrucción X es ambigua. ¿A qué te refieres exactamente con [detalle]?"*.
+- No intentes adivinar la intención del Arquitecto ni buscar soluciones alternativas que no estén escritas. Si no está en el texto, no se hace.

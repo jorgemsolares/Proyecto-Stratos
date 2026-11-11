@@ -540,8 +540,9 @@
                     
                     <div class="formulario">
                         <input type="text" id="recuperacion-destino" placeholder="Email o Teléfono del usuario *" data-i18n="cfg_rec_dest" spellcheck="true">
-                        <input type="text" id="recuperacion-nueva-pass" class="input-password" placeholder="Contraseña temporal *" data-i18n="cfg_rec_temp" oninput="manejarMascara(this)" autocomplete="new-password">
-                        <input type="text" id="recuperacion-conf-pass" class="input-password" placeholder="Confirmar contraseña *" data-i18n="cfg_rec_conf" oninput="manejarMascara(this)" autocomplete="new-password">
+                        <input type="text" id="recuperacion-nueva-pass" class="input-password" placeholder="Contraseña temporal *" data-i18n="cfg_rec_temp" oninput="manejarMascara(this); validarPasswordsConfig()" autocomplete="new-password">
+                        <input type="text" id="recuperacion-conf-pass" class="input-password" placeholder="Confirmar contraseña *" data-i18n="cfg_rec_conf" oninput="manejarMascara(this); validarPasswordsConfig()" autocomplete="new-password">
+                        <p id="mensaje-password-config" class="aviso-letrero"></p>
                         <p id="mensaje-recuperacion" class="aviso-letrero"></p>
                     </div>
                     
