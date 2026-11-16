@@ -49,6 +49,48 @@
 5. **`instrucciones-IA/instrucciones.md`**
    - Protocolo: el rol del Arquitecto (dueño) y de la IA (asistente técnico).
 
+### 10/11/2026 — instrucciones.md (PUNTO 1 Y PUNTO 2): Validación de solicitud de recuperación y revisión de iconos SVG
+### 14/11/2026 — instrucciones.md (PUNTOS 1, 2 y 3): Corrección de logo en sello de agua, contraste de avisos y película blanca en botones de paleta
+- **Punto 1 — hecho:**
+  - `Cuerpo-y-Textos/index.html`: el branding superior volvió a ser texto (`<h1>STRATOS</h1>` con eslogan) y en el `footer-global` (`.watermark-stratos`) se reemplazó por la etiqueta `<img src="../Colores-y-Estetica/Iconos/Logo.png" alt="Stratos">`.
+  - `Colores-y-Estetica/estilos.css`: agregado `.watermark-stratos img` con `max-width: 100px; height: auto; opacity: 0.4;`.
+- **Punto 2 — hecho:**
+  - `Colores-y-Estetica/estilos.css`: ajustado `.texto-exito` (`color: #ffffff !important; text-align: center;`) y `.texto-error` (`color: #ffffff !important; text-align: center;`) para cumplir la regla de contraste y alineación. `.texto-advertencia` con `color: #0b0f19 !important; text-align: center;`.
+- **Punto 3 — hecho:**
+  - `Colores-y-Estetica/estilos.css`: en `.controles-paleta-botones button`, agregado fondo tenue `background-color: rgba(255, 255, 255, 0.1);` y borde sutil `border: 1px solid rgba(255, 255, 255, 0.2);`.
+- **Verificación:** validado con `_validar_js.py` (0 errores de sintaxis). MEMORIA y bitácora actualizadas.
+
+
+### 11/11/2026 — instrucciones.md (PUNTO 1 Y PUNTO 2): Banco de contraseñas temporales en perfil y lógica de envío
+- **Punto 1 — hecho:**
+  - `Motor-Logica-y-Acronimos/datos.js`: agregado el arreglo `contrasenasTemporales: []` a la estructura del usuario activo y perfiles de usuarios.
+- **Punto 2 — hecho:**
+  - `Motor-Logica-y-Acronimos/logica.js`: actualizada la función `enviarContrasenaAUsuario()`:
+    1. Validación del estado del formulario (contacto/contraseñas vacías y validación de coincidencia en verde) con aviso **Amarillo** y `Advertencia-naranja.svg`.
+    2. Verificación de solicitud pendiente; si no existe, muestra aviso **Rojo** con `Error-rojo.svg`, registra intento fallido en banco de datos y detiene el proceso.
+    3. Si existe solicitud: crea el objeto con la nueva clave `{ contrasena, generadoPor, fecha, usada: false }` y lo añade a `contrasenasTemporales` del usuario (sin sobrescribir la contraseña original del perfil).
+    4. Asigna `requiereCambioContrasena = true` y marca el inicio del conteo de 24 horas.
+    5. Muestra aviso **Verde** con `Exito-verde.svg` al facilitador y genera correo simulado con el cuerpo exacto: `"Tu contraseña temporal es: [Clave]"`.
+    6. Registra la acción exitosa en el banco de datos.
+- **Verificación:** Ejecutado `_validar_js.py` con esprima (0 errores de sintaxis).
+
+### 14/11/2026 — instrucciones.md (PUNTOS 1, 2 y 3): Corrección de logo en sello de agua, contraste de avisos y película blanca en botones de paleta
+- **Punto 1 — hecho:**
+  - `Cuerpo-y-Textos/index.html`: el branding superior volvió a ser texto (`<h1>STRATOS</h1>` con eslogan) y en el `footer-global` (`.watermark-stratos`) se reemplazó por la etiqueta `<img src="../Colores-y-Estetica/Iconos/Logo.png" alt="Stratos">`.
+  - `Colores-y-Estetica/estilos.css`: agregado `.watermark-stratos img` con `max-width: 100px; height: auto; opacity: 0.4;`.
+- **Punto 2 — hecho:**
+  - `Colores-y-Estetica/estilos.css`: ajustado `.texto-exito` (`color: #ffffff !important; text-align: center;`) y `.texto-error` (`color: #ffffff !important; text-align: center;`) para cumplir la regla de contraste y alineación. `.texto-advertencia` con `color: #0b0f19 !important; text-align: center;`.
+- **Punto 3 — hecho:**
+  - `Colores-y-Estetica/estilos.css`: en `.controles-paleta-botones button`, agregado fondo tenue `background-color: rgba(255, 255, 255, 0.1);` y borde sutil `border: 1px solid rgba(255, 255, 255, 0.2);`.
+- **Verificación:** validado con `_validar_js.py` (0 errores de sintaxis). MEMORIA y bitácora actualizadas.
+
+
+- **Punto 1 — hecho:**
+  - `Cuerpo-y-Textos/index.html`: agregado evento `oninput="verificarSolicitudRecuperacion()"` al campo `#recuperacion-destino` y elemento `<p id="mensaje-solicitud-config" class="aviso-letrero"></p>`.
+  - `Motor-Logica-y-Acronimos/logica.js`: creada la función `verificarSolicitudRecuperacion()` para buscar si el correo o teléfono ingresado tiene una solicitud de recuperación pendiente, mostrando aviso amarillo con `Advertencia-naranja.svg` si no hay solicitud o aviso verde con `Exito-verde.svg` si existe.
+- **Punto 2 — hecho:**
+  - `Motor-Logica-y-Acronimos/logica.js`: revisados los avisos en validación de contraseñas de configuración (`validarPasswordsConfig`), eliminando símbolos genéricos y utilizando iconos SVG oficiales (`Error-rojo.svg`, `Exito-verde.svg`, `Advertencia-naranja.svg`).
+- **Verificación:** pruebas sintácticas ejecutadas con `_validar_js.py` (0 problemas) y pruebas unitarias en verde.
 ### 7/11/2026 — instrucciones.md (PUNTO ÚNICO): Validación en tiempo real de contraseñas en Configuración
 - **Punto Único — hecho:**
   - `Cuerpo-y-Textos/index.html`: agregado evento `oninput="validarPasswordsConfig()"` a los inputs `#recuperacion-nueva-pass` y `#recuperacion-conf-pass`, y el elemento `<p id="mensaje-password-config" class="aviso-letrero"></p>`.

@@ -737,6 +737,12 @@ function manejarMascara(input) {
     timersOcultarUltimaLetra[input.id] = setTimeout(() => {
         if (input && document.body.contains(input)) {
             const r = valoresRealesPassword[input.id] || '';
+            if (r.length > 0) {
+                input.value = "●".repeat(r.length);
+            }
+        }
+    }, 2500);
+
     if (input.id === 'reg-pass' || input.id === 'reg-pass-conf') {
         if (typeof validarPasswords === 'function') validarPasswords();
     }
@@ -754,39 +760,63 @@ function validarPasswordsConfig() {
     const aviso = document.getElementById('mensaje-password-config');
     if (!aviso) return false;
     if (p1 === '' && p2 === '') {
-        aviso.innerText = '';
+        aviso.innerHTML = '';
         aviso.className = 'aviso-letrero';
         aviso.style.maxHeight = '0';
         return false;
     }
     if (p2 !== '') {
         if (p1 !== p2) {
-            aviso.innerText = '✖ No coinciden';
+            aviso.innerHTML = '<img src="../Colores-y-Estetica/Iconos/Error-rojo.svg" alt="" class="icono-inline" onerror="this.remove()"> No coinciden';
             aviso.className = 'aviso-letrero texto-error';
             aviso.style.maxHeight = '40px';
             return false;
         } else {
-            aviso.innerText = '✓ Coinciden';
+            aviso.innerHTML = '<img src="../Colores-y-Estetica/Iconos/Exito-verde.svg" alt="" class="icono-inline" onerror="this.remove()"> Coinciden';
             aviso.className = 'aviso-letrero texto-exito';
             aviso.style.maxHeight = '40px';
             return true;
         }
     }
-    aviso.innerText = '';
+    aviso.innerHTML = '';
     aviso.className = 'aviso-letrero';
     aviso.style.maxHeight = '0';
     return false;
 }
-            if (r.length > 0) {
-                input.value = "●".repeat(r.length);
-            }
-        }
-    }, 2500);
-
-    if (input.id === 'reg-pass' || input.id === 'reg-pass-conf') {
-        if (typeof validarPasswords === 'function') validarPasswords();
+// ==========================================
+// VERIFICAR SOLICITUD DE RECUPERACIÓN EN CONFIGURACIÓN
+// ==========================================
+function verificarSolicitudRecuperacion() {
+    const campoDestino = document.getElementById('recuperacion-destino');
+    const aviso = document.getElementById('mensaje-solicitud-config');
+    if (!aviso) return;
+    const destino = (campoDestino ? campoDestino.value : '').trim();
+    if (!destino) {
+        aviso.innerText = '';
+        aviso.className = 'aviso-letrero';
+        aviso.style.maxHeight = '0';
+        return;
+    }
+    const usuario = baseDatosUsuarios.find(u => u && (u.email === destino || u.telefono === destino));
+    if (!usuario) {
+        aviso.innerText = '';
+        aviso.className = 'aviso-letrero';
+        aviso.style.maxHeight = '0';
+        return;
+    }
+    const solicitud = solicitudesRecuperacion.find(s => s.usuarioId === usuario.id && s.estado === 'pendiente');
+    if (!solicitud) {
+        aviso.innerHTML = '<img src="../Colores-y-Estetica/Iconos/Advertencia-naranja.svg" alt="" class="icono-inline" onerror="this.remove()"> No hay solicitud pendiente para este usuario. No se podrá enviar nada.';
+        aviso.className = 'aviso-letrero texto-advertencia';
+        aviso.style.maxHeight = '50px';
+    } else {
+        aviso.innerHTML = '<img src="../Colores-y-Estetica/Iconos/Exito-verde.svg" alt="" class="icono-inline" onerror="this.remove()"> Solicitud pendiente encontrada.';
+        aviso.className = 'aviso-letrero texto-exito';
+        aviso.style.maxHeight = '50px';
     }
 }
+
+
 
 // ==========================================
 // 12. GENERACIÓN DE ACRÓNIMOS (genera acrónimos a partir de nombres o puestos)
@@ -1693,6 +1723,9 @@ function solicitarRecuperacionContrasena() {
 // ==========================================
 // 16.1.2 RECUPERACIÓN DE CONTRASEÑA - GENERACIÓN DE CONTRASEÑA TEMPORAL DESDE CONFIGURACIÓN (JEFE)
 // ==========================================
+// ==========================================
+// 16.1.2 RECUPERACIÓN DE CONTRASEÑA - GENERACIÓN DE CONTRASEÑA TEMPORAL DESDE CONFIGURACIÓN (JEFE)
+// ==========================================
 function enviarContrasenaAUsuario() {
     const campoDestino = document.getElementById('recuperacion-destino');
     const campoPass = document.getElementById('recuperacion-nueva-pass');
@@ -1702,100 +1735,132 @@ function enviarContrasenaAUsuario() {
     const destino = (campoDestino ? campoDestino.value : '').trim();
     const passNueva = (campoPass ? campoPass.value : '').trim();
     const passConf = (campoConf ? campoConf.value : '').trim();
+
+    // 1. Validar campos vacíos -> aviso Amarillo con Advertencia-naranja.svg
     if (!destino || !passNueva || !passConf) {
         if (aviso) {
-            aviso.innerText = '✖ Completa todos los campos';
-            aviso.className = 'aviso-letrero texto-error';
+            aviso.innerHTML = '<img src="../Colores-y-Estetica/Iconos/Advertencia-naranja.svg" alt="" class="icono-inline" onerror="this.remove()"> Completa todos los campos obligatorios';
+            aviso.className = 'aviso-letrero texto-advertencia';
             aviso.style.maxHeight = '40px';
         }
         return;
     }
-    if (passNueva !== passConf) {
-        if (aviso) {
-            aviso.innerText = '✖ Las contraseñas no coinciden';
-            aviso.className = 'aviso-letrero texto-error';
-            aviso.style.maxHeight = '40px';
-        }
-        return;
-    }
-    if (passNueva.length < 6) {
-        if (aviso) {
-            aviso.innerText = '✖ La contraseña temporal debe tener al menos 6 caracteres';
-            aviso.className = 'aviso-letrero texto-error';
-            aviso.style.maxHeight = '40px';
-        }
-        return;
-    }
+
+    // Buscar usuario por Email o Teléfono
     const usuario = baseDatosUsuarios.find(u => u && (u.email === destino || u.telefono === destino));
+    const nombreUsuario = usuario ? (usuario.nombreCompleto || usuario.nombre || destino) : destino;
+
     if (!usuario) {
         if (aviso) {
-            aviso.innerText = '✖ No se encontró un usuario con ese correo o teléfono';
+            aviso.innerHTML = '<img src="../Colores-y-Estetica/Iconos/Error-rojo.svg" alt="" class="icono-inline" onerror="this.remove()"> No se encontró un usuario con ese correo o teléfono';
             aviso.className = 'aviso-letrero texto-error';
             aviso.style.maxHeight = '40px';
         }
         return;
     }
-    // Buscar solicitud pendiente para este usuario
+
+    // 2. Buscar solicitud pendiente para este usuario
     const solicitud = solicitudesRecuperacion.find(s => s.usuarioId === usuario.id && s.estado === 'pendiente');
+
+    // 3. Si NO hay solicitud pendiente
     if (!solicitud) {
         if (btnEnviar) btnEnviar.disabled = true;
+        if (typeof mostrarNotificacion === 'function') {
+            mostrarNotificacion(`Operación no completada: No hay solicitud pendiente para ${nombreUsuario}`, 'error');
+        }
         if (aviso) {
-            aviso.innerText = 'No hay ninguna solicitud de recuperación pendiente para este usuario';
+            aviso.innerHTML = `<img src="../Colores-y-Estetica/Iconos/Error-rojo.svg" alt="" class="icono-inline" onerror="this.remove()"> Operación no completada: No hay solicitud pendiente para ${nombreUsuario}`;
+            aviso.className = 'aviso-letrero texto-error';
+            aviso.style.maxHeight = '50px';
+        }
+        const ahoraFallo = new Date();
+        const detalleFallo = `Intento fallido de enviar contraseña: No hay solicitud pendiente para ${nombreUsuario}. Fecha: ${_fechaISO(ahoraFallo)} ${_horaHM(ahoraFallo)}`;
+        registrarActividadBancoDatos(usuario.id, 'intento_fallido_recuperacion', detalleFallo);
+        if (usuarioActivo && usuarioActivo.id && usuarioActivo.id !== usuario.id) {
+            registrarActividadBancoDatos(usuarioActivo.id, 'intento_fallido_recuperacion', detalleFallo);
+        }
+        return;
+    }
+
+    // 4. Si SÍ hay solicitud: Validar que las contraseñas coincidan usando validarPasswordsConfig
+    if (typeof validarPasswordsConfig === 'function' && !validarPasswordsConfig()) {
+        if (aviso) {
+            aviso.innerHTML = '<img src="../Colores-y-Estetica/Iconos/Error-rojo.svg" alt="" class="icono-inline" onerror="this.remove()"> Las contraseñas no coinciden';
             aviso.className = 'aviso-letrero texto-error';
             aviso.style.maxHeight = '40px';
         }
         return;
     }
+
+    if (passNueva.length < 6) {
+        if (aviso) {
+            aviso.innerHTML = '<img src="../Colores-y-Estetica/Iconos/Error-rojo.svg" alt="" class="icono-inline" onerror="this.remove()"> La contraseña temporal debe tener al menos 6 caracteres';
+            aviso.className = 'aviso-letrero texto-error';
+            aviso.style.maxHeight = '40px';
+        }
+        return;
+    }
+
     if (btnEnviar) btnEnviar.disabled = false;
-    const expiracion = new Date(new Date().getTime() + 24 * 60 * 60 * 1000); // 1 día
+    const ahora = new Date();
+    const expiracion = new Date(ahora.getTime() + 24 * 60 * 60 * 1000);
     const idx = baseDatosUsuarios.findIndex(u => u && u.id === usuario.id);
     if (idx === -1) {
         if (aviso) {
-            aviso.innerText = '✖ No se pudo actualizar el perfil del usuario';
+            aviso.innerHTML = '<img src="../Colores-y-Estetica/Iconos/Error-rojo.svg" alt="" class="icono-inline" onerror="this.remove()"> No se pudo actualizar el perfil del usuario';
             aviso.className = 'aviso-letrero texto-error';
             aviso.style.maxHeight = '40px';
         }
         return;
     }
     const objetivo = baseDatosUsuarios[idx];
-    objetivo.contrasena = passNueva;
+    
+    // === PUNTO 1 & 2: BANCO DE CONTRASEÑAS TEMPORALES EN EL PERFIL ===
+    if (!Array.isArray(objetivo.contrasenasTemporales)) {
+        objetivo.contrasenasTemporales = [];
+    }
+
+    const generadoPor = (usuarioActivo && usuarioActivo.id) || '';
+    const generadoPorNombre = (usuarioActivo ? (usuarioActivo.nombreCompleto || usuarioActivo.nombre || '') : '');
+    const itemClave = {
+        contrasena: passNueva,
+        generadoPor: generadoPor,
+        generadoPorNombre: generadoPorNombre,
+        fecha: `${_fechaISO(ahora)} ${_horaHM(ahora)}`,
+        usada: false
+    };
+
+    objetivo.contrasenasTemporales.push(itemClave);
+    // NO sobrescribir objetivo.contrasena original del perfil
     objetivo.requiereCambioContrasena = true;
     objetivo.fechaExpiracionTemporal = expiracion;
     baseDatosUsuarios[idx] = { ...objetivo };
     guardarEnStorage(STORAGE_KEYS.BASE_USUARIOS, baseDatosUsuarios);
 
-    // === PUNTO ÚNICO: MÚLTIPLES CONTRASEÑAS TEMPORALES ===
-    // Inicializar la lista si no existe (migración de solicitudes antiguas)
+    // === SOLICITUD DE RECUPERACIÓN ===
     if (!Array.isArray(solicitud.contrasenasGeneradas)) solicitud.contrasenasGeneradas = [];
-
-    // Agregar la nueva contraseña a la lista (flexibilidad: múltiples permitidas)
-    const generadoPor = (usuarioActivo && usuarioActivo.id) || '';
-    const generadoPorNombre = (usuarioActivo ? (usuarioActivo.nombreCompleto || usuarioActivo.nombre || '') : '');
     solicitud.contrasenasGeneradas.push({
         contrasena: passNueva,
-        fechaGeneracion: new Date(),
+        fechaGeneracion: ahora,
         generadoPor: generadoPor,
         generadoPorNombre: generadoPorNombre,
         usada: false
     });
-
-    // Mantener también la última generada en contrasenaTemporalGenerada (compatibilidad)
     solicitud.contrasenaTemporalGenerada = passNueva;
     solicitud.quienAyudo = generadoPor;
     solicitud.nombreQuienAyudo = generadoPorNombre;
-    // La solicitud sigue PENDIENTE hasta que el usuario use una de las contraseñas
-    // (estado 'resuelta' se asigna al validarEntrada)
 
     const sIdx = solicitudesRecuperacion.findIndex(s => s.id === solicitud.id);
     if (sIdx !== -1) solicitudesRecuperacion[sIdx] = { ...solicitud };
     guardarEnStorage(STORAGE_KEYS.SOLICITUDES_RECUPERACION, solicitudesRecuperacion);
 
     // Registrar en banco de datos del solicitante y del jefe (trazabilidad de generación)
-    const ahora = new Date();
-    const detalleGen = `Contraseña temporal generada para ${usuario.nombreCompleto || usuario.nombre || ''} (${passNueva}). Fecha: ${_fechaISO(ahora)} ${_horaHM(ahora)}`;
-    if (usuario.id) registrarActividadBancoDatos(usuario.id, 'contrasena_temporal_generada', detalleGen);
+    const detalleGen = `Contraseña temporal generada para ${nombreUsuario} (${passNueva}). Fecha: ${_fechaISO(ahora)} ${_horaHM(ahora)}`;
+    registrarActividadBancoDatos(usuario.id, 'contrasena_temporal_generada', detalleGen);
     const jefeId = usuario.superiorId;
-    if (jefeId && jefeId !== usuario.id) registrarActividadBancoDatos(jefeId, 'contrasena_temporal_generada', detalleGen);
+    if (jefeId && jefeId !== usuario.id) {
+        registrarActividadBancoDatos(jefeId, 'contrasena_temporal_generada', detalleGen);
+    }
 
     // Contador de solicitudes de recuperación por mes (para Vero - bandera >3 en un mes)
     const mesActual = ahora.getFullYear() + '-' + String(ahora.getMonth() + 1).padStart(2, '0');
@@ -1806,7 +1871,6 @@ function enviarContrasenaAUsuario() {
             fichaSolicitante.solicitudesRecuperacionMes = 0;
         }
         fichaSolicitante.solicitudesRecuperacionMes++;
-        // Bandera de reincidencia: más de 3 solicitudes en el mes (solo para Vero, sin alerta en tiempo real)
         if (fichaSolicitante.solicitudesRecuperacionMes > 3 && !fichaSolicitante.camposLibres.reincidenciaRecuperacion) {
             fichaSolicitante.camposLibres.reincidenciaRecuperacion = true;
             fichaSolicitante.camposLibres.mesReincidenciaRecuperacion = mesActual;
@@ -1815,11 +1879,28 @@ function enviarContrasenaAUsuario() {
         guardarBancoDatos();
     }
 
-    // Aviso en pantalla (simulación de envío al correo/celular del usuario)
+    // (Simulación de correo): Generar el mensaje con el cuerpo exactamente: "Tu contraseña temporal es: [Clave]"
+    const cuerpoSimuladoCorreo = `Tu contraseña temporal es: ${passNueva}`;
+    if (typeof correosLocales !== 'undefined' && Array.isArray(correosLocales)) {
+        correosLocales.unshift({
+            id: 'corr-temp-' + Date.now(),
+            remitenteId: (usuarioActivo ? usuarioActivo.id : 'sistema'),
+            remitenteNombre: (usuarioActivo ? (usuarioActivo.nombreCompleto || usuarioActivo.nombre) : 'Sistema'),
+            destinatarioId: usuario.id,
+            asunto: 'Contraseña temporal',
+            cuerpo: cuerpoSimuladoCorreo,
+            fecha: ahora.toISOString(),
+            leido: false,
+            archivado: false
+        });
+        if (typeof guardarCorreosLocales === 'function') guardarCorreosLocales();
+    }
+
+    // Mostrar aviso Verde al facilitador con Exito-verde.svg
     if (aviso) {
-        aviso.innerText = 'Contraseña temporal generada: ' + passNueva + '. (Simulación de envío al correo/celular del usuario)';
+        aviso.innerHTML = `<img src="../Colores-y-Estetica/Iconos/Exito-verde.svg" alt="" class="icono-inline" onerror="this.remove()"> Correo/Mensaje enviado a ${nombreUsuario} con la clave: ${passNueva}`;
         aviso.className = 'aviso-letrero texto-exito';
-        aviso.style.maxHeight = '40px';
+        aviso.style.maxHeight = '50px';
     }
     if (campoDestino) campoDestino.value = '';
     if (campoPass) campoPass.value = '';

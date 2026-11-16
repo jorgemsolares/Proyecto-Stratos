@@ -393,7 +393,7 @@ textarea {
 3.3 MENSAJES DE VALIDACIÓN (avisos que aparecen al lado de los campos cuando hay errores o faltan datos)
 ========================================== */
 .aviso-letrero {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     font-style: normal;
     margin-top: -5px;
     font-weight: 500;
@@ -403,19 +403,26 @@ textarea {
     min-height: 1.2rem;
 }
 
+button {
+    font-size: 0.85rem !important;
+}
+
 .texto-exito {
-    color: var(--color-exito);
-    background: rgba(0, 255, 136, 0.1);
+    color: #ffffff !important;
+    background: rgba(0, 255, 136, 0.25) !important;
+    text-align: center;
 }
 
 .texto-error {
-    color: var(--color-error);
-    background: rgba(255, 77, 77, 0.1);
+    color: #ffffff !important;
+    background: rgba(255, 77, 77, 0.25) !important;
+    text-align: center;
 }
 
 .texto-advertencia {
-    color: var(--color-advertencia);
-    background: rgba(255, 165, 0, 0.1);
+    color: #0b0f19 !important;
+    background: rgba(255, 165, 0, 0.25) !important;
+    text-align: center;
 }
 
 .campos-obligatorios {
@@ -850,13 +857,12 @@ textarea {
 .controles-paleta-botones button {
     width: 100%;
     padding: 8px 12px;
-    border: 2px solid transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.1);
     font-size: 0.7rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding: 8px 12px;
-    border: 2px solid transparent;
 }
 
 .color-cuadro:hover {
@@ -2024,22 +2030,13 @@ button .icono-inline,
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    font-size: 0.6rem;
-    color: rgba(255, 255, 255, 0.2);
-    letter-spacing: 2px;
-    font-weight: bold;
     pointer-events: none;
 }
 
-.watermark-stratos span:first-child {
-    font-size: 0.7rem;
-    letter-spacing: 3px;
-}
-
-.watermark-slogan {
-    font-size: 0.5rem;
-    letter-spacing: 1.5px;
-    margin-top: 2px;
+.watermark-stratos img {
+    max-width: 140px;
+    height: auto;
+    opacity: 0.4;
 }
 
 /* ==========================================

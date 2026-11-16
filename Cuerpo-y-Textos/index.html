@@ -12,7 +12,8 @@
         <!-- GRUPO 1: CABECERA Y AVISOS GLOBALES -->
         <!-- ============================================ -->
 
-        <!-- 1.1 BARRA DE NOTIFICACIONES SUPERIOR (avisos tipo "toast" que aparecen en la parte superior de la app) -->
+        <!-- PUNTO 4: Depuración de memoria al iniciar sesión -->
+    <!-- 4.1 BARRA DE NOTIFICACIONES SUPERIOR (avisos tipo "toast" que aparecen en la parte superior de la app) -->
     <div id="barra-notificaciones" class="notificacion-superior">
         <span id="texto-notificacion"></span>
     </div>
@@ -32,7 +33,7 @@
 
                 <!-- BRANDING INICIAL DE STRATOS (el logotipo principal de la aplicación) -->
                 <header class="branding">
-                    <h1>STRATOS</h1>
+                    <h1 style="font-size: 2.2rem; font-weight: bold; letter-spacing: 4px; color: var(--color-texto); margin-bottom: 5px;">STRATOS</h1>
                     <p data-i18n="branding_cabecera">HERRAMIENTA MULTIFUNCIONAL</p>
                 </header>
             </div>
@@ -539,7 +540,8 @@
                     </p>
                     
                     <div class="formulario">
-                        <input type="text" id="recuperacion-destino" placeholder="Email o Teléfono del usuario *" data-i18n="cfg_rec_dest" spellcheck="true">
+                        <input type="text" id="recuperacion-destino" placeholder="Email o Teléfono del usuario *" data-i18n="cfg_rec_dest" spellcheck="true" oninput="verificarSolicitudRecuperacion()">
+                        <p id="mensaje-solicitud-config" class="aviso-letrero"></p>
                         <input type="text" id="recuperacion-nueva-pass" class="input-password" placeholder="Contraseña temporal *" data-i18n="cfg_rec_temp" oninput="manejarMascara(this); validarPasswordsConfig()" autocomplete="new-password">
                         <input type="text" id="recuperacion-conf-pass" class="input-password" placeholder="Confirmar contraseña *" data-i18n="cfg_rec_conf" oninput="manejarMascara(this); validarPasswordsConfig()" autocomplete="new-password">
                         <p id="mensaje-password-config" class="aviso-letrero"></p>
@@ -596,8 +598,7 @@
         <!-- 3.1 FOOTER GLOBAL (pie de página con la marca de agua de la app) -->
         <div class="footer-global">
             <div class="watermark-stratos">
-                <span>STRATOS</span>
-                <span class="watermark-slogan">HERRAMIENTA MULTIFUNCIONAL</span>
+                <img src="../Colores-y-Estetica/Iconos/Logo.png" alt="Stratos">
             </div>
         </div>
 

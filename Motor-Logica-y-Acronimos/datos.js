@@ -71,6 +71,7 @@ let usuarioActivo = {
     fechaExpiracionTemporal: null, // Vencimiento de la contraseña temporal (1 día)
     intentosLoginFallidos: 0, // Intentos de login fallidos de ESTE usuario (PUNTO 48 - por usuario, no global)
     ultimaContrasenaTemporal: null, // Fecha del último uso de contraseña temporal (PUNTO 48)
+    contrasenasTemporales: [], // Banco de contraseñas temporales activas (PUNTO instrucciones.md)
     // PUNTO 6 (Parte A) — marcas del día en curso. Se alimentan de `registrosAsistencia`
     // (PUNTO 48), que es el histórico de 5 años; aquí queda la foto del día actual.
     primeraEntradaDelDia: null, // "YYYY-MM-DD HH:MM" — primera entrada de HOY
