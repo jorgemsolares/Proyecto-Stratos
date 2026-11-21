@@ -3542,7 +3542,36 @@ function generarIdUnico() { return 'id_' + Date.now() + '_' + Math.random().toSt
 function generarCodigoInvitacion() { return 'INV_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6).toUpperCase(); }
 function guardarEnStorage(key, data) { try { localStorage.setItem(key, JSON.stringify(data)); return true; } catch (error) { console.error("Error guardando en localStorage:", error); return false; } }
 function cargarDeStorage(key) { try { const data = localStorage.getItem(key); return data ? JSON.parse(data) : null; } catch (error) { console.error("Error cargando de localStorage:", error); return null; } }
-function enviarInvitacion(invitacion) { console.log("Enviando invitación a:", invitacion.nombreContacto); }
+function enviarInvitacion(invitacion) { 
+    console.log("Enviando invitación a:", invitacion.nombreContacto); 
+    if (invitacion && invitacion.emailContacto) {
+        const correoSimulado = {
+            id: 'corr-inv-' + Date.now() + '-' + Math.random().toString(36).substr(2, 4),
+            vista: 'enviados',
+            remitente: (usuarioActivo && usuarioActivo.email) ? usuarioActivo.email : 'soporte@stratos.app',
+            destinatarios: [invitacion.emailContacto],
+            asunto: 'INVITACIÓN STRATOS',
+            cuerpo: invitacion.linkInvitacion,
+            fecha: new Date().toISOString(),
+            leido: true,
+            soloCopia: false
+        };
+        if (!Array.isArray(correosLocales)) correosLocales = [];
+        correosLocales.unshift(correoSimulado);
+        if (typeof guardarCorreosLocales === 'function') {
+            guardarCorreosLocales();
+        } else {
+            guardarEnStorage(STORAGE_KEYS.CORREOS_LOCALES, correosLocales);
+        }
+        if (typeof mostrarAvisoInmediato === 'function') {
+            mostrarAvisoInmediato(`Invitación enviada a ${invitacion.emailContacto}. Revisa tu bandeja de Enviados.`, "exito");
+        }
+    } else {
+        if (typeof mostrarAvisoInmediato === 'function') {
+            mostrarAvisoInmediato("El envío de invitaciones por SMS estará disponible próximamente. Usa un correo electrónico para probar.", "advertencia");
+        }
+    }
+}
 function obtenerFraseMotivacional() { return mensajesMotivacionales[Math.floor(Math.random() * mensajesMotivacionales.length)]; }
 function seleccionarColor(color, elemento) { document.querySelectorAll('.color-cuadro').forEach(c => c.classList.remove('seleccionado')); elemento.classList.add('seleccionado'); colorSeleccionado = color; }
 
