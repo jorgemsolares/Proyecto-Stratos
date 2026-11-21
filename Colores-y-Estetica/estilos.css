@@ -2333,6 +2333,7 @@ No toca .btn-principal / .btn-secundario existentes.
     flex: 1;
     text-align: center;
     margin: 0;
+    color: var(--color-letras, var(--color-texto));
 }
 .espaciador-cabecera-correos {
     width: 46px;
