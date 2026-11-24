@@ -3561,7 +3561,7 @@ function enviarInvitacion(invitacion) {
         if (typeof guardarCorreosLocales === 'function') {
             guardarCorreosLocales();
         } else {
-            guardarEnStorage(STORAGE_KEYS.CORREOS_LOCALES, correosLocales);
+            guardarEnStorage(STORAGE_KEYS.CORREOS, { correos: correosLocales, metricas: metricasCorreos });
         }
         if (typeof mostrarAvisoInmediato === 'function') {
             mostrarAvisoInmediato(`Invitación enviada a ${invitacion.emailContacto}. Revisa tu bandeja de Enviados.`, "exito");
