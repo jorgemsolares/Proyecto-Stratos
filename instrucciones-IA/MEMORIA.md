@@ -50,6 +50,10 @@
    - Protocolo: el rol del Arquitecto (dueño) y de la IA (asistente técnico).
 
 ### 10/11/2026 — instrucciones.md (PUNTO 1 Y PUNTO 2): Validación de solicitud de recuperación y revisión de iconos SVG
+### 24/11/2026 — instrucciones.md (PUNTO ÚNICO: Corregir remitente del correo de invitación)
+- **Punto Único — hecho:** `logica.js` en la función `enviarInvitacion(invitacion)` el campo `remitente` ya utilizaba `(usuarioActivo && usuarioActivo.email) ? usuarioActivo.email : 'soporte@stratos.app'`, asegurando que se refleje el correo del usuario logueado en lugar de un valor estático.
+- **Verificación:** validación sintáctica de JavaScript correcta (esprima: 0 problemas).
+
 ### 14/11/2026 — instrucciones.md (PUNTOS 1, 2 y 3): Corrección de logo en sello de agua, contraste de avisos y película blanca en botones de paleta
 - **Punto 1 — hecho:**
   - `Cuerpo-y-Textos/index.html`: el branding superior volvió a ser texto (`<h1>STRATOS</h1>` con eslogan) y en el `footer-global` (`.watermark-stratos`) se reemplazó por la etiqueta `<img src="../Colores-y-Estetica/Iconos/Logo.png" alt="Stratos">`.
