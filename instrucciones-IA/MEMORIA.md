@@ -50,6 +50,10 @@
    - Protocolo: el rol del Arquitecto (dueño) y de la IA (asistente técnico).
 
 ### 10/11/2026 — instrucciones.md (PUNTO 1 Y PUNTO 2): Validación de solicitud de recuperación y revisión de iconos SVG
+### 24/11/2026 — instrucciones.md (PUNTO ÚNICO: Corregir ruta del link de invitación)
+- **Punto Único — hecho:** `logica.js` en la función `continuarCreacionContacto()` se actualizó la construcción de `linkInvitacion` a `window.location.origin + "/Cuerpo-y-Textos/index.html?inv=" + codigoInv` para que apunte correctamente al archivo principal de la aplicación.
+- **Verificación:** validación sintáctica de JavaScript correcta (esprima: 0 problemas).
+
 ### 24/11/2026 — instrucciones.md (PUNTO ÚNICO: Corregir remitente del correo de invitación)
 - **Punto Único — hecho:** `logica.js` en la función `enviarInvitacion(invitacion)` el campo `remitente` ya utilizaba `(usuarioActivo && usuarioActivo.email) ? usuarioActivo.email : 'soporte@stratos.app'`, asegurando que se refleje el correo del usuario logueado en lugar de un valor estático.
 - **Verificación:** validación sintáctica de JavaScript correcta (esprima: 0 problemas).
