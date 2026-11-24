@@ -13,20 +13,21 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 
 ---
 
-## PUNTO ÚNICO: CORREGIR EL REMITENTE DEL CORREO DE INVITACIÓN
+## PUNTO ÚNICO: CORREGIR LA RUTA DEL LINK DE INVITACIÓN
 
-**Contexto:** El correo simulado de invitación dice que lo envía "soporte@stratos.app", pero debería decir que lo envía el usuario que está haciendo la invitación (el facilitador). En la función `enviarInvitacion()`, el campo `remitente` está fijo en el código.
+**Contexto:** El link de invitación generado apunta a la raíz del servidor (`http://127.0.0.1:5500/?inv=...`), lo que muestra el listado de archivos en lugar de la aplicación. El link debe apuntar directamente al archivo `index.html`.
 
 **Qué cambiar:**
-- En `logica.js`, en la función `enviarInvitacion(invitacion)`:
-  - Cambiar el valor de `remitente: "soporte@stratos.app"` por `remitente: usuarioActivo.email` (o el campo que contenga el correo del usuario logueado).
+- En `logica.js`, en la función `continuarCreacionContacto()` (o donde se construya el `linkInvitacion`):
+  - Cambiar la construcción del link para que incluya la ruta correcta hacia el archivo principal.
+  - La nueva ruta debe ser: `const linkInvitacion = window.location.origin + "/Cuerpo-y-Textos/index.html?inv=" + codigoInv;`
 
 **Dónde:**
-- `Motor-Logica-y-Acronimos/logica.js`: función `enviarInvitacion()`.
+- `Motor-Logica-y-Acronimos/logica.js`: función que crea el objeto de invitación.
 
 **Qué NO hacer:**
-- NO cambiar el resto de la lógica del correo (asunto, link, destinatario).
-- NO tocar los tamaños ni estilos de la pantalla de Correos (eso queda como pendiente para después).
+- NO cambiar la lógica de `enviarInvitacion()`.
+- NO tocar los estilos de la pantalla de Correos.
 
 ---
 
