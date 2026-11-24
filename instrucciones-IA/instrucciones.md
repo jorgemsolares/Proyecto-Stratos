@@ -13,22 +13,23 @@ Este es el documento de trabajo del día para el proyecto Stratos. Contiene los 
 
 ---
 
-## PUNTO ÚNICO: LLAMAR A LA FUNCIÓN `enviarInvitacion` AL GUARDAR UN CONTACTO
+## PUNTO ÚNICO: REPARAR LA FUNCIÓN `enviarInvitacion()` PARA QUE CREE EL CORREO
 
-**Contexto:** Al guardar un contacto en el Organigrama Personal, el sistema no está generando el correo simulado en la bandeja de "Enviados". La función `enviarInvitacion()` existe y tiene la lógica, pero **no se está llamando** desde `continuarCreacionContacto()`.
+**Contexto:** La función `enviarInvitacion(invitacion)` se está llamando correctamente desde `continuarCreacionContacto()`, pero **no está generando el correo en la bandeja de "Enviados"**. El correo no aparece en la lista. Esto indica que la función `enviarInvitacion` está fallando internamente (no guarda en `correosLocales` o no muestra el aviso).
 
 **Qué cambiar:**
-- En `logica.js`, en la función `continuarCreacionContacto()`:
-  - Buscar el bloque donde se crea el objeto `invitacion` y se guarda en `invitacionesPendientes`.
-  - Justo después de `guardarEnStorage(STORAGE_KEYS.INVITACIONES, invitacionesPendientes);`, agregar la línea:
-    - `enviarInvitacion(invitacion);`
+- En `logica.js`, en la función `enviarInvitacion(invitacion)`:
+  1. Verificar que está extrayendo correctamente el correo del destinatario (`invitacion.emailContacto`) y el link (`invitacion.linkInvitacion`).
+  2. Asegurar que se está creando el objeto de correo y se está agregando a `correosLocales`.
+  3. Asegurar que se llama a `guardarCorreosLocales()` para persistir el cambio.
+  4. Si hay un error en la lógica, corregirlo para que el correo se cree siempre que haya un email válido.
 
 **Dónde:**
-- `Motor-Logica-y-Acronimos/logica.js`: función `continuarCreacionContacto()`.
+- `Motor-Logica-y-Acronimos/logica.js`: función `enviarInvitacion()`.
 
 **Qué NO hacer:**
-- NO cambiar la lógica de `enviarInvitacion()` (esa ya está bien).
-- NO tocar los estilos de la pantalla de Correos (eso se hará después).
+- NO cambiar la llamada desde `continuarCreacionContacto()` (esa está bien).
+- NO tocar los estilos de Correos.
 - NO usar `prompt()` ni `alert()`.
 
 ---
