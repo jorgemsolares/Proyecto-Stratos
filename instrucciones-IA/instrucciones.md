@@ -15,12 +15,13 @@ Este es el documento de trabajo del día para el proyecto Stratos.
 
 ## PUNTO ÚNICO: CORREGIR LA RUTA DEL LINK DE INVITACIÓN
 
-**Contexto:** El link que se genera en el correo simulado apunta a la raíz del servidor (`http://127.0.0.1:5500/?inv=...`). Al abrirlo, el navegador muestra el listado de archivos en lugar de la app. El link debe apuntar al archivo `index.html`.
+**Contexto:** El link de invitación apunta a la raíz del servidor (`http://127.0.0.1:5500/?inv=...`). Debe apuntar al archivo `index.html`.
 
 **Qué cambiar:**
-- En `Motor-Logica-y-Acronimos/logica.js`, en la función `continuarCreacionContacto()` (o donde se construya el link):
-  - Buscar la línea donde se define `linkInvitacion`.
-  - Cambiarla por:
+- En `Motor-Logica-y-Acronimos/logica.js`, en la función `continuarCreacionContacto()` (o `guardarContacto()`):
+  - Buscar la línea exacta:
+    `linkInvitacion: window.location.origin + "?inv=" + codigoInv`
+  - Reemplazarla por:
     `linkInvitacion: window.location.origin + "/Cuerpo-y-Textos/index.html?inv=" + codigoInv`
 
 **Dónde:**
