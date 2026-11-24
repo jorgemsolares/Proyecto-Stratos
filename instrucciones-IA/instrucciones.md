@@ -1,15 +1,15 @@
 # INSTRUCCIONES PARA LA IA DEL SISTEMA (VS CODE)
 
-Este es el documento de trabajo del día para el proyecto Stratos. Contiene los cambios que el Arquitecto ya autorizó y que deben ejecutarse en orden.
+Este es el documento de trabajo del día para el proyecto Stratos.
 
 **Protocolo de trabajo habitual del proyecto:**
-1. Leer los archivos de contexto y del sistema listados abajo.
-2. Ejecutar los puntos en el orden indicado.
-3. Reportar cada punto como "Punto X: hecho" o "Punto X: no se pudo porque [razón]".
-4. **DEPURACIÓN DE MEMORIA:** Antes de iniciar cualquier cambio, revisar la sección BITÁCORA de `MEMORIA.md`.
-5. Al terminar todo, actualizar `MEMORIA.md` y ejecutar `sincronizar_git.ps1`.
+1. Leer el archivo `instrucciones-IA/instrucciones.md` (ubicado en la carpeta `instrucciones-IA`, no en la raíz).
+2. Leer `instrucciones-IA/A_DONDE_VA_STRATOS.md` y `instrucciones-IA/MEMORIA.md`.
+3. Leer los 4 archivos del sistema: `Cuerpo-y-Textos/index.html`, `Colores-y-Estetica/estilos.css`, `Motor-Logica-y-Acronimos/datos.js`, `Motor-Logica-y-Acronimos/logica.js`.
+4. Ejecutar el punto indicado abajo.
+5. Al terminar, actualizar `MEMORIA.md` y ejecutar `sincronizar_git.ps1`.
 
-**AUTORIZACIÓN EXPLÍCITA DE MODIFICACIÓN:** El Arquitecto te autoriza formalmente a **modificar los archivos** (`logica.js`) para aplicar este punto.
+**AUTORIZACIÓN EXPLÍCITA DE MODIFICACIÓN:** El Arquitecto te autoriza formalmente a **modificar los archivos** (`logica.js`) para aplicar este punto. **NO necesitas pedir permiso después de leer los archivos; procede directamente a escribir el código.**
 
 ---
 
