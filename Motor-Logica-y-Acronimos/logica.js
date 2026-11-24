@@ -4108,11 +4108,12 @@ function continuarCreacionContacto(nombre, puesto, pais, telefono, email, acroni
 
     // Invitación del contacto recién creado
     const codigoInv = generarCodigoInvitacion();
+    const linkInvitacion = window.location.origin + "/Cuerpo-y-Textos/index.html?inv=" + codigoInv;
     const invitacion = {
         id: generarIdUnico(), destinoUsuarioId: nuevoContacto.id, nombreContacto: nombre, puestoContacto: puesto,
         telefonoContacto: telefono, emailContacto: email, paisPrefijo: pais, tipoContacto: tipo,
         invitadoPor: (usuarioActivo && usuarioActivo.id) || null, nombreInvitador: (usuarioActivo && usuarioActivo.nombreCompleto) || '',
-        codigoInvitacion: codigoInv, linkInvitacion: `${window.location.origin}?inv=${codigoInv}`,
+        codigoInvitacion: codigoInv, linkInvitacion: linkInvitacion,
         fechaInvitacion: new Date(), fechaRespuesta: null, tiempoRespuestaMs: null,
         estado: 'pendiente', metodoEnvio: telefono ? 'whatsapp' : 'email'
     };
